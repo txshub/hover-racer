@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lwjgl3/lwjgl.jar"/>
+	<classpathentry kind="lib" path="lwjgl3/lwjgl-glfw.jar"/>
+	<classpathentry kind="lib" path="lwjgl3/lwjgl-jemalloc.jar"/>
+	<classpathentry kind="lib" path="lwjgl3/lwjgl-nanovg.jar"/>
+	<classpathentry kind="lib" path="lwjgl3/lwjgl-natives-linux.jar"/>
+	<classpathentry kind="lib" path="lwjgl3/lwjgl-natives-macos.jar"/>
+	<classpathentry kind="lib" path="lwjgl3/lwjgl-natives-windows.jar"/>
+	<classpathentry kind="lib" path="lwjgl3/lwjgl-nfd.jar"/>
+	<classpathentry kind="lib" path="lwjgl3/lwjgl-nuklear.jar"/>
+	<classpathentry kind="lib" path="lwjgl3/lwjgl-openal.jar"/>
+	<classpathentry kind="lib" path="lwjgl3/lwjgl-opengl.jar"/>
+	<classpathentry kind="lib" path="lwjgl3/lwjgl-par.jar"/>
+	<classpathentry kind="lib" path="lwjgl3/lwjgl-stb.jar"/>
+	<classpathentry kind="lib" path="lwjgl3/lwjgl-tinyfd.jar"/>
+	<classpathentry kind="lib" path="lwjgl3/lwjgl-vulkan.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
