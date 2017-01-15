@@ -66,6 +66,16 @@ public class Vector3 {
 		return z;
 	}
 
+	public void changeX(DoubleUnaryOperator f) {
+		this.x = f.applyAsDouble(x);
+	}
+	public void changeY(DoubleUnaryOperator f) {
+		this.y = f.applyAsDouble(y);
+	}
+	public void changeZ(DoubleUnaryOperator f) {
+		this.z = f.applyAsDouble(z);
+	}
+
 	public Vector3 copy() {
 		return new Vector3(this);
 	}
