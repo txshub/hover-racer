@@ -21,8 +21,13 @@ public class Ship {
 	private ControllerInt controller;
 	private Collection<Ship> otherShips;
 
-	public Ship(Vector3 v, ControllerInt controller, Collection<Ship> otherShips) {
-		position = v.copy();
+	/** Creates a new player-controlled ship
+	 * 
+	 * @param startingPosition Vector describing this ship's starting position.
+	 * @param controller Controller object for steering the ship
+	 * @param otherShips Other ships to possibly collide with */
+	public Ship(Vector3 startingPosition, ControllerInt controller, Collection<Ship> otherShips) {
+		position = startingPosition.copy();
 		this.velocity = new Vector3(0, 0, 0);
 		this.rotation = new Vector3(0, 0, 0);
 		this.mass = DEFAULT_MASS;
@@ -65,6 +70,9 @@ public class Ship {
 		updatePosition(delta);
 	}
 
+	/** Handle controls from the player.
+	 * Once we have server controlled ships, this method (or even whole update) could be abstract and differently implemented by PlayerShip
+	 * and ServerShip. */
 	private void handleControls(double delta) {
 		Collection<Action> keys = controller.getPressedKeys();
 		if (keys.contains(Action.FORWARD)) accelerate2d(delta * ACCELERATION, Math.PI / 2);
@@ -97,18 +105,19 @@ public class Ship {
 
 
 
+	/** @return Position of this ship's centre */
 	public Vector3 getPosition() {
 		return position.copy();
 	}
+	/** @return Size, or radius of this ship's hitbox */
 	public double getSize() {
 		return size;
 	}
-	public Vector3 getMomentum() {
-		return velocity.multiply(mass).copy();
-	}
+	/** @return This ship's current velocities, separately in all dimensions */
 	public Vector3 getVelocity() {
 		return velocity.copy();
 	}
+	/** @return This ship's mass */
 	public double getMass() {
 		return mass;
 	}
