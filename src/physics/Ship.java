@@ -10,27 +10,25 @@ public class Ship {
 	private static final int ACCELERATION = 1; // How fast does the ship accelerate
 	private static final double BREAK_POWER = 5; // How fast does it break
 	private static final double TURN_SPEED = 0.5; // How fast does it turn
+	private static final double AIR_RESISTANCE = 10; // How fast do ships slow down (this and acceleration determines the max speed)
+	private static final double DEFAULT_MASS = 1;
+	private static final double DEFAULT_SIZE = 1;
 	private Vector3 position;
 	private Vector3 velocity;
 	private Vector3 rotation;
 	private double mass;
-	private final double DEFAULT_MASS = 1;
+	private double size;
 	private ControllerInt controller;
+	private Collection<Ship> otherShips;
 
-
-	public Ship(ControllerInt controller) {
-		this.position = new Vector3(0, 0, 0);
-		this.velocity = new Vector3(0, 0, 0);
-		this.rotation = new Vector3(0, 0, 0);
-		this.mass = DEFAULT_MASS;
-		this.controller = controller;
-	}
-	public Ship(Vector3 v, ControllerInt controller) {
+	public Ship(Vector3 v, ControllerInt controller, Collection<Ship> otherShips) {
 		position = v.copy();
 		this.velocity = new Vector3(0, 0, 0);
 		this.rotation = new Vector3(0, 0, 0);
 		this.mass = DEFAULT_MASS;
+		this.size = DEFAULT_SIZE;
 		this.controller = controller;
+		this.otherShips = otherShips;
 	}
 
 	/** Accelerate in any direction within the 2d horizontal plane. The acceleration is instant; it's basically just changing velocities
@@ -47,7 +45,6 @@ public class Ship {
 	 * 
 	 * @param delta Time in seconds that passed since the last call of this function */
 	private void airResistance(double delta) {
-		final double AIR_RESISTANCE = 10; // to be experimentally found out
 		velocity.forEach(v -> Math.signum(v) * (Math.abs(v) - delta * Math.sqrt(Math.abs(v) / AIR_RESISTANCE)));
 	}
 
@@ -63,7 +60,12 @@ public class Ship {
 	 * @param delta Time in seconds that passed since the last call of this function */
 	public void update(double delta) {
 		airResistance(delta);
+		handleControls(delta);
+		doCollisions();
 		updatePosition(delta);
+	}
+
+	private void handleControls(double delta) {
 		Collection<Action> keys = controller.getPressedKeys();
 		if (keys.contains(Action.FORWARD)) accelerate2d(delta * ACCELERATION, Math.PI / 2);
 		if (keys.contains(Action.BREAK)) airResistance(delta * BREAK_POWER); // Breaking slows you down, no matter how you're moving
@@ -74,6 +76,15 @@ public class Ship {
 		if (keys.contains(Action.TURN_LEFT)) rotation.changeY(y -> correctAngle(y + TURN_SPEED));
 	}
 
+	private void doCollisions() {
+		otherShips.stream().filter(ship -> ship.getPosition().distanceTo(this.position) <= ship.getSize() + this.size)
+			.forEach(s -> collideWith(s));
+	}
+
+	/** Changes the velocity to account for a collision with a different ship */
+	private void collideWith(Ship ship) {
+		velocity.add(ship.getVelocity().substract(this.velocity).multiply(ship.getMass()).multiply(1 / this.getMass()).multiply(0.5));
+	}
 
 	/** Corrects an angle to fit between 0 and 2pi (e.g. 7.13pi->1.13pi, -0.13pi->1.87pi) */
 	private double correctAngle(double angle) {
@@ -85,5 +96,21 @@ public class Ship {
 	}
 
 
+
+	public Vector3 getPosition() {
+		return position.copy();
+	}
+	public double getSize() {
+		return size;
+	}
+	public Vector3 getMomentum() {
+		return velocity.multiply(mass).copy();
+	}
+	public Vector3 getVelocity() {
+		return velocity.copy();
+	}
+	public double getMass() {
+		return mass;
+	}
 
 }

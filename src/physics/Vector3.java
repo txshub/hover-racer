@@ -42,6 +42,9 @@ public class Vector3 {
 		this.z = f.applyAsDouble(z);
 		return this;
 	}
+	public double distanceTo(Vector3 v) {
+		return Math.sqrt(Math.pow(x - v.getX(), 2) + Math.pow(y - v.getY(), 2) + Math.pow(z - v.getZ(), 2));
+	}
 
 	public double[] asArray() {
 		return new double[]{x, y, z};
