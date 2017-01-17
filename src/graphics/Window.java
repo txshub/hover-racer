@@ -25,6 +25,8 @@ public class Window {
     int x = (vidmode.width() - width) / 2;
     int y = (vidmode.height() - height) / 2;
     glfwSetWindowPos(window, x, y);
+    
+    glfwMakeContextCurrent(window);
   }
   
   public void dispose() {
