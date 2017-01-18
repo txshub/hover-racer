@@ -1,6 +1,7 @@
 package graphics.shader;
 
 import math.Matrix4f;
+import math.Vector3f;
 
 public class BasicShader extends Shader {
 
@@ -15,7 +16,10 @@ public class BasicShader extends Shader {
     compileShader();
     
     addUniform("projectionMatrix");
+    addUniform("viewMatrix");
     addUniform("worldMatrix");
+    
+    addUniform("sun");
   }
   
   @Override
@@ -29,6 +33,14 @@ public class BasicShader extends Shader {
   
   public void updateWorldMatrix(Matrix4f worldMatrix) {
     setUniform("worldMatrix", worldMatrix);
+  }
+  
+  public void updateSun(Vector3f sun) {
+    setUniform("sun", sun);
+  }
+  
+  public void updateViewMatrix(Matrix4f viewMatrix) {
+    setUniform("viewMatrix", viewMatrix);
   }
 
 }

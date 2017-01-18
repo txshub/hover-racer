@@ -2,25 +2,51 @@ package main;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
+import camera.Camera;
+import entity.Entity;
 import graphics.MasterRenderer;
 import graphics.Window;
+import graphics.model.Model;
+import input.Input;
+import math.Vector3f;
 
 public class Main {
   
   @SuppressWarnings("unused")
   private GLFWErrorCallback errorCallBack;
-  
-  private Window window;
+
+  private Camera camera;
+  private Input input;
   private MasterRenderer renderer;
+  private Window window;
   
   private boolean running = false;
+  
+  // TEMP
+  private ArrayList<Entity> entities = new ArrayList<>();
   
   public Main() {
     init();
     renderer = new MasterRenderer();
+    
+    camera = new Camera();
+    input = new Input(window);
+    
+    // TEMP
+    Model model = Model.loadModel("cube.obj");
+    Random rand = new Random();
+    
+    for (int i = 0; i < 1000; i++) {
+      entities.add(new Entity(new Vector3f(rand.nextInt(500) - 250, rand.nextInt(500) - 250, rand.nextInt(500)), model));
+    }
+
+    //entities.add(new Entity(new Vector3f(0, 0, 5), model));
   }
   
   private void init() {
@@ -45,6 +71,21 @@ public class Main {
   private void input() {
     glfwPollEvents();
     if (window.shouldClose()) stop();
+    
+    float moveAmount = 0.6f;
+    
+    float dx = 0;
+    float dy = 0;
+    float dz = 0;
+    
+    if (input.keys[GLFW_KEY_W]) dz += moveAmount;
+    if (input.keys[GLFW_KEY_S]) dz -= moveAmount;
+    if (input.keys[GLFW_KEY_A]) dx -= moveAmount;
+    if (input.keys[GLFW_KEY_D]) dx += moveAmount;
+    if (input.keys[GLFW_KEY_SPACE]) dy += moveAmount;
+    if (input.keys[GLFW_KEY_LEFT_SHIFT]) dy -= moveAmount;
+    
+    camera.move(dx, dy, dz);
   }
   
   private void update() {
@@ -52,8 +93,10 @@ public class Main {
   }
   
   private void render() {
+    for (int i = 0; i < entities.size(); i++) renderer.processEntity(entities.get(i));
+    
     // Do drawing
-    renderer.render();
+    renderer.render(camera);
     // Swap the buffers
     window.render();
   }

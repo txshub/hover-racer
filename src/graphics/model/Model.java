@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
 
+import math.Vector3f;
+
 public class Model {
   
   private int vbo;
@@ -23,12 +25,22 @@ public class Model {
   }
   
   public void bufferVertices(Vertex[] vertices, int[] indices) {
+    bufferVertices(vertices, indices, false);
+  }
+  
+  public void bufferVertices(Vertex[] vertices, int[] indices, boolean calcNormals) {
+    if (calcNormals) calcNormals(vertices, indices);
+    
     FloatBuffer buffer = BufferUtils.createFloatBuffer(vertices.length * Vertex.SIZE);
     
     for (Vertex vertex : vertices) {
       buffer.put(vertex.getPos().x);
       buffer.put(vertex.getPos().y);
       buffer.put(vertex.getPos().z);
+
+      buffer.put(vertex.getNormal().x);
+      buffer.put(vertex.getNormal().y);
+      buffer.put(vertex.getNormal().z);
     }
     
     buffer.flip();
@@ -77,7 +89,7 @@ public class Model {
         
         if (line.startsWith("v ")) {
           String[] parts = line.split(" ");
-          vertices.add(new Vertex(Float.parseFloat(parts[1]), Float.parseFloat(parts[2]), Float.parseFloat(parts[3])));
+          vertices.add(new Vertex(Float.parseFloat(parts[1]), Float.parseFloat(parts[2]), Float.parseFloat(parts[3]), new Vector3f()));
         
         } else if (line.startsWith("f ")) {
           String[] parts = line.split(" ");
@@ -102,9 +114,33 @@ public class Model {
     int[] i = new int[indices.size()];
     for (int n = 0; n < i.length; n++) i[n] = indices.get(n);
     
-    res.bufferVertices(v, i);
+    res.bufferVertices(v, i, true);
     
     return res;
+  }
+  
+  private void calcNormals(Vertex[] vertices, int[] indices) {
+    // We use 3 indices each step so increment += 3
+    for (int i = 0; i < indices.length; i += 3) {
+      int i0 = indices[i];
+      int i1 = indices[i+1];
+      int i2 = indices[i+2];
+      
+      // Calculate the vertex normals
+      Vector3f v1 = vertices[i1].getPos().sub(vertices[i0].getPos());
+      Vector3f v2 = vertices[i2].getPos().sub(vertices[i0].getPos());
+      
+      // Cross these to get the face normal
+      Vector3f normal = v1.cross(v2).normalized();
+      
+      vertices[i0].setNormal(vertices[i0].getNormal().add(normal));
+      vertices[i1].setNormal(vertices[i1].getNormal().add(normal));
+      vertices[i2].setNormal(vertices[i2].getNormal().add(normal));
+    }
+    
+    for (int i = 0; i < vertices.length; i++) {
+      vertices[i].setNormal(vertices[i].getNormal().normalized());
+    }
   }
 
 }
