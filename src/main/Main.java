@@ -27,6 +27,7 @@ public class Main {
   private Window window;
   
   private boolean running = false;
+  private Model ship;
   
   // TEMP
   private ArrayList<Entity> entities = new ArrayList<>();
@@ -43,10 +44,14 @@ public class Main {
     Random rand = new Random();
     
     for (int i = 0; i < 300; i++) {
-      entities.add(new Entity(new Vector3f(rand.nextInt(500) - 250, rand.nextInt(500) - 250, rand.nextInt(500)), model));
+      entities.add(new Entity(
+          new Vector3f(rand.nextInt(500) - 250, rand.nextInt(500) - 250, rand.nextInt(500)), 
+          new Vector3f(), 
+          model));
     }
-
-//    entities.add(new Entity(new Vector3f(0, 0, 5), model));
+    
+    ship = Model.loadModel("ship2.obj");
+    entities.add(new Entity(new Vector3f(0, 0, 5), new Vector3f(), ship));
   }
   
   private void init() {
@@ -72,11 +77,13 @@ public class Main {
     glfwPollEvents();
     if (window.shouldClose()) stop();
     
-    float moveAmount = 0.6f;
+    float moveAmount = 0.1f;
     
     float dx = 0;
     float dy = 0;
     float dz = 0;
+    
+    if (input.keys[GLFW_KEY_LEFT_CONTROL]) moveAmount *= 6;
     
     if (input.keys[GLFW_KEY_W]) dz += moveAmount;
     if (input.keys[GLFW_KEY_S]) dz -= moveAmount;
@@ -93,10 +100,17 @@ public class Main {
     if (input.keys[GLFW_KEY_DOWN]) camera.rotateX(rotAmount); 
     if (input.keys[GLFW_KEY_RIGHT]) camera.rotateY(rotAmount); 
     if (input.keys[GLFW_KEY_LEFT]) camera.rotateY(-rotAmount); 
+    
+    if (input.keys[GLFW_KEY_ESCAPE]) running = false;
   }
   
   private void update() {
-    
+    for (Entity entity : entities) {
+      if (entity.getModel() != ship) {
+        Vector3f rot = entity.getRot();
+        entity.setRot(new Vector3f(rot.x += 0.01f, rot.y += 0.02f, rot.z += 0.03f));
+      }
+    }
   }
   
   private void render() {

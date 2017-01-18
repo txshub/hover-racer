@@ -61,7 +61,7 @@ public class MasterRenderer {
     
     basicShader.bind();
     basicShader.updateViewMatrix(viewMatrix);
-    basicShader.updateSun(new Vector3f(0f, 0f, -1f));
+    basicShader.updateSun(new Vector3f(-1f, 1f, 1f).normalized());
     entityRenderer.render(entities);
     
     Shader.unbind();

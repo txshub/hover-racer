@@ -25,6 +25,7 @@ public class BasicShader extends Shader {
   @Override
   public void bindAttributes() {
     bindAttribute(0, "position");
+    bindAttribute(1, "normal");
   }
   
   public void updateProjectionMatrix(Matrix4f projectionMatrix) {

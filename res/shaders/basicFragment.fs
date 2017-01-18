@@ -4,7 +4,7 @@ in vec3 normal0;
 
 uniform vec3 sun;
 
-const float ambientLight = 0.1;
+const float ambientLight = 0.3;
 
 void main() {
 	float brightness = max(ambientLight, dot(normal0, sun));

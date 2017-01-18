@@ -21,6 +21,21 @@ public class EntityRenderer {
     this.shader = shader;
   }
   
+  private void loadModel(Model model) {
+    glBindBuffer(GL_ARRAY_BUFFER, model.getVBO());
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.getIBO());
+    
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * 4, 0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, false, Vertex.SIZE * 4, 12);
+  }
+
+  private void loadInstance(Entity entity) {
+    shader.updateWorldMatrix(Transform.getTransformation(entity.getPos(), entity.getRot().x, entity.getRot().y, entity.getRot().z, 1f));
+  }
+
   public void render(HashMap<Model, ArrayList<Entity>> entities) {
     for (Model model : entities.keySet()) {
       loadModel(model);
@@ -34,27 +49,12 @@ public class EntityRenderer {
     }
   }
   
-  private void loadModel(Model model) {
-    glBindBuffer(GL_ARRAY_BUFFER, model.getVBO());
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.getIBO());
-    
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    
-    glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * 4, 0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, false, Vertex.SIZE * 4, 12);
-  }
-  
   private void unloadModel() {
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-  }
-  
-  private void loadInstance(Entity entity) {
-    shader.updateWorldMatrix(Transform.getTransformation(entity.getPos(), 0.78f, 0.78f, 0.78f, 1f));
   }
 
 }
