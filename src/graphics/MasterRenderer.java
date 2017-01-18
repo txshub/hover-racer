@@ -27,7 +27,7 @@ public class MasterRenderer {
     basicShader = new BasicShader();
     entityRenderer = new EntityRenderer(basicShader);
     
-    updateProjection(70, 640, 360, 0.1f, 1000f);
+    updateProjection(70, 1280, 720, 0.1f, 1000f);
   }
   
   private void init() {

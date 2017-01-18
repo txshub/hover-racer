@@ -20,9 +20,9 @@ public class Transform {
     Vector3f pos = camera.getPos();
     
     Matrix4f translationMatrix = new Matrix4f().initTranslation(-pos.x, -pos.y, -pos.z);
-    Matrix4f rotationMatrix = new Matrix4f().initRotation(0f, 0f, 0f);
+    Matrix4f rotationMatrix = new Matrix4f().initRotation(camera.getForward(), camera.getUp());
     
-    return translationMatrix.mul(rotationMatrix.mul(rotationMatrix));
+    return rotationMatrix.mul(translationMatrix);
   }
   
 }

@@ -42,18 +42,18 @@ public class Main {
     Model model = Model.loadModel("cube.obj");
     Random rand = new Random();
     
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 300; i++) {
       entities.add(new Entity(new Vector3f(rand.nextInt(500) - 250, rand.nextInt(500) - 250, rand.nextInt(500)), model));
     }
 
-    //entities.add(new Entity(new Vector3f(0, 0, 5), model));
+//    entities.add(new Entity(new Vector3f(0, 0, 5), model));
   }
   
   private void init() {
     glfwSetErrorCallback(errorCallBack = GLFWErrorCallback.createPrint(System.err));
     glfwInit();
     
-    window = new Window(640, 360, "Hover Racer");
+    window = new Window(1280, 720, "Hover Racer");
     GL.createCapabilities();
   }
   
@@ -86,6 +86,13 @@ public class Main {
     if (input.keys[GLFW_KEY_LEFT_SHIFT]) dy -= moveAmount;
     
     camera.move(dx, dy, dz);
+    
+    float rotAmount = 1f;
+    
+    if (input.keys[GLFW_KEY_UP]) camera.rotateX(-rotAmount); 
+    if (input.keys[GLFW_KEY_DOWN]) camera.rotateX(rotAmount); 
+    if (input.keys[GLFW_KEY_RIGHT]) camera.rotateY(rotAmount); 
+    if (input.keys[GLFW_KEY_LEFT]) camera.rotateY(-rotAmount); 
   }
   
   private void update() {
