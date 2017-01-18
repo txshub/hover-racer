@@ -10,6 +10,7 @@ import graphics.Window;
 
 public class Main {
   
+  @SuppressWarnings("unused")
   private GLFWErrorCallback errorCallBack;
   
   private Window window;
@@ -66,13 +67,20 @@ public class Main {
     double ns = 1000000000 / 60.0;
     double delta = 0.0;
     
+    // FPS cap
+    double deltaFPS = 1000000000 / 60.0;
+    double d = 0.0;
+    long diff = 0;
+    
     int fps = 0;
     int ups = 0;
     long timer = System.currentTimeMillis();
     
     while (running) {
       curTime = System.nanoTime();
-      delta += (curTime - lastTime) / ns;
+      diff = curTime - lastTime;
+      delta += diff / ns;
+      d += diff / deltaFPS;
       lastTime = curTime;
       
       while (delta >= 1.0) {
@@ -82,9 +90,13 @@ public class Main {
         delta--;
       }
       
-      render();
-      fps++;
+      if (d >= 1.0) {
+        render();
+        fps++;
+        d = 0.0;
+      }
       
+      // Log the ups and fps to the window title every 1000ms
       if (System.currentTimeMillis() > timer + 1000) {
         window.setTitle("Hover Racer - ups: " + ups + " | fps: " + fps);
         timer += 1000;

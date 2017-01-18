@@ -100,6 +100,9 @@ public abstract class Shader {
     bindAttributes();
   }
   
+  /**
+   * Installs the program object as part of the current rendering state.
+   */
   public void bind() {
     glUseProgram(program);
   }

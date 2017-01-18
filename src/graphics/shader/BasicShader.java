@@ -1,7 +1,6 @@
 package graphics.shader;
 
 import math.Matrix4f;
-import math.Vector3f;
 
 public class BasicShader extends Shader {
 
@@ -15,12 +14,17 @@ public class BasicShader extends Shader {
     addFragmentShader(loadShader(FRAGMENT_FILE));
     compileShader();
     
+    addUniform("projectionMatrix");
     addUniform("worldMatrix");
   }
   
   @Override
   public void bindAttributes() {
     bindAttribute(0, "position");
+  }
+  
+  public void updateProjectionMatrix(Matrix4f projectionMatrix) {
+    setUniform("projectionMatrix", projectionMatrix);
   }
   
   public void updateWorldMatrix(Matrix4f worldMatrix) {
