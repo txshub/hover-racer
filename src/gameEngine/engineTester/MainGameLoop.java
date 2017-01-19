@@ -44,7 +44,7 @@ public class MainGameLoop {
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
 
-		/************************* Terrain ********************************/
+		/************************* Terrain ********************************/ 
 
 		TerrainTexture background = new TerrainTexture(loader.loadTexture("grassy2"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mud"));
