@@ -18,6 +18,7 @@ public class MasterRenderer {
   
   private BasicShader basicShader;
   private EntityRenderer entityRenderer;
+  
   private Matrix4f projectionMatrix;
   private HashMap<Model, ArrayList<Entity>> entities = new HashMap<>();
 
@@ -34,6 +35,12 @@ public class MasterRenderer {
     glEnable(GL_DEPTH_TEST);
   }
   
+  /**
+   * Processes entities so that entities with the same model can all use the
+   * same instance of that model.
+   * 
+   * @param entity the entity to process
+   */
   public void processEntity(Entity entity) {
     // See what model the entity has and get the ArrayList of entities with that model
     Model model = entity.getModel();
@@ -68,10 +75,6 @@ public class MasterRenderer {
     entities.clear();
   }
   
-  public void cleanUp() {
-    
-  }
-  
   private void updateProjection(float fov, int width, int height, float zNear, float zFar) {
     projectionMatrix = Transform.getPerspectiveProjection(fov, width, height, zNear, zFar);
     
@@ -79,6 +82,10 @@ public class MasterRenderer {
     basicShader.updateProjectionMatrix(projectionMatrix);
     
     Shader.unbind();
+  }
+
+  public void cleanUp() {
+    basicShader.cleanUp();
   }
   
 }

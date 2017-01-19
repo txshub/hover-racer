@@ -11,14 +11,15 @@ public class BasicShader extends Shader {
   public BasicShader() {
     super();
     
+    // Load the shader files and compile
     addVertexShader(loadShader(VERTEX_FILE));
     addFragmentShader(loadShader(FRAGMENT_FILE));
     compileShader();
     
+    // Add uniforms to be used in the program
     addUniform("projectionMatrix");
     addUniform("viewMatrix");
     addUniform("worldMatrix");
-    
     addUniform("sun");
   }
   

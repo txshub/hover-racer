@@ -27,6 +27,11 @@ public class Main {
   private Window window;
   
   private boolean running = false;
+  
+  // Set to -1 to disable the cap
+  private float updateCap = 60;
+  private float frameCap = 60;
+  
   private Model ship;
   
   // TEMP
@@ -47,11 +52,12 @@ public class Main {
       entities.add(new Entity(
           new Vector3f(rand.nextInt(500) - 250, rand.nextInt(500) - 250, rand.nextInt(500)), 
           new Vector3f(), 
+          2f,
           model));
     }
     
     ship = Model.loadModel("ship2.obj");
-    entities.add(new Entity(new Vector3f(0, 0, 5), new Vector3f(), ship));
+    entities.add(new Entity(new Vector3f(0, 0, 5), new Vector3f(), 1, ship));
   }
   
   private void init() {
@@ -73,6 +79,9 @@ public class Main {
     running = false;
   }
   
+  /**
+   * Handles input not related to a specific entity.
+   */
   private void input() {
     glfwPollEvents();
     if (window.shouldClose()) stop();
@@ -105,59 +114,67 @@ public class Main {
   }
   
   private void update() {
+    float i = 0.1f;
     for (Entity entity : entities) {
       if (entity.getModel() != ship) {
         Vector3f rot = entity.getRot();
-        entity.setRot(new Vector3f(rot.x += 0.01f, rot.y += 0.02f, rot.z += 0.03f));
+        entity.setRot(new Vector3f(rot.x += 0.01f * i, rot.y += 0.02f, rot.z += 0.03f));
       }
+      i += 0.01f;
     }
   }
   
   private void render() {
+    // Process the entities for rendering
     for (int i = 0; i < entities.size(); i++) renderer.processEntity(entities.get(i));
     
-    // Do drawing
+    // Do drawing and swap the buffers to display the rendered image
     renderer.render(camera);
-    // Swap the buffers
     window.render();
   }
   
   private void run() {
     long lastTime = System.nanoTime();
     long curTime = lastTime;
-    
-    // ns is the minimum length between updates
-    // Delta = 1.0 when enough time has elapsed for another update
-    double ns = 1000000000 / 60.0;
-    double delta = 0.0;
-    
-    // FPS cap
-    double deltaFPS = 1000000000 / 60.0;
-    double d = 0.0;
     long diff = 0;
+    
+    // updateDur is the minimum time between updates
+    // deltaUPS is the time since the last update
+    double updateDur = 1000000000 / updateCap;
+    if (updateCap == -1) updateDur = 0;
+    double deltaUPS = 0.0;
+
+    // renderDur is the minimum time between renders
+    // deltaFPS is the time since the last render
+    double renderDur = 1000000000 / frameCap;
+    if (frameCap == -1) renderDur = 0;
+    double deltaFPS = 0.0;
     
     int fps = 0;
     int ups = 0;
+    
     long timer = System.currentTimeMillis();
     
     while (running) {
       curTime = System.nanoTime();
       diff = curTime - lastTime;
-      delta += diff / ns;
-      d += diff / deltaFPS;
+      deltaUPS += diff / updateDur;
+      deltaFPS += diff / renderDur;
       lastTime = curTime;
       
-      while (delta >= 1.0) {
+      // If updateDur has passed since the last update, do an update
+      while (deltaUPS >= 1.0) {
         input();
         update();
         ups++;
-        delta--;
+        deltaUPS--;
       }
       
-      if (d >= 1.0) {
+      // If renderDur has passed since that last render, do a render
+      if (deltaFPS >= 1.0) {
         render();
         fps++;
-        d = 0.0;
+        deltaFPS = 0.0;
       }
       
       // Log the ups and fps to the window title every 1000ms
@@ -169,9 +186,10 @@ public class Main {
       }
     }
     
+    // When the game ends clean up
     cleanUp();
   }
-  
+
   private void cleanUp() {
     window.hide();
     

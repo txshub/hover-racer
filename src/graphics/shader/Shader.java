@@ -18,18 +18,27 @@ public abstract class Shader {
   
   private HashMap<String, Integer> uniforms;
 
-  private int program;
+  private int programID;
   
+  /**
+   * A shader program with Vertex and Fragment shaders.
+   */
   public Shader() {
-    program = glCreateProgram();
+    programID = glCreateProgram();
     uniforms = new HashMap<>();
     
-    if (program == 0) {
+    if (programID == 0) {
       System.err.println("Shader creation failed! No valid memory.");
       System.exit(1);
     }
   }
   
+  /**
+   * Loads a shader file from the /res/shaders/ folder.
+   * 
+   * @param fileName the shader filename
+   * @return the shader code
+   */
   public static String loadShader(String fileName) {
     StringBuilder source = new StringBuilder();
     BufferedReader reader = null;
@@ -55,7 +64,13 @@ public abstract class Shader {
     return source.toString();
   }
   
-  private void addProgram(String text, int type) {
+  /**
+   * Adds a shader to the program.
+   *  
+   * @param text the source of the shader
+   * @param type the type of shader to be created
+   */
+  private void addShader(String text, int type) {
     int shader = glCreateShader(type);
     
     if (shader == 0) {
@@ -67,46 +82,59 @@ public abstract class Shader {
     glCompileShader(shader);
     
     if (glGetShaderi(shader, GL_COMPILE_STATUS) == GL_FALSE) {
-      // Get the shader log with size of 1024 bytes
-      System.err.println((glGetShaderInfoLog(shader, 1024)));
+      System.err.println("Error compiling shader code: " + glGetShaderInfoLog(shader, 1024));
     }
     
-    glAttachShader(program, shader);
+    glAttachShader(programID, shader);
   }
   
+  /**
+   * Adds a shader of type GL_VERTEX_SHADER to the program.
+   * 
+   * @param text the source of the shader
+   */
   protected void addVertexShader(String text) {
-    addProgram(text, GL_VERTEX_SHADER);
+    addShader(text, GL_VERTEX_SHADER);
   }
   
+  /**
+   * Adds a shader of type GL_FRAGMENT_SHADER to the program.
+   * 
+   * @param text the source of the shader
+   */
   protected void addFragmentShader(String text) {
-    addProgram(text, GL_FRAGMENT_SHADER);
+    addShader(text, GL_FRAGMENT_SHADER);
   }
   
+  /**
+   * Compiles the shader program and binds the attributes used in the shader file.
+   */
   protected void compileShader() {
-    glLinkProgram(program);
+    glLinkProgram(programID);
     
-    if (glGetProgrami(program, GL_LINK_STATUS) == GL_FALSE) {
-      // Get the shader log with size of 1024 bytes
-      System.err.println(glGetShaderInfoLog(program, 1024));
+    if (glGetProgrami(programID, GL_LINK_STATUS) == GL_FALSE) {
+      System.err.println("Error linking shader code: " + glGetShaderInfoLog(programID, 1024));
     }
     
-    glValidateProgram(program);
+    glValidateProgram(programID);
     
-    if (glGetProgrami(program, GL_VALIDATE_STATUS) == GL_FALSE) {
-      // Get the shader log with size of 1024 bytes
-      System.err.println(glGetShaderInfoLog(program, 1024));
+    if (glGetProgrami(programID, GL_VALIDATE_STATUS) == GL_FALSE) {
+      System.err.println("Warning validating shader code: " + glGetShaderInfoLog(programID, 1024));
     }
     
     bindAttributes();
   }
   
   /**
-   * Installs the program object as part of the current rendering state.
+   * Activates this program for use in rendering.
    */
   public void bind() {
-    glUseProgram(program);
+    glUseProgram(programID);
   }
   
+  /**
+   * Stops using any program in rendering.
+   */
   public static void unbind() {
     glUseProgram(0);
   }
@@ -114,11 +142,11 @@ public abstract class Shader {
   public abstract void bindAttributes();
   
   protected void bindAttribute(int attribute, String variableName) {
-    glBindAttribLocation(program, attribute, variableName);
+    glBindAttribLocation(programID, attribute, variableName);
   }
   
   protected void addUniform(String uniform) {
-    int uniformLocation = glGetUniformLocation(program, uniform);
+    int uniformLocation = glGetUniformLocation(programID, uniform);
     
     if (uniformLocation == 0xFFFFFFFF) {
       System.err.println("Error: Could not find uniform " + uniform);
@@ -152,6 +180,13 @@ public abstract class Shader {
     buffer.flip();
     
     glUniformMatrix4fv(uniforms.get(uniformName), false, buffer);
+  }
+  
+  public void cleanUp() {
+    unbind();
+    if (programID != 0) {
+      glDeleteProgram(programID);
+    }
   }
 
 }

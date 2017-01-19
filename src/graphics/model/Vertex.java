@@ -4,6 +4,10 @@ import math.Vector3f;
 
 public class Vertex {
 
+  /**
+   * The number of floats in the vertex:
+   * 3 for position and 3 for normal.
+   */
   public static final int SIZE = 6;
   
   private Vector3f pos;

@@ -16,12 +16,12 @@ public class Model {
   
   private int vbo;
   private int ibo;
-  private int size;
+  private int vertexCount;
   
   public Model() {
     vbo = glGenBuffers();
     ibo = glGenBuffers();
-    size = 0;
+    vertexCount = 0;
   }
   
   public void bufferVertices(Vertex[] vertices, int[] indices) {
@@ -43,7 +43,7 @@ public class Model {
       buffer.put(vertex.getNormal().z);
     }
     
-    buffer.flip();
+    buffer.flip();  // Call when finished writing to the buffer
     
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
@@ -57,7 +57,7 @@ public class Model {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibuffer, GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     
-    size = indices.length;
+    vertexCount = indices.length;
   }
   
   public int getIBO() {
@@ -68,8 +68,8 @@ public class Model {
     return vbo;
   }
   
-  public int getSize() {
-    return size;
+  public int getVertexCount() {
+    return vertexCount;
   }
   
   public static Model loadModel(String fileName) {
