@@ -1,25 +1,22 @@
 package graphics.model;
 
-import math.Vector3f;
+import org.joml.Vector3f;
 
 public class Vertex {
 
   /**
-   * The number of floats in the vertex:
-   * 3 for position and 3 for normal.
+   * The number of floats in the vertex (3 for position)
    */
-  public static final int SIZE = 6;
+  public static final int SIZE = 3;
   
   private Vector3f pos;
-  private Vector3f normal;
   
-  public Vertex(float x, float y, float z, Vector3f normal) {
-    this(new Vector3f(x, y, z), normal);
+  public Vertex(float x, float y, float z) {
+    this(new Vector3f(x, y, z));
   }
   
-  public Vertex(Vector3f pos, Vector3f normal) {
+  public Vertex(Vector3f pos) {
     this.setPos(pos);
-    this.normal = normal;
   }
 
   public Vector3f getPos() {
@@ -28,14 +25,6 @@ public class Vertex {
 
   public void setPos(Vector3f pos) {
     this.pos = pos;
-  }
-
-  public Vector3f getNormal() {
-    return normal;
-  }
-
-  public void setNormal(Vector3f normal) {
-    this.normal = normal;
   }
   
 }

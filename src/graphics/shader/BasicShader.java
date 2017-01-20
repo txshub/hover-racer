@@ -1,7 +1,7 @@
 package graphics.shader;
 
-import math.Matrix4f;
-import math.Vector3f;
+import org.joml.Vector3f;
+import org.joml.Matrix4f;;
 
 public class BasicShader extends Shader {
 

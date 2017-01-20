@@ -8,27 +8,32 @@ import java.util.HashMap;
 import camera.Camera;
 import entity.Entity;
 import graphics.model.Model;
-import graphics.shader.BasicShader;
+import graphics.shader.BasicShader2;
 import graphics.shader.Shader;
-import math.Matrix4f;
-import math.Transform;
-import math.Vector3f;
+import org.joml.Matrix4f;
 
 public class MasterRenderer {
   
-  private BasicShader basicShader;
+  private BasicShader2 basicShader;
   private EntityRenderer entityRenderer;
-  
-  private Matrix4f projectionMatrix;
-  private HashMap<Model, ArrayList<Entity>> entities = new HashMap<>();
 
-  public MasterRenderer() {
+  private Transformation transform;
+  
+  private HashMap<Model, ArrayList<Entity>> entities = new HashMap<>();
+  
+  private int width;
+  private int height;
+
+  public MasterRenderer(int width, int height) {
     init();
     
-    basicShader = new BasicShader();
+    basicShader = new BasicShader2();
     entityRenderer = new EntityRenderer(basicShader);
     
-    updateProjection(70, 1280, 720, 0.1f, 1000f);
+    transform = new Transformation();
+    
+    this.width = width;
+    this.height = height;
   }
   
   private void init() {
@@ -56,32 +61,31 @@ public class MasterRenderer {
     batch.add(entity);
   }
   
-  private void prepare() {
+  private void clear() {
     glClearColor(0.53f, 0.81f, 0.98f, 1f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
   
   public void render(Camera camera) {
-    Matrix4f viewMatrix = Transform.getViewMatrix(camera);
+    //Matrix4f viewMatrix = Transform.getViewMatrix(camera);
     
-    prepare();
+    clear();
     
     basicShader.bind();
-    basicShader.updateViewMatrix(viewMatrix);
-    basicShader.updateSun(new Vector3f(-1f, 1f, 1f).normalized());
+
+    float fov = (float) Math.toRadians(70f);
+    float aspect = (float) width / height;
+    updateProjection(fov, aspect, 0.01f, 1000f);
+    
     entityRenderer.render(entities);
     
     Shader.unbind();
     entities.clear();
   }
   
-  private void updateProjection(float fov, int width, int height, float zNear, float zFar) {
-    projectionMatrix = Transform.getPerspectiveProjection(fov, width, height, zNear, zFar);
-    
-    basicShader.bind();
-    basicShader.updateProjectionMatrix(projectionMatrix);
-    
-    Shader.unbind();
+  private void updateProjection(float fov, float aspect, float zNear, float zFar) {
+    Matrix4f projectionMatrix = transform.getProjectionMatrix(fov, aspect, zNear, zFar);
+    basicShader.updateProjection(projectionMatrix);
   }
 
   public void cleanUp() {

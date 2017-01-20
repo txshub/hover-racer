@@ -8,11 +8,10 @@ import java.io.FileReader;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 
+import org.joml.Matrix4f;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
-
-import math.Matrix4f;
-import math.Vector2f;
-import math.Vector3f;
 
 public abstract class Shader {
   
@@ -145,15 +144,15 @@ public abstract class Shader {
     glBindAttribLocation(programID, attribute, variableName);
   }
   
-  protected void addUniform(String uniform) {
-    int uniformLocation = glGetUniformLocation(programID, uniform);
+  protected void addUniform(String uniformName) {
+    int uniformLocation = glGetUniformLocation(programID, uniformName);
     
     if (uniformLocation == 0xFFFFFFFF) {
-      System.err.println("Error: Could not find uniform " + uniform);
+      System.err.println("Error: Could not find uniform " + uniformName);
       System.exit(1);
     }
     
-    uniforms.put(uniform, uniformLocation);
+    uniforms.put(uniformName, uniformLocation);
   }
   
   protected void setUniform(String uniformName, float value) {
@@ -169,16 +168,9 @@ public abstract class Shader {
   }
   
   protected void setUniform(String uniformName, Matrix4f value) {
-    FloatBuffer buffer = BufferUtils.createFloatBuffer(4 * 4);
-    
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 4; j++) {
-        buffer.put(value.get(i, j));
-      }
-    }
-    
-    buffer.flip();
-    
+    // Dump the matrix into a float buffer
+    FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
+    value.get(buffer);
     glUniformMatrix4fv(uniforms.get(uniformName), false, buffer);
   }
   

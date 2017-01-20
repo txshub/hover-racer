@@ -1,6 +1,9 @@
 package graphics.model;
 
+import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,68 +13,75 @@ import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
 
-import math.Vector3f;
-
 public class Model {
   
-  private int vbo;
-  private int ibo;
   private int vertexCount;
   
+  private int vaoID;
+  private int vboID;
+  private int iboID;
+  private int cboID;
+  
   public Model() {
-    vbo = glGenBuffers();
-    ibo = glGenBuffers();
     vertexCount = 0;
+    vaoID = glGenVertexArrays();
+    vboID = glGenBuffers();
+    iboID = glGenBuffers();
+    cboID = glGenBuffers();
   }
   
-  public void bufferVertices(Vertex[] vertices, int[] indices) {
-    bufferVertices(vertices, indices, false);
-  }
+//  public void bufferVertices(Vertex[] vertices, int[] indices) {
+//    bufferVertices(vertices, indices, false);
+//  }
   
-  public void bufferVertices(Vertex[] vertices, int[] indices, boolean calcNormals) {
-    if (calcNormals) calcNormals(vertices, indices);
-    
-    FloatBuffer buffer = BufferUtils.createFloatBuffer(vertices.length * Vertex.SIZE);
-    
-    for (Vertex vertex : vertices) {
-      buffer.put(vertex.getPos().x);
-      buffer.put(vertex.getPos().y);
-      buffer.put(vertex.getPos().z);
-
-      buffer.put(vertex.getNormal().x);
-      buffer.put(vertex.getNormal().y);
-      buffer.put(vertex.getNormal().z);
-    }
-    
-    buffer.flip();  // Call when finished writing to the buffer
-    
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    
-    IntBuffer ibuffer = BufferUtils.createIntBuffer(indices.length);
-    ibuffer.put(indices);
-    ibuffer.flip();
-    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibuffer, GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    
+  public void bufferVertices(Vertex[] vertices, int[] indices, float[] colors, boolean calcNormals) {
     vertexCount = indices.length;
-  }
-  
-  public int getIBO() {
-    return ibo;
-  }
-  
-  public int getVBO() {
-    return vbo;
+    
+    glBindVertexArray(vaoID);
+    
+    // Vertex VBO
+    FloatBuffer vBuffer = BufferUtils.createFloatBuffer(vertices.length * Vertex.SIZE);
+    for (Vertex vertex : vertices) {
+      vBuffer.put(vertex.getPos().x);
+      vBuffer.put(vertex.getPos().y);
+      vBuffer.put(vertex.getPos().z);
+    }
+    vBuffer.flip();
+    
+    glBindBuffer(GL_ARRAY_BUFFER, vboID);
+    glBufferData(GL_ARRAY_BUFFER, vBuffer, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+    
+    // Index VBO
+    IntBuffer iBuffer = BufferUtils.createIntBuffer(indices.length);
+    iBuffer.put(indices);
+    iBuffer.flip();
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboID);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, iBuffer, GL_STATIC_DRAW);
+    
+    // Colour VBO
+    FloatBuffer cBuffer = BufferUtils.createFloatBuffer(colors.length);
+    cBuffer.put(colors);
+    cBuffer.flip();
+    
+    glBindBuffer(GL_ARRAY_BUFFER, cboID);
+    glBufferData(GL_ARRAY_BUFFER, cBuffer, GL_STATIC_DRAW);
+    glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
+    
+    // Unbind buffers
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
   }
   
   public int getVertexCount() {
     return vertexCount;
   }
   
+  public int getVAO() {
+    return vaoID;
+  }
+
   public static Model loadModel(String fileName) {
     Model res = new Model();
     ArrayList<Vertex> vertices = new ArrayList<>();
@@ -89,7 +99,7 @@ public class Model {
         
         if (line.startsWith("v ")) {
           String[] parts = line.split(" ");
-          vertices.add(new Vertex(Float.parseFloat(parts[1]), Float.parseFloat(parts[2]), Float.parseFloat(parts[3]), new Vector3f()));
+          vertices.add(new Vertex(Float.parseFloat(parts[1]), Float.parseFloat(parts[2]), Float.parseFloat(parts[3])));
         
         } else if (line.startsWith("f ")) {
           String[] parts = line.split(" ");
@@ -114,33 +124,50 @@ public class Model {
     int[] i = new int[indices.size()];
     for (int n = 0; n < i.length; n++) i[n] = indices.get(n);
     
-    res.bufferVertices(v, i, true);
+//    res.bufferVertices(v, i, true);
     
     return res;
   }
   
-  private void calcNormals(Vertex[] vertices, int[] indices) {
-    // We use 3 indices each step so increment += 3
-    for (int i = 0; i < indices.length; i += 3) {
-      int i0 = indices[i];
-      int i1 = indices[i+1];
-      int i2 = indices[i+2];
-      
-      // Calculate the vertex normals
-      Vector3f v1 = vertices[i1].getPos().sub(vertices[i0].getPos());
-      Vector3f v2 = vertices[i2].getPos().sub(vertices[i0].getPos());
-      
-      // Cross these to get the face normal
-      Vector3f normal = v1.cross(v2).normalized();
-      
-      vertices[i0].setNormal(vertices[i0].getNormal().add(normal));
-      vertices[i1].setNormal(vertices[i1].getNormal().add(normal));
-      vertices[i2].setNormal(vertices[i2].getNormal().add(normal));
-    }
+//  private void calcNormals(Vertex[] vertices, int[] indices) {
+//    // We use 3 indices each step so increment += 3
+//    for (int i = 0; i < indices.length; i += 3) {
+//      int i0 = indices[i];
+//      int i1 = indices[i+1];
+//      int i2 = indices[i+2];
+//      
+//      // Calculate the vertex normals
+//      Vector3f v1 = vertices[i1].getPos().sub(vertices[i0].getPos());
+//      Vector3f v2 = vertices[i2].getPos().sub(vertices[i0].getPos());
+//      
+//      // Cross these to get the face normal
+//      Vector3f normal = v1.cross(v2).normalized();
+//      
+//      vertices[i0].setNormal(vertices[i0].getNormal().add(normal));
+//      vertices[i1].setNormal(vertices[i1].getNormal().add(normal));
+//      vertices[i2].setNormal(vertices[i2].getNormal().add(normal));
+//    }
+//    
+//    for (int i = 0; i < vertices.length; i++) {
+//      vertices[i].setNormal(vertices[i].getNormal().normalized());
+//    }
+//  }
+  
+  /**
+   * Free up buffers used by the model
+   */
+  public void cleanUp() {
+    glDisableVertexAttribArray(0);
     
-    for (int i = 0; i < vertices.length; i++) {
-      vertices[i].setNormal(vertices[i].getNormal().normalized());
-    }
+    // Delete VBOs
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glDeleteBuffers(vboID);
+    glDeleteBuffers(iboID);
+    glDeleteBuffers(cboID);
+    
+    // Delete VAO
+    glBindVertexArray(0);
+    glDeleteVertexArrays(vaoID);
   }
 
 }

@@ -3,8 +3,8 @@ package main;
 import static org.lwjgl.glfw.GLFW.*;
 
 import java.util.ArrayList;
-import java.util.Random;
 
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
@@ -13,8 +13,8 @@ import entity.Entity;
 import graphics.MasterRenderer;
 import graphics.Window;
 import graphics.model.Model;
+import graphics.model.Vertex;
 import input.Input;
-import math.Vector3f;
 
 public class Main {
   
@@ -32,39 +32,48 @@ public class Main {
   private float updateCap = 60;
   private float frameCap = 60;
   
-  private Model ship;
-  
   // TEMP
   private ArrayList<Entity> entities = new ArrayList<>();
   
+  private int width = 640;
+  private int height = 360;
+  
   public Main() {
     init();
-    renderer = new MasterRenderer();
+    renderer = new MasterRenderer(width, height);
     
     camera = new Camera();
     input = new Input(window);
     
     // TEMP
-    Model model = Model.loadModel("cube.obj");
-    Random rand = new Random();
+//    Model cube = Model.loadModel("cube.obj");
+//    entities.add(new Entity(new Vector3f(0, 0, 5), new Vector3f(), 1f, cube));
     
-    for (int i = 0; i < 300; i++) {
-      entities.add(new Entity(
-          new Vector3f(rand.nextInt(500) - 250, rand.nextInt(500) - 250, rand.nextInt(500)), 
-          new Vector3f(), 
-          2f,
-          model));
-    }
+    Model triangle = new Model();
     
-    ship = Model.loadModel("ship2.obj");
-    entities.add(new Entity(new Vector3f(0, 0, 5), new Vector3f(), 1, ship));
+    Vertex[] verts = new Vertex[] {
+        new Vertex(-0.5f,  0.5f,  -1.0f),
+        new Vertex(-0.5f, -0.5f,  -1.0f),
+        new Vertex( 0.5f, -0.5f,  -1.0f),
+        new Vertex( 0.5f,  0.5f,  -1.0f)
+    };
+    int[] indices = new int[] { 0, 1, 3, 1, 2, 3 };
+    float[] colors = new float[] {
+        0.5f, 0.0f, 0.0f,
+        0.0f, 0.5f, 0.0f,
+        0.0f, 0.0f, 0.5f,
+        0.0f, 0.5f, 0.5f
+    };
+    
+    triangle.bufferVertices(verts, indices, colors, false);
+    entities.add(new Entity(triangle, new Vector3f(0f, 0f, 0f)));
   }
   
   private void init() {
     glfwSetErrorCallback(errorCallBack = GLFWErrorCallback.createPrint(System.err));
     glfwInit();
     
-    window = new Window(1280, 720, "Hover Racer");
+    window = new Window(width, height, "Hover Racer");
     GL.createCapabilities();
   }
   
@@ -114,14 +123,6 @@ public class Main {
   }
   
   private void update() {
-    float i = 0.1f;
-    for (Entity entity : entities) {
-      if (entity.getModel() != ship) {
-        Vector3f rot = entity.getRot();
-        entity.setRot(new Vector3f(rot.x += 0.01f * i, rot.y += 0.02f, rot.z += 0.03f));
-      }
-      i += 0.01f;
-    }
   }
   
   private void render() {

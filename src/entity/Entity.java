@@ -1,44 +1,62 @@
 package entity;
 
+import org.joml.Vector3f;
+
 import graphics.model.Model;
-import math.Vector3f;
 
 public class Entity {
 
-  private Vector3f pos;
-  private Vector3f rot;
-  private float scale;
   private Model model;
   
-  public Entity(Vector3f pos, Vector3f rot, float scale, Model model) {
-    this.pos = pos;
-    this.rot = rot;
-    this.scale = scale;
+  private Vector3f position;
+  private Vector3f rotation;
+  private float scale;
+  
+  public Entity(Model model) {
+    this(model, new Vector3f(), new Vector3f(), 1f);
+  }
+  
+  public Entity(Model model, Vector3f position) {
+    this(model, position, new Vector3f(), 1f);
+  }
+  
+  public Entity(Model model, Vector3f position, Vector3f rotation, float scale) {
     this.model = model;
-  }
-
-  public Vector3f getPos() {
-    return pos;
-  }
-
-  public void setPos(Vector3f pos) {
-    this.pos = pos;
-  }
-  
-  public Vector3f getRot() {
-    return rot;
-  }
-  
-  public void setRot(Vector3f rot) {
-    this.rot = rot;
+    this.position = position;
+    this.rotation = rotation;
+    this.scale = scale;
   }
 
   public Model getModel() {
     return model;
   }
 
-  public void setModel(Model model) {
-    this.model = model;
+  public Vector3f getPosition() {
+    return position;
+  }
+  
+  public void setPosition(float x, float y, float z) {
+    this.position.x = x;
+    this.position.y = y;
+    this.position.z = z;
+  }
+
+  public void setPosition(Vector3f position) {
+    this.position = position;
+  }
+
+  public Vector3f getRotation() {
+    return rotation;
+  }
+  
+  public void setRotation(float x, float y, float z) {
+    this.rotation.x = x;
+    this.rotation.y = y;
+    this.rotation.z = z;
+  }
+
+  public void setRotation(Vector3f rotation) {
+    this.rotation = rotation;
   }
 
   public float getScale() {
@@ -48,6 +66,5 @@ public class Entity {
   public void setScale(float scale) {
     this.scale = scale;
   }
-  
-  
+
 }

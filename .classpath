@@ -47,5 +47,6 @@
 	<classpathentry kind="lib" path="lib/natives/lwjgl-tinyfd-natives-linux.jar"/>
 	<classpathentry kind="lib" path="lib/natives/lwjgl-tinyfd-natives-macos.jar"/>
 	<classpathentry kind="lib" path="lib/natives/lwjgl-tinyfd-natives-windows.jar"/>
+	<classpathentry kind="lib" path="lib/joml-1.9.1.jar" sourcepath="lib/sources/joml-1.9.1-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

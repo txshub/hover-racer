@@ -1,6 +1,6 @@
 package camera;
 
-import math.Vector3f;
+import org.joml.Vector3f;
 
 public class Camera {
   
@@ -22,8 +22,8 @@ public class Camera {
   
   public void move(float dx, float dy, float dz) {
     // Axes relative to the forward axis of the camera
-    Vector3f relXAxis = yAxis.cross(forward).normalized();
-    Vector3f relZAxis = forward.normalized();
+    Vector3f relXAxis = yAxis.cross(forward).normalize();
+    Vector3f relZAxis = forward.normalize();
     
     // Convert the relative movement to the global space
     float x = relXAxis.x * dx + relZAxis.x * dz;
@@ -36,15 +36,15 @@ public class Camera {
   }
   
   public void rotateY(float angle) {
-    Vector3f horAxis = yAxis.cross(forward.normalized());
-    forward = forward.rotate(yAxis, angle);
-    up = forward.cross(horAxis).normalized();
+    Vector3f horAxis = yAxis.cross(forward.normalize());
+//    forward = forward.rotate(yAxis, angle);
+    up = forward.cross(horAxis).normalize();
   }
   
   public void rotateX(float angle) {
-    Vector3f horAxis = yAxis.cross(forward.normalized());
-    forward = forward.rotate(horAxis, angle);
-    up = forward.cross(horAxis).normalized();
+    Vector3f horAxis = yAxis.cross(forward.normalize());
+//    forward = forward.rotate(horAxis, angle);
+    up = forward.cross(horAxis).normalize();
   }
 
   public Vector3f getForward() {
