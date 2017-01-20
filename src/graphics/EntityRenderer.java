@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import org.joml.Matrix4f;
 
+import camera.Camera;
 import entity.Entity;
 import graphics.model.Model;
 import graphics.shader.BasicShader2;
@@ -24,7 +25,12 @@ public class EntityRenderer {
     this.transform = new Transformation();
   }
 
-  public void render(HashMap<Model, ArrayList<Entity>> entities) {
+  public void render(HashMap<Model, ArrayList<Entity>> entities, Camera camera) {
+    // Update the view Matrix
+    Matrix4f viewMatrix = transform.getViewMatrix(camera);
+    
+    shader.updateTextureSampler(0);
+    
     for (Model model : entities.keySet()) {
       glBindVertexArray(model.getVAO());
       glEnableVertexAttribArray(0);
@@ -35,13 +41,9 @@ public class EntityRenderer {
       glBindTexture(GL_TEXTURE_2D, model.getTexture().getID());
       
       for (Entity entity : entities.get(model)) {
-        // Set the world matrix for this entity
-        Matrix4f worldMatrix = 
-            transform.getWorldMatrix(
-                entity.getPosition(), 
-                entity.getRotation(), 
-                entity.getScale());
-        shader.updateWorldMatrix(worldMatrix);
+        // Set the model view matrix for this entity
+        Matrix4f modelViewMatrix = transform.getModelViewMatrix(entity, viewMatrix);
+        shader.updateModelViewMatrix(modelViewMatrix);
         
         glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
       }

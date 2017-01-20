@@ -147,6 +147,8 @@ public class Main {
     };
     cube.bufferVertices(vertsCube, indicesCube, texCoordsCube);
     entities.add(new Entity(cube, new Vector3f(0f, 0f, -2f)));
+    entities.add(new Entity(cube, new Vector3f(5f, 0f, -4f), new Vector3f(), 2f));
+    entities.add(new Entity(cube, new Vector3f(-2f, 0f, -1f), new Vector3f(), 0.4f));
   }
   
   private void init() {
@@ -176,28 +178,31 @@ public class Main {
     if (window.shouldClose()) stop();
     
     float moveAmount = 0.1f;
-    
     float dx = 0;
     float dy = 0;
     float dz = 0;
     
     if (input.keys[GLFW_KEY_LEFT_CONTROL]) moveAmount *= 6;
     
-    if (input.keys[GLFW_KEY_W]) dz += moveAmount;
-    if (input.keys[GLFW_KEY_S]) dz -= moveAmount;
+    if (input.keys[GLFW_KEY_W]) dz -= moveAmount;
+    if (input.keys[GLFW_KEY_S]) dz += moveAmount;
     if (input.keys[GLFW_KEY_A]) dx -= moveAmount;
     if (input.keys[GLFW_KEY_D]) dx += moveAmount;
     if (input.keys[GLFW_KEY_SPACE]) dy += moveAmount;
     if (input.keys[GLFW_KEY_LEFT_SHIFT]) dy -= moveAmount;
     
-    camera.move(dx, dy, dz);
+    camera.movePosition(dx, dy, dz);
     
     float rotAmount = 1f;
+    float rx = 0;
+    float ry = 0;
     
-    if (input.keys[GLFW_KEY_UP]) camera.rotateX(-rotAmount); 
-    if (input.keys[GLFW_KEY_DOWN]) camera.rotateX(rotAmount); 
-    if (input.keys[GLFW_KEY_RIGHT]) camera.rotateY(rotAmount); 
-    if (input.keys[GLFW_KEY_LEFT]) camera.rotateY(-rotAmount); 
+    if (input.keys[GLFW_KEY_UP]) rx -= rotAmount;
+    if (input.keys[GLFW_KEY_DOWN]) rx += rotAmount;
+    if (input.keys[GLFW_KEY_RIGHT]) ry += rotAmount;
+    if (input.keys[GLFW_KEY_LEFT]) ry -= rotAmount;
+    
+    camera.moveRotation(rx, ry, 0);
     
     if (input.keys[GLFW_KEY_ESCAPE]) running = false;
   }

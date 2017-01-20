@@ -4,63 +4,57 @@ import org.joml.Vector3f;
 
 public class Camera {
   
-  private static final Vector3f yAxis = new Vector3f(0f, 1f, 0f);
-  
-  private Vector3f pos;
-  private Vector3f forward;
-  private Vector3f up;
+  private final Vector3f position;
+  private final Vector3f rotation;
   
   public Camera() {
-    this(new Vector3f());
+    position = new Vector3f();
+    rotation = new Vector3f();
   }
   
-  public Camera(Vector3f pos) {
-    this.pos = pos;
-    forward = new Vector3f(0f, 0f, 1f);
-    up = new Vector3f(0f, 1f, 0f);
+  public Camera(Vector3f position, Vector3f rotation) {
+    this.position = position;
+    this.rotation = rotation;
+  }
+
+  public Vector3f getPosition() {
+    return position;
   }
   
-  public void move(float dx, float dy, float dz) {
-    // Axes relative to the forward axis of the camera
-    Vector3f relXAxis = yAxis.cross(forward).normalize();
-    Vector3f relZAxis = forward.normalize();
+  public void setPosition(float x, float y, float z) {
+    position.x = x;
+    position.y = y;
+    position.z = z;
+  }
+  
+  public void movePosition(float offsetX, float offsetY, float offsetZ) {
+    if (offsetZ != 0) {
+      position.x += (float) Math.sin(Math.toRadians(rotation.y)) * -1.0f * offsetZ;
+      position.z += (float) Math.cos(Math.toRadians(rotation.y)) * offsetZ;
+    }
     
-    // Convert the relative movement to the global space
-    float x = relXAxis.x * dx + relZAxis.x * dz;
-    float y = dy;
-    float z = relXAxis.z * dx + relZAxis.z * dz;
+    if (offsetX != 0) {
+      position.x += (float) Math.sin(Math.toRadians(rotation.y - 90)) * -1.0f * offsetX;
+      position.z += (float) Math.cos(Math.toRadians(rotation.y - 90)) * offsetX;
+    }
     
-    pos.x += x;
-    pos.y += y;
-    pos.z += z;
+    position.y += offsetY;
+  }
+
+  public Vector3f getRotation() {
+    return rotation;
   }
   
-  public void rotateY(float angle) {
-    Vector3f horAxis = yAxis.cross(forward.normalize());
-//    forward = forward.rotate(yAxis, angle);
-    up = forward.cross(horAxis).normalize();
+  public void setRotation(float x, float y, float z) {
+    rotation.x = x;
+    rotation.y = y;
+    rotation.z = z;
   }
   
-  public void rotateX(float angle) {
-    Vector3f horAxis = yAxis.cross(forward.normalize());
-//    forward = forward.rotate(horAxis, angle);
-    up = forward.cross(horAxis).normalize();
-  }
-
-  public Vector3f getForward() {
-    return forward;
-  }
-
-  public Vector3f getPos() {
-    return pos;
-  }
-
-  public void setPos(Vector3f pos) {
-    this.pos = pos;
-  }
-
-  public Vector3f getUp() {
-    return up;
+  public void moveRotation(float offsetX, float offsetY, float offsetZ) {
+    rotation.x += offsetX;
+    rotation.y += offsetY;
+    rotation.z += offsetZ;
   }
   
 }
