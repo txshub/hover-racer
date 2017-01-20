@@ -15,6 +15,7 @@ import graphics.Window;
 import graphics.model.Model;
 import graphics.model.Vertex;
 import input.Input;
+import graphics.texture.Texture;
 
 public class Main {
   
@@ -49,24 +50,102 @@ public class Main {
 //    Model cube = Model.loadModel("cube.obj");
 //    entities.add(new Entity(new Vector3f(0, 0, 5), new Vector3f(), 1f, cube));
     
-    Model triangle = new Model();
+//    Model quad = new Model();
+//    Vertex[] verts = new Vertex[] {
+//        new Vertex(-0.5f,  0.5f,  -1.0f),
+//        new Vertex(-0.5f, -0.5f,  -1.0f),
+//        new Vertex( 0.5f, -0.5f,  -1.0f),
+//        new Vertex( 0.5f,  0.5f,  -1.0f)
+//    };
+//    int[] indices = new int[] { 0, 1, 3, 1, 2, 3 };
+//    float[] colors = new float[] {
+//        0.5f, 0.0f, 0.0f,
+//        0.0f, 0.5f, 0.0f,
+//        0.0f, 0.0f, 0.5f,
+//        0.0f, 0.5f, 0.5f
+//    };
+//    
+//    quad.bufferVertices(verts, indices, colors, false);
+//    entities.add(new Entity(quad, new Vector3f(2f, 0f, -1f)));
     
-    Vertex[] verts = new Vertex[] {
-        new Vertex(-0.5f,  0.5f,  -1.0f),
-        new Vertex(-0.5f, -0.5f,  -1.0f),
-        new Vertex( 0.5f, -0.5f,  -1.0f),
-        new Vertex( 0.5f,  0.5f,  -1.0f)
+    Model cube = new Model(new Texture("grass.png"));
+    Vertex[] vertsCube = new Vertex[] {
+        new Vertex(-0.5f,  0.5f,  0.5f), // V0
+        new Vertex(-0.5f, -0.5f,  0.5f), // V1
+        new Vertex( 0.5f, -0.5f,  0.5f), // V2
+        new Vertex( 0.5f,  0.5f,  0.5f), // V3
+        new Vertex(-0.5f,  0.5f, -0.5f), // V4
+        new Vertex( 0.5f,  0.5f, -0.5f), // V5
+        new Vertex(-0.5f, -0.5f, -0.5f), // V6
+        new Vertex( 0.5f, -0.5f, -0.5f), // V7
+        
+        // For texCoords top face
+        new Vertex(-0.5f,  0.5f, -0.5f), // V8 = V4
+        new Vertex( 0.5f,  0.5f, -0.5f), // V9 = V5
+        new Vertex(-0.5f,  0.5f,  0.5f), // V10 = V0
+        new Vertex( 0.5f,  0.5f,  0.5f), // V11 = V3
+        
+        // For texCoords right face
+        new Vertex( 0.5f,  0.5f,  0.5f), // V12 = V3
+        new Vertex( 0.5f, -0.5f,  0.5f), // V13 = V2
+        
+        // For texCoords in left face
+        new Vertex(-0.5f,  0.5f,  0.5f), // V14 = V0
+        new Vertex(-0.5f, -0.5f,  0.5f), // V15 = V1
+        
+        // For texCoords in bottom face
+        new Vertex(-0.5f, -0.5f, -0.5f), // V16 = V6
+        new Vertex( 0.5f, -0.5f, -0.5f), // V17 = V7
+        new Vertex(-0.5f, -0.5f,  0.5f), // V18 = V1
+        new Vertex( 0.5f, -0.5f,  0.5f), // V19 = V2
     };
-    int[] indices = new int[] { 0, 1, 3, 1, 2, 3 };
-    float[] colors = new float[] {
-        0.5f, 0.0f, 0.0f,
-        0.0f, 0.5f, 0.0f,
-        0.0f, 0.0f, 0.5f,
-        0.0f, 0.5f, 0.5f
+    int[] indicesCube = new int[] {
+     // Front face
+        0, 1, 3, 3, 1, 2,
+        // Top Face
+        8, 10, 11, 9, 8, 11,
+        // Right face
+        12, 13, 7, 5, 12, 7,
+        // Left face
+        14, 15, 6, 4, 14, 6,
+        // Bottom face
+        16, 18, 19, 17, 16, 19,
+        // Back face
+        4, 6, 7, 5, 4, 7
     };
-    
-    triangle.bufferVertices(verts, indices, colors, false);
-    entities.add(new Entity(triangle, new Vector3f(0f, 0f, 0f)));
+    float[] texCoordsCube = new float[] {
+        0.0f, 0.0f,
+        0.0f, 0.5f,
+        0.5f, 0.5f,
+        0.5f, 0.0f,
+        
+        0.0f, 0.0f,
+        0.5f, 0.0f,
+        0.0f, 0.5f,
+        0.5f, 0.5f,
+        
+        // For text coords in top face
+        0.0f, 0.5f,
+        0.5f, 0.5f,
+        0.0f, 1.0f,
+        0.5f, 1.0f,
+
+        // For text coords in right face
+        0.0f, 0.0f,
+        0.0f, 0.5f,
+
+        // For text coords in left face
+        0.5f, 0.0f,
+        0.5f, 0.5f,
+
+        // For text coords in bottom face
+        0.5f, 0.0f,
+        1.0f, 0.0f,
+        0.5f, 0.5f,
+        1.0f, 0.5f
+    };
+    cube.bufferVertices(vertsCube, indicesCube, texCoordsCube);
+    entities.add(new Entity(cube, new Vector3f(0f, 0f, -2f)));
   }
   
   private void init() {
@@ -123,6 +202,12 @@ public class Main {
   }
   
   private void update() {
+    Entity e = entities.get(0);
+    float rotation = e.getRotation().x + 1.5f;
+    if (rotation > 360) {
+      rotation = 0;
+    }
+    e.setRotation(rotation, rotation, rotation);
   }
   
   private void render() {

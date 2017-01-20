@@ -1,6 +1,7 @@
 package graphics;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
@@ -28,6 +29,10 @@ public class EntityRenderer {
       glBindVertexArray(model.getVAO());
       glEnableVertexAttribArray(0);
       glEnableVertexAttribArray(1);
+      
+      // Activate the first texture unit and bind to it
+      glActiveTexture(GL_TEXTURE0);
+      glBindTexture(GL_TEXTURE_2D, model.getTexture().getID());
       
       for (Entity entity : entities.get(model)) {
         // Set the world matrix for this entity

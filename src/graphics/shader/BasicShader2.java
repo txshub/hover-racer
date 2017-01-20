@@ -14,6 +14,7 @@ public class BasicShader2 extends Shader {
     // Create the uniforms
     addUniform("projectionMatrix");
     addUniform("worldMatrix");
+    addUniform("texture_sampler");
   }
 
   @Override
@@ -25,6 +26,10 @@ public class BasicShader2 extends Shader {
   
   public void updateWorldMatrix(Matrix4f matrix) {
     setUniform("worldMatrix", matrix);
+  }
+  
+  public void updateTextureSampler(int value) {
+    setUniform("texture_sampler", value);
   }
 
 }

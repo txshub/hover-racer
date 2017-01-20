@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
 
+import graphics.texture.Texture;
+
 public class Model {
   
   private int vertexCount;
@@ -21,20 +23,26 @@ public class Model {
   private int vboID;
   private int iboID;
   private int cboID;
+  private int tboID;
   
-  public Model() {
+  private Texture texture;
+  
+  public Model(Texture texture) {
     vertexCount = 0;
     vaoID = glGenVertexArrays();
     vboID = glGenBuffers();
     iboID = glGenBuffers();
     cboID = glGenBuffers();
+    tboID = glGenBuffers();
+    
+    this.texture = texture;
   }
   
 //  public void bufferVertices(Vertex[] vertices, int[] indices) {
 //    bufferVertices(vertices, indices, false);
 //  }
   
-  public void bufferVertices(Vertex[] vertices, int[] indices, float[] colors, boolean calcNormals) {
+  public void bufferVertices(Vertex[] vertices, int[] indices, float[] texCoords) {
     vertexCount = indices.length;
     
     glBindVertexArray(vaoID);
@@ -61,13 +69,22 @@ public class Model {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, iBuffer, GL_STATIC_DRAW);
     
     // Colour VBO
-    FloatBuffer cBuffer = BufferUtils.createFloatBuffer(colors.length);
-    cBuffer.put(colors);
-    cBuffer.flip();
+//    FloatBuffer cBuffer = BufferUtils.createFloatBuffer(colors.length);
+//    cBuffer.put(colors);
+//    cBuffer.flip();
+//    
+//    glBindBuffer(GL_ARRAY_BUFFER, cboID);
+//    glBufferData(GL_ARRAY_BUFFER, cBuffer, GL_STATIC_DRAW);
+//    glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
     
-    glBindBuffer(GL_ARRAY_BUFFER, cboID);
-    glBufferData(GL_ARRAY_BUFFER, cBuffer, GL_STATIC_DRAW);
-    glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
+    // Texture coordinates VBO
+    FloatBuffer tBuffer = BufferUtils.createFloatBuffer(texCoords.length);
+    tBuffer.put(texCoords);
+    tBuffer.flip();
+    
+    glBindBuffer(GL_ARRAY_BUFFER, tboID);
+    glBufferData(GL_ARRAY_BUFFER, tBuffer, GL_STATIC_DRAW);
+    glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
     
     // Unbind buffers
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -82,8 +99,12 @@ public class Model {
     return vaoID;
   }
 
-  public static Model loadModel(String fileName) {
-    Model res = new Model();
+  public Texture getTexture() {
+    return texture;
+  }
+
+  public static Model loadModel(String fileName, Texture texture) {
+    Model res = new Model(texture);
     ArrayList<Vertex> vertices = new ArrayList<>();
     ArrayList<Integer> indices = new ArrayList<>();
     

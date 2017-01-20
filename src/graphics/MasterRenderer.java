@@ -77,6 +77,8 @@ public class MasterRenderer {
     float aspect = (float) width / height;
     updateProjection(fov, aspect, 0.01f, 1000f);
     
+    basicShader.updateTextureSampler(0);
+    
     entityRenderer.render(entities);
     
     Shader.unbind();

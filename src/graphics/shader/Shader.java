@@ -155,6 +155,10 @@ public abstract class Shader {
     uniforms.put(uniformName, uniformLocation);
   }
   
+  protected void setUniform(String uniformName, int value) {
+    glUniform1i(uniforms.get(uniformName), value);
+  }
+  
   protected void setUniform(String uniformName, float value) {
     glUniform1f(uniforms.get(uniformName), value);
   }
