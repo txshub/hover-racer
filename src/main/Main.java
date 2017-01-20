@@ -36,8 +36,9 @@ public class Main {
   // TEMP
   private ArrayList<Entity> entities = new ArrayList<>();
   
-  private int width = 640;
-  private int height = 360;
+  // 1280x720 or 640x360
+  private int width = 1280;
+  private int height = 720;
   
   public Main() {
     init();
@@ -203,7 +204,7 @@ public class Main {
   
   private void update() {
     Entity e = entities.get(0);
-    float rotation = e.getRotation().x + 1.5f;
+    float rotation = e.getRotation().x + 0.5f;
     if (rotation > 360) {
       rotation = 0;
     }

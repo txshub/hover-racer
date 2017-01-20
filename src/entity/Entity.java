@@ -45,16 +45,30 @@ public class Entity {
     this.position = position;
   }
 
+  /**
+   * Returns rotation in degrees.
+   * @return rotation
+   */
   public Vector3f getRotation() {
     return rotation;
   }
   
+  /**
+   * Sets rotation around x, y and z axes in degrees.
+   * @param x
+   * @param y
+   * @param z
+   */
   public void setRotation(float x, float y, float z) {
     this.rotation.x = x;
     this.rotation.y = y;
     this.rotation.z = z;
   }
 
+  /**
+   * Sets rotation vector in degrees.
+   * @param rotation
+   */
   public void setRotation(Vector3f rotation) {
     this.rotation = rotation;
   }

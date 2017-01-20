@@ -1,7 +1,7 @@
 package graphics.texture;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL30.glGenerateMipmap;
+import static org.lwjgl.opengl.GL30.*;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -50,12 +50,16 @@ public class Texture {
     // Tell OpenGL how to unpack the bytes. Each component is one byte
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     
+    // Nearest neighbour scaling
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    
     // Upload the texture data
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), 
         decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
     
     // Generate a mipmap for scaling of textures
-    glGenerateMipmap(GL_TEXTURE_2D);
+//    glGenerateMipmap(GL_TEXTURE_2D);
     
     return textureID;
   }
