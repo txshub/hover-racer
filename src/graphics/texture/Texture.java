@@ -1,7 +1,6 @@
 package graphics.texture;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL30.*;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

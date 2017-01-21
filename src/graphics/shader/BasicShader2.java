@@ -1,6 +1,7 @@
 package graphics.shader;
 
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 public class BasicShader2 extends Shader {
 
@@ -15,6 +16,8 @@ public class BasicShader2 extends Shader {
     addUniform("projectionMatrix");
     addUniform("modelViewMatrix");
     addUniform("texture_sampler");
+    addUniform("color");
+    addUniform("useColor");
   }
 
   @Override
@@ -30,6 +33,14 @@ public class BasicShader2 extends Shader {
   
   public void updateTextureSampler(int value) {
     setUniform("texture_sampler", value);
+  }
+  
+  public void setColor(Vector3f color) {
+    setUniform("color", color);
+  }
+  
+  public void setUseColor(boolean useColor) {
+    setUniform("useColor", useColor ? 0 : 1);
   }
 
 }

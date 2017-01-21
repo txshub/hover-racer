@@ -11,6 +11,7 @@ import java.util.HashMap;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 
 public abstract class Shader {
@@ -169,6 +170,10 @@ public abstract class Shader {
   
   protected void setUniform(String uniformName, Vector3f value) {
     glUniform3f(uniforms.get(uniformName), value.x, value.y, value.z);
+  }
+  
+  protected void setUniform(String uniformName, Vector4f value) {
+    glUniform4f(uniforms.get(uniformName), value.x, value.y, value.z, value.w);
   }
   
   protected void setUniform(String uniformName, Matrix4f value) {

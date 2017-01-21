@@ -35,10 +35,16 @@ public class EntityRenderer {
       glBindVertexArray(model.getVAO());
       glEnableVertexAttribArray(0);
       glEnableVertexAttribArray(1);
+      glEnableVertexAttribArray(2);
       
-      // Activate the first texture unit and bind to it
-      glActiveTexture(GL_TEXTURE0);
-      glBindTexture(GL_TEXTURE_2D, model.getTexture().getID());
+      shader.setColor(model.getColor());
+      shader.setUseColor(model.isTextured());
+      
+      if (model.getTexture() != null) {
+        // Activate the first texture unit and bind to it
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, model.getTexture().getID());
+      }
       
       for (Entity entity : entities.get(model)) {
         // Set the model view matrix for this entity
@@ -48,9 +54,12 @@ public class EntityRenderer {
         glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
       }
 
+      // Restore state
       glDisableVertexAttribArray(0);
       glDisableVertexAttribArray(1);
+      glDisableVertexAttribArray(2);
       glBindVertexArray(0);
+      glBindTexture(GL_TEXTURE_2D, 0);
     }
   }
 

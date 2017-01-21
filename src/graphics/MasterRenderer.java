@@ -34,6 +34,9 @@ public class MasterRenderer {
     
     this.width = width;
     this.height = height;
+    
+    // Draw in line-frame mode
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   }
   
   private void init() {
