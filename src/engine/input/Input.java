@@ -1,10 +1,10 @@
-package input;
+package engine.input;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 import org.lwjgl.glfw.*;
 
-import graphics.Window;
+import engine.graphics.Window;
 
 public class Input {
 

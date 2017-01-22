@@ -1,8 +1,8 @@
-package entity;
+package engine.entity;
 
 import org.joml.Vector3f;
 
-import graphics.model.Model;
+import engine.graphics.model.Model;
 
 public class Entity {
 

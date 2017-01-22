@@ -1,4 +1,4 @@
-package graphics;
+package engine.graphics;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -8,11 +8,12 @@ import java.util.HashMap;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-import camera.Camera;
-import entity.Entity;
-import graphics.model.Model;
-import graphics.shader.BasicShader2;
-import graphics.shader.Shader;
+import engine.camera.Camera;
+import engine.entity.Entity;
+import engine.graphics.model.Model;
+import engine.graphics.shader.BasicShader2;
+import engine.graphics.shader.PointLight;
+import engine.graphics.shader.Shader;
 
 public class MasterRenderer {
   
@@ -22,26 +23,18 @@ public class MasterRenderer {
   private Transformation transform;
   
   private HashMap<Model, ArrayList<Entity>> entities = new HashMap<>();
-  
-  private int width;
-  private int height;
 
-  public MasterRenderer(int width, int height) {
-    init();
-    
+  public MasterRenderer() {
     shader = new BasicShader2();
     entityRenderer = new EntityRenderer(shader);
     
     transform = new Transformation();
     
-    this.width = width;
-    this.height = height;
-    
     // Draw in line-frame mode
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   }
   
-  private void init() {
+  public void init() {
     glEnable(GL_DEPTH_TEST);
   }
   
@@ -71,7 +64,7 @@ public class MasterRenderer {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
   
-  public void render(Camera camera, Vector3f ambientLight, PointLight pointLight) {
+  public void render(Window window, Camera camera, Vector3f ambientLight, PointLight pointLight) {
     //Matrix4f viewMatrix = Transform.getViewMatrix(camera);
     
     clear();
@@ -80,7 +73,7 @@ public class MasterRenderer {
 
     // Update projection matrix
     float fov = (float) Math.toRadians(70f);
-    float aspect = (float) width / height;
+    float aspect = (float) window.getWidth() / window.getHeight();
     Matrix4f projectionMatrix = transform.getProjectionMatrix(fov, aspect, 0.01f, 1000);
     shader.updateProjectionMatrix(projectionMatrix);
     

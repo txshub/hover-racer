@@ -1,4 +1,4 @@
-package graphics.model;
+package engine.graphics.model;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
@@ -10,8 +10,6 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
-
-import graphics.Material;
 
 public class Model {
   

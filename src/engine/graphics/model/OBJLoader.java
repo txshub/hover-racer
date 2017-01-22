@@ -1,4 +1,4 @@
-package graphics.model;
+package engine.graphics.model;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

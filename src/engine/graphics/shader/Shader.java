@@ -1,4 +1,4 @@
-package graphics.shader;
+package engine.graphics.shader;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;

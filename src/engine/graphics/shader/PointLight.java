@@ -1,4 +1,4 @@
-package graphics;
+package engine.graphics.shader;
 
 import org.joml.Vector3f;
 

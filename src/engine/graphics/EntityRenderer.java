@@ -1,4 +1,4 @@
-package graphics;
+package engine.graphics;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
@@ -12,11 +12,12 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import camera.Camera;
-import entity.Entity;
-import graphics.model.Model;
-import graphics.shader.BasicShader2;
-import graphics.texture.Texture;
+import engine.camera.Camera;
+import engine.entity.Entity;
+import engine.graphics.model.Model;
+import engine.graphics.model.Texture;
+import engine.graphics.shader.BasicShader2;
+import engine.graphics.shader.PointLight;
 
 public class EntityRenderer {
   

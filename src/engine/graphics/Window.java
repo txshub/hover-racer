@@ -1,4 +1,4 @@
-package graphics;
+package engine.graphics;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -9,8 +9,14 @@ import org.lwjgl.glfw.GLFWVidMode;
 public class Window {
   
   private long window;
+  
+  private int height;
+  private int width;
 
   public Window(int width, int height, String title) {
+    this.height = height;
+    this.width = width;
+    
     // Set the window hints
     glfwDefaultWindowHints();
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -55,6 +61,14 @@ public class Window {
   
   public long getWindow() {
     return window;
+  }
+  
+  public int getWidth() {
+    return width;
+  }
+  
+  public int getHeight() {
+    return height;
   }
 
 }

@@ -1,4 +1,4 @@
-package graphics.texture;
+package engine.graphics.model;
 
 import static org.lwjgl.opengl.GL11.*;
 

@@ -1,10 +1,10 @@
-package graphics;
+package engine.graphics;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-import camera.Camera;
-import entity.Entity;
+import engine.camera.Camera;
+import engine.entity.Entity;
 
 public class Transformation {
 

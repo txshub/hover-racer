@@ -1,10 +1,9 @@
-package graphics.shader;
+package engine.graphics.shader;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-import graphics.Material;
-import graphics.PointLight;
+import engine.graphics.model.Material;
 
 public class BasicShader2 extends Shader {
 
