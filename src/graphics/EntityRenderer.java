@@ -9,11 +9,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import camera.Camera;
 import entity.Entity;
 import graphics.model.Model;
 import graphics.shader.BasicShader2;
+import graphics.texture.Texture;
 
 public class EntityRenderer {
   
@@ -25,26 +28,42 @@ public class EntityRenderer {
     this.transform = new Transformation();
   }
 
-  public void render(HashMap<Model, ArrayList<Entity>> entities, Camera camera) {
+  public void render(HashMap<Model, ArrayList<Entity>> entities, Camera camera, 
+      Vector3f ambientLight, PointLight pointLight) {
+    
     // Update the view Matrix
     Matrix4f viewMatrix = transform.getViewMatrix(camera);
+    
+    // Update light uniforms
+    shader.updateAmbientLight(ambientLight);
+    shader.updateSpecularPower(10f);
+    
+    // Get a copy of the light object and transform its position to view coordinates
+    PointLight currPointLight = new PointLight(pointLight);
+    Vector3f lightPos = currPointLight.getPosition();
+    Vector4f aux = new Vector4f(lightPos, 1);
+    aux.mul(viewMatrix);
+    lightPos.x = aux.x;
+    lightPos.y = aux.y;
+    lightPos.z = aux.z;
+    shader.updatePointLight(currPointLight);
     
     shader.updateTextureSampler(0);
     
     for (Model model : entities.keySet()) {
+      Texture texture = model.getMaterial().getTexture();
+      if (texture != null) {
+        // Activate the first texture unit and bind the texture to it
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture.getID());
+      }
+      
+      shader.updateMaterial(model.getMaterial());
+      
       glBindVertexArray(model.getVAO());
       glEnableVertexAttribArray(0);
       glEnableVertexAttribArray(1);
       glEnableVertexAttribArray(2);
-      
-      shader.setColor(model.getColor());
-      shader.setUseColor(model.isTextured());
-      
-      if (model.getTexture() != null) {
-        // Activate the first texture unit and bind to it
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, model.getTexture().getID());
-      }
       
       for (Entity entity : entities.get(model)) {
         // Set the model view matrix for this entity

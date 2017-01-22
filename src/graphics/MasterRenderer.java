@@ -5,16 +5,18 @@ import static org.lwjgl.opengl.GL11.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+
 import camera.Camera;
 import entity.Entity;
 import graphics.model.Model;
 import graphics.shader.BasicShader2;
 import graphics.shader.Shader;
-import org.joml.Matrix4f;
 
 public class MasterRenderer {
   
-  private BasicShader2 basicShader;
+  private BasicShader2 shader;
   private EntityRenderer entityRenderer;
 
   private Transformation transform;
@@ -27,8 +29,8 @@ public class MasterRenderer {
   public MasterRenderer(int width, int height) {
     init();
     
-    basicShader = new BasicShader2();
-    entityRenderer = new EntityRenderer(basicShader);
+    shader = new BasicShader2();
+    entityRenderer = new EntityRenderer(shader);
     
     transform = new Transformation();
     
@@ -69,30 +71,27 @@ public class MasterRenderer {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
   
-  public void render(Camera camera) {
+  public void render(Camera camera, Vector3f ambientLight, PointLight pointLight) {
     //Matrix4f viewMatrix = Transform.getViewMatrix(camera);
     
     clear();
     
-    basicShader.bind();
+    shader.bind();
 
+    // Update projection matrix
     float fov = (float) Math.toRadians(70f);
     float aspect = (float) width / height;
-    updateProjection(fov, aspect, 0.01f, 1000f);
+    Matrix4f projectionMatrix = transform.getProjectionMatrix(fov, aspect, 0.01f, 1000);
+    shader.updateProjectionMatrix(projectionMatrix);
     
-    entityRenderer.render(entities, camera);
+    entityRenderer.render(entities, camera, ambientLight, pointLight);
     
     Shader.unbind();
     entities.clear();
   }
-  
-  private void updateProjection(float fov, float aspect, float zNear, float zFar) {
-    Matrix4f projectionMatrix = transform.getProjectionMatrix(fov, aspect, zNear, zFar);
-    basicShader.updateProjection(projectionMatrix);
-  }
 
   public void cleanUp() {
-    basicShader.cleanUp();
+    shader.cleanUp();
   }
   
 }

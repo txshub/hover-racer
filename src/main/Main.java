@@ -3,7 +3,6 @@ package main;
 import static org.lwjgl.glfw.GLFW.*;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -12,6 +11,9 @@ import org.lwjgl.opengl.GL;
 import camera.Camera;
 import entity.Entity;
 import graphics.MasterRenderer;
+import graphics.Material;
+import graphics.PointLight;
+import graphics.PointLight.Attenuation;
 import graphics.Window;
 import graphics.model.Model;
 import graphics.model.OBJLoader;
@@ -36,6 +38,11 @@ public class Main {
   
   private ArrayList<Entity> entities = new ArrayList<>();
   
+  private Vector3f ambientLight;
+  private PointLight pointLight;
+  
+  private boolean spinning = false;
+  
   // 1280x720 or 640x360
   private int width = 1280;
   private int height = 720;
@@ -48,18 +55,31 @@ public class Main {
     input = new Input(window);
 
     Model cube = OBJLoader.loadModel("cube.obj");
-    cube.setTexture(new Texture("grass.png"));
+    Texture texture = new Texture("grass.png");
+    Material material = new Material(texture, 1f);
+    cube.setMaterial(material);
     
-    Random r = new Random();
-    for (int i = 0; i < 100; i++) {
-      float x = r.nextFloat() * 100 - 50;
-      float y = r.nextFloat() * 100 - 50;
-      float z = r.nextFloat() * -100;
-      entities.add(new Entity(cube, new Vector3f(x, y, z)));
-    }
+//    Random r = new Random();
+//    for (int i = 0; i < 100; i++) {
+//      float x = r.nextFloat() * 100 - 50;
+//      float y = r.nextFloat() * 100 - 50;
+//      float z = r.nextFloat() * -100;
+//      entities.add(new Entity(cube, new Vector3f(x, y, z)));
+//    }
+    
+    entities.add(new Entity(cube, new Vector3f(3f, 0f, -2f)));
+    entities.add(new Entity(cube, new Vector3f(-2f, -2f, -2f)));
     
     Model bunny = OBJLoader.loadModel("bunny.obj");
-    entities.add(new Entity(bunny, new Vector3f(0, 0, -5f)));
+    bunny.setMaterial(new Material(new Vector3f(0.8f, 0.5f, 0.5f), 2f));
+    entities.add(new Entity(bunny, new Vector3f(0f, 0f, -5f)));
+    
+    ambientLight = new Vector3f(0.3f, 0.3f, 0.3f);
+    Vector3f lightColor = new Vector3f(1f, 1f, 1f);
+    Vector3f lightPosition = new Vector3f(0f, 0f, 1f);
+    float lightIntensity = 2.0f;
+    pointLight = new PointLight(lightColor, lightPosition, lightIntensity);
+    pointLight.setAttenuation(new Attenuation(0f, 0f, 0.5f));
   }
   
   private void init() {
@@ -115,18 +135,37 @@ public class Main {
     
     camera.moveRotation(rx, ry, 0);
     
+    moveAmount = 0.1f;
+    dx = 0;
+    dy = 0;
+    dz = 0;
+    
+    if (input.keys[GLFW_KEY_I]) dz -= moveAmount;
+    if (input.keys[GLFW_KEY_K]) dz += moveAmount;
+    if (input.keys[GLFW_KEY_J]) dx -= moveAmount;
+    if (input.keys[GLFW_KEY_L]) dx += moveAmount;
+    
+    pointLight.movePosition(dx, dy, dz);
+    
+    if (input.keys[GLFW_KEY_P]) spinning = !spinning;
+    
     if (input.keys[GLFW_KEY_ESCAPE]) running = false;
   }
   
   private void update() {
-    for (Entity e : entities) {
-      float off = entities.indexOf(e) % 100 / 20;
-      float rotation = e.getRotation().x + 0.5f + off;
-      if (rotation > 360) {
-        rotation = 0;
+    if (spinning) {
+      for (Entity e : entities) {
+        float off = entities.indexOf(e) % 100 / 20;
+        float rotation = e.getRotation().x + 0.5f + off;
+        if (rotation > 360) {
+          rotation = 0;
+        }
+        e.setRotation(rotation, rotation, rotation);
       }
-      e.setRotation(rotation, rotation, rotation);
     }
+    
+    pointLight.setIntensity(5f);
+    pointLight.setAttenuation(new Attenuation(0f, 0f, 0.2f));
   }
   
   private void render() {
@@ -134,7 +173,7 @@ public class Main {
     for (int i = 0; i < entities.size(); i++) renderer.processEntity(entities.get(i));
     
     // Do drawing and swap the buffers to display the rendered image
-    renderer.render(camera);
+    renderer.render(camera, ambientLight, pointLight);
     window.render();
   }
   

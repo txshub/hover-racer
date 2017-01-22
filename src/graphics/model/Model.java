@@ -9,10 +9,9 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
-import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 
-import graphics.texture.Texture;
+import graphics.Material;
 
 public class Model {
   
@@ -20,18 +19,14 @@ public class Model {
   
   private int vaoID;
   private ArrayList<Integer> vboList;
-  
-  private Texture texture;
-  private Vector3f color;
+
+  private Material material;
   
   public Model(float[] vertices, int[] indices, float[] normals, float[] texCoords) {
     vertexCount = 0;
     
     vaoID = glGenVertexArrays();
     vboList = new ArrayList<>();
-    
-    texture = null;
-    color = new Vector3f();
     
     bufferVertices(vertices, indices, normals, texCoords);
   }
@@ -103,32 +98,20 @@ public class Model {
     glBindVertexArray(0);
   }
   
-  public int getVertexCount() {
-    return vertexCount;
+  public Material getMaterial() {
+    return material;
   }
-  
+
+  public void setMaterial(Material material) {
+    this.material = material;
+  }
+
   public int getVAO() {
     return vaoID;
   }
-  
-  public boolean isTextured() {
-    return texture != null;
-  }
 
-  public Texture getTexture() {
-    return texture;
-  }
-  
-  public void setTexture(Texture texture) {
-    this.texture = texture;
-  }
-  
-  public void setColor(Vector3f color) {
-    this.color = color;
-  }
-  
-  public Vector3f getColor() {
-    return color;
+  public int getVertexCount() {
+    return vertexCount;
   }
     
   /**
