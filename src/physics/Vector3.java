@@ -4,15 +4,15 @@ import java.util.function.DoubleUnaryOperator;
 
 public class Vector3 {
 
-	double x, y, z;
+	float x, y, z;
 
 
-	public Vector3(double x, double y, double z) {
+	public Vector3(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
-	public Vector3(double[] values) {
+	public Vector3(float[] values) {
 		this.x = values[0];
 		this.y = values[1];
 		this.z = values[2];
@@ -33,50 +33,53 @@ public class Vector3 {
 	public Vector3 substract(Vector3 v) {
 		return add(v.multiply(-1));
 	}
-	public Vector3 multiply(double scalar) {
+	public Vector3 multiply(float scalar) {
 		return forEach(a -> a * scalar);
 	}
+	public Vector3 multiply(double scalar) {
+		return forEach(a -> (float) (a * scalar));
+	}
 	public Vector3 forEach(DoubleUnaryOperator f) {
-		this.x = f.applyAsDouble(x);
-		this.y = f.applyAsDouble(y);
-		this.z = f.applyAsDouble(z);
+		changeX(f);
+		changeY(f);
+		changeZ(f);
 		return this;
 	}
-	public double distanceTo(Vector3 v) {
-		return Math.sqrt(Math.pow(x - v.getX(), 2) + Math.pow(y - v.getY(), 2) + Math.pow(z - v.getZ(), 2));
+	public float distanceTo(Vector3 v) {
+		return (float) (Math.sqrt(Math.pow(x - v.getX(), 2) + Math.pow(y - v.getY(), 2) + Math.pow(z - v.getZ(), 2)));
 	}
 
-	public double[] asArray() {
-		return new double[]{x, y, z};
+	public float[] asArray() {
+		return new float[]{x, y, z};
 	}
 
-	public double getX() {
+	public float getX() {
 		return x;
 	}
-	public void setX(double x) {
+	public void setX(float x) {
 		this.x = x;
 	}
-	public double getY() {
+	public float getY() {
 		return y;
 	}
-	public void setY(double y) {
+	public void setY(float y) {
 		this.y = y;
 	}
-	public void setZ(double z) {
+	public void setZ(float z) {
 		this.z = z;
 	}
-	public double getZ() {
+	public float getZ() {
 		return z;
 	}
 
 	public void changeX(DoubleUnaryOperator f) {
-		this.x = f.applyAsDouble(x);
+		this.x = (float) f.applyAsDouble(x);
 	}
 	public void changeY(DoubleUnaryOperator f) {
-		this.y = f.applyAsDouble(y);
+		this.y = (float) f.applyAsDouble(y);
 	}
 	public void changeZ(DoubleUnaryOperator f) {
-		this.z = f.applyAsDouble(z);
+		this.z = (float) f.applyAsDouble(z);
 	}
 
 	public Vector3 copy() {
