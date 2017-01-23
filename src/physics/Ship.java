@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import placeholders.Action;
 import placeholders.ControllerInt;
+import placeholders.ExportedShip;
 import placeholders.FakeController;
 
 public class Ship {
@@ -42,6 +43,9 @@ public class Ship {
 		this.size = DEFAULT_SIZE;
 		this.controller = controller;
 		this.otherShips = otherShips;
+	}
+	public Ship(float[] numbers) {
+		// TODO
 	}
 
 	/** Accelerate in any direction within the 2d horizontal plane. The acceleration is instant; it's basically just changing velocities
@@ -131,6 +135,10 @@ public class Ship {
 	/** @return This ship's mass */
 	public float getMass() {
 		return mass;
+	}
+
+	public float[] export() {
+		return (new ExportedShip(position, velocity, controller.getPressedKeys())).toNumbers();
 	}
 
 }
