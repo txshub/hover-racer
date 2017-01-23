@@ -1,7 +1,5 @@
 package audioEngine;
 
-import java.awt.datatransfer.FlavorTable;
-
 import org.lwjgl.openal.AL10;
 
 public class Source {
@@ -10,9 +8,13 @@ public class Source {
 	
 	public Source() {
 		sourceId = AL10.alGenSources();
-		AL10.alSourcef(sourceId, AL10.AL_GAIN, 1);
+		AL10.alSourcef(sourceId, AL10.AL_GAIN, 3);
 		AL10.alSourcef(sourceId, AL10.AL_PITCH, 1);
 		AL10.alSource3f(sourceId, AL10.AL_POSITION, 0, 0, 0);
+		AL10.alSource3f(sourceId, AL10.AL_VELOCITY, 0, 0, 0);
+		AL10.alSourcef(sourceId, AL10.AL_ROLLOFF_FACTOR, 1);
+		AL10.alSourcef(sourceId, AL10.AL_REFERENCE_DISTANCE, 10);
+		AL10.alSourcef(sourceId, AL10.AL_MAX_DISTANCE, 250);
 	}
 	
 	/*

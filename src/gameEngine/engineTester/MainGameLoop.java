@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -11,6 +13,8 @@ import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
+import audioEngine.AudioMaster;
+import audioEngine.Source;
 import gameEngine.entities.Camera;
 import gameEngine.entities.Entity;
 import gameEngine.entities.Light;
@@ -43,6 +47,8 @@ public class MainGameLoop {
 
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
+		AudioMaster.init();
+		AL10.alDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
 
 		/************************* Terrain ********************************/ 
 
@@ -65,11 +71,11 @@ public class MainGameLoop {
 			}
 		}
 
-		// List<Terrain> list2 = new ArrayList<Terrain>();
-		// Terrain terrain = new Terrain((int) (-Terrain.SIZE / 2), (int)
-		// (-Terrain.SIZE / 2), loader, texturePack,
-		// blendMap, "heightMap2");
-		// list2.add(terrain);
+//		 List<Terrain> list2 = new ArrayList<Terrain>();
+//		 Terrain terrain = new Terrain((int) (-Terrain.SIZE / 2), (int)
+//		 (-Terrain.SIZE / 2), loader, texturePack,
+//		 blendMap, "heightMap2");
+//		 list2.add(terrain);
 
 		/************************* Player ********************************/
 
@@ -100,6 +106,15 @@ public class MainGameLoop {
 			entity.getModel().getTexture().setReflectivity(0.5f);
 			entity.getModel().getTexture().setShineDamper(50);
 			list.add(entity);
+			
+			Source source = new Source();
+			source.setPosition(entity.getPosition().x, entity.getPosition().y, entity.getPosition().z);
+			source.setLooping(true);
+			source.setVolume(2);
+			source.setPitch(1.2f);
+			
+			int buffer = AudioMaster.loadSound("audioEngine/bounce.wav");
+			source.play(buffer);
 		}
 
 		/************************* Grass ********************************/
@@ -296,6 +311,7 @@ public class MainGameLoop {
 		renderer.cleanUp();
 		loader.cleanUp();
 		wfb.cleanUp();
+		AudioMaster.cleanUP();
 		DisplayManager.closeDisplay();
 
 	}
