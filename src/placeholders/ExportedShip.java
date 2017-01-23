@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import physics.Vector3;
 
-public class ExportedShip {
+public class ExportedShip implements ControllerInt {
 
 	Vector3 position;
 	Vector3 velocity;
@@ -35,14 +35,11 @@ public class ExportedShip {
 	public Vector3 getPosition() {
 		return position;
 	}
-	public void setPosition(Vector3 position) {
-		this.position = position;
+	public Vector3 getVelocity() {
+		return velocity;
 	}
 	public Collection<Action> getKeys() {
 		return keys;
-	}
-	public void setKeys(Collection<Action> keys) {
-		this.keys = keys;
 	}
 
 	public float[] toNumbers() {
@@ -84,6 +81,11 @@ public class ExportedShip {
 			res += action + ", ";
 		}
 		return res;
+	}
+
+	@Override
+	public Collection<Action> getPressedKeys() {
+		return getKeys();
 	}
 
 

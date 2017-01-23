@@ -14,9 +14,5 @@ public class FakeController implements ControllerInt {
 		return new ArrayList<Action>();
 	}
 
-	@Override
-	public Collection<Action> getNewlyPressedKeys() {
-		return new ArrayList<Action>();
-	}
 
 }
