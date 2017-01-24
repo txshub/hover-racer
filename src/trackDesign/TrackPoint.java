@@ -8,22 +8,13 @@ import java.awt.Color;
  *
  */
 public class TrackPoint implements Comparable<TrackPoint>{
-<<<<<<< HEAD
 	private float x,y;
-=======
-	private int x,y;
->>>>>>> f37925c46b61b7de7344634a6046994d80e41aaf
 	/**
 	 * Creates a new TrackPoint object
 	 * @param x X coordinate of the point
 	 * @param y Y coordinate of the point
 	 */
-<<<<<<< HEAD
 	public TrackPoint(float x, float y) {
-=======
-	public TrackPoint(int x, int y) {
-		System.out.println("New point at " + x + ", " + y);
->>>>>>> f37925c46b61b7de7344634a6046994d80e41aaf
 		this.x = x;
 		this.y = y;
 	}
@@ -32,11 +23,7 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	 * Returns the X coordinate of this point
 	 * @return The X coordinate of this point
 	 */
-<<<<<<< HEAD
 	public float getX() {
-=======
-	public int getX() {
->>>>>>> f37925c46b61b7de7344634a6046994d80e41aaf
 		return x;
 	}
 	
@@ -44,11 +31,7 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	 * Returns the Y coordinate of this point
 	 * @return The Y coordinate of this point
 	 */
-<<<<<<< HEAD
 	public float getY() {
-=======
-	public int getY() {
->>>>>>> f37925c46b61b7de7344634a6046994d80e41aaf
 		return y;
 	}
 	
@@ -56,12 +39,7 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	 * Sets a new X coordinate for this point
 	 * @param x New X coordinate for this point
 	 */
-<<<<<<< HEAD
 	public void setX(float x) {
-=======
-	public void setX(int x) {
-		System.out.println("Changing x from " + this.x + " to " + x);
->>>>>>> f37925c46b61b7de7344634a6046994d80e41aaf
 		this.x = x;
 	}
 	
@@ -69,12 +47,7 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	 * Sets a new Y coordinate for this point
 	 * @param y New Y coordinate for this point
 	 */
-<<<<<<< HEAD
 	public void setY(float y) {
-=======
-	public void setY(int y) {
-		System.out.println("Changing y from " + this.y + " to " + y);
->>>>>>> f37925c46b61b7de7344634a6046994d80e41aaf
 		this.y = y;
 	}
 	
@@ -83,15 +56,9 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	 * @param p The point to measure distance to
 	 * @return The distance between this and point p
 	 */
-<<<<<<< HEAD
 	public float dist(TrackPoint p) {
 		float dx = this.x - p.getX();
 		float dy = this.y - p.getY();
-=======
-	public int dist(TrackPoint p) {
-		int dx = this.x - p.getX();
-		int dy = this.y - p.getY();
->>>>>>> f37925c46b61b7de7344634a6046994d80e41aaf
 		return (int) Math.sqrt((dx*dx) + (dy*dy));
 	}
 	
