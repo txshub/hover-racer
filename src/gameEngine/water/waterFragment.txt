@@ -1,0 +1,73 @@
+#version 400 core
+
+in vec4 clipSpace;
+in vec2 textureCoords;
+in vec3 toCameraVector;
+in vec3 fromLight;
+
+out vec4 out_Color;
+
+uniform sampler2D reflectionTexture;
+uniform sampler2D refractionTexture;
+uniform sampler2D dudvMap;
+uniform sampler2D normalMap;
+uniform sampler2D depthMap;
+uniform vec3 lightColour;
+uniform vec3 skyColour;
+
+uniform float moveFactor;
+
+const float waveStrength = 0.04;
+const float shineDamper = 20.0;
+const float reflectivity = 0.5f;
+
+void main(void) {
+
+
+
+	vec2 ndc = (clipSpace.xy/(clipSpace.w ))* 0.5 + 0.5;
+	vec2 refractionTexCoords = vec2(ndc.x, ndc.y);
+	vec2 reflectionTexCoords = vec2(ndc.x, -ndc.y);
+	
+	float near = 0.1;
+	float far = 10000.0;
+	float depth = texture(depthMap, refractionTexCoords).r;
+	float floorDistance =  2.0 * near * far / ( far + near - (2.0 * depth - 1.0) * (far - near));
+	
+	depth = gl_FragCoord.z;
+	float waterDistance = 2.0 * near * far / ( far + near - (2.0 * depth - 1.0) * (far - near));
+	float waterDepth = floorDistance - waterDistance;
+	
+	vec2 distortedTextureCoords = (texture(dudvMap, vec2(textureCoords.x + moveFactor,textureCoords.y)).rg * 2.0 - 1.0) * waveStrength;
+	distortedTextureCoords = textureCoords + vec2(distortedTextureCoords.x, distortedTextureCoords.y+moveFactor);
+	vec2 totalDistortion = (texture(dudvMap, distortedTextureCoords).rg * 2.0 - 1.0) * waveStrength; 
+	
+	refractionTexCoords += totalDistortion;
+	refractionTexCoords = clamp(refractionTexCoords, 0.001, 0.999);
+	reflectionTexCoords += totalDistortion;
+	reflectionTexCoords.x = clamp(reflectionTexCoords.x, 0.001, 0.999);
+	reflectionTexCoords.y = clamp(reflectionTexCoords.y, -0.999, -0.001);
+	
+	vec4 reflectionColour = texture(reflectionTexture, reflectionTexCoords);
+	vec4 refractionColour = texture(refractionTexture, refractionTexCoords);
+	
+	vec3 viewVector = normalize(toCameraVector);
+	float refractiveFactor = dot(viewVector, vec3(0.0, 1.0, 0.0));
+	refractiveFactor = pow(refractiveFactor, 3.0);
+	
+	vec4 normalMapColour = texture(normalMap,distortedTextureCoords);
+	vec3 normal = normalize(vec3(normalMapColour.r * 2.0 - 1.0, normalMapColour.b, normalMapColour.g * 2.0 - 1.0));
+	normal = normalize(normal);
+	
+	vec3 reflactedLight = reflect(normalize(fromLight), normal);
+	float specular = max(dot(reflactedLight, viewVector), 0.0);
+	specular = pow(specular, shineDamper);
+	vec3 specularHighlights = lightColour * specular * reflectivity * clamp(waterDepth*0.01,0.0,1.0);
+
+	out_Color = mix(reflectionColour, refractionColour, refractiveFactor);
+	out_Color = mix(out_Color, vec4(0.1,0.2,0.3,1), 0.2) + vec4(specularHighlights,0.0);
+	out_Color.a = clamp(waterDepth*0.1,0.0,1.0);
+	
+}
+
+
