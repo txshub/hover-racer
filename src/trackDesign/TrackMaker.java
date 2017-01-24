@@ -2,7 +2,6 @@ package trackDesign;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
-
 import trackDesign.catmullrom.SplineUtils;
 /**
  * Class to make the track
@@ -30,6 +29,7 @@ public class TrackMaker {
 	 * @param maxDisp Max displacement 
 	 * @return An arraylist of track points forming the route
 	 */
+
 	public static ArrayList<TrackPoint> makeTrack(int minTrackPoints, int maxTrackPoints, float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs) {
 		Random temp = new Random();
 		return makeTrack(temp.nextLong(), minTrackPoints, maxTrackPoints, minDist, seperateIterations, difficulty, maxDisp, subDivs);
