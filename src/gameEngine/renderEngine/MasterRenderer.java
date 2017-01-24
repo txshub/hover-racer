@@ -19,7 +19,6 @@ import gameEngine.shaders.StaticShader;
 import gameEngine.shaders.TerrainShader;
 import gameEngine.skybox.SkyboxRenderer;
 import gameEngine.terrains.Terrain;
-import gameEngine.water.WaterShader;
 
 public class MasterRenderer {
 
