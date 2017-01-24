@@ -7,7 +7,9 @@ import javax.swing.JComponent;
 
 public class TrackComponent extends JComponent {
 	
-	private ArrayList<TrackPoint> track;
+  private static final long serialVersionUID = 1L;
+  
+  private ArrayList<TrackPoint> track;
 	
 	public TrackComponent() {
 		super();

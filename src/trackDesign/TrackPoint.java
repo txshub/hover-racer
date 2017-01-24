@@ -1,7 +1,6 @@
 package trackDesign;
-import java.awt.geom.Ellipse2D;
-import java.awt.Graphics2D;
 import java.awt.Color;
+import java.awt.Graphics2D;
 /**
  * This class exists in order to have a sortable point, as well as a square distance measure
  * @author sxw588
@@ -91,7 +90,7 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	public void draw(Graphics2D g) {
 		g.setColor(Color.RED);
 		g.drawOval(x*2, y*2, 2, 2);
-		System.out.println("Drawing point at " + x + ", " + y);
+//		System.out.println("Drawing point at " + x + ", " + y);
 	}
 	
 	
