@@ -8,14 +8,13 @@ import java.awt.Color;
  *
  */
 public class TrackPoint implements Comparable<TrackPoint>{
-	private int x,y;
+	private float x,y;
 	/**
 	 * Creates a new TrackPoint object
 	 * @param x X coordinate of the point
 	 * @param y Y coordinate of the point
 	 */
-	public TrackPoint(int x, int y) {
-		System.out.println("New point at " + x + ", " + y);
+	public TrackPoint(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -24,7 +23,7 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	 * Returns the X coordinate of this point
 	 * @return The X coordinate of this point
 	 */
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 	
@@ -32,7 +31,7 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	 * Returns the Y coordinate of this point
 	 * @return The Y coordinate of this point
 	 */
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 	
@@ -40,8 +39,7 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	 * Sets a new X coordinate for this point
 	 * @param x New X coordinate for this point
 	 */
-	public void setX(int x) {
-		System.out.println("Changing x from " + this.x + " to " + x);
+	public void setX(float x) {
 		this.x = x;
 	}
 	
@@ -49,8 +47,7 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	 * Sets a new Y coordinate for this point
 	 * @param y New Y coordinate for this point
 	 */
-	public void setY(int y) {
-		System.out.println("Changing y from " + this.y + " to " + y);
+	public void setY(float y) {
 		this.y = y;
 	}
 	
@@ -59,18 +56,18 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	 * @param p The point to measure distance to
 	 * @return The distance between this and point p
 	 */
-	public int dist(TrackPoint p) {
-		int dx = this.x - p.getX();
-		int dy = this.y - p.getY();
+	public float dist(TrackPoint p) {
+		float dx = this.x - p.getX();
+		float dy = this.y - p.getY();
 		return (int) Math.sqrt((dx*dx) + (dy*dy));
 	}
 	
 	@Override
 	public int compareTo(TrackPoint p) {
 		if(this.x == p.x) {
-			return this.y - p.y; //If x is the same, return the difference in Y
+			return (int)(this.y - p.y); //If x is the same, return the difference in Y
 		} else {
-			return this.x - p.x;
+			return (int)(this.x - p.x);
 		}
 	}
 	
@@ -89,9 +86,7 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	}
 	
 	public void draw(Graphics2D g) {
-		g.setColor(Color.RED);
-		g.drawOval(x*2, y*2, 2, 2);
-		System.out.println("Drawing point at " + x + ", " + y);
+		g.drawOval((int)x*2, (int)y*2, 2, 2);
 	}
 	
 	

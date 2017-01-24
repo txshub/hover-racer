@@ -2,6 +2,8 @@ package trackDesign;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+
+import trackDesign.catmullrom.SplineUtils;
 /**
  * Class to make the track
  * @author sxw588
@@ -14,7 +16,7 @@ public class TrackMaker {
 	 * @param args Any arguments passed to the program
 	 */
 	public static void main(String[] args) {
-		makeTrack(10,20, 15, 3, 5, 20);
+		makeTrack(10,20, 15, 3, 50, 20, 4);
 		
 	}
 	
@@ -28,8 +30,13 @@ public class TrackMaker {
 	 * @param maxDisp Max displacement 
 	 * @return An arraylist of track points forming the route
 	 */
-	public static ArrayList<TrackPoint> makeTrack(int minTrackPoints, int maxTrackPoints, int minDist, int seperateIterations, int difficulty, int maxDisp) {
-		Random random = new Random();
+	public static ArrayList<TrackPoint> makeTrack(int minTrackPoints, int maxTrackPoints, float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs) {
+		Random temp = new Random();
+		return makeTrack(temp.nextLong(), minTrackPoints, maxTrackPoints, minDist, seperateIterations, difficulty, maxDisp, subDivs);
+	}
+	
+	public static ArrayList<TrackPoint> makeTrack(long seed, int minTrackPoints, int maxTrackPoints, float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs) {
+		Random random = new Random(seed);
 		ArrayList<TrackPoint> points = new ArrayList<TrackPoint>();
 		ArrayList<TrackPoint> hullPoints = new ArrayList<TrackPoint>();
 		int trackPointCount = random.nextInt(maxTrackPoints - minTrackPoints) + minTrackPoints;
@@ -42,35 +49,42 @@ public class TrackMaker {
 		for(int i = 0; i < seperateIterations; i++) {
 			seperatePoints(points, minDist);
 		}
-		ArrayList<TrackPoint> finalCircuit = doublePoints(hullPoints, difficulty, maxDisp, random);
+		ArrayList<TrackPoint> circuit = new ArrayList<TrackPoint>();//doublePoints(hullPoints, difficulty, maxDisp, random);
+		circuit.add(new TrackPoint(100,100));
+		circuit.add(new TrackPoint(100,200));
+		circuit.add(new TrackPoint(200,200));
+		circuit.add(new TrackPoint(200,100));
+		ArrayList<TrackPoint> finalCircuit = SplineUtils.dividePoints(circuit, subDivs);
 		return finalCircuit;
 	}
 	
-	public static ArrayList<TrackPoint> doublePoints(ArrayList<TrackPoint> points, int difficulty, int maxDisplacement, Random random) {
+	
+	
+	public static ArrayList<TrackPoint> doublePoints(ArrayList<TrackPoint> points, float difficulty, float maxDisplacement, Random random) {
 		ArrayList<TrackPoint> newPoints = new ArrayList<TrackPoint>();
 		for(int i = 0; i < points.size(); i++) {
-			int displacementLength = (int) Math.pow(random.nextDouble(), ((double)difficulty) / 100d) * maxDisplacement;
+			int displacementLength = (int)(Math.pow(random.nextDouble(), ((double)difficulty) / 100d) * (double)maxDisplacement);
 			double randomAngle = (random.nextDouble() * Math.PI * 2) - Math.PI;
-			int xAdd = (int) (displacementLength * Math.cos(randomAngle));
-			int yAdd = (int) (displacementLength * Math.sin(randomAngle));
-			int xNew = ((points.get(i).getX() + points.get((i+1)%points.size()).getX())/2) + xAdd;
-			int yNew = ((points.get(i).getY() + points.get((i+1)%points.size()).getY())/2) + yAdd;
+			float xAdd = (float)(displacementLength * Math.cos(randomAngle));
+			float yAdd = (float)(displacementLength * Math.sin(randomAngle));
+			float xNew = ((points.get(i).getX() + points.get((i+1)%points.size()).getX())/2) + xAdd;
+			float yNew = ((points.get(i).getY() + points.get((i+1)%points.size()).getY())/2) + yAdd;
 			newPoints.add(points.get(i));
 			newPoints.add(new TrackPoint(xNew, yNew));
 		}
 		return newPoints;
 	}
 	
-	public static void seperatePoints(ArrayList<TrackPoint> points, int minDist) {
+	public static void seperatePoints(ArrayList<TrackPoint> points, float minDist) {
 		for(int i = 0; i < points.size(); i++) {
 			for(int j = i+1; j < points.size(); j++) {
 				if(points.get(i).dist(points.get(j)) < minDist) {
-					int dx = points.get(i).getX() - points.get(j).getX();
-					int dy = points.get(i).getY() - points.get(j).getY();
-					int len = (int)Math.sqrt((dx*dx)+(dy*dy));
+					float dx = points.get(i).getX() - points.get(j).getX();
+					float dy = points.get(i).getY() - points.get(j).getY();
+					float len = (float)Math.sqrt((dx*dx)+(dy*dy));
 					dx /= len;
 					dy /= len;
-					int dif = minDist - len;
+					float dif = minDist - len;
 					dx *= dif;
 					dy *= dif;
 					points.get(i).setX(points.get(i).getX() + dx);
@@ -117,7 +131,7 @@ public class TrackMaker {
 	 * @param b Point B
 	 * @return Whether a given angle OAB is straight, clockwise or anti-clockwise
 	 */
-	public static int cross(TrackPoint o, TrackPoint a, TrackPoint b) {
+	public static float cross(TrackPoint o, TrackPoint a, TrackPoint b) {
 		return ((a.getX() - o.getX()) * (b.getY() - o.getY())) - ((a.getY() - o.getY()) * (b.getX() - o.getX()));
 	}
 }
