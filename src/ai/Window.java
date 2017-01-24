@@ -1,17 +1,26 @@
 package ai;
 
+import java.util.ArrayList;
+
 import javax.swing.JFrame;
+
+import trackDesign.TrackMaker;
+import trackDesign.TrackPoint;
 
 public class Window {
 
   public static void main(String[] args) {
     
-    ShipManager shipManager = new ShipManager();
-    Ship player = new Ship(100, 200, 40);
-    shipManager.addShip(player);
-    player.setVX(1);
+    ArrayList<TrackPoint> track = TrackMaker.makeTrack(10, 20, 15, 3, 50, 20);
+    TrackPoint start = track.get(1);
     
-    Visualisation visualisation = new Visualisation(shipManager);
+    System.out.println(track);
+    
+    ShipManager shipManager = new ShipManager();
+    Ship player = new Ship(start.getX(), start.getY(), 0);
+    shipManager.addShip(player);
+    
+    Visualisation visualisation = new Visualisation(shipManager, track, 2);
     
     JFrame frame = new JFrame();
     frame.setSize(800, 800);
