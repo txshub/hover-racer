@@ -6,6 +6,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 
+/** Keyboard controller for steering a player controlled ship with the keyboard.
+ * The default mapping is W-FORWARD, S-BRAK< A-STRAFE_LEFT, D-STRAFE_RIGHT, right arrow-TURN_RIGHT, left arrow-TURN LEFT
+ * Mappings can be changes with the changeKey function.
+ * This class is a KeyListener - make sure to add it where needed.
+ * 
+ * @author Maciej Bogacki */
 public class KeyboardController implements KeyListener {
 
 	HashSet<Action> pressed;
@@ -27,8 +33,13 @@ public class KeyboardController implements KeyListener {
 		return res;
 	}
 
+	/** Change the key mapping for a specific action.
+	 * 
+	 * @param action Action to update the corresponding key for.
+	 * @param key Key code */
 	public void changeKey(Action action, int key) {
-		mapping.remove(mapping.entrySet().stream().filter(e -> e.getValue().equals(action)).map(e -> e.getKey()).findAny());
+		mapping.entrySet().stream().filter(e -> e.getValue().equals(action)).map(e -> e.getKey()).findAny()
+			.map(oldKey -> mapping.remove(oldKey)); // Remove old mapping for this action, if existed
 		mapping.put(key, action);
 	}
 
@@ -40,13 +51,14 @@ public class KeyboardController implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		pressed.add(mapping.get(e.getKeyCode()));
-
+		Action action = mapping.get(e.getKeyCode());
+		if (action != null) pressed.add(action);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		pressed.remove(mapping.get(e.getKeyCode()));
+		Action action = mapping.get(e.getKeyCode());
+		if (action != null) pressed.remove(action);
 	}
 
 }
