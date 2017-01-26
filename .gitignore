@@ -64,6 +64,9 @@ local.properties
 .recommenders
 .classpath
 
+# Eclipse Core
+.project
+
 # External tool builders
 .externalToolBuilders/
 

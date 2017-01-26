@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
@@ -42,11 +44,20 @@ public class Visualisation extends JComponent {
     
     // Loop through ships and draw each of them
     for (Ship s : shipManager.getShips()) {
-      Rectangle r = new Rectangle(s.getX() * scale, s.getY() * scale, shipWidth, shipLength);
+      Rectangle r = new Rectangle((int) s.getPos().x * scale, (int) s.getPos().y * scale, shipWidth, shipLength);
+      
+      AffineTransform trans = g2.getTransform();
       
       g2.setColor(new Color(0, 0, 0));
       g2.rotate(Math.toRadians(s.getRot()), r.getCenterX(), r.getCenterY());
       g2.draw(r);
+      g2.fillRect((int) s.getPos().x * scale, (int) s.getPos().y * scale, shipWidth, 10);
+      
+      g2.setTransform(trans);
+      
+      DecimalFormat df = new DecimalFormat("#.####");
+      g2.drawString("ax: " + df.format(s.getAcl().x) + " ay: " + df.format(s.getAcl().y) + " vx: " + df.format(s.getVel().x) + " vy: " + 
+      df.format(s.getVel().y) + " px: " + df.format(s.getPos().x) + " py: " + df.format(s.getPos().y), 10, 10);
     }
   }
 
