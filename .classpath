@@ -1,54 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="res"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/lwjgl-glfw.jar" sourcepath="lib/sources/lwjgl-glfw-sources.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl-jemalloc.jar" sourcepath="lib/sources/lwjgl-jemalloc-sources.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl-nanovg.jar" sourcepath="lib/sources/lwjgl-nanovg-sources.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl-nfd.jar" sourcepath="lib/sources/lwjgl-nfd-sources.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl-nuklear.jar" sourcepath="lib/sources/lwjgl-nuklear-sources.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl-openal.jar" sourcepath="lib/sources/lwjgl-openal-sources.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl-opengl.jar" sourcepath="lib/sources/lwjgl-opengl-sources.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl-par.jar" sourcepath="lib/sources/lwjgl-par-sources.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl-stb.jar" sourcepath="lib/sources/lwjgl-stb-sources.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl-tinyfd.jar" sourcepath="lib/sources/lwjgl-tinyfd-sources.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl-vulkan.jar" sourcepath="lib/sources/lwjgl-vulkan-sources.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl.jar" sourcepath="lib/sources/lwjgl-sources.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-glfw-natives-linux.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-glfw-natives-macos.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-glfw-natives-windows.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-jemalloc-natives-linux.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-jemalloc-natives-macos.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-jemalloc-natives-windows.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-nanovg-natives-linux.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-nanovg-natives-macos.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-nanovg-natives-windows.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-natives-linux.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-natives-macos.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-natives-windows.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-nfd-natives-linux.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-nfd-natives-macos.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-nfd-natives-windows.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-nuklear-natives-linux.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-nuklear-natives-macos.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-nuklear-natives-windows.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-openal-natives-linux.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-openal-natives-macos.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-openal-natives-windows.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-opengl-natives-linux.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-opengl-natives-macos.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-opengl-natives-windows.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-par-natives-linux.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-par-natives-macos.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-par-natives-windows.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-stb-natives-linux.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-stb-natives-macos.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-stb-natives-windows.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-tinyfd-natives-linux.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-tinyfd-natives-macos.jar"/>
-	<classpathentry kind="lib" path="lib/natives/lwjgl-tinyfd-natives-windows.jar"/>
-	<classpathentry kind="lib" path="lib/joml-1.9.1.jar" sourcepath="lib/sources/joml-1.9.1-sources.jar"/>
-	<classpathentry kind="lib" path="lib/PNGDecoder.jar"/>
+	<classpathentry kind="lib" path="lib/jars/lwjgl_util.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="hover-racer/lib/natives-win"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/jars/lwjgl.jar"/>
+	<classpathentry kind="lib" path="lib/jars/PNGDecoder.jar"/>
+	<classpathentry kind="lib" path="lib/jars/slick-util.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
