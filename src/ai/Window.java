@@ -6,21 +6,24 @@ import javax.swing.JFrame;
 
 import com.sun.glass.events.KeyEvent;
 
-import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
 
 public class Window {
 
   public static void main(String[] args) {
     
-    ArrayList<TrackPoint> track = TrackMaker.makeTrack(10, 20, 15, 3, 50, 20);
-    TrackPoint start = track.get(1);
+    ArrayList<TrackPoint> track = new ArrayList<>();
+    track.add(new TrackPoint(50, 50));
+    track.add(new TrackPoint(300, 50));
+    track.add(new TrackPoint(300, 300));
+    track.add(new TrackPoint(50, 300));
+    TrackPoint start = track.get(0);
     
     System.out.println(track);
     
     ShipManager shipManager = new ShipManager();
-    Ship player = new Ship(start.getX(), start.getY(), 0);
-    player.setRot(90);
+    AIShip player = new AIShip(start.getX(), start.getY(), 0, track);
+    player.setRot(0);
     player.setAccel(0.001);
     shipManager.addShip(player);
     
@@ -57,20 +60,17 @@ public class Window {
       
       while (deltaUPS >= 1) {
         // Update
-        double a = 0;
-        double ma = 0.1;
-        
-        double t = 0;
-        double ta = 5;
-        
-        if (input.isKeyDown(KeyEvent.VK_W)) a += ma;
-        if (input.isKeyDown(KeyEvent.VK_S)) a -= ma;
-        
-        if (input.isKeyDown(KeyEvent.VK_A)) t -= ta;
-        if (input.isKeyDown(KeyEvent.VK_D)) t += ta;
-        
-        player.setAccel(a);
-        player.setRotV(t);
+//        double a = 0;
+//        double t = 0;
+//        
+//        if (input.isKeyDown(KeyEvent.VK_W)) a += Ship.maxAcceleration;
+//        if (input.isKeyDown(KeyEvent.VK_S)) a -= Ship.maxAcceleration;
+//        
+//        if (input.isKeyDown(KeyEvent.VK_A)) t -= Ship.maxTurnSpeed;
+//        if (input.isKeyDown(KeyEvent.VK_D)) t += Ship.maxTurnSpeed;
+//        
+//        player.setAccel(a);
+//        player.setRotV(t);
         
         shipManager.updateShips();
         

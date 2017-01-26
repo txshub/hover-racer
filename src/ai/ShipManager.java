@@ -24,6 +24,9 @@ public class ShipManager {
   
   public void updateShips() {
     for (Ship s : ships) {
+      if (s instanceof AIShip) {
+        ((AIShip) s).doNextInput();
+      }
       s.updatePos();
     }
   }

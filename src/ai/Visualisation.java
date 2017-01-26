@@ -22,8 +22,8 @@ public class Visualisation extends JComponent {
   
   private int scale;
   
-  private final int shipWidth = 20;
-  private final int shipLength = 40;
+  private final int shipWidth = 10;
+  private final int shipLength = 20;
 
   public Visualisation(ShipManager shipManager, ArrayList<TrackPoint> track, int scale) {
     super();
@@ -44,14 +44,14 @@ public class Visualisation extends JComponent {
     
     // Loop through ships and draw each of them
     for (Ship s : shipManager.getShips()) {
-      Rectangle r = new Rectangle((int) s.getPos().x * scale, (int) s.getPos().y * scale, shipWidth, shipLength);
+      Rectangle r = new Rectangle((int) (s.getPos().x-shipWidth/2) * scale, (int) (s.getPos().y-shipLength/2) * scale, shipWidth*scale, shipLength*scale);
       
       AffineTransform trans = g2.getTransform();
       
       g2.setColor(new Color(0, 0, 0));
       g2.rotate(Math.toRadians(s.getRot()), r.getCenterX(), r.getCenterY());
       g2.draw(r);
-      g2.fillRect((int) s.getPos().x * scale, (int) s.getPos().y * scale, shipWidth, 10);
+      g2.fillRect((int) (s.getPos().x-shipWidth/2) * scale, (int) (s.getPos().y-shipLength/2) * scale, shipWidth*scale, 10);
       
       g2.setTransform(trans);
       

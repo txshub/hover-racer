@@ -1,15 +1,18 @@
 package ai;
 
-import org.lwjgl.util.vector.Vector2f;
+import org.joml.Vector2f;
 
 public class Ship {
 
-  private Vector2f pos;
-  private Vector2f vel;
-  private Vector2f acl;
-  private double accel;
-  private double rot;
-  private double rotV;
+  protected Vector2f pos;
+  protected Vector2f vel;
+  protected Vector2f acl;
+  protected double accel;
+  protected double rot;
+  protected double rotV;
+  
+  public static float maxAcceleration = 0.1f;
+  public static float maxTurnSpeed = 5;
   
   public Ship() {
     this(0, 0, 0);
@@ -70,7 +73,12 @@ public class Ship {
   }
   
   public void updatePos() {
-    rot = (rot + rotV) % 360;
+    rot = (rot + rotV);
+    if (rot >= 360) {
+      rot = rot % 360;
+    } else if (rot < 0) {
+      rot = 360 + rot;
+    }
     
     acl.x = (float) (accel * Math.sin(Math.toRadians(rot)));
     acl.y = (float) (accel * -Math.cos(Math.toRadians(rot)));
