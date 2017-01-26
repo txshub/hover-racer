@@ -54,10 +54,10 @@ public class TrackMaker {
 		}
 		ArrayList<TrackPoint> circuit = doublePoints(hullPoints, difficulty, maxDisp, random); //Double the number of points and offset them
 		for(int i = 0; i < seperateIterations * 3; i++) {
-			fixAngles(circuit);
+			//fixAngles(circuit);
 			seperatePoints(circuit, minDist); //Seperate the points again
 		}
-		ArrayList<TrackPoint> finalCircuit = circuit;// = SplineUtils.dividePoints(circuit, subDivs); //Apply smoothing
+		ArrayList<TrackPoint> finalCircuit = SplineUtils.dividePoints(circuit, subDivs); //Apply smoothing
 		return finalCircuit; //Return this final track after smoothing
 	}
 	
