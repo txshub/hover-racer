@@ -12,7 +12,7 @@ public class TrackComponent extends JComponent {
 	
 	public TrackComponent() {
 		super();
-		track = TrackMaker.makeTrack(141210, 10, 20, 15, 3, 50, 40, 10);
+		track = TrackMaker.makeTrack(10, 20, 15, 3, 70, 40, 4);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -21,10 +21,6 @@ public class TrackComponent extends JComponent {
 		for(int i = 0; i < track.size(); i++) {
 			track.get(i).draw(g2);
 			g2.drawLine((int)track.get(i).getX()*2, (int)track.get(i).getY()*2, (int)track.get((i+1)%track.size()).getX()*2, (int)track.get((i+1)%track.size()).getY()*2);
-		}
-		g2.setColor(Color.RED);
-		for(int i = 0; i < track.size(); i += 6) {
-			//g2.drawLine((int)track.get(i).getX()*2, (int)track.get(i).getY()*2, (int)track.get((i+6)%track.size()).getX()*2, (int)track.get((i+6)%track.size()).getY()*2);
 		}
 	}
 }
