@@ -25,10 +25,10 @@ public class Visualisation extends JComponent {
   private final int shipWidth = 10;
   private final int shipLength = 20;
 
-  public Visualisation(ShipManager shipManager, ArrayList<TrackPoint> track, int scale) {
+  public Visualisation(ShipManager shipManager, TrackComponent trackComponent, int scale) {
     super();
     this.shipManager = shipManager;
-    trackComponent = new TrackComponent(track, scale);
+    this.trackComponent = trackComponent;
     this.scale = scale;
   }
   

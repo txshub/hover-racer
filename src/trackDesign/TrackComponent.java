@@ -1,4 +1,5 @@
 package trackDesign;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -13,28 +14,20 @@ public class TrackComponent extends JComponent {
   private int scale;
   
   public TrackComponent() {
-    this(TrackMaker.makeTrack(10, 20, 15, 3, 50, 20), 1);
-  }
-  
-  public TrackComponent(int scale) {
-    this(TrackMaker.makeTrack(10, 20, 15, 3, 50, 20), scale);
-  }
-	
-	public TrackComponent(ArrayList<TrackPoint> track, int scale) {
 		super();
-		this.track = track;
-    this.scale = scale;
+		track = TrackMaker.makeTrack(10, 20, 15, 3, 70, 40, 4);
 	}
+  
+  public ArrayList<TrackPoint> getTrack() {
+    return track;
+  }
 	
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
+		g2.setColor(Color.BLUE);
 		for(int i = 0; i < track.size(); i++) {
-		  TrackPoint s = track.get(i);
-		  TrackPoint f = track.get((i+1) % track.size());
-		  
-			s.draw(g2);
-			g2.drawLine(s.getX() * scale, s.getY() * scale, f.getX() * scale, f.getY() * scale);
-			g2.drawString(Integer.toString(i), s.getX() * scale, s.getY() * scale);
+			track.get(i).draw(g2);
+			g2.drawLine((int)track.get(i).getX()*2, (int)track.get(i).getY()*2, (int)track.get((i+1)%track.size()).getX()*2, (int)track.get((i+1)%track.size()).getY()*2);
 		}
 	}
 }

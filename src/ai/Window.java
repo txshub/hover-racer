@@ -6,28 +6,23 @@ import javax.swing.JFrame;
 
 import com.sun.glass.events.KeyEvent;
 
+import trackDesign.TrackComponent;
 import trackDesign.TrackPoint;
 
 public class Window {
 
   public static void main(String[] args) {
     
-    ArrayList<TrackPoint> track = new ArrayList<>();
-    track.add(new TrackPoint(50, 50));
-    track.add(new TrackPoint(300, 50));
-    track.add(new TrackPoint(300, 300));
-    track.add(new TrackPoint(50, 300));
-    TrackPoint start = track.get(0);
-    
-    System.out.println(track);
+    TrackComponent trackComponent = new TrackComponent();
+    ArrayList<TrackPoint> track = trackComponent.getTrack();
     
     ShipManager shipManager = new ShipManager();
-    AIShip player = new AIShip(start.getX(), start.getY(), 0, track);
+    AIShip player = new AIShip(track.get(0).getX(), track.get(0).getY(), 0, track);
     player.setRot(0);
     player.setAccel(0.001);
     shipManager.addShip(player);
     
-    Visualisation visualisation = new Visualisation(shipManager, track, 2);
+    Visualisation visualisation = new Visualisation(shipManager, trackComponent, 2);
     
     JFrame frame = new JFrame();
     frame.setSize(800, 800);

@@ -11,7 +11,7 @@ public class AIShip extends Ship {
   private ArrayList<TrackPoint> track;
   private int nextPointIndex = 0;
   
-  public AIShip(int x, int y, int rot, ArrayList<TrackPoint> track) {
+  public AIShip(float x, float y, float rot, ArrayList<TrackPoint> track) {
     super(x, y, rot);
     this.track = track;
   }
@@ -38,9 +38,9 @@ public class AIShip extends Ship {
     }
     
     setRotV(dTurn);
-    setAccel(0.1);
+    setAccel(0.04);
     
-    if (dist < 2) {
+    if (dist < 10) {
       nextPointIndex++;
       if (nextPointIndex >= track.size()) {
         nextPointIndex = 0;

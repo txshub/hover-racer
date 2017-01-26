@@ -18,7 +18,7 @@ public class Ship {
     this(0, 0, 0);
   }
   
-  public Ship(int x, int y, int rot) {
+  public Ship(float x, float y, float rot) {
     pos = new Vector2f(x, y);
     vel = new Vector2f();
     acl = new Vector2f();

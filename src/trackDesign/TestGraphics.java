@@ -7,7 +7,7 @@ public class TestGraphics {
 		frame.setSize(600,600);
 		frame.setTitle("Track Making Graphics Test");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		TrackComponent track = new TrackComponent(2);
+		TrackComponent track = new TrackComponent();
 		frame.add(track);
 		frame.setVisible(true);
 	}
