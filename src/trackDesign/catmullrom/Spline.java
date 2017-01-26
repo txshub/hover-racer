@@ -21,7 +21,7 @@ public class Spline {
 		return 0.5f * ((2 * p1) + 
 					   (p2 - p0) * t +
 					   (2*p0 - 5*p1 + 4*p2 - p3) * t * t +
-					   (3*p1 - p0 - 3 * p2 + p3));
+					   (3*p1 - p0 - 3 * p2 + p3) * t * t * t);
 	}
 
 	public float getP0() {
