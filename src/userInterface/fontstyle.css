@@ -1,0 +1,8 @@
+@font-face {
+	font-family: "War is Over";
+   	src : url("/War is Over.ttf");
+ }
+ 
+.text{
+	-fx-font-family: "War is Over";
+}
