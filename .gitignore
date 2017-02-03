@@ -1,3 +1,4 @@
+dist
 
 
 # Created by https://www.gitignore.io/api/windows,osx,linux,eclipse,intellij,java
@@ -78,8 +79,7 @@ local.properties
 .settings/
 .loadpath
 .recommenders
-
-# Eclipse Core
+.classpath
 .project
 
 # External tool builders
@@ -165,7 +165,6 @@ fabric.properties
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 
