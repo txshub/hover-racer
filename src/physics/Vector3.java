@@ -2,6 +2,8 @@ package physics;
 
 import java.util.function.DoubleUnaryOperator;
 
+import org.joml.Vector3f;
+
 public class Vector3 {
 
 	float x, y, z;
@@ -80,6 +82,9 @@ public class Vector3 {
 	}
 	public void changeZ(DoubleUnaryOperator f) {
 		this.z = (float) f.applyAsDouble(z);
+	}
+	public Vector3f as3f() {
+		return new Vector3f(x, y, z);
 	}
 
 	public Vector3 copy() {
