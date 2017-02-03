@@ -49,8 +49,8 @@ public class Visualisation {
 		for (Ship s : ships) {
 			// float x = s.testX;
 			float x = s.getPosition().getX();
-			// float z = s.getPosition().getZ();
-			float z = (500 - s.getPosition().getY() * 20);
+			float z = s.getPosition().getZ(); // Use this line to get a top-down view
+			// float z = (500 - s.getPosition().getY() * 20); // Use this line to get a sideways view
 			Rectangle r =
 				new Rectangle((int) (x - shipWidth / 2) * scale, (int) (z - shipLength / 2) * scale, shipWidth * scale, shipLength * scale);
 
