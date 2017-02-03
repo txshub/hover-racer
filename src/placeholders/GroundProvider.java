@@ -4,7 +4,8 @@ import org.joml.Vector3f;
 
 public interface GroundProvider {
 
-	/** Returns distance to the ground from a given point in a given direction
+	/** Returns distance to the ground from a given point in a given direction. If no ground is found, checks in the other direction and
+	 * return a negative value. If ground is still not found, return {@link Float.POSITIVE_INFINITY}
 	 * 
 	 * @param position Position of the point to measure distance to
 	 * @param direction Direction in which to look for the ground, e.g. (0,-1,0) when the vehicle is horizontal and wants to know what is
