@@ -12,8 +12,8 @@ import placeholders.ServerShipProvider;
 
 public class Ship {
 
-	private static final int ACCELERATION = 1; // How fast does the ship accelerate
-	private static final float BREAK_POWER = 5; // How fast does it break
+	private static final int ACCELERATION = 10; // How fast does the ship accelerate
+	private static final float BREAK_POWER = 50; // How fast does it break
 	private static final float TURN_SPEED = 2.5f; // How fast does it turn
 	private static final float AIR_RESISTANCE = 10; // How fast do ships slow down (this and acceleration determines the max speed)
 	private static final float DEFAULT_MASS = 1;
