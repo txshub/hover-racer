@@ -5,16 +5,13 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import javax.swing.JComponent;
 
 import physics.Ship;
 // import trackDesign.TrackComponent;
 
-public class Visualisation extends JComponent {
+public class Visualisation {
 
 	private static final long serialVersionUID = 1L;
 
@@ -28,7 +25,6 @@ public class Visualisation extends JComponent {
 
 
 	public Visualisation(Ship ship, int scale) {
-		super();
 		this.ships = new ArrayList<Ship>();
 		ships.add(ship);
 		// this.trackComponent = null;
@@ -42,34 +38,32 @@ public class Visualisation extends JComponent {
 	 * this.scale = scale;
 	 * } */
 
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
+	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 
-		g2.setBackground(new Color(250, 250, 250));
-		g2.clearRect(0, 0, getWidth(), getHeight());
 
 		// Paint the track first
 		// if (trackComponent != null) trackComponent.paintComponent(g);
 
 		// Loop through ships and draw each of them
 		for (Ship s : ships) {
+			// float x = s.testX;
 			float x = s.getPosition().getX();
 			float z = s.getPosition().getZ();
 			Rectangle r =
 				new Rectangle((int) (x - shipWidth / 2) * scale, (int) (z - shipLength / 2) * scale, shipWidth * scale, shipLength * scale);
 
 			AffineTransform trans = g2.getTransform();
-
-			g2.setColor(new Color(0, 0, 0));
+			//
+			g2.setColor(Color.white);
 			g2.rotate(s.getRotation().getY(), r.getCenterX(), r.getCenterY());
 			g2.fillRect((int) (x - shipWidth / 2) * scale, (int) (z - shipLength / 2) * scale, shipWidth * scale, 10);
 			g2.draw(r);
 			g2.fillRect((int) (x - shipWidth / 2) * scale, (int) (z - shipLength / 2) * scale, shipWidth * scale, 10);
-
+			//
 			g2.setTransform(trans);
 
-			DecimalFormat df = new DecimalFormat("#.####");
+			// DecimalFormat df = new DecimalFormat("#.####");
 			// g2.drawString("ax: " + df.format(s.getAcl().x) + " ay: " + df.format(s.getAcl().y) + " vx: " + df.format(s.getVel().x) + "
 			// vy: "
 			// + df.format(s.getVel().y) + " px: " + df.format(s.getPos().x) + " py: " + df.format(s.getPos().y), 10, 10);

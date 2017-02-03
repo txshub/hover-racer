@@ -12,10 +12,12 @@ import placeholders.ServerShipProvider;
 
 public class Ship {
 
-	private static final int ACCELERATION = 10; // How fast does the ship accelerate
-	private static final float BREAK_POWER = 50; // How fast does it break
+	private static final float SCALE = 3;
+	private static final float ACCELERATION = 20 * SCALE; // How fast does the ship accelerate
+	private static final float BREAK_POWER = 10; // How fast does it break
 	private static final float TURN_SPEED = 2.5f; // How fast does it turn
-	private static final float AIR_RESISTANCE = 10; // How fast do ships slow down (this and acceleration determines the max speed)
+	private static final float AIR_RESISTANCE = 10; // How fast do ships slow down (this and acceleration determines the max
+													// speed)
 	private static final float DEFAULT_MASS = 1;
 	private static final float DEFAULT_SIZE = 1;
 	private Vector3 position;
@@ -28,7 +30,7 @@ public class Ship {
 	private ServerShipProvider server;
 	private ExportedShip fromServer;
 
-
+	public float testX = 0;
 
 	/** Creates a ship with position (0,0,0), no inputs an no other ships. For testing only */
 	public Ship() {
@@ -81,7 +83,7 @@ public class Ship {
 	 * 
 	 * @param delta Time in seconds that passed since the last call of this function */
 	private void airResistance(float delta) {
-		velocity.forEach(v -> Math.signum(v) * (Math.abs(v) - delta * Math.sqrt(Math.abs(v) / AIR_RESISTANCE)));
+		velocity.forEach(v -> Math.signum(v) * Math.max(0, (Math.abs(v) - delta * Math.sqrt(Math.abs(v) * AIR_RESISTANCE))));
 	}
 
 	/** Changes the position by given velocity
@@ -146,11 +148,14 @@ public class Ship {
 		if (controller != null) handleControls(delta, controller); // Steer the ship with user controls
 		else handleControls(delta, fromServer); // Steer the ship with controls from server (only when missed packets)
 
-		// airResistance(delta);
+		airResistance(delta);
 		doCollisions();
 		updatePosition(delta);
 	}
 
+	public void setX(float amount) {
+		this.position.setX(amount);
+	}
 
 	/** @return Position of this ship's centre */
 	public Vector3 getPosition() {
