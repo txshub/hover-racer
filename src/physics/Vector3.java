@@ -50,6 +50,9 @@ public class Vector3 {
 	public float distanceTo(Vector3 v) {
 		return (float) (Math.sqrt(Math.pow(x - v.getX(), 2) + Math.pow(y - v.getY(), 2) + Math.pow(z - v.getZ(), 2)));
 	}
+	public Vector3 getDownDirection() {
+		return new Vector3(0, -1, 0);// TODO - support own rotation
+	}
 
 	public float[] asArray() {
 		return new float[]{x, y, z};

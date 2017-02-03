@@ -31,6 +31,7 @@ public class KeyboardController implements KeyListener, ControllerInt {
 		res.put(68, Action.STRAFE_RIGHT); // d
 		res.put(39, Action.TURN_RIGHT); // right arrow
 		res.put(37, Action.TURN_LEFT); // left arrow
+		res.put(32, Action.JUMP); // space
 		return res;
 	}
 

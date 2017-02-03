@@ -8,6 +8,8 @@ import placeholders.ControllerInt;
 import placeholders.ExportedShip;
 import placeholders.FakeController;
 import placeholders.FakeServerProvider;
+import placeholders.FlatGroundProvider;
+import placeholders.GroundProvider;
 import placeholders.ServerShipProvider;
 
 public class Ship {
@@ -16,8 +18,14 @@ public class Ship {
 	private static final float ACCELERATION = 20 * SCALE; // How fast does the ship accelerate
 	private static final float BREAK_POWER = 10; // How fast does it break
 	private static final float TURN_SPEED = 2.5f; // How fast does it turn
-	private static final float AIR_RESISTANCE = 10; // How fast do ships slow down (this and acceleration determines the max
-													// speed)
+	private static final float AIR_RESISTANCE = 10; // How fast do ships slow down (this and acceleration determines the max speed)
+
+	private static final float GRAVITY = 15 * SCALE; // The force of gravity affecting the ship
+	private static final float AIR_CUSHION = 50 * SCALE; // The base force of the ait cushion keeping the hovercraft in the air
+	private static final double CUSHION_SCALE = 0.8f;
+	private static final float JUMP_POWER = 30 * SCALE; // Jumping, for science! (testing vertical stuff)
+	// 15, 100, 2, 30: magnet-like
+
 	private static final float DEFAULT_MASS = 1;
 	private static final float DEFAULT_SIZE = 1;
 	private Vector3 position;
@@ -29,15 +37,15 @@ public class Ship {
 	private Collection<Ship> otherShips;
 	private ServerShipProvider server;
 	private ExportedShip fromServer;
+	private GroundProvider ground;
 
-	public float testX = 0;
 
 	/** Creates a ship with position (0,0,0), no inputs an no other ships. For testing only */
 	public Ship() {
-		this(new Vector3(0, 0, 0), new ArrayList<>(), new FakeController(), new FakeServerProvider());
+		this(new Vector3(0, 0, 0), new FakeController());
 	}
 	public Ship(Vector3 startingPosition, ControllerInt controller) {
-		this(startingPosition, new ArrayList<>(), controller, new FakeServerProvider());
+		this(startingPosition, new ArrayList<>(), controller);
 	}
 	/** Creates a new server-controlled ship
 	 * 
@@ -45,7 +53,7 @@ public class Ship {
 	 * @param otherShips Other ships to possibly collide with
 	 * @param server Object providing data about the ship, as described in the interface */
 	public Ship(Vector3 startingPosition, Collection<Ship> otherShips, ServerShipProvider server) {
-		this(startingPosition, otherShips, new FakeController(), server);
+		this(startingPosition, otherShips, new FakeController(), server, new FlatGroundProvider(0));
 	}
 	/** Creates a player-controlled ship
 	 * 
@@ -53,11 +61,12 @@ public class Ship {
 	 * @param otherShips Other ships to possibly collide with
 	 * @param controller Controlled providing player's desired actions, as described in the interface */
 	public Ship(Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller) {
-		this(startingPosition, otherShips, controller, new FakeServerProvider());
+		this(startingPosition, otherShips, controller, new FakeServerProvider(), new FlatGroundProvider(0));
 	}
 
 
-	private Ship(Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller, ServerShipProvider server) {
+	private Ship(Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller, ServerShipProvider server,
+		GroundProvider ground) {
 		position = startingPosition.copy();
 		this.velocity = new Vector3(0, 0, 0);
 		this.rotation = new Vector3(0, 0, 0);
@@ -66,6 +75,7 @@ public class Ship {
 		this.controller = controller;
 		this.otherShips = otherShips != null ? otherShips : new ArrayList<Ship>(); // If null set to an empty ArrayList
 		this.server = server;
+		this.ground = ground;
 	}
 
 	/** Accelerate in any direction within the 2d horizontal plane. The acceleration is instant; it's basically just changing velocities.
@@ -84,6 +94,18 @@ public class Ship {
 	 * @param delta Time in seconds that passed since the last call of this function */
 	private void airResistance(float delta) {
 		velocity.forEach(v -> Math.signum(v) * Math.max(0, (Math.abs(v) - delta * Math.sqrt(Math.abs(v) * AIR_RESISTANCE))));
+	}
+
+	/** Apply the force of gravity */
+	private void gravity(float delta) {
+		velocity.changeY(y -> y - GRAVITY * delta);
+	}
+
+	/** Apply the forces of the air cushion (also bounce off ground if it ever happens) */
+	private void airCushion(float delta) {
+		float distance = ground.distanceToGround(position.as3f(), rotation.getDownDirection().as3f());
+		if (distance <= 0 && velocity.getY() < 0) velocity.changeY(y -> -y);
+		else if (distance > 0) velocity.changeY(y -> y + delta * AIR_CUSHION / Math.pow(distance, CUSHION_SCALE));
 	}
 
 	/** Changes the position by given velocity
@@ -108,6 +130,7 @@ public class Ship {
 		if (keys.contains(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION / 2, (float) Math.PI);
 		if (keys.contains(Action.TURN_RIGHT)) rotation.changeY(y -> correctAngle(y + delta * TURN_SPEED));
 		if (keys.contains(Action.TURN_LEFT)) rotation.changeY(y -> correctAngle(y - delta * TURN_SPEED));
+		if (keys.contains(Action.JUMP)) velocity.changeY(y -> y + delta * JUMP_POWER);
 	}
 
 	private void doCollisions() {
@@ -150,6 +173,8 @@ public class Ship {
 
 		airResistance(delta);
 		doCollisions();
+		gravity(delta);
+		airCushion(delta);
 		updatePosition(delta);
 	}
 

@@ -110,12 +110,10 @@ public class Window {
 			// }
 			// Updating and repainting
 			testShip.update((float) delta / 60);
-			x += delta / 5;
-			testShip.testX = x;
 			offg.setColor(Color.black);
 			offg.fillRect(0, 0, 1920, 1080);
 			offg.setColor(Color.blue);
-			offg.fillRect(100, 100, 110, 110);
+			offg.fillRect(0, 1020, 1000, 110);
 			visualisation.draw(offg);
 			g.drawImage(i, 0, 0, null);
 			try {

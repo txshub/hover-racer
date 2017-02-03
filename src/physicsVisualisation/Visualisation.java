@@ -49,7 +49,8 @@ public class Visualisation {
 		for (Ship s : ships) {
 			// float x = s.testX;
 			float x = s.getPosition().getX();
-			float z = s.getPosition().getZ();
+			// float z = s.getPosition().getZ();
+			float z = (500 - s.getPosition().getY() * 20);
 			Rectangle r =
 				new Rectangle((int) (x - shipWidth / 2) * scale, (int) (z - shipLength / 2) * scale, shipWidth * scale, shipLength * scale);
 
