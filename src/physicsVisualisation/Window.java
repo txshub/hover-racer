@@ -44,6 +44,8 @@ public class Window {
 		double deltaUPS = 0;
 		double renderDur = (double) 1000000000 / 60;
 		double deltaFPS = 0;
+		testShip.accelerate2d(10, 0);
+		double previousX = 0;
 
 		while (running) {
 			currTime = System.nanoTime();
@@ -52,18 +54,26 @@ public class Window {
 			deltaFPS += diff / renderDur;
 			lastTime = currTime;
 
+
 			// float delta = (float) diff / 1000000000;
 			// ships.forEach(s -> s.update(delta / 10000));
 			// input.getPressedKeys().forEach(k -> System.out.println(k));
 			// Testing
 			// testShip.accelerate2d(0.0001f, (float) Math.PI * 1.75f);
 
+			int atSameTime = 0;
 			while (deltaUPS >= 1) {
 				testShip.update((float) 1 / 60);
 				deltaUPS--;
+				atSameTime++;
+				// System.out.println(diff / updateDur);
+
 			}
 
+
 			while (deltaFPS >= 1) {
+				System.out.println(testShip.getPosition().getX() - previousX);
+				previousX = testShip.getPosition().getX();
 				// Render
 				frame.repaint();
 

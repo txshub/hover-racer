@@ -14,7 +14,7 @@ public class Ship {
 
 	private static final int ACCELERATION = 1; // How fast does the ship accelerate
 	private static final float BREAK_POWER = 5; // How fast does it break
-	private static final float TURN_SPEED = 0.5f; // How fast does it turn
+	private static final float TURN_SPEED = 2.5f; // How fast does it turn
 	private static final float AIR_RESISTANCE = 10; // How fast do ships slow down (this and acceleration determines the max speed)
 	private static final float DEFAULT_MASS = 1;
 	private static final float DEFAULT_SIZE = 1;
@@ -88,7 +88,7 @@ public class Ship {
 	 * 
 	 * @param delta Time in seconds that passed since the last call of this function */
 	private void updatePosition(float delta) {
-		position.add(velocity);
+		position.add(velocity.copy().multiply(delta));
 	}
 
 	/** Handle controls from the player.
@@ -146,7 +146,7 @@ public class Ship {
 		if (controller != null) handleControls(delta, controller); // Steer the ship with user controls
 		else handleControls(delta, fromServer); // Steer the ship with controls from server (only when missed packets)
 
-		airResistance(delta);
+		// airResistance(delta);
 		doCollisions();
 		updatePosition(delta);
 	}
