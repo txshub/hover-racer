@@ -45,23 +45,23 @@ public class Ship {
 		this(new Vector3(0, 0, 0), new FakeController());
 	}
 	public Ship(Vector3 startingPosition, ControllerInt controller) {
-		this(startingPosition, new ArrayList<>(), controller);
+		this(startingPosition, new ArrayList<>(), controller, new FlatGroundProvider(0));
 	}
 	/** Creates a new server-controlled ship
 	 * 
 	 * @param startingPosition Vector describing this ship's starting position.
 	 * @param otherShips Other ships to possibly collide with
 	 * @param server Object providing data about the ship, as described in the interface */
-	public Ship(Vector3 startingPosition, Collection<Ship> otherShips, ServerShipProvider server) {
-		this(startingPosition, otherShips, new FakeController(), server, new FlatGroundProvider(0));
+	public Ship(Vector3 startingPosition, Collection<Ship> otherShips, ServerShipProvider server, GroundProvider ground) {
+		this(startingPosition, otherShips, new FakeController(), server, ground);
 	}
 	/** Creates a player-controlled ship
 	 * 
 	 * @param startingPosition Vector describing this ship's starting position
 	 * @param otherShips Other ships to possibly collide with
 	 * @param controller Controlled providing player's desired actions, as described in the interface */
-	public Ship(Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller) {
-		this(startingPosition, otherShips, controller, new FakeServerProvider(), new FlatGroundProvider(0));
+	public Ship(Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller, GroundProvider ground) {
+		this(startingPosition, otherShips, controller, new FakeServerProvider(), ground);
 	}
 
 
@@ -103,7 +103,7 @@ public class Ship {
 
 	/** Apply the forces of the air cushion (also bounce off ground if it ever happens) */
 	private void airCushion(float delta) {
-		float distance = ground.distanceToGround(position.as3f(), rotation.getDownDirection().as3f());
+		float distance = ground.distanceToGround(position.as3f(), rotation.getDownDirection());
 		if (distance <= 0 && velocity.getY() < 0) velocity.changeY(y -> -y);
 		else if (distance > 0) velocity.changeY(y -> y + delta * AIR_CUSHION / Math.pow(distance, CUSHION_SCALE));
 	}
