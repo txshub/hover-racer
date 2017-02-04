@@ -8,7 +8,7 @@ import java.util.HashSet;
 
 
 /** Keyboard controller for steering a player controlled ship with the keyboard.
- * The default mapping is W-FORWARD, S-BRAK< A-STRAFE_LEFT, D-STRAFE_RIGHT, right arrow-TURN_RIGHT, left arrow-TURN LEFT
+ * The default mapping is W-FORWARD, S-BRAK< A-STRAFE_LEFT, D-STRAFE_RIGHT, right arrow-TURN_RIGHT, left arrow-TURN LEFT, space-JUMP
  * Mappings can be changes with the changeKey function.
  * This class is a KeyListener - make sure to add it where needed.
  * 

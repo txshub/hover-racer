@@ -13,6 +13,8 @@ import physics.Vector3;
 // import trackDesign.TrackPoint;
 import placeholders.KeyboardController;
 
+/** Class for handling the basic ship physics visualisation.
+ * Redone based on code by Reece Bennett that he used to test his AI. */
 public class Window {
 
 	public static void main(String[] args) {
@@ -39,55 +41,11 @@ public class Window {
 
 		boolean running = true;
 
-		/* long lastTime = System.nanoTime();
-		 * long currTime = lastTime;
-		 * long diff = 0;
-		 * 
-		 * double updateDur = (double) 1000000000 / 60;
-		 * double deltaUPS = 0;
-		 * double renderDur = (double) 1000000000 / 60;
-		 * double deltaFPS = 0;
-		 * // testShip.accelerate2d(50, 0);
-		 * double previousX = 0; */
-
-		/* while (running) {
-		 * currTime = System.nanoTime();
-		 * diff = currTime - lastTime;
-		 * deltaUPS += diff / updateDur;
-		 * deltaFPS += diff / renderDur;
-		 * lastTime = currTime;
-		 * 
-		 * 
-		 * // float delta = (float) diff / 1000000000;
-		 * // ships.forEach(s -> s.update(delta / 10000));
-		 * // input.getPressedKeys().forEach(k -> System.out.println(k));
-		 * // Testing
-		 * // testShip.accelerate2d(0.0001f, (float) Math.PI * 1.75f);
-		 * 
-		 * while (deltaUPS >= 1) {
-		 * testShip.update((float) 1 / 60);
-		 * deltaUPS--;
-		 * // System.out.println(diff / updateDur);
-		 * }
-		 * 
-		 * int atSameTime = 0;
-		 * while (deltaFPS >= 1) {
-		 * // System.out.println(testShip.getPosition().getX() - previousX);
-		 * previousX = testShip.getPosition().getX();
-		 * // Render
-		 * frame.repaint();
-		 * atSameTime++;
-		 * deltaFPS--;
-		 * }
-		 * // System.out.println(atSameTime);
-		 * } */
-
 		long lastLoopTime = System.nanoTime();
 		final int TARGET_FPS = 60;
 		final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
 		long lastFpsTime = System.nanoTime();
 		long fps = 0;
-		float x = 0;
 
 		Graphics g = frame.getGraphics();
 		Image i = frame.createImage(1920, 1080);
@@ -103,11 +61,11 @@ public class Window {
 			// update the frame counter
 			lastFpsTime += updateLength;
 			fps++;
-			// if (lastFpsTime >= 1000000000) {
-			// System.out.println("(FPS: " + fps + ")");
-			// lastFpsTime = 0;
-			// fps = 0;
-			// }
+			if (lastFpsTime >= 1000000000) {
+				// System.out.println("(FPS: " + fps + ")");
+				lastFpsTime = 0;
+				fps = 0;
+			}
 			// Updating and repainting
 			testShip.update((float) delta / 60);
 			offg.setColor(Color.black);
@@ -118,9 +76,7 @@ public class Window {
 			g.drawImage(i, 0, 0, null);
 			try {
 				Thread.sleep((lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000);
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
+			} catch (Exception e) {}
 			;
 		}
 

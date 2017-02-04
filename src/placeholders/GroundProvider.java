@@ -2,6 +2,9 @@ package placeholders;
 
 import org.joml.Vector3f;
 
+/** Provides a Ship object with information about the ground below. See methods for details.
+ * 
+ * @author Maciej Bogacki */
 public interface GroundProvider {
 
 	/** Returns distance to the ground from a given point in a given direction. If no ground is found, checks in the other direction and

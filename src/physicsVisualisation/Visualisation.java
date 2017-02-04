@@ -11,9 +11,9 @@ import java.util.Collection;
 import physics.Ship;
 // import trackDesign.TrackComponent;
 
+/** Basic visualisation for testing ship physics. Placeholder until physics is connected to the main engine.
+ * Adjusted from code by Reece Bennett that he used to test his AI. */
 public class Visualisation {
-
-	private static final long serialVersionUID = 1L;
 
 	private Collection<Ship> ships;
 	// private TrackComponent trackComponent;

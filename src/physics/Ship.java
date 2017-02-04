@@ -12,6 +12,23 @@ import placeholders.FlatGroundProvider;
 import placeholders.GroundProvider;
 import placeholders.ServerShipProvider;
 
+/** A single ship entity. Can be controlled by an AI or the player. Handles all the physics, namely (currently):
+ * -Keeping track of velocity and position
+ * -Applying air resistance
+ * -Applying accelerations based on user's input
+ * -Keeping track of rotation
+ * -Handles gravity and forces of the air cushion, on flat terrain only (so far)
+ * -Detecting and reacting to collision with other ships (untested!)
+ * Can also export itself to an array of floats and update itself with such an array received from server (used for ships controlled by
+ * other players/server's AIs)
+ * TODO:
+ * - Integrate with track system to detect and react to track collisions
+ * - Test and polish collisions with other ships
+ * - Upgrade air cushion to work with curved terrain
+ * - Smarter reaction if the ship ends up underground for some reason (super rare but still should be addressed)
+ * - Panning physics (matching ground below/reacting to accelerations)
+ * 
+ * @author Maciej Bogacki */
 public class Ship {
 
 	private static final float SCALE = 3;
@@ -176,10 +193,6 @@ public class Ship {
 		gravity(delta);
 		airCushion(delta);
 		updatePosition(delta);
-	}
-
-	public void setX(float amount) {
-		this.position.setX(amount);
 	}
 
 	/** @return Position of this ship's centre */

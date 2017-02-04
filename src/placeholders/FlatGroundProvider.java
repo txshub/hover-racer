@@ -3,6 +3,9 @@ package placeholders;
 import org.joml.Vector3f;
 
 
+/** GroundProvider the provides a flat ground at y=0 and assumes all vehicles are horizontal.
+ * 
+ * @author Maciej Bogacki */
 public class FlatGroundProvider implements GroundProvider {
 
 	float height;
