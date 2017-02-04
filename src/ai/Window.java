@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import com.sun.glass.events.KeyEvent;
-
 import trackDesign.TrackComponent;
 import trackDesign.TrackPoint;
 
@@ -13,8 +11,28 @@ public class Window {
 
   public static void main(String[] args) {
     
-    TrackComponent trackComponent = new TrackComponent();
-    ArrayList<TrackPoint> track = trackComponent.getTrack();
+    ArrayList<TrackPoint> track = new ArrayList<>();
+//    track.add(new TrackPoint(50, 50));
+//    track.add(new TrackPoint(80, 60));
+//    track.add(new TrackPoint(130, 100));
+//    track.add(new TrackPoint(160, 170));
+//    track.add(new TrackPoint(180, 180));
+//    track.add(new TrackPoint(200, 165));
+//    track.add(new TrackPoint(210, 120));
+//    track.add(new TrackPoint(220, 80));
+//    track.add(new TrackPoint(240, 60));
+//    track.add(new TrackPoint(290, 80));
+//    track.add(new TrackPoint(300, 300));
+//    track.add(new TrackPoint(50, 300));
+    
+    track.add(new TrackPoint(50, 50));
+    track.add(new TrackPoint(80, 60));
+    track.add(new TrackPoint(110, 50));
+    track.add(new TrackPoint(120, 140));
+    track.add(new TrackPoint(80, 200));
+    
+    TrackComponent trackComponent = new TrackComponent(track);
+    track = trackComponent.getTrack();
     
     ShipManager shipManager = new ShipManager();
     AIShip player = new AIShip(track.get(0).getX(), track.get(0).getY(), 0, track);

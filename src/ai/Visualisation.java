@@ -6,12 +6,10 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
 import trackDesign.TrackComponent;
-import trackDesign.TrackPoint;
 
 public class Visualisation extends JComponent {
 

@@ -1,5 +1,4 @@
 package trackDesign;
-import java.awt.Color;
 import java.awt.Graphics2D;
 /**
  * This class exists in order to have a sortable point, as well as a square distance measure

@@ -14,9 +14,13 @@ public class TrackComponent extends JComponent {
   private int scale;
   
   public TrackComponent() {
-		super();
-		track = TrackMaker.makeTrack(10, 20, 15, 3, 70, 40, 4);
+    this(TrackMaker.makeTrack(10, 20, 15, 3, 70, 40, 4));
 	}
+  
+  public TrackComponent(ArrayList<TrackPoint> track) {
+    super();
+    this.track = track;
+  }
   
   public ArrayList<TrackPoint> getTrack() {
     return track;

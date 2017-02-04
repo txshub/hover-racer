@@ -26,10 +26,9 @@ public class AIShip extends Ship {
     float angle = dirToPoint.angle(dirVec); 
     float dist = dirToPoint.length();
     
-    System.out.println("Next: " + nextPointIndex + " angle: " + angle + " dist: " + dist);
+    // System.out.println("Next: " + nextPointIndex + " angle: " + angle + " dist: " + dist);
     
     float dTurn = 0;
-    float dAcel = 0;
     
     if (angle > 0) {
       dTurn = -Ship.maxTurnSpeed;
@@ -38,7 +37,30 @@ public class AIShip extends Ship {
     }
     
     setRotV(dTurn);
-    setAccel(0.04);
+    
+    // Check the angle between future points, if high slow down
+    // Get the next points
+    ArrayList<Vector2f> nextEdges = new ArrayList<>();
+    for (int i = 0; i < 2; i++) {
+      int n = nextPointIndex + i;
+      int nextPoint1 = n+i >= track.size() ? n+i - track.size() : n+i;
+      int nextPoint2 = n+i+1 >= track.size() ? (n+i+1) - track.size() : n+i+1;
+      
+      Vector2f point1 = new Vector2f(track.get(nextPoint1).getX(), track.get(nextPoint1).getY());
+      Vector2f point2 = new Vector2f(track.get(nextPoint2).getX(), track.get(nextPoint2).getY());
+
+      nextEdges.add(point2.sub(point1).normalize());
+    }
+
+    //System.out.println("Angle: " + Math.toDegrees(nextEdges.get(0).angle(nextEdges.get(1))) + " Edge1: " + nextEdges.get(0) + " Edge2: " + nextEdges.get(1));
+    float x = nextEdges.get(0).x;
+    float y = nextEdges.get(0).y;
+    System.out.println(Math.toDegrees(nextEdges.get(0).angle(nextEdges.get(1))));
+    
+    float maxAccel = 0.1f;
+    float minAccel = 0.01f;
+    
+    setAccel(0.02);
     
     if (dist < 10) {
       nextPointIndex++;
