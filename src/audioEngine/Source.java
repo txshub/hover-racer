@@ -5,9 +5,12 @@ import org.lwjgl.openal.AL10;
 public class Source {
 
 	private int sourceId;
+	private int compVolume;
 	
 	public Source() {
+		AudioMaster.addSource(this);
 		sourceId = AL10.alGenSources();
+		compVolume = 3;
 		AL10.alSourcef(sourceId, AL10.AL_GAIN, 3);
 		AL10.alSourcef(sourceId, AL10.AL_PITCH, 1);
 		AL10.alSource3f(sourceId, AL10.AL_POSITION, 0, 0, 0);
@@ -15,6 +18,12 @@ public class Source {
 		AL10.alSourcef(sourceId, AL10.AL_ROLLOFF_FACTOR, 1);
 		AL10.alSourcef(sourceId, AL10.AL_REFERENCE_DISTANCE, 10);
 		AL10.alSourcef(sourceId, AL10.AL_MAX_DISTANCE, 250);
+	}
+	
+	public Source(int compVolume) {
+		this();
+		this.compVolume = compVolume;
+		setVolume(compVolume);
 	}
 	
 	/*
@@ -65,6 +74,10 @@ public class Source {
 	
 	public void setPosition (float x, float y, float z) {
 		AL10.alSource3f(sourceId, AL10.AL_POSITION, x, y, z);
+	}
+	
+	public void changeVolume(float master) {
+		setVolume(master * compVolume);
 	}
 	
 }

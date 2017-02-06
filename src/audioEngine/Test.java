@@ -9,22 +9,14 @@ public class Test {
 		AudioMaster.init();
 		AudioMaster.setListenerData(0, 0, 0);
 		
-		int buffer = AudioMaster.loadSound("audioEngine/bounce.wav");
 		Source source = new Source();
 		source.setLooping(true);
-		source.play(buffer);
+		source.play(6463659);
 		
 		float xPos = 8;
 		source.setPosition(xPos, 0, 2);
 		
-		char c = ' ';
-		while (c != 'q') {
-			
-			xPos -= 0.03f;
-			source.setPosition(xPos, 0, 2);
-			Thread.sleep(10);
-			
-		}
+		Thread.sleep(10000);
 		
 		source.delete();
 		AudioMaster.cleanUP();

@@ -11,6 +11,9 @@ import org.lwjgl.util.WaveData;
 public class AudioMaster {
 
 	private static List<Integer> buffers = new ArrayList<Integer>();
+	private static List<Source> sources = new ArrayList<Source>();
+	
+	private static float masterVolume = 1;
 
 	/*
 	 * Initialize the master
@@ -21,6 +24,7 @@ public class AudioMaster {
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
+		Sounds.init();
 	}
 	
 	public static void setListenerData(float x, float y, float z) {
@@ -49,6 +53,28 @@ public class AudioMaster {
 			AL10.alDeleteBuffers(buffer);
 		}
 		AL.destroy();
+	}
+	
+	public static void increaseMasterVolume() {
+		if (masterVolume < 1) {
+			masterVolume += 0.1;
+			for (Source s : sources) {
+				s.changeVolume(masterVolume);
+			}
+		}
+	}
+	
+	public static void decreaseMasterVolume() {
+		if (masterVolume > 0) {
+			masterVolume -= 0.1;
+			for (Source s : sources) {
+				s.changeVolume(masterVolume);
+			}
+		}
+	}
+	
+	public static void addSource(Source s) {
+		sources.add(s);
 	}
 	
 }
