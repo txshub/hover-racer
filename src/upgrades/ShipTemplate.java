@@ -55,6 +55,18 @@ public class ShipTemplate {
 		stats.put(Stat.COLLISION_NEGATION, 0f);
 	}
 
+	public static ShipTemplate getDefault() {
+		return new ShipTemplate();
+	}
+
+
+	public Map<Stat, Float> getStats() {
+		return stats;
+	}
+	public Map<UpgradeType, Integer> getUpgrades() {
+		return upgrades;
+	}
+
 
 
 }

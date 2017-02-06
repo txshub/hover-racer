@@ -65,4 +65,14 @@ public class UpgradeType {
 		else return costFunction.apply(level);
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		try {
+			UpgradeType casted = (UpgradeType) obj;
+			return casted.name.equals(this.name);
+		} catch (ClassCastException e) {
+			return false;
+		}
+	}
+
 }
