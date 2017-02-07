@@ -41,7 +41,7 @@ public class Shop {
 
 	private Map<String, Float> convertStats(Map<Stat, Float> stats) {
 		Map<String, Float> res = new HashMap<String, Float>();
-		stats.entrySet().stream().forEach(e -> res.put(e.getKey().name(), e.getValue()));
+		stats.entrySet().stream().forEach(e -> res.put(e.getKey().getName(), e.getValue()));
 		return res;
 	}
 

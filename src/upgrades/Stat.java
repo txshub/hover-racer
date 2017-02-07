@@ -12,5 +12,8 @@ public enum Stat {
 	private Stat(String name) {
 		this.name = name;
 	}
+	public String getName() {
+		return name;
+	}
 
 }
