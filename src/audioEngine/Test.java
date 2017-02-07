@@ -1,7 +1,12 @@
 package audioEngine;
 
+import java.util.Scanner;
+
+
 /*
- * Test class -- NOT IMPORTANT
+ * Tudor Suruceanu
+ * 
+ * Usage example
  */
 public class Test {
 
@@ -9,24 +14,25 @@ public class Test {
 		AudioMaster.init();
 		AudioMaster.setListenerData(0, 0, 0);
 		
-		int buffer = AudioMaster.loadSound("audioEngine/bounce.wav");
-		Source source = new Source();
-		source.setLooping(true);
-		source.play(buffer);
+		Scanner in = new Scanner(System.in);
+		String c = "";
 		
-		float xPos = 8;
-		source.setPosition(xPos, 0, 2);
+		AudioMaster.playMusic();
 		
-		char c = ' ';
-		while (c != 'q') {
+		while (!c.equals("stop")) {
+			c = in.nextLine();
 			
-			xPos -= 0.03f;
-			source.setPosition(xPos, 0, 2);
-			Thread.sleep(10);
+			if (c.equals("up")) {
+				AudioMaster.increaseMasterVolume();
+			}
 			
+			if (c.equals("down")) {
+				AudioMaster.decreaseMasterVolume();
+			}
 		}
 		
-		source.delete();
+		AudioMaster.stopMusic();
+		
 		AudioMaster.cleanUP();
 	}
 

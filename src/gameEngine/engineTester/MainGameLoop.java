@@ -47,8 +47,6 @@ public class MainGameLoop {
 
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
-		AudioMaster.init();
-		AL10.alDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
 
 		/************************* Terrain ********************************/ 
 
@@ -107,14 +105,6 @@ public class MainGameLoop {
 			entity.getModel().getTexture().setShineDamper(50);
 			list.add(entity);
 			
-			Source source = new Source();
-			source.setPosition(entity.getPosition().x, entity.getPosition().y, entity.getPosition().z);
-			source.setLooping(true);
-			source.setVolume(2);
-			source.setPitch(1.2f);
-			
-			int buffer = AudioMaster.loadSound("audioEngine/bounce.wav");
-			source.play(buffer);
 		}
 
 		/************************* Grass ********************************/
@@ -311,7 +301,6 @@ public class MainGameLoop {
 		renderer.cleanUp();
 		loader.cleanUp();
 		wfb.cleanUp();
-		AudioMaster.cleanUP();
 		DisplayManager.closeDisplay();
 
 	}
