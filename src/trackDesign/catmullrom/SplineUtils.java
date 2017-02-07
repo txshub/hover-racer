@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 import trackDesign.TrackPoint;
 
+/**
+ * @author Simon
+ * Adapted From http://hawkesy.blogspot.co.uk/2010/05/catmull-rom-spline-curve-implementation.html
+ * 
+ *
+ */
 public class SplineUtils {
 
 	public static ArrayList<TrackPoint> dividePoints(ArrayList<TrackPoint> points, int divisionCount) {

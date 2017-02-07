@@ -2,6 +2,12 @@ package trackDesign.catmullrom;
 
 import trackDesign.TrackPoint;
 
+/**
+ * @author Simon
+ * Adapted From http://hawkesy.blogspot.co.uk/2010/05/catmull-rom-spline-curve-implementation.html
+ * 
+ *
+ */
 public class Spline2D {
 	private Spline splineXs, splineYs;
 	

@@ -3,7 +3,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.Graphics2D;
 import java.awt.Color;
 /**
- * This class exists in order to have a sortable point, as well as a square distance measure
+ * This class exists in order to have a sortable point, as well as a distance measure
  * @author sxw588
  *
  */
