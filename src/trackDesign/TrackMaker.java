@@ -22,7 +22,7 @@ public class TrackMaker {
 	 * @param subDivs The number of subdivisions between each point when smoothing is applied
 	 * @return A track in the form of an arraylist of points
 	 */
-	public static ArrayList<TrackPoint> makeTrack(int minTrackPoints, int maxTrackPoints, float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs) {
+	public static SeedTrack makeTrack(int minTrackPoints, int maxTrackPoints, float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs) {
 		Random temp = new Random(); //Create a new random object
 		return makeTrack(temp.nextLong(), minTrackPoints, maxTrackPoints, minDist, seperateIterations, difficulty, maxDisp, subDivs); //Return the made track with a random seed
 	}
@@ -39,7 +39,7 @@ public class TrackMaker {
 	 * @param subDivs The number of subdivisions between each point when smoothing is applied
 	 * @return A track in the form of an arraylist of points
 	 */
-	public static ArrayList<TrackPoint> makeTrack(long seed, int minTrackPoints, int maxTrackPoints, float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs) {
+	public static SeedTrack makeTrack(long seed, int minTrackPoints, int maxTrackPoints, float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs) {
 		Random random = new Random(seed); //Make the random object
 		ArrayList<TrackPoint> points = new ArrayList<TrackPoint>();
 		ArrayList<TrackPoint> hullPoints = new ArrayList<TrackPoint>();
@@ -60,7 +60,7 @@ public class TrackMaker {
 		}
 		ArrayList<TrackPoint> finalCircuit = SplineUtils.dividePoints(circuit, subDivs); //Apply smoothing
 		centreTrack(finalCircuit); //Centre the track so it doesn't go off screen at all
-		return finalCircuit; //Return this final track after smoothing and centreing (however the hell you spell that word, I take CS not english)
+		return new SeedTrack(seed,finalCircuit); //Return this final track after smoothing and centreing (however the hell you spell that word, I take CS not english)
 	}
 	
 	/**
@@ -125,7 +125,6 @@ public class TrackMaker {
 					float nexX = (float)Math.sin(angleNeeded) * length;
 					nextPoint.setX(currentPoint.getX() + nexX);
 					nextPoint.setY(currentPoint.getY() + newY);
-					System.out.println(length + " Clock To " + currentPoint.dist(nextPoint));
 				}
 			}
 		}
