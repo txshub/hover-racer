@@ -21,7 +21,7 @@ public class Camera {
 	
 	public Camera(Player player){
 		this.player = player;
-		Mouse.setGrabbed(true);
+//		Mouse.setGrabbed(true);
 	}
 	
 	public Player getPlayer(){
@@ -34,20 +34,20 @@ public class Camera {
 	
 	public void move(Terrain[][] terrains){
 
-		Mouse.setCursorPosition(Display.getWidth()/2, Display.getHeight()/2);
+//		Mouse.setCursorPosition(Display.getWidth()/2, Display.getHeight()/2);
 		player.move(terrains);
-//		calculateZoom();
+		calculateZoom();
 		calculatePitch();
-//		calculateAngleAroundPlayer();
-//		float horizontalDistance = calculateHorizontalDistance();
+		calculateAngleAroundPlayer();
+		float horizontalDistance = calculateHorizontalDistance();
 		verticalDistance = calculateVerticalDistance();
-		calculateCameraPosition(-0.75f, verticalDistance);
+		calculateCameraPosition(horizontalDistance, verticalDistance);
 		this.yaw = 180 - (player.getRoty() + angleAroundPlayer);
-//		if(angleAroundPlayer >= 180){
-//			angleAroundPlayer -= 360;
-//		}else if(angleAroundPlayer <= -180){
-//			angleAroundPlayer += 360;
-//		}
+		if(angleAroundPlayer >= 180){
+			angleAroundPlayer -= 360;
+		}else if(angleAroundPlayer <= -180){
+			angleAroundPlayer += 360;
+		}
 
 	}
 
@@ -82,9 +82,6 @@ public class Camera {
 		position.x = player.getPosition().x - offsetX;
 		position.z = player.getPosition().z - offsetZ;
 		position.y = player.getPosition().y + (player.getScale() * 10) + verticalDistance;
-//		position.x = - offsetX;
-//		position.z = - offsetZ;
-//		position.y = (player.getScale() * 10) + verticalDistance;
 	}
 	
 	private float calculateHorizontalDistance(){
@@ -96,7 +93,6 @@ public class Camera {
 	}
 	
 	private void calculateZoom(){
-//		distanceFromPlayer = 0; // for FPS games
 		float zoomLevel = Mouse.getDWheel() * 0.1f;
 		distanceFromPlayer -= zoomLevel;
 		if(distanceFromPlayer < 5){
@@ -104,10 +100,11 @@ public class Camera {
 		}else if(distanceFromPlayer > 1000){
 			distanceFromPlayer = 1000;
 		}
+//		distanceFromPlayer = 0; // for FPS games
 	}
 	
 	private void calculatePitch(){
-//		if(Mouse.isButtonDown(1)){
+		if(Mouse.isButtonDown(1)){
 			float pitchChange = Mouse.getDY() * 0.1f;
 			pitch -= pitchChange;
 			if(pitch >= 90){
@@ -115,12 +112,12 @@ public class Camera {
 			}else if(pitch <= -90){
 				pitch = -90;
 			}
-//			pTimer = System.currentTimeMillis();
-//		}else if(System.currentTimeMillis() >= pTimer + 1000){
-//			pitch -= defaultPitch;
-//			pitch -= pitch/10;
-//			pitch += defaultPitch;
-//		}
+			pTimer = System.currentTimeMillis();
+		}else if(System.currentTimeMillis() >= pTimer + 1000){
+			pitch -= defaultPitch;
+			pitch -= pitch/10;
+			pitch += defaultPitch;
+		}
 	}
 	
 	private void calculateAngleAroundPlayer(){
