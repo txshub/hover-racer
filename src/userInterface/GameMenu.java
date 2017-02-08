@@ -1,7 +1,6 @@
 package userInterface;
 
 import gameEngine.engineTester.MainGameLoop;
-import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
@@ -11,12 +10,16 @@ import javafx.util.Duration;
 
 public class GameMenu extends Parent {
 	
+	VBox menu0, menu1, menu2;
+	MenuButton btnPlayGame, btnPlayAI, btnOptions, btnSound, btnMusic, btnExit, btnBack, btnBack2;
+	ToggleButton btnToggle;
+	final int OFFSET = 600;
 	
 	public GameMenu(){
 		
-		VBox menu0 = new VBox(10);
-		VBox menu1 = new VBox(10);
-		VBox menu2 = new VBox(10);
+		menu0 = new VBox(10);
+		menu1 = new VBox(10);
+		menu2 = new VBox(10);
 		
 		menu0.setTranslateX(100);
 		menu0.setTranslateY(160);
@@ -26,44 +29,28 @@ public class GameMenu extends Parent {
 		
 		menu2.setTranslateX(700);
 		menu2.setTranslateY(160);
-		
-		final int offset = 600;
-		
-		//menu1.setTranslateX(offset);
-		
-		MenuButton btnPlayGame = new MenuButton("PLAY AGAINST RACERS");
+			
+		btnPlayGame = new MenuButton("PLAY AGAINST RACERS");
 		btnPlayGame.setOnMouseClicked(event -> {
-			//FadeTransition ft = new FadeTransition(Duration.seconds(0.5), this);
-			//ft.setFromValue(1);
-			//ft.setToValue(0);
-			//ft.setOnFinished(evt -> {
-			//	this.setVisible(true);
-			//});
-			//ft.play();
+			//enter the server lobby in the actual game
 			MainGameLoop.main(null);
 		});
 		
-		MenuButton btnPlayAI = new MenuButton("PLAY AGAINST AI");
+		btnPlayAI = new MenuButton("PLAY AGAINST AI");
 		btnPlayAI.setOnMouseClicked(event -> {
-			//FadeTransition ft = new FadeTransition(Duration.seconds(0.5), this);
-			//ft.setFromValue(1);
-			//ft.setToValue(0);
-			//ft.setOnFinished(evt -> {
-			//	this.setVisible(true);
-			//});
-			//ft.play();
+			//enter the game with the computer-controlled players
 			MainGameLoop.main(null);
 		});
 		
-		MenuButton btnOptions = new MenuButton ("SETTINGS");
+		btnOptions = new MenuButton ("SETTINGS");
 		btnOptions.setOnMouseClicked(event -> {
 			getChildren().add(menu1);
 			
 			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25),menu0);
-			trans.setToX(menu0.getTranslateX()-offset);
+			trans.setToX(menu0.getTranslateX() - OFFSET);
 			
 			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.5),menu1);
-			trans1.setToX(menu1.getTranslateX()-offset);
+			trans1.setToX(menu1.getTranslateX() - OFFSET);
 			
 			trans.play();
 			trans1.play();
@@ -74,17 +61,17 @@ public class GameMenu extends Parent {
 			
 		});
 		
-		MenuButton btnExit = new MenuButton ("EXIT");
+		btnExit = new MenuButton ("EXIT");
 		btnExit.setOnMouseClicked(event ->{
 			System.exit(0);
 		});
 		
-		MenuButton btnBack = new MenuButton ("BACK");
+		btnBack = new MenuButton ("BACK");
 		btnBack.setOnMouseClicked(event -> {
 			getChildren().add(menu0);
 			
 			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25),menu1);
-			trans.setToX(menu1.getTranslateX()+offset);
+			trans.setToX(menu1.getTranslateX() + OFFSET);
 			
 			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.5),menu0);
 			trans1.setToX(menu1.getTranslateX());
@@ -97,12 +84,12 @@ public class GameMenu extends Parent {
 		    });
 		});
 		
-		MenuButton btnBack2 = new MenuButton ("BACK");
+		btnBack2 = new MenuButton ("BACK");
 		btnBack2.setOnMouseClicked(event -> {
 			getChildren().add(menu1);
 			
 			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25),menu2);
-			trans.setToX(menu2.getTranslateX()+offset);
+			trans.setToX(menu2.getTranslateX() + OFFSET);
 			
 			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.5),menu1);
 			trans1.setToX(menu2.getTranslateX());
@@ -115,16 +102,15 @@ public class GameMenu extends Parent {
 		    });
 		});
 		
-		MenuButton btnSound = new MenuButton("SOUND EFFECTS");
-		
+		btnSound = new MenuButton("SOUND EFFECTS");
 		btnSound.setOnMouseClicked(event -> {
 			getChildren().add(menu2);
 			
 			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25),menu1);
-			trans.setToX(menu1.getTranslateX()-offset);
+			trans.setToX(menu1.getTranslateX() - OFFSET);
 			
 			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.5),menu2);
-			trans1.setToX(menu2.getTranslateX()-offset);
+			trans1.setToX(menu2.getTranslateX()- OFFSET);
 			
 			trans.play();
 			trans1.play();
@@ -136,16 +122,15 @@ public class GameMenu extends Parent {
 		});
 		
 		
-		MenuButton btnMusic = new MenuButton("MUSIC");
-		
+		btnMusic = new MenuButton("MUSIC");		
 		btnMusic.setOnMouseClicked(event -> {
 			getChildren().add(menu2);
 			
 			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25),menu1);
-			trans.setToX(menu1.getTranslateX()-offset);
+			trans.setToX(menu1.getTranslateX() - OFFSET);
 			
 			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.5),menu2);
-			trans1.setToX(menu2.getTranslateX()-offset);
+			trans1.setToX(menu2.getTranslateX() - OFFSET);
 			
 			trans.play();
 			trans1.play();
@@ -156,17 +141,15 @@ public class GameMenu extends Parent {
 			
 		});
 		
-		
-		ToggleButton btn1 = new ToggleButton();
-		btn1.toggle();
-		
+		btnToggle = new ToggleButton();
+		btnToggle.toggle();
 		
 		//main menu
 		menu0.getChildren().addAll(btnPlayGame, btnPlayAI, btnOptions, btnExit);
 		//options menu
 		menu1.getChildren().addAll(btnSound, btnMusic, btnBack);
 		//music and sound effects
-		menu2.getChildren().addAll(btn1, btnBack2);
+		menu2.getChildren().addAll(btnToggle, btnBack2);
 		
 		//game menu background
 		Rectangle bg = new Rectangle(550,412);
@@ -175,7 +158,6 @@ public class GameMenu extends Parent {
 		
 		getChildren().addAll(bg,menu0);
 		 
-
 	}
 
 }

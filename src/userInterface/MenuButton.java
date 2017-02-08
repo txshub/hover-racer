@@ -3,15 +3,10 @@ package userInterface;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 import javafx.geometry.Pos;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
-import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -22,8 +17,14 @@ public class MenuButton extends StackPane {
 	
 	private Text buttonText;
 	
+	/**
+	 * Constructor for the MenuButton class that creates a menu button
+	 * with a certain style, and with the given name as the label. 
+	 * @param name The name of the button.
+	 */
 	public MenuButton (String name) {
 		buttonText = new Text(name);
+		
 		
 		try {
 			Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), 20);
@@ -49,6 +50,7 @@ public class MenuButton extends StackPane {
 		
 		//add button to stack with text over the background
 		getChildren().addAll(bg, buttonText);
+	
 		
 		//hover over button
 		this.setOnMouseEntered(event -> {

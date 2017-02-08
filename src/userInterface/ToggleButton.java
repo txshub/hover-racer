@@ -13,11 +13,22 @@ import javafx.scene.text.Font;
 public class ToggleButton extends HBox {
 	
 	
-	private Label label = new Label();
-	private Button button = new Button();
+	private Label label;
+	private Button button;
+	private boolean switchedOn;
 	
-	private boolean switchedOn = false;
+	/**
+	 * Constructor for the ToggleButton class.
+	 */
+	public ToggleButton(){
+		label = new Label();
+		button = new Button();
+		switchedOn = false;
+	}
 	
+	/**
+	 * Sets the initial state of the toggle button.
+	 */
 	private void initialState() {
 		
 		label.setText("OFF");
@@ -29,7 +40,6 @@ public class ToggleButton extends HBox {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 		
 		getChildren().addAll(label, button);
 		
@@ -44,8 +54,10 @@ public class ToggleButton extends HBox {
 		setButtonStyle();
 	}
 	
+	/**
+	 * Sets the style of the toggle button.
+	 */
 	public void setButtonStyle(){
-		
 		
 		setWidth(200);
 		label.setAlignment(Pos.CENTER);
@@ -58,6 +70,9 @@ public class ToggleButton extends HBox {
 		button.prefHeightProperty().bind(heightProperty());
 	}
 	
+	/**
+	 * Method that implements the ON/OFF toggle of the button.
+	 */
 	public void toggle(){
 		
 		initialState();
@@ -75,11 +90,18 @@ public class ToggleButton extends HBox {
 		});
 	}
 	
-	
+	/**
+	 * Get method for the switchedOn property.
+	 * @return True if the button is switched on, false otherwise.
+	 */
 	public boolean isSwitchedOn() {
 		return this.switchedOn;
 	}
 	
+	/**
+	 * Set method for the switchedOn property.
+	 * @param state The current state of the toggle button.
+	 */
 	public void setSwitchedOn (boolean state){
 		this.switchedOn = state;
 	}
