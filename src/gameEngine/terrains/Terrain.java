@@ -159,7 +159,7 @@ public class Terrain {
 		height += MAX_PIXEL_COLOR / 2f;
 		height /= MAX_PIXEL_COLOR / 2f;
 		height *= MAX_HEIGHT;
-		return height;
+		return 0;
 		
 	}
 }

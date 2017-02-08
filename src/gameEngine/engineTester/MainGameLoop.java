@@ -169,7 +169,7 @@ public class MainGameLoop {
 		barrel.getTexture().setShineDamper(10f);
 		barrel.getTexture().setNormalMapID(loader.loadTexture(normalObjs + "barrelNormal"));
 
-		normalEntities.add(new Entity(barrel, new Vector3f(100, 20, 100), 0, 0, 0, 1));
+		//normalEntities.add(new Entity(barrel, new Vector3f(100, 20, 100), 0, 0, 0, 1));
 
 		TexturedModel boulder = new TexturedModel(NormalMappedObjLoader.loadOBJ(normalObjs + "boulder", loader),
 				new ModelTexture(loader.loadTexture(normalObjs + "boulder")));
@@ -177,7 +177,7 @@ public class MainGameLoop {
 		boulder.getTexture().setShineDamper(50f);
 		boulder.getTexture().setNormalMapID(loader.loadTexture(normalObjs + "boulderNormal"));
 
-		normalEntities.add(new Entity(boulder, new Vector3f(110, 20, 100), 0, 0, 0, 1));
+		//normalEntities.add(new Entity(boulder, new Vector3f(110, 20, 100), 0, 0, 0, 1));
 
 		TexturedModel crate = new TexturedModel(NormalMappedObjLoader.loadOBJ(normalObjs + "crate", loader),
 				new ModelTexture(loader.loadTexture(normalObjs + "crate")));
@@ -185,7 +185,7 @@ public class MainGameLoop {
 		crate.getTexture().setShineDamper(10f);
 		crate.getTexture().setNormalMapID(loader.loadTexture(normalObjs + "crateNormal"));
 
-		normalEntities.add(new Entity(crate, new Vector3f(90, 20, 100), 0, 0, 0, 0.01f));
+		//normalEntities.add(new Entity(crate, new Vector3f(90, 20, 100), 0, 0, 0, 0.01f));
 
 		/*************************
 		 * Lights and Others
@@ -217,20 +217,20 @@ public class MainGameLoop {
 
 		MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrains);
 
-		WaterFrameBuffers wfb = new WaterFrameBuffers();
+		//WaterFrameBuffers wfb = new WaterFrameBuffers();
 
-		WaterShader waterShader = new WaterShader();
-		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), wfb);
+		//WaterShader waterShader = new WaterShader();
+		//WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), wfb);
 		// List<WaterTile> waters = new ArrayList<>();
 		// WaterTile water = new WaterTile(Terrain.SIZE/2, Terrain.SIZE/2, -10);
 		// waters.add(water);
-		WaterTile[][] waters = new WaterTile[1][1];
-		for (int i = 0; i < 1; i++) {
-			for (int j = 0; j < 1; j++) {
-				waters[i][j] = new WaterTile(i * Terrain.SIZE + (Terrain.SIZE / 2),
-						j * Terrain.SIZE + (Terrain.SIZE / 2), -25f);
-			}
-		}
+		//WaterTile[][] waters = new WaterTile[1][1];
+		//for (int i = 0; i < 1; i++) {
+			//for (int j = 0; j < 1; j++) {
+				//waters[i][j] = new WaterTile(i * Terrain.SIZE + (Terrain.SIZE / 2),
+					//	j * Terrain.SIZE + (Terrain.SIZE / 2), -25f);
+		//	}
+		//}
 
 		/************************* Guis ********************************/
 
@@ -265,32 +265,32 @@ public class MainGameLoop {
 			// light2.setPosition(new Vector3f(point.x, point.y + 5, point.z));
 			// }
 			camera.move(terrains);
-			for (WaterTile[] waters1 : waters) {
-				for (WaterTile water : waters1) {
-
-					// reflection
-					wfb.bindReflectionFrameBuffer();
-					float distance = 2 * (camera.getPosition().y - water.getHeight());
-					camera.getPosition().y -= distance;
-					camera.invertPitch();
-					renderer.renderScene(list, normalEntities, terrains, lights, camera,
-							new Vector4f(0, 1, 0, -water.getHeight() + 0.1f));
-					camera.invertPitch();
-					camera.getPosition().y += distance;
-					// refraction
-					wfb.bindRefractionFrameBuffer();
-					renderer.renderScene(list, normalEntities, terrains, lights, camera,
-							new Vector4f(0, -1, 0, water.getHeight() + 0.1f));
-					wfb.unbindCurrentFrameBuffer();
-				}
-			}
+//			for (WaterTile[] waters1 : waters) {
+//				for (WaterTile water : waters1) {
+//
+//					// reflection
+//					wfb.bindReflectionFrameBuffer();
+//					float distance = 2 * (camera.getPosition().y - water.getHeight());
+//					camera.getPosition().y -= distance;
+//					camera.invertPitch();
+//					renderer.renderScene(list, normalEntities, terrains, lights, camera,
+//							new Vector4f(0, 1, 0, -water.getHeight() + 0.1f));
+//					camera.invertPitch();
+//					camera.getPosition().y += distance;
+//					// refraction
+//					wfb.bindRefractionFrameBuffer();
+//					renderer.renderScene(list, normalEntities, terrains, lights, camera,
+//							new Vector4f(0, -1, 0, water.getHeight() + 0.1f));
+//					wfb.unbindCurrentFrameBuffer();
+//				}
+//			}
 
 			renderer.renderScene(list, normalEntities, terrains, lights, camera,
 					new Vector4f((float) Math.sin(Math.toRadians(p1.getRoty())), 0,
 							(float) Math.cos(Math.toRadians(p1.getRoty())),
 							10f));
 			GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
-			waterRenderer.render(waters, camera, sun);
+			//waterRenderer.render(waters, camera, sun);
 			guiRender.render(guis);
 			DisplayManager.updateDisplay();
 			sortLights(lights, p1.getPosition());
@@ -301,7 +301,7 @@ public class MainGameLoop {
 		guiRender.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
-		wfb.cleanUp();
+		//wfb.cleanUp();
 		AudioMaster.cleanUP();
 		DisplayManager.closeDisplay();
 
