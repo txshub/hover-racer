@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.Display;
@@ -246,7 +247,7 @@ public class MainGameLoop {
 		List<GuiTexture> guis = new ArrayList<GuiTexture>();
 		GuiTexture crosshair = new GuiTexture(loader.loadTexture("crosshair"), new Vector2f(0, 0),
 				new Vector2f(64f / Display.getWidth(), 60f / Display.getHeight()));
-		guis.add(crosshair);
+//		guis.add(crosshair);
 		// GuiTexture gui2 = new GuiTexture(loader.loadTexture("fern"), new
 		// Vector2f(.5f, .5f), new Vector2f(.25f, .25f));
 		// guis.add(gui);
@@ -295,14 +296,17 @@ public class MainGameLoop {
 			}
 
 			renderer.renderScene(list, normalEntities, terrains, lights, camera,
-					new Vector4f((float) Math.sin(Math.toRadians(p1.getRoty())), 0,
-							(float) Math.cos(Math.toRadians(p1.getRoty())),
-							10f));
+					new Vector4f(0,0,0,0));
 			GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
 			waterRenderer.render(waters, camera, sun);
 			guiRender.render(guis);
 			DisplayManager.updateDisplay();
 			sortLights(lights, p1.getPosition());
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
+				break;
+			}
+			
 		}
 
 		/************************* Clean up ********************************/
