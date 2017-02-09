@@ -1,6 +1,6 @@
 package placeholders;
 
-import org.joml.Vector3f;
+import org.lwjgl.util.vector.Vector3f;
 
 
 /** GroundProvider the provides a flat ground at y=0 and assumes all vehicles are horizontal.

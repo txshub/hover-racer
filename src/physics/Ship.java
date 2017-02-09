@@ -3,6 +3,7 @@ package physics;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import gameEngine.entities.Entity;
 import placeholders.Action;
 import placeholders.ControllerInt;
 import placeholders.ExportedShip;
@@ -29,7 +30,8 @@ import placeholders.ServerShipProvider;
  * - Panning physics (matching ground below/reacting to accelerations)
  * 
  * @author Maciej Bogacki */
-public class Ship {
+public class Ship extends Entity {
+	// public class Ship {
 
 	private static final float SCALE = 3;
 	private static final float ACCELERATION = 20 * SCALE; // How fast does the ship accelerate
@@ -84,6 +86,7 @@ public class Ship {
 
 	private Ship(Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller, ServerShipProvider server,
 		GroundProvider ground) {
+		super(null, startingPosition.as3f(), 0, 0, 0, 1); // TODO modify constructors to add the texture (will break Visualisation)
 		position = startingPosition.copy();
 		this.velocity = new Vector3(0, 0, 0);
 		this.rotation = new Vector3(0, 0, 0);
@@ -151,7 +154,7 @@ public class Ship {
 	}
 
 	private void doCollisions() {
-		otherShips.stream().filter(ship -> ship.getPosition().distanceTo(this.position) <= ship.getSize() + this.size)
+		otherShips.stream().filter(ship -> ship.getInternalPosition().distanceTo(this.position) <= ship.getSize() + this.size)
 			.forEach(s -> collideWith(s));
 	}
 
@@ -187,16 +190,21 @@ public class Ship {
 
 		if (controller != null) handleControls(delta, controller); // Steer the ship with user controls
 		else handleControls(delta, fromServer); // Steer the ship with controls from server (only when missed packets)
-
+		// Do physics
 		airResistance(delta);
 		doCollisions();
 		gravity(delta);
 		airCushion(delta);
 		updatePosition(delta);
+		// Update parent
+		super.setPosition(position.as3f());
+		super.setRotx(rotation.getX());
+		super.setRoty(rotation.getY());
+		super.setRotz(rotation.getZ());
 	}
 
 	/** @return Position of this ship's centre */
-	public Vector3 getPosition() {
+	public Vector3 getInternalPosition() {
 		return position.copy();
 	}
 	/** @return The ship's rotation in all three dimensions (x,y,z), in radians. Values (0,0,0) mean the ship is horizontal and facing

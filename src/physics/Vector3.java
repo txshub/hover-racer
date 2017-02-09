@@ -3,7 +3,7 @@ package physics;
 import java.util.function.DoubleUnaryOperator;
 
 import org.joml.Matrix3f;
-import org.joml.Vector3f;
+import org.lwjgl.util.vector.Vector3f;
 
 /** Utility class representing a 3-dimensional vector. Custom built for the Ship class - use {@link as3f} to convert to Vector3f
  * 
