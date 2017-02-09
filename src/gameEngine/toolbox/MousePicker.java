@@ -131,8 +131,9 @@ public class MousePicker {
 	}
 
 	private Terrain getTerrain(float worldX, float worldZ) {
-		return terrains[(int) Math.max(0, Math.min(MainGameLoop.size - 1, (worldX / Terrain.SIZE)))][(int) Math.max(0,
-				Math.min(MainGameLoop.size - 1, (worldZ / Terrain.SIZE)))];
+	  // !! Using 'terrains.length' assumes that the array is square and all columns the same length !!
+		return terrains[(int) Math.max(0, Math.min(terrains.length - 1, (worldX / Terrain.SIZE)))][(int) Math.max(0,
+				Math.min(terrains.length - 1, (worldZ / Terrain.SIZE)))];
 	}
 
 }

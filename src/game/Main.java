@@ -25,6 +25,7 @@ public class Main {
     if (frameCap == -1) renderDur = 0;
     double deltaFPS = 0.0;
     
+    // FPS and UPS reporting variables
     int fps = 0;
     int ups = 0;
     long timer = System.currentTimeMillis();
@@ -48,6 +49,14 @@ public class Main {
         game.render();
         fps++;
         deltaFPS = 0.0;
+      }
+      
+      // Log the ups and fps to the window title every 1000ms
+      if (System.currentTimeMillis() > timer + 1000) {
+        System.out.println("Hover Racer - ups: " + ups + " | fps: " + fps);
+        timer += 1000;
+        fps = 0;
+        ups = 0;
       }
     }
   }

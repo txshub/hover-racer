@@ -33,15 +33,15 @@ import gameEngine.toolbox.MousePicker;
 public class Game {
   
   private Loader loader;
-  private ArrayList<Entity> list;
+  private ArrayList<Entity> entities;
   private ArrayList<Entity> normalEntities;
   private Terrain[][] terrains;
   private ArrayList<Light> lights;
   private Player player;
   private Camera camera;
+  private MousePicker picker;
   private MasterRenderer renderer;
   private GuiRenderer guiRender;
-  private MousePicker picker;
   
   public Game() {
     init();
@@ -53,7 +53,7 @@ public class Game {
     AudioMaster.init();
     AL10.alDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
 
-    list = new ArrayList<Entity>();
+    entities = new ArrayList<Entity>();
     normalEntities = new ArrayList<Entity>();
 
     // Terrain
@@ -66,12 +66,12 @@ public class Game {
 
     TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
 
-    int size = 4;
+    int size = 1;
     terrains = new Terrain[size][size];
     for (int i = 0; i < size; i++) {
       for (int j = 0; j < size; j++) {
         terrains[i][j] = new Terrain((int) (Terrain.SIZE) * i, (int) (Terrain.SIZE) * j, loader,
-            texturePack, blendMap, "heightMap2");
+            texturePack, blendMap, "new/flatMap");
       }
     }
 
@@ -83,9 +83,10 @@ public class Game {
     lights.add(sun);
 
     // Player Ship
-    TexturedModel playerTModel = new TexturedModel(getModel("person", loader),
-        new ModelTexture(loader.loadTexture("playerTexture")));
+    TexturedModel playerTModel = new TexturedModel(getModel("new/ship/ship", loader),
+        new ModelTexture(loader.loadTexture("new/ship/texture")));
     player = new Player(playerTModel, new Vector3f(50, 0, 50), 0, 0, 0, 0.5f);
+    entities.add(player);
 
     // Player following camera
     camera = new Camera(player);
@@ -94,17 +95,18 @@ public class Game {
     renderer = new MasterRenderer(loader);
     guiRender = new GuiRenderer(loader);
 
+    // Camera rotation with right click
     picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrains);
   }
   
   public void update(double delta) {
-    picker.update();
     camera.move(terrains);
+    picker.update();
   }
   
   public void render() {
     GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
-    renderer.renderScene(list, normalEntities, terrains, lights, camera,
+    renderer.renderScene(entities, normalEntities, terrains, lights, camera,
         new Vector4f((float) Math.sin(Math.toRadians(player.getRoty())), 0,
             (float) Math.cos(Math.toRadians(player.getRoty())), 10f));
     GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
