@@ -29,6 +29,8 @@ import gameEngine.textures.ModelTexture;
 import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
+import physics.Ship;
+import placeholders.KeyboardController;
 
 public class Game {
   
@@ -37,7 +39,7 @@ public class Game {
   private ArrayList<Entity> normalEntities;
   private Terrain[][] terrains;
   private ArrayList<Light> lights;
-  private Player player;
+  private Ship player;
   private Camera camera;
   private MousePicker picker;
   private MasterRenderer renderer;
@@ -85,7 +87,8 @@ public class Game {
     // Player Ship
     TexturedModel playerTModel = new TexturedModel(getModel("new/ship/ship", loader),
         new ModelTexture(loader.loadTexture("new/ship/texture")));
-    player = new Player(playerTModel, new Vector3f(50, 0, 50), 0, 0, 0, 0.5f);
+    KeyboardController input = new KeyboardController();
+    player = new Ship(playerTModel, new Vector3f(50, 0, 50), null, input, null);
     entities.add(player);
 
     // Player following camera
