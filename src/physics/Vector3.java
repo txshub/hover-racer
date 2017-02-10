@@ -1,5 +1,6 @@
 package physics;
 
+import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
 import org.joml.Matrix3f;
@@ -49,6 +50,12 @@ public class Vector3 {
 		changeX(f);
 		changeY(f);
 		changeZ(f);
+		return this;
+	}
+	public Vector3 forEach(Vector3 v, DoubleBinaryOperator f) {
+		changeX(x -> f.applyAsDouble(x, v.getX()));
+		changeY(y -> f.applyAsDouble(y, v.getY()));
+		changeZ(z -> f.applyAsDouble(z, v.getZ()));
 		return this;
 	}
 	public float distanceTo(Vector3 v) {

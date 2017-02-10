@@ -37,8 +37,9 @@ public class Ship extends Entity {
 	private static final float VERTICAL_SCALE = 10;
 	private static final float ACCELERATION = 20 * SCALE; // How fast does the ship accelerate
 	private static final float BREAK_POWER = 10; // How fast does it break
-	private static final float TURN_SPEED = 2.5f; // How fast does it turn
+	private static final float TURN_SPEED = 4f; // How fast does it turn
 	private static final float AIR_RESISTANCE = 10; // How fast do ships slow down (this and acceleration determines the max speed)
+	private static final float ROTATIONAL_RESISTANCE = 5; // How fast does rotating slow down
 
 	private static final float GRAVITY = 15 * SCALE; // The force of gravity affecting the ship
 	private static final float AIR_CUSHION = 50 * SCALE; // The base force of the ait cushion keeping the hovercraft in the air
@@ -52,6 +53,7 @@ public class Ship extends Entity {
 	private Vector3 position;
 	private Vector3 velocity;
 	private Vector3 rotation;
+	private Vector3 rotationalMomentum;
 	private float mass;
 	private float size;
 	private ControllerInt controller;
@@ -94,6 +96,7 @@ public class Ship extends Entity {
 		position = startingPosition.copy();
 		this.velocity = new Vector3(0, 0, 0);
 		this.rotation = new Vector3(0, 0, 0);
+		this.rotationalMomentum = new Vector3(0, 0, 0);
 		this.mass = DEFAULT_MASS;
 		this.size = DEFAULT_SIZE;
 		this.controller = controller;
@@ -140,6 +143,15 @@ public class Ship extends Entity {
 		position.add(velocity.copy().multiply(delta));
 	}
 
+	private void updateRotation(float delta) {
+		float before = rotation.getY();
+		rotation.forEach(rotationalMomentum, (rot, vel) -> correctAngle(rot + delta * vel)); // Add momentum
+		rotationalMomentum
+			.forEach(v -> Math.signum(v) * Math.max(0, (Math.abs(v) - delta * Math.sqrt(Math.abs(v) * ROTATIONAL_RESISTANCE))));
+		// System.out.println(rotation.getY() - before);
+		// System.out.println(delta);
+	}
+
 	/** Handle controls from the player.
 	 * Once we have server controlled ships, this method (or even whole update) could be abstract and differently implemented by PlayerShip
 	 * and ServerShip.
@@ -148,13 +160,15 @@ public class Ship extends Entity {
 	private void handleControls(float delta, ControllerInt conn) {
 		if (conn == null) return; // Safeguard against first few frames before receiving any data
 		Collection<Action> keys = conn.getPressedKeys();
+		/* if (keys.contains(Action.TURN_RIGHT)) rotation.changeY(y -> correctAngle(y - delta * TURN_SPEED));
+		 * if (keys.contains(Action.TURN_LEFT)) rotation.changeY(y -> correctAngle(y + delta * TURN_SPEED)); */
+		if (keys.contains(Action.TURN_RIGHT)) rotationalMomentum.changeY(y -> y - delta * TURN_SPEED);
+		if (keys.contains(Action.TURN_LEFT)) rotationalMomentum.changeY(y -> y + delta * TURN_SPEED);
 		if (keys.contains(Action.FORWARD)) accelerate2d(delta * ACCELERATION, (float) Math.PI * 1.5f);
 		if (keys.contains(Action.BREAK)) airResistance(delta * BREAK_POWER); // Breaking slows you down, no matter how you're moving
 		// if (keys.contains(Action.BREAK)) accelerate2d(delta * ACCELERATION, Math.PI * 1.5); // Breaking accelerates backwards
 		if (keys.contains(Action.STRAFE_RIGHT)) accelerate2d(delta * ACCELERATION / 2, (float) Math.PI);
 		if (keys.contains(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION / 2, 0);
-		if (keys.contains(Action.TURN_RIGHT)) rotation.changeY(y -> correctAngle(y - delta * TURN_SPEED));
-		if (keys.contains(Action.TURN_LEFT)) rotation.changeY(y -> correctAngle(y + delta * TURN_SPEED));
 		if (keys.contains(Action.JUMP)) velocity.changeY(y -> y + delta * JUMP_POWER * VERTICAL_SCALE);
 	}
 
@@ -186,6 +200,11 @@ public class Ship extends Entity {
 	 * 
 	 * @param delta Time in seconds that passed since the last call of this function */
 	public void update(float preDelta) {
+		// if (preDelta != 1) System.out.println((preDelta - 1) / 60 + " sec");
+		while (preDelta > 1.2) {
+			update(1);
+			preDelta--;
+		}
 		float delta = preDelta / 60f;
 		if (server.getShip().isPresent()) { // If received data from server, just update and don't do physics
 			this.fromServer = server.getShip().get();
@@ -201,11 +220,11 @@ public class Ship extends Entity {
 		doCollisions();
 		gravity(delta);
 		airCushion(delta);
+		updateRotation(delta);
 		updatePosition(delta);
 
 		// Update parent
 		// super.setPosition(position.copy().changeY(y -> y * 10).as3f()); // TODO fix this
-		System.out.println("Y = " + position.getY());
 		super.setPosition(position.as3f());
 		super.setRotx((float) Math.toDegrees(rotation.getX()));
 		super.setRoty((float) Math.toDegrees(rotation.getY()));
