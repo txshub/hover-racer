@@ -34,14 +34,9 @@ public class Player extends Entity {
 		super(model, position, dx, dy, dz, scale);
 		initAudio();
 	}
-	
-	public void turn(){
-		currentTurn = -Mouse.getDX() * 0.1f;
-	}
 
 	public void move(Terrain[][] terrains) {
 		checkInputs();
-		turn();
 		super.increaseRotation(0, currentTurn, 0);
 		float distance = currentRunSpeed * DisplayManager.getFrameTimeSeconds();
 		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRoty())));
@@ -97,11 +92,11 @@ public class Player extends Entity {
 			this.currentRunSpeed = 0;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			this.currentStrafeSpeed = RUN_SPEED;
+			this.currentTurn += 1;
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			this.currentStrafeSpeed = -RUN_SPEED;
+			this.currentTurn -= 1;
 		} else {
-			this.currentStrafeSpeed = 0;
+			this.currentTurn = 0;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 			jump();
