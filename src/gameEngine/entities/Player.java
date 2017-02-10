@@ -13,16 +13,19 @@ import gameEngine.terrains.Terrain;
 
 public class Player extends Entity {
 
-	private static float RUN_SPEED = 20;
-	private static final float TURN_SPEED = 120;
-	private static final float GRAVITY = -50;
-	private static final float JUMP_POWER = 30;
+	private final float TURN_SPEED = 120;
+	private final float GRAVITY = -50;
+	private final float JUMP_POWER = 30;
+	private float TERRAIN_HEIGHT = 0;
 
-	private static float TERRAIN_HEIGHT = 0;
+	private Vector3f velocity;
 
+	private float acceleration = 1f;
+	private float maxSpeed = 30;
 	private float currentRunSpeed = 0;
 	private float currentStrafeSpeed = 0;
 	private float currentTurn = 0;
+	private float maxTurn = 5;
 	private float upwardsSpeed = 0;
 
 	private boolean isInAir = false;
@@ -32,27 +35,33 @@ public class Player extends Entity {
 	
 	public Player(TexturedModel model, Vector3f position, float dx, float dy, float dz, float scale) {
 		super(model, position, dx, dy, dz, scale);
+		velocity = new Vector3f(0,0,0);
 		initAudio();
 	}
 
 	public void move(Terrain[][] terrains) {
 		checkInputs();
 		super.increaseRotation(0, currentTurn, 0);
+		
 		float distance = currentRunSpeed * DisplayManager.getFrameTimeSeconds();
 		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRoty())));
 		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRoty())));
 		distance = currentStrafeSpeed * DisplayManager.getFrameTimeSeconds();
 		dx += (float) (distance * Math.cos(Math.toRadians(super.getRoty())));
 		dz += (float) (distance * -Math.sin(Math.toRadians(super.getRoty())));
-		super.increasePosition(dx, upwardsSpeed * DisplayManager.getFrameTimeSeconds(), dz);
+		
+		velocity.y = upwardsSpeed * DisplayManager.getFrameTimeSeconds();
+		super.increasePosition(velocity.x, velocity.y, velocity.z);
+		
 		float terrainHeight = terrains[(int) Math.max(0,
 				Math.min(MainGameLoop.size - 1, (super.getPosition().x / Terrain.SIZE)))][(int) Math.max(0,
 						Math.min(MainGameLoop.size - 1, (super.getPosition().z / Terrain.SIZE)))].getHeightOfTerrain(
 								super.getPosition().x, super.getPosition().z);
-		if (super.getPosition().y <= terrainHeight) {
+		
+		if (super.getPosition().y <= terrainHeight + 5) {
 			upwardsSpeed = 0;
 			isInAir = false;
-			super.getPosition().y = terrainHeight;
+			super.getPosition().y = terrainHeight + 5;
 		} else {
 			upwardsSpeed += GRAVITY * DisplayManager.getFrameTimeSeconds();
 			isInAir = true;
@@ -80,27 +89,57 @@ public class Player extends Entity {
 
 	private void checkInputs() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			RUN_SPEED = 100;
+			maxSpeed = 60;
 		} else {
-			RUN_SPEED = 20;
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			this.currentRunSpeed = RUN_SPEED;
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-			this.currentRunSpeed = -RUN_SPEED;
-		} else {
-			this.currentRunSpeed = 0;
+			maxSpeed = 30;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			this.currentTurn += 1;
+			turn(1);
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			this.currentTurn -= 1;
+			turn(-1);
 		} else {
-			this.currentTurn = 0;
+			turn(0);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+			move(acceleration);
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+			move(-acceleration);
+		} else {
+			move(0);
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 			jump();
 		}
+	}
+
+	private void turn(float i) {
+		
+		if(i != 0){
+			currentTurn += i;
+			if(currentTurn > maxTurn){
+				currentTurn = maxTurn;
+			}
+		}else{
+			this.currentTurn /= 1.5f;
+		}
+		
+	}
+
+	private void move(float acceleration) {
+		
+		velocity.x += Math.sin(Math.toRadians(this.getRoty())) * acceleration;
+		velocity.z += Math.cos(Math.toRadians(this.getRoty())) * acceleration;
+		
+		float speed = (float) Math.sqrt(Math.pow(velocity.x,2) + Math.pow(velocity.z,2));
+		if(speed > maxSpeed){
+			velocity.x = (velocity.x / speed) * maxSpeed;
+			velocity.z = (velocity.z / speed) * maxSpeed;
+		}
+		if(acceleration == 0){
+			velocity.x /= 1.5f;
+			velocity.z /= 1.5f;
+		}
+		
 	}
 
 }

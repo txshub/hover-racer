@@ -6,7 +6,6 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.PixelFormat;
 
@@ -26,7 +25,8 @@ public class DisplayManager {
 		ContextAttribs attribs = new ContextAttribs(3, 2).withForwardCompatible(true).withProfileCore(true);
 
 		try {
-			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
+			
+//			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
 			Display.create(new PixelFormat(), attribs);
 			Display.setTitle("Game Display");
 			Display.setVSyncEnabled(true);

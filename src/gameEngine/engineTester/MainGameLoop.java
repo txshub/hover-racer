@@ -65,7 +65,7 @@ public class MainGameLoop {
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				terrains[i][j] = new Terrain((int) (Terrain.SIZE) * i, (int) (Terrain.SIZE) * j, loader, texturePack,
-						blendMap, "heightMap2");
+						blendMap, "white");
 			}
 		}
 
