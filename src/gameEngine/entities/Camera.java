@@ -8,13 +8,13 @@ import gameEngine.terrains.Terrain;
 
 public class Camera {
 
-	private float distanceFromPlayer = 20;
+	private float distanceFromPlayer = 100;
 	private float angleAroundPlayer = 0;
 	private long aagTimer = System.currentTimeMillis(), pTimer = System.currentTimeMillis();
 	private int defaultPitch = 20, defaultangle = 0;
 	private float offsetX, verticalDistance, offsetZ;
 	
-	private Vector3f position = new Vector3f(0,5,0);
+	private Vector3f position = new Vector3f(0,0,0);
 	private float pitch = 20, yaw = 180, roll = 0;
 	
 	private Player player;
@@ -81,7 +81,7 @@ public class Camera {
 		offsetZ = (float) (horizontalDistance * Math.cos(Math.toRadians(theta)));
 		position.x = player.getPosition().x - offsetX;
 		position.z = player.getPosition().z - offsetZ;
-		position.y = player.getPosition().y + (player.getScale() * 10) + verticalDistance;
+		position.y = player.getPosition().y + (player.getScale()) + verticalDistance;
 	}
 	
 	private float calculateHorizontalDistance(){
@@ -95,8 +95,8 @@ public class Camera {
 	private void calculateZoom(){
 		float zoomLevel = Mouse.getDWheel() * 0.1f;
 		distanceFromPlayer -= zoomLevel;
-		if(distanceFromPlayer < 5){
-			distanceFromPlayer = 5;
+		if(distanceFromPlayer < 25){
+			distanceFromPlayer = 25;
 		}else if(distanceFromPlayer > 1000){
 			distanceFromPlayer = 1000;
 		}
