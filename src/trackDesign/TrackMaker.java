@@ -58,11 +58,32 @@ public class TrackMaker {
 			fixAngles(circuit); //Ensure all angles are greater than 100 degrees to prevent sudden turns
 			seperatePoints(circuit, minDist); //Seperate the points again
 		}
+		mergeClosePoints(circuit, minDist);
 		ArrayList<TrackPoint> finalCircuit = SplineUtils.dividePoints(circuit, subDivs); //Apply smoothing
 		centreTrack(finalCircuit); //Centre the track so it doesn't go off screen at all
 		return new SeedTrack(seed,finalCircuit); //Return this final track after smoothing and centreing (however the hell you spell that word, I take CS not english)
 	}
 	
+	private static void mergeClosePoints(ArrayList<TrackPoint> points, float minDist) {
+		boolean changed = true;
+		while(changed) {
+			changed = false;
+			for(int i = 0; i < points.size() - 1; i++) {
+				for(int j = i+1; j < points.size(); j++) {
+					if(points.get(i).dist(points.get(i+1)) < minDist) {
+						points.get(i).setX((points.get(i).getX() + points.get(j).getX())/2);
+						points.get(i).setY((points.get(i).getY() + points.get(j).getY())/2);
+						points.remove(j);
+						changed = true;
+						i = points.size();
+						j = points.size();
+					}
+				}
+			}
+		}
+		
+	}
+
 	/**
 	 * Takes a track and ensures no point is out of the 250*250 area
 	 * @param points The track
@@ -95,7 +116,7 @@ public class TrackMaker {
 	}
 	
 	public static void fixAngles(ArrayList<TrackPoint> points) {
-		final float angle100 = (float)Math.toRadians(100); //100 degrees in radians
+		final float angle100 = (float)Math.toRadians(90); //100 degrees in radians
 		for(int i = 0; i < points.size(); i++) { //For each point
 			TrackPoint currentPoint = points.get(i); //Get this point
 			TrackPoint prevPoint; //Get the previous point

@@ -14,13 +14,15 @@ import javax.swing.JComponent;
 public class TrackComponent extends JComponent {
 	
 	private ArrayList<TrackPoint> track; //The arraylist of points that make up the track
-	
+	private long seed;
 	/**
 	 * Creates the TrackComponent object
 	 */
 	public TrackComponent() {
 		super();
-		track = (TrackMaker.makeTrack(10, 20, 30, 1, 70, 40, 4)).getTrack(); //Get a random track object
+		SeedTrack st = TrackMaker.makeTrack(10, 20, 30, 1, 70, 40, 4);
+		track = st.getTrack(); //Get a random track object
+		seed = st.getSeed();
 	}
 	
 	/**
@@ -28,6 +30,7 @@ public class TrackComponent extends JComponent {
 	 * @param g The graphics object
 	 */
 	public void paintComponent(Graphics g) {
+		
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setColor(Color.BLUE);
 		for(int i = 0; i < track.size(); i++) {
