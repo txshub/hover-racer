@@ -85,7 +85,7 @@ public class Terrain {
 		
 		BufferedImage image = null;
 		try {
-			image = ImageIO.read(new File("res/"+heightMap+".png"));
+			image = ImageIO.read(new File("src/resources/"+heightMap+".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

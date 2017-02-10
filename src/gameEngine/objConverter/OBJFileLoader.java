@@ -13,7 +13,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class OBJFileLoader {
 
-	private static final String RES_LOC = "res/";
+	private static final String RES_LOC = "src/resources/";
 
 	public static ModelData loadOBJ(String objFileName) {
 		FileReader isr = null;
@@ -32,10 +32,10 @@ public class OBJFileLoader {
 		try {
 			while (true) {
 				line = reader.readLine();
-				if(line.startsWith("o ")){
-					line = reader.readLine();
-					continue;
-				}
+//				if(line.startsWith("o ")){
+//					line = reader.readLine();
+//					continue;
+//				}
 				if (line.startsWith("v ")) {
 					String[] currentLine = line.split(" ");
 					Vector3f vertex = new Vector3f((float) Float.valueOf(currentLine[1]),
@@ -63,7 +63,7 @@ public class OBJFileLoader {
 						processVertex(vertex2, vertices, indices);
 						processVertex(vertex3, vertices, indices);
 						line = reader.readLine();
-						if (line == null) {
+						if (line == null || !line.startsWith("f ")) {
 							break;
 						}
 					}
