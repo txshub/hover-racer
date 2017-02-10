@@ -94,7 +94,7 @@ public class Game {
     entities.add(player);
 
     // Player following camera
-    camera = new Camera(player);
+//    camera = new Camera(player);
 
     // Renderers
     renderer = new MasterRenderer(loader);
