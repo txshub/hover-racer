@@ -86,8 +86,8 @@ public class Game {
     lights.add(sun);
 
     // Player Ship
-    TexturedModel playerTModel = new TexturedModel(getModel("new/ship/ship", loader),
-        new ModelTexture(loader.loadTexture("new/ship/texture")));
+    TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
+        new ModelTexture(loader.loadTexture("newShipTexture")));
     KeyboardController input = new KeyboardController();
     ArrayList<Ship> otherShips = new ArrayList<>();
     player = new Ship(playerTModel, new Vector3(50, 0, 50), otherShips, input, new FlatGroundProvider(2f));

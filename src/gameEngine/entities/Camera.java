@@ -79,9 +79,9 @@ public class Camera {
 		float theta = entity.getRoty() + angleAroundPlayer;
 		offsetX = (float) (horizontalDistance * Math.sin(Math.toRadians(theta)));
 		offsetZ = (float) (horizontalDistance * Math.cos(Math.toRadians(theta)));
-		position.x = player.getPosition().x - offsetX;
-		position.z = player.getPosition().z - offsetZ;
-		position.y = player.getPosition().y + (player.getScale()) + verticalDistance;
+		position.x = entity.getPosition().x - offsetX;
+		position.z = entity.getPosition().z - offsetZ;
+		position.y = entity.getPosition().y + (entity.getScale()) + verticalDistance;
 	}
 	
 	private float calculateHorizontalDistance(){

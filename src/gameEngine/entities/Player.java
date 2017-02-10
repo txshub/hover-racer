@@ -1,12 +1,10 @@
 package gameEngine.entities;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
 import audioEngine.AudioMaster;
 import audioEngine.Source;
-import gameEngine.engineTester.MainGameLoop;
 import gameEngine.models.TexturedModel;
 import gameEngine.renderEngine.DisplayManager;
 import gameEngine.terrains.Terrain;
@@ -58,8 +56,8 @@ public class Player extends Entity {
 		super.increasePosition(velocity.x, velocity.y, velocity.z);
 		
 		float terrainHeight = terrains[(int) Math.max(0,
-				Math.min(MainGameLoop.size - 1, (super.getPosition().x / Terrain.SIZE)))][(int) Math.max(0,
-						Math.min(MainGameLoop.size - 1, (super.getPosition().z / Terrain.SIZE)))].getHeightOfTerrain(
+				Math.min(terrains.length, (super.getPosition().x / Terrain.SIZE)))][(int) Math.max(0,
+						Math.min(terrains[1].length - 1, (super.getPosition().z / Terrain.SIZE)))].getHeightOfTerrain(
 								super.getPosition().x, super.getPosition().z);
 		
 		if (super.getPosition().y <= terrainHeight + 5) {
