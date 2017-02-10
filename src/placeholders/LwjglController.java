@@ -52,7 +52,7 @@ public class LwjglController implements ControllerInt {
 	@Override
 	public Collection<Action> getPressedKeys() {
 		mapping.keySet().stream().forEach(keyCode -> updateKey(keyCode));
-		pressed.forEach(a -> System.out.println(a));
+		// pressed.forEach(a -> System.out.println(a));
 		return pressed;
 	}
 

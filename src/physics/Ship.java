@@ -108,7 +108,7 @@ public class Ship extends Entity {
 	public void accelerate2d(float force, float angle) {
 		final float angle2 = correctAngle(rotation.getY() + angle); // Adjust the angle for ship's own rotation
 		velocity.changeX(x -> x + force * Math.cos(angle2));
-		velocity.changeZ(z -> z + force * Math.sin(angle2));
+		velocity.changeZ(z -> z - force * Math.sin(angle2));
 	}
 
 	/** Applies air resistance, i.e. slows down velocities
@@ -148,10 +148,10 @@ public class Ship extends Entity {
 		if (keys.contains(Action.FORWARD)) accelerate2d(delta * ACCELERATION, (float) Math.PI * 1.5f);
 		if (keys.contains(Action.BREAK)) airResistance(delta * BREAK_POWER); // Breaking slows you down, no matter how you're moving
 		// if (keys.contains(Action.BREAK)) accelerate2d(delta * ACCELERATION, Math.PI * 1.5); // Breaking accelerates backwards
-		if (keys.contains(Action.STRAFE_RIGHT)) accelerate2d(delta * ACCELERATION / 2, 0);
-		if (keys.contains(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION / 2, (float) Math.PI);
-		if (keys.contains(Action.TURN_RIGHT)) rotation.changeY(y -> correctAngle(y + delta * TURN_SPEED));
-		if (keys.contains(Action.TURN_LEFT)) rotation.changeY(y -> correctAngle(y - delta * TURN_SPEED));
+		if (keys.contains(Action.STRAFE_RIGHT)) accelerate2d(delta * ACCELERATION / 2, (float) Math.PI);
+		if (keys.contains(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION / 2, 0);
+		if (keys.contains(Action.TURN_RIGHT)) rotation.changeY(y -> correctAngle(y - delta * TURN_SPEED));
+		if (keys.contains(Action.TURN_LEFT)) rotation.changeY(y -> correctAngle(y + delta * TURN_SPEED));
 		if (keys.contains(Action.JUMP)) velocity.changeY(y -> y + delta * JUMP_POWER);
 	}
 
@@ -182,7 +182,8 @@ public class Ship extends Entity {
 	/** Updates all physics
 	 * 
 	 * @param delta Time in seconds that passed since the last call of this function */
-	public void update(float delta) {
+	public void update(float preDelta) {
+		float delta = preDelta / 60f;
 		if (server.getShip().isPresent()) { // If received data from server, just update and don't do physics
 			this.fromServer = server.getShip().get();
 			this.position = fromServer.getPosition();
@@ -195,15 +196,15 @@ public class Ship extends Entity {
 		// Do physics
 		airResistance(delta);
 		doCollisions();
-		// gravity(delta);
-		// airCushion(delta);
+		gravity(delta);
+		airCushion(delta);
 		updatePosition(delta);
 
 		// Update parent
 		super.setPosition(position.as3f());
-		super.setRotx(rotation.getX());
-		super.setRoty(rotation.getY());
-		super.setRotz(rotation.getZ());
+		super.setRotx((float) Math.toDegrees(rotation.getX()));
+		super.setRoty((float) Math.toDegrees(rotation.getY()));
+		super.setRotz((float) Math.toDegrees(rotation.getZ()));
 
 	}
 

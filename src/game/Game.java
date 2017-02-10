@@ -31,119 +31,114 @@ import gameEngine.toolbox.MousePicker;
 import physics.Ship;
 import physics.Vector3;
 import placeholders.FlatGroundProvider;
-import placeholders.KeyboardController;
+import placeholders.LwjglController;
 
 public class Game {
-  
-  private Loader loader;
-  private ArrayList<Entity> entities;
-  private ArrayList<Entity> normalEntities;
-  private Terrain[][] terrains;
-  private ArrayList<Light> lights;
-  private Ship player;
-  private Camera camera;
-  private MousePicker picker;
-  private MasterRenderer renderer;
-  private GuiRenderer guiRender;
-  
-  public Game() {
-    init();
-  }
-  
-  private void init() {
-    DisplayManager.createDisplay();
-    loader = new Loader();
-    AudioMaster.init();
-    AL10.alDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
 
-    entities = new ArrayList<Entity>();
-    normalEntities = new ArrayList<Entity>();
+	private Loader loader;
+	private ArrayList<Entity> entities;
+	private ArrayList<Entity> normalEntities;
+	private Terrain[][] terrains;
+	private ArrayList<Light> lights;
+	private Ship player;
+	private Camera camera;
+	private MousePicker picker;
+	private MasterRenderer renderer;
+	private GuiRenderer guiRender;
 
-    // Terrain
-    TerrainTexture background = new TerrainTexture(loader.loadTexture("grassy2"));
-    TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mud"));
-    TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("grassFlowers"));
-    TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("path"));
-    TerrainTexturePack texturePack = new TerrainTexturePack(background, rTexture, gTexture,
-        bTexture);
+	public Game() {
+		init();
+	}
 
-    TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
+	private void init() {
+		DisplayManager.createDisplay();
+		loader = new Loader();
+		AudioMaster.init();
+		AL10.alDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
 
-    int size = 1;
-    terrains = new Terrain[size][size];
-    for (int i = 0; i < size; i++) {
-      for (int j = 0; j < size; j++) {
-        terrains[i][j] = new Terrain((int) (Terrain.SIZE) * i, (int) (Terrain.SIZE) * j, loader,
-            texturePack, blendMap, "new/flatMap");
-      }
-    }
+		entities = new ArrayList<Entity>();
+		normalEntities = new ArrayList<Entity>();
 
-    // Lighting
-    lights = new ArrayList<Light>();
-    Light sun = new Light(
-        new Vector3f((float) Math.cos(0), 100, (float) Math.sin(0) + Terrain.SIZE / 2),
-        new Vector3f(1f, 1f, 1f));
-    lights.add(sun);
+		// Terrain
+		TerrainTexture background = new TerrainTexture(loader.loadTexture("grassy2"));
+		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mud"));
+		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("grassFlowers"));
+		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("path"));
+		TerrainTexturePack texturePack = new TerrainTexturePack(background, rTexture, gTexture, bTexture);
 
-    // Player Ship
-    TexturedModel playerTModel = new TexturedModel(getModel("new/ship/ship", loader),
-        new ModelTexture(loader.loadTexture("new/ship/texture")));
-    KeyboardController input = new KeyboardController();
-    ArrayList<Ship> otherShips = new ArrayList<>();
-    player = new Ship(playerTModel, new Vector3(50, 0, 50), otherShips, input, new FlatGroundProvider(2f));
-    entities.add(player);
+		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
 
-    // Player following camera
-    camera = new Camera(player);
+		int size = 1;
+		terrains = new Terrain[size][size];
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				terrains[i][j] =
+					new Terrain((int) (Terrain.SIZE) * i, (int) (Terrain.SIZE) * j, loader, texturePack, blendMap, "new/FlatMap");
+			}
+		}
 
-    // Renderers
-    renderer = new MasterRenderer(loader);
-    guiRender = new GuiRenderer(loader);
+		// Lighting
+		lights = new ArrayList<Light>();
+		Light sun = new Light(new Vector3f((float) Math.cos(0), 100, (float) Math.sin(0) + Terrain.SIZE / 2), new Vector3f(1f, 1f, 1f));
+		lights.add(sun);
 
-    // Camera rotation with right click
-    picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrains);
-  }
-  
-  public void update(double delta) {
-    player.update((float) delta);
-    camera.move(terrains);
-    picker.update();
-  }
-  
-  public void render() {
-    GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
-    renderer.renderScene(entities, normalEntities, terrains, lights, camera,
-        new Vector4f((float) Math.sin(Math.toRadians(player.getRoty())), 0,
-            (float) Math.cos(Math.toRadians(player.getRoty())), 10f));
-    GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
-    DisplayManager.updateDisplay();
-    sortLights(lights, player.getPosition());
-  }
-  
-  public void cleanUp() {
-    guiRender.cleanUp();
-    renderer.cleanUp();
-    loader.cleanUp();
-    AudioMaster.cleanUP();
-    DisplayManager.closeDisplay();
-  }
+		// Player Ship
+		TexturedModel playerTModel =
+			new TexturedModel(getModel("new/ship/ship", loader), new ModelTexture(loader.loadTexture("new/ship/texture")));
+		LwjglController input = new LwjglController();
+		ArrayList<Ship> otherShips = new ArrayList<>();
+		player = new Ship(playerTModel, new Vector3(50, 0, 50), otherShips, input, new FlatGroundProvider(100f));
+		entities.add(player);
 
-  public boolean shouldClose() {
-    return Display.isCloseRequested();
-  }
+		// Player following camera
+		camera = new Camera(player);
 
-  private static RawModel getModel(String fileName, Loader loader) {
-    ModelData data = OBJFileLoader.loadOBJ(fileName);
+		// Renderers
+		renderer = new MasterRenderer(loader);
+		guiRender = new GuiRenderer(loader);
 
-    return loader.loadToVAO(data.getVertices(), data.getTextureCoords(), data.getNormals(),
-        data.getIndices());
-  }
+		// Camera rotation with right click
+		picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrains);
+	}
 
-  private static void sortLights(List<Light> lights, Vector3f currentPosition) {
-    float[] distance = new float[lights.size() - 1];
-    for (int i = 1; i < lights.size(); i++) {
-      distance[i - 1] = lights.get(i).getdistance(currentPosition);
-    }
-  }
+	public void update(double delta) {
+		player.update((float) delta);
+		camera.move(terrains);
+		picker.update();
+	}
+
+	public void render() {
+		GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
+		renderer.renderScene(entities, normalEntities, terrains, lights, camera,
+			new Vector4f((float) Math.sin(Math.toRadians(player.getRoty())), 0, (float) Math.cos(Math.toRadians(player.getRoty())), 10f));
+		GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
+		DisplayManager.updateDisplay();
+		sortLights(lights, player.getPosition());
+	}
+
+	public void cleanUp() {
+		guiRender.cleanUp();
+		renderer.cleanUp();
+		loader.cleanUp();
+		AudioMaster.cleanUP();
+		DisplayManager.closeDisplay();
+	}
+
+	public boolean shouldClose() {
+		return Display.isCloseRequested();
+	}
+
+	private static RawModel getModel(String fileName, Loader loader) {
+		ModelData data = OBJFileLoader.loadOBJ(fileName);
+
+		return loader.loadToVAO(data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices());
+	}
+
+	private static void sortLights(List<Light> lights, Vector3f currentPosition) {
+		float[] distance = new float[lights.size() - 1];
+		for (int i = 1; i < lights.size(); i++) {
+			distance[i - 1] = lights.get(i).getdistance(currentPosition);
+		}
+	}
 
 }

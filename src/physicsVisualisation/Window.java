@@ -73,7 +73,7 @@ public class Window {
 				fps = 0;
 			}
 			// Updating and repainting
-			testShip.update((float) delta / 60);
+			testShip.update((float) delta);
 			offg.setColor(Color.black);
 			offg.fillRect(0, 0, 1920, 1080);
 			offg.setColor(Color.blue);
