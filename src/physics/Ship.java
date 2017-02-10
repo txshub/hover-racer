@@ -195,8 +195,8 @@ public class Ship extends Entity {
 
 		airResistance(delta);
 		doCollisions();
-		gravity(delta);
-		airCushion(delta);
+		//gravity(delta);
+		//airCushion(delta);
 		updatePosition(delta);
 		Vector3f v = new Vector3f(position.as3f().x, position.as3f().y, position.as3f().z);
 		super.setPosition(v);

@@ -124,11 +124,11 @@ public class Camera {
 		if(Mouse.isButtonDown(1)){
 			float angleChange = Mouse.getDX() * 0.3f;
 			angleAroundPlayer -= angleChange;
-			if(angleAroundPlayer >= 90){
-				angleAroundPlayer = 90;
-			}else if(angleAroundPlayer <= -90){
-				angleAroundPlayer = -90;
-			}
+//			if(angleAroundPlayer >= 90){
+//				angleAroundPlayer = 90;
+//			}else if(angleAroundPlayer <= -90){
+//				angleAroundPlayer = -90;
+//			}
 			aagTimer = System.currentTimeMillis();
 		}else if(System.currentTimeMillis() >= aagTimer + 1000){
 			angleAroundPlayer -= defaultangle;

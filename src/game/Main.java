@@ -1,12 +1,14 @@
 package game;
 
+import java.awt.GraphicsEnvironment;
+
 public class Main {
 
   public static void main(String[] args) {
     Game game = new Game();
     
     // Set the FPS and UPS caps
-    int frameCap = 60;
+    int frameCap = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getRefreshRate();
     int updateCap = 60;
     
     long lastTime = System.nanoTime();

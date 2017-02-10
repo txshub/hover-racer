@@ -1,7 +1,6 @@
 package game;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.lwjgl.openal.AL10;
@@ -16,7 +15,6 @@ import audioEngine.AudioMaster;
 import gameEngine.entities.Camera;
 import gameEngine.entities.Entity;
 import gameEngine.entities.Light;
-import gameEngine.entities.Player;
 import gameEngine.guis.GuiRenderer;
 import gameEngine.models.RawModel;
 import gameEngine.models.TexturedModel;
@@ -32,9 +30,7 @@ import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
 import physics.Ship;
 import physics.Vector3;
-import placeholders.ControllerInt;
 import placeholders.FlatGroundProvider;
-import placeholders.GroundProvider;
 import placeholders.KeyboardController;
 
 public class Game {
