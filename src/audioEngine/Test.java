@@ -2,6 +2,8 @@ package audioEngine;
 
 import java.util.Scanner;
 
+import sun.net.www.content.audio.x_aiff;
+
 
 /*
  * Tudor Suruceanu
@@ -17,21 +19,59 @@ public class Test {
 		Scanner in = new Scanner(System.in);
 		String c = "";
 		
-		AudioMaster.playMusic();
+		float pitch = 1;
 		
-		while (!c.equals("stop")) {
-			c = in.nextLine();
-			
-			if (c.equals("up")) {
-				AudioMaster.increaseMasterVolume();
+		
+		Source engine = new Source();
+		engine.play(Sounds.ENGINE);
+		
+		int x = 0;
+		
+		Thread.sleep(3000);
+		
+		while (x < 500) {
+
+			if (pitch < 2) {
+				pitch += 0.01f;
+				engine.setPitch(pitch);
 			}
 			
-			if (c.equals("down")) {
-				AudioMaster.decreaseMasterVolume();
-			}
+			x++;
+			Thread.sleep(10);
+			
 		}
 		
-		AudioMaster.stopMusic();
+		while (pitch > 1) {
+			
+			pitch -= 0.01f;
+			engine.setPitch(pitch);
+			Thread.sleep(10);
+			
+		}		
+		
+		Thread.sleep(3000);
+		
+		while (pitch > 0) {
+
+			pitch -= 0.01f;
+			engine.setPitch(pitch);
+			Thread.sleep(10);
+			
+		}		
+		
+//		AudioMaster.playMusic();
+//		
+//		while (!c.equals("stop")) {
+//			
+//			if (c.equals("skip")) {
+//				AudioMaster.skipMusic();
+//			}
+//			
+//			c = in.nextLine();
+//			
+//		}
+//		
+//		AudioMaster.stopMusic();
 		
 		AudioMaster.cleanUP();
 	}

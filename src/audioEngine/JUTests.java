@@ -24,7 +24,7 @@ public class JUTests {
 	
 	@Test
 	public void test2() {
-		source.play(Sounds.MUSIC);
+		source.play(Sounds.MUSIC_1);
 		assertTrue(source.isPlaying());
 		source.stop();
 	}

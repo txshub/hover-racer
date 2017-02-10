@@ -3,8 +3,6 @@ package audioEngine;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.print.MultiDocPrintService;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
@@ -18,9 +16,9 @@ import org.lwjgl.util.WaveData;
 public class AudioMaster {
 
 	private static List<Integer> buffers = new ArrayList<Integer>();
+	private static List<Source> music = new ArrayList<Source>();
+	private static List<Source> sfx = new ArrayList<Source>();
 	private static List<Source> sources = new ArrayList<Source>();
-	
-	private static float masterVolume = 1;
 	
 	private static MusicPlayer player;
 
@@ -76,38 +74,43 @@ public class AudioMaster {
 	}
 	
 	/*
-	 * Increase the master volume
+	 * Create a music source
 	 */
-	public static void increaseMasterVolume() {
-		if (masterVolume < 1) {
-			masterVolume += 0.1;
-			masterVolume = Math.round(masterVolume * 10) / 10f;
-			for (Source s : sources) {
-				s.changeVolume(masterVolume);
-			}
-		}
-	}
-	
-	/*
-	 * Decrease the master volume
-	 */
-	public static void decreaseMasterVolume() {
-		if (masterVolume > 0) {
-			masterVolume -= 0.1;
-			masterVolume = Math.round(masterVolume * 10) / 10f;
-			for (Source s : sources) {
-				s.changeVolume(masterVolume);
-			}
-		}
-	}
-	
-	/*
-	 * Add a source to the sources list
-	 */
-	public static void addSource(Source s) {
+	public static Source createMusicSource() {
+		Source s = new Source();
+		music.add(s);
 		sources.add(s);
+		return s;
 	}
-
+	
+	/*
+	 * Create a sfx source
+	 */
+	public static Source createSFXSource() {
+		Source s = new Source();
+		sfx.add(s);
+		sources.add(s);
+		return s;
+	}
+	
+	/*
+	 * Set the volume of all the music sources
+	 */
+	public static void setMusicVolume(float master) {
+		for (Source s : music) {
+			s.setVolume(master);
+		}
+	}
+	
+	/*
+	 * Set the volume of all the sfx sources
+	 */
+	public static void setSFXVolume(float master) {
+		for (Source s : sfx) {
+			s.setVolume(master);
+		}
+	}
+	
 	/*
 	 * Start the music player
 	 */
@@ -120,5 +123,12 @@ public class AudioMaster {
 	 */
 	public static void stopMusic() {
 		player.terminate();
+	}
+	
+	/*
+	 * Skip the current song
+	 */
+	public static void skipMusic() {
+		player.skip();
 	}
 }
