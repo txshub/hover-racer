@@ -1,8 +1,6 @@
 package gameEngine.entities;
 
-
-
-import org.lwjgl.util.vector.Vector3f;
+import org.joml.Vector3f;
 
 import gameEngine.models.TexturedModel;
 
@@ -14,10 +12,6 @@ public class Entity {
 	private float scale;
 
 	private int textureIndex = 0;
-	
-	public Entity(TexturedModel model, org.joml.Vector3f position, float rotx, float roty, float rotz, float scale) {
-	  this(model, new Vector3f(position.x, position.y, position.z), rotx, roty, rotz, scale);
-	}
 
 	public Entity(TexturedModel model, Vector3f position, float rotx, float roty, float rotz, float scale) {
 
