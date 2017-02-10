@@ -17,15 +17,15 @@ public class Camera {
 	private Vector3f position = new Vector3f(0,5,0);
 	private float pitch = 20, yaw = 180, roll = 0;
 	
-	private Player player;
+	private Entity entity;
 	
-	public Camera(Player player){
-		this.player = player;
+	public Camera(Entity entity){
+		this.entity = entity;
 //		Mouse.setGrabbed(true);
 	}
 	
-	public Player getPlayer(){
-		return player;
+	public Entity getEntity(){
+		return entity;
 	}
 	
 	public Vector3f getOffset(){
@@ -35,14 +35,14 @@ public class Camera {
 	public void move(Terrain[][] terrains){
 
 //		Mouse.setCursorPosition(Display.getWidth()/2, Display.getHeight()/2);
-		player.move(terrains);
+//		player.move(terrains);
 		calculateZoom();
 		calculatePitch();
 		calculateAngleAroundPlayer();
 		float horizontalDistance = calculateHorizontalDistance();
 		verticalDistance = calculateVerticalDistance();
 		calculateCameraPosition(horizontalDistance, verticalDistance);
-		this.yaw = 180 - (player.getRoty() + angleAroundPlayer);
+		this.yaw = 180 - (entity.getRoty() + angleAroundPlayer);
 		if(angleAroundPlayer >= 180){
 			angleAroundPlayer -= 360;
 		}else if(angleAroundPlayer <= -180){
@@ -76,12 +76,12 @@ public class Camera {
 	}
 	
 	private void calculateCameraPosition(float horizontalDistance, float verticalDistance){
-		float theta = player.getRoty() + angleAroundPlayer;
+		float theta = entity.getRoty() + angleAroundPlayer;
 		offsetX = (float) (horizontalDistance * Math.sin(Math.toRadians(theta)));
 		offsetZ = (float) (horizontalDistance * Math.cos(Math.toRadians(theta)));
-		position.x = player.getPosition().x - offsetX;
-		position.z = player.getPosition().z - offsetZ;
-		position.y = player.getPosition().y + (player.getScale() * 10) + verticalDistance;
+		position.x = entity.getPosition().x - offsetX;
+		position.z = entity.getPosition().z - offsetZ;
+		position.y = entity.getPosition().y + (entity.getScale() * 10) + verticalDistance;
 	}
 	
 	private float calculateHorizontalDistance(){

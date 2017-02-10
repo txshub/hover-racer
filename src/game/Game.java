@@ -1,6 +1,7 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.lwjgl.openal.AL10;
@@ -30,6 +31,10 @@ import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
 import physics.Ship;
+import physics.Vector3;
+import placeholders.ControllerInt;
+import placeholders.FlatGroundProvider;
+import placeholders.GroundProvider;
 import placeholders.KeyboardController;
 
 public class Game {
@@ -88,7 +93,8 @@ public class Game {
     TexturedModel playerTModel = new TexturedModel(getModel("new/ship/ship", loader),
         new ModelTexture(loader.loadTexture("new/ship/texture")));
     KeyboardController input = new KeyboardController();
-    player = new Ship(playerTModel, new Vector3f(50, 0, 50), null, input, null);
+    ArrayList<Ship> otherShips = new ArrayList<>();
+    player = new Ship(playerTModel, new Vector3(50, 0, 50), otherShips, input, new FlatGroundProvider(2f));
     entities.add(player);
 
     // Player following camera
@@ -103,6 +109,7 @@ public class Game {
   }
   
   public void update(double delta) {
+    player.update((float) delta);
     camera.move(terrains);
     picker.update();
   }
