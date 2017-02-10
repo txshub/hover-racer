@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import org.lwjgl.LWJGLException;
+
 import physics.Ship;
 import physics.Vector3;
 // import trackDesign.TrackComponent;
@@ -17,10 +19,14 @@ import placeholders.KeyboardController;
  * Redone based on code by Reece Bennett that he used to test his AI. */
 public class Window {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws LWJGLException {
 
 		// TrackComponent trackComponent = new TrackComponent();
 		// ArrayList<TrackPoint> track = trackComponent.getTrack();
+
+		/* Display.create();
+		 * Keyboard.create();
+		 * Ship testShip = new Ship(new Vector3(10f, 10f, 30f), new LwjglController()); */
 
 		KeyboardController input = new KeyboardController();
 		Ship testShip = new Ship(new Vector3(10f, 10f, 30f), input);

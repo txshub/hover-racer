@@ -51,7 +51,6 @@ public class DisplayManager {
 		secondTimer += delta;
 		lastFrameTime = currentFrameTime;
 		if(secondTimer >= time + 1000){
-			System.out.println(frames);
 			frames = 0;
 			time += 1000;
 		}else{

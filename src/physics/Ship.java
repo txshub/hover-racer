@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import gameEngine.entities.Entity;
+import gameEngine.models.TexturedModel;
 import placeholders.Action;
 import placeholders.ControllerInt;
 import placeholders.ExportedShip;
@@ -31,7 +32,6 @@ import placeholders.ServerShipProvider;
  * 
  * @author Maciej Bogacki */
 public class Ship extends Entity {
-	// public class Ship {
 
 	private static final float SCALE = 3;
 	private static final float ACCELERATION = 20 * SCALE; // How fast does the ship accelerate
@@ -64,29 +64,31 @@ public class Ship extends Entity {
 		this(new Vector3(0, 0, 0), new FakeController());
 	}
 	public Ship(Vector3 startingPosition, ControllerInt controller) {
-		this(startingPosition, new ArrayList<>(), controller, new FlatGroundProvider(0));
+		this(null, startingPosition, new ArrayList<>(), controller, new FlatGroundProvider(0));
 	}
 	/** Creates a new server-controlled ship
 	 * 
 	 * @param startingPosition Vector describing this ship's starting position.
 	 * @param otherShips Other ships to possibly collide with
 	 * @param server Object providing data about the ship, as described in the interface */
-	public Ship(Vector3 startingPosition, Collection<Ship> otherShips, ServerShipProvider server, GroundProvider ground) {
-		this(startingPosition, otherShips, new FakeController(), server, ground);
+	public Ship(TexturedModel model, Vector3 startingPosition, Collection<Ship> otherShips, ServerShipProvider server,
+		GroundProvider ground) {
+		this(model, startingPosition, otherShips, new FakeController(), server, ground);
 	}
 	/** Creates a player-controlled ship
 	 * 
 	 * @param startingPosition Vector describing this ship's starting position
 	 * @param otherShips Other ships to possibly collide with
 	 * @param controller Controlled providing player's desired actions, as described in the interface */
-	public Ship(Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller, GroundProvider ground) {
-		this(startingPosition, otherShips, controller, new FakeServerProvider(), ground);
+	public Ship(TexturedModel model, Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller,
+		GroundProvider ground) {
+		this(model, startingPosition, otherShips, controller, new FakeServerProvider(), ground);
 	}
 
 
-	private Ship(Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller, ServerShipProvider server,
-		GroundProvider ground) {
-		super(null, startingPosition.as3f(), 0, 0, 0, 1); // TODO modify constructors to add the texture (will break Visualisation)
+	private Ship(TexturedModel model, Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller,
+		ServerShipProvider server, GroundProvider ground) {
+		super(model, startingPosition.as3f(), 0, 0, 0, 1);
 		position = startingPosition.copy();
 		this.velocity = new Vector3(0, 0, 0);
 		this.rotation = new Vector3(0, 0, 0);
@@ -193,20 +195,23 @@ public class Ship extends Entity {
 		// Do physics
 		airResistance(delta);
 		doCollisions();
-		gravity(delta);
-		airCushion(delta);
+		// gravity(delta);
+		// airCushion(delta);
 		updatePosition(delta);
+
 		// Update parent
 		super.setPosition(position.as3f());
 		super.setRotx(rotation.getX());
 		super.setRoty(rotation.getY());
 		super.setRotz(rotation.getZ());
+
 	}
 
 	/** @return Position of this ship's centre */
 	public Vector3 getInternalPosition() {
 		return position.copy();
 	}
+
 	/** @return The ship's rotation in all three dimensions (x,y,z), in radians. Values (0,0,0) mean the ship is horizontal and facing
 	 *         towards positive x. */
 	public Vector3 getRotation() {
