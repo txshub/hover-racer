@@ -90,14 +90,17 @@ public class Vector3 {
 		return z;
 	}
 
-	public void changeX(DoubleUnaryOperator f) {
+	public Vector3 changeX(DoubleUnaryOperator f) {
 		this.x = (float) f.applyAsDouble(x);
+		return this;
 	}
-	public void changeY(DoubleUnaryOperator f) {
+	public Vector3 changeY(DoubleUnaryOperator f) {
 		this.y = (float) f.applyAsDouble(y);
+		return this;
 	}
-	public void changeZ(DoubleUnaryOperator f) {
+	public Vector3 changeZ(DoubleUnaryOperator f) {
 		this.z = (float) f.applyAsDouble(z);
+		return this;
 	}
 	public Vector3f as3f() {
 		return new Vector3f(x, y, z);

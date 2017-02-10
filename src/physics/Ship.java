@@ -34,6 +34,7 @@ import placeholders.ServerShipProvider;
 public class Ship extends Entity {
 
 	private static final float SCALE = 3;
+	private static final float VERTICAL_SCALE = 10;
 	private static final float ACCELERATION = 20 * SCALE; // How fast does the ship accelerate
 	private static final float BREAK_POWER = 10; // How fast does it break
 	private static final float TURN_SPEED = 2.5f; // How fast does it turn
@@ -44,6 +45,7 @@ public class Ship extends Entity {
 	private static final double CUSHION_SCALE = 0.8f;
 	private static final float JUMP_POWER = 30 * SCALE; // Jumping, for science! (testing vertical stuff)
 	// 15, 100, 2, 30: magnet-like
+	// 15, 50, 0.8, 30: nicely cushiony
 
 	private static final float DEFAULT_MASS = 1;
 	private static final float DEFAULT_SIZE = 1;
@@ -98,6 +100,7 @@ public class Ship extends Entity {
 		this.otherShips = otherShips != null ? otherShips : new ArrayList<Ship>(); // If null set to an empty ArrayList
 		this.server = server;
 		this.ground = ground;
+		position.changeY(y -> y / 20f); // TODO this is a temporary fix
 	}
 
 	/** Accelerate in any direction within the 2d horizontal plane. The acceleration is instant; it's basically just changing velocities.
@@ -120,14 +123,14 @@ public class Ship extends Entity {
 
 	/** Apply the force of gravity */
 	private void gravity(float delta) {
-		velocity.changeY(y -> y - GRAVITY * delta);
+		velocity.changeY(y -> y - GRAVITY * delta * VERTICAL_SCALE);
 	}
 
 	/** Apply the forces of the air cushion (also bounce off ground if it ever happens) */
 	private void airCushion(float delta) {
-		float distance = ground.distanceToGround(position.as3f(), rotation.getDownDirection());
-		if (distance <= 0 && velocity.getY() < 0) velocity.changeY(y -> -y);
-		else if (distance > 0) velocity.changeY(y -> y + delta * AIR_CUSHION / Math.pow(distance, CUSHION_SCALE));
+		float distance = ground.distanceToGround(position.as3f(), rotation.getDownDirection()) / VERTICAL_SCALE;
+		if (distance <= 0 && velocity.getY() < 0) velocity.changeY(y -> -.3 * y); // If hit the ground do this
+		else if (distance > 0) velocity.changeY(y -> y + delta * AIR_CUSHION * VERTICAL_SCALE / Math.pow(distance, CUSHION_SCALE));
 	}
 
 	/** Changes the position by given velocity
@@ -152,7 +155,7 @@ public class Ship extends Entity {
 		if (keys.contains(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION / 2, 0);
 		if (keys.contains(Action.TURN_RIGHT)) rotation.changeY(y -> correctAngle(y - delta * TURN_SPEED));
 		if (keys.contains(Action.TURN_LEFT)) rotation.changeY(y -> correctAngle(y + delta * TURN_SPEED));
-		if (keys.contains(Action.JUMP)) velocity.changeY(y -> y + delta * JUMP_POWER);
+		if (keys.contains(Action.JUMP)) velocity.changeY(y -> y + delta * JUMP_POWER * VERTICAL_SCALE);
 	}
 
 	private void doCollisions() {
@@ -201,6 +204,8 @@ public class Ship extends Entity {
 		updatePosition(delta);
 
 		// Update parent
+		// super.setPosition(position.copy().changeY(y -> y * 10).as3f()); // TODO fix this
+		System.out.println("Y = " + position.getY());
 		super.setPosition(position.as3f());
 		super.setRotx((float) Math.toDegrees(rotation.getX()));
 		super.setRoty((float) Math.toDegrees(rotation.getY()));

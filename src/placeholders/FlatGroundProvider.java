@@ -16,7 +16,7 @@ public class FlatGroundProvider implements GroundProvider {
 
 	@Override
 	public float distanceToGround(Vector3f position, Vector3f direction) {
-		return position.y;
+		return position.y - height;
 	}
 
 	@Override
