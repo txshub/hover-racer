@@ -78,7 +78,7 @@ public class MainGameLoop {
 		/************************* Player ********************************/
 
 		TexturedModel playerTModel = new TexturedModel(getModel("shipGhost", loader),
-				new ModelTexture(loader.loadTexture("white")));
+				new ModelTexture(loader.loadTexture("ghostcloak")));
 
 		Player p1 = new Player(playerTModel, new Vector3f(50, 0, 50), 0, 0, 0, 5);
 
