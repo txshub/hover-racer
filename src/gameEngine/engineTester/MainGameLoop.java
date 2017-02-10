@@ -61,9 +61,6 @@ public class MainGameLoop {
 
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
 
-		TexturedModel playerTModel = new TexturedModel(getModel("person", loader),
-				new ModelTexture(loader.loadTexture("playerTexture")));
-
 		Terrain[][] terrains = new Terrain[size][size];
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
@@ -80,7 +77,10 @@ public class MainGameLoop {
 
 		/************************* Player ********************************/
 
-		Player p1 = new Player(playerTModel, new Vector3f(50, 0, 50), 0, 0, 0, 0.5f);
+		TexturedModel playerTModel = new TexturedModel(getModel("shipGhost", loader),
+				new ModelTexture(loader.loadTexture("shipGhost")));
+
+		Player p1 = new Player(playerTModel, new Vector3f(50, 0, 50), 0, 0, 0, 5f);
 
 		/************************* Trees ********************************/
 
