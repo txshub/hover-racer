@@ -173,7 +173,7 @@ public class MainGameLoop {
 
 		String normalObjs = "normalMappedModels/";
 
-		TexturedModel barrel = new TexturedModel(NormalMappedObjLoader.loadOBJ(normalObjs + "barrel", loader),
+		TexturedModel barrel = new TexturedModel(NormalMappedObjLoader.loadOBJ("barrel", loader),
 				new ModelTexture(loader.loadTexture(normalObjs + "barrel")));
 		barrel.getTexture().setReflectivity(0.5f);
 		barrel.getTexture().setShineDamper(10f);
@@ -181,7 +181,7 @@ public class MainGameLoop {
 
 		normalEntities.add(new Entity(barrel, new Vector3f(100, 20, 100), 0, 0, 0, 1));
 
-		TexturedModel boulder = new TexturedModel(NormalMappedObjLoader.loadOBJ(normalObjs + "boulder", loader),
+		TexturedModel boulder = new TexturedModel(NormalMappedObjLoader.loadOBJ("boulder", loader),
 				new ModelTexture(loader.loadTexture(normalObjs + "boulder")));
 		boulder.getTexture().setReflectivity(0.1f);
 		boulder.getTexture().setShineDamper(50f);
@@ -189,7 +189,7 @@ public class MainGameLoop {
 
 		normalEntities.add(new Entity(boulder, new Vector3f(110, 20, 100), 0, 0, 0, 1));
 
-		TexturedModel crate = new TexturedModel(NormalMappedObjLoader.loadOBJ(normalObjs + "crate", loader),
+		TexturedModel crate = new TexturedModel(NormalMappedObjLoader.loadOBJ("crate", loader),
 				new ModelTexture(loader.loadTexture(normalObjs + "crate")));
 		crate.getTexture().setReflectivity(0.5f);
 		crate.getTexture().setShineDamper(10f);

@@ -16,7 +16,7 @@ import gameEngine.renderEngine.Loader;
 
 public class NormalMappedObjLoader {
 
-	private static final String RES_LOC = "src/resources/";
+	private static final String RES_LOC = "src/resources/normalMappedModels/";
 
 	public static RawModel loadOBJ(String objFileName, Loader loader) {
 		FileReader isr = null;

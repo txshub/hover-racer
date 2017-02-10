@@ -13,7 +13,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class OBJFileLoader {
 
-	private static final String RES_LOC = "src/resources/";
+	private static final String RES_LOC = "src/resources/objectModels/";
 
 	public static ModelData loadOBJ(String objFileName) {
 		FileReader isr = null;
