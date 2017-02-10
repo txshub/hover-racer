@@ -82,6 +82,9 @@ local.properties
 .classpath
 .project
 
+# Eclipse Core
+.project
+
 # External tool builders
 .externalToolBuilders/
 

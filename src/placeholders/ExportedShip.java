@@ -6,6 +6,10 @@ import java.util.Collection;
 
 import physics.Vector3;
 
+/** An object representing a Ship entity, exported for transmission over the network. It serves as an intermediate step between a Ship
+ * object and a float array. This will likely be upgraded to a byte array later
+ * 
+ * @author Maciej Bogacki */
 public class ExportedShip implements ControllerInt {
 
 	Vector3 position;

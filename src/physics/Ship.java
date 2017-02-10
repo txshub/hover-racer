@@ -3,19 +3,50 @@ package physics;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.lwjgl.util.vector.Vector3f;
+
+import gameEngine.entities.Entity;
+import gameEngine.models.TexturedModel;
 import placeholders.Action;
 import placeholders.ControllerInt;
 import placeholders.ExportedShip;
 import placeholders.FakeController;
 import placeholders.FakeServerProvider;
+import placeholders.FlatGroundProvider;
+import placeholders.GroundProvider;
 import placeholders.ServerShipProvider;
 
-public class Ship {
+/** A single ship entity. Can be controlled by an AI or the player. Handles all the physics, namely (currently):
+ * -Keeping track of velocity and position
+ * -Applying air resistance
+ * -Applying accelerations based on user's input
+ * -Keeping track of rotation
+ * -Handles gravity and forces of the air cushion, on flat terrain only (so far)
+ * -Detecting and reacting to collision with other ships (untested!)
+ * Can also export itself to an array of floats and update itself with such an array received from server (used for ships controlled by
+ * other players/server's AIs)
+ * TODO:
+ * - Integrate with track system to detect and react to track collisions
+ * - Test and polish collisions with other ships
+ * - Upgrade air cushion to work with curved terrain
+ * - Smarter reaction if the ship ends up underground for some reason (super rare but still should be addressed)
+ * - Panning physics (matching ground below/reacting to accelerations)
+ * 
+ * @author Maciej Bogacki */
+public class Ship extends Entity {
 
-	private static final int ACCELERATION = 1; // How fast does the ship accelerate
-	private static final float BREAK_POWER = 5; // How fast does it break
-	private static final float TURN_SPEED = 0.5f; // How fast does it turn
+	private static final float SCALE = 3;
+	private static final float ACCELERATION = 20 * SCALE; // How fast does the ship accelerate
+	private static final float BREAK_POWER = 10; // How fast does it break
+	private static final float TURN_SPEED = 2.5f; // How fast does it turn
 	private static final float AIR_RESISTANCE = 10; // How fast do ships slow down (this and acceleration determines the max speed)
+
+	private static final float GRAVITY = 15 * SCALE; // The force of gravity affecting the ship
+	private static final float AIR_CUSHION = 50 * SCALE; // The base force of the ait cushion keeping the hovercraft in the air
+	private static final double CUSHION_SCALE = 0.8f;
+	private static final float JUMP_POWER = 30 * SCALE; // Jumping, for science! (testing vertical stuff)
+	// 15, 100, 2, 30: magnet-like
+
 	private static final float DEFAULT_MASS = 1;
 	private static final float DEFAULT_SIZE = 1;
 	private Vector3 position;
@@ -27,32 +58,37 @@ public class Ship {
 	private Collection<Ship> otherShips;
 	private ServerShipProvider server;
 	private ExportedShip fromServer;
-
+	private GroundProvider ground;
 
 
 	/** Creates a ship with position (0,0,0), no inputs an no other ships. For testing only */
 	public Ship() {
-		this(new Vector3(0, 0, 0), new ArrayList<>(), new FakeController(), new FakeServerProvider());
+		this(new Vector3(0, 0, 0), new FakeController());
+	}
+	public Ship(Vector3 startingPosition, ControllerInt controller) {
+		this(null, startingPosition, new ArrayList<>(), controller, new FlatGroundProvider(0));
 	}
 	/** Creates a new server-controlled ship
 	 * 
 	 * @param startingPosition Vector describing this ship's starting position.
 	 * @param otherShips Other ships to possibly collide with
 	 * @param server Object providing data about the ship, as described in the interface */
-	public Ship(Vector3 startingPosition, Collection<Ship> otherShips, ServerShipProvider server) {
-		this(startingPosition, otherShips, new FakeController(), server);
+	public Ship(TexturedModel model, Vector3 startingPosition, Collection<Ship> otherShips, ServerShipProvider server, GroundProvider ground) {
+		this(model, startingPosition, otherShips, new FakeController(), server, ground);
 	}
 	/** Creates a player-controlled ship
 	 * 
 	 * @param startingPosition Vector describing this ship's starting position
 	 * @param otherShips Other ships to possibly collide with
 	 * @param controller Controlled providing player's desired actions, as described in the interface */
-	public Ship(Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller) {
-		this(startingPosition, otherShips, controller, new FakeServerProvider());
+	public Ship(TexturedModel model, Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller, GroundProvider ground) {
+		this(model, startingPosition, otherShips, controller, new FakeServerProvider(), ground);
 	}
 
 
-	private Ship(Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller, ServerShipProvider server) {
+	private Ship(TexturedModel model, Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller, ServerShipProvider server,
+		GroundProvider ground) {
+	  super(model, startingPosition.as3f(), 0, 0, 0, 1);
 		position = startingPosition.copy();
 		this.velocity = new Vector3(0, 0, 0);
 		this.rotation = new Vector3(0, 0, 0);
@@ -61,6 +97,7 @@ public class Ship {
 		this.controller = controller;
 		this.otherShips = otherShips != null ? otherShips : new ArrayList<Ship>(); // If null set to an empty ArrayList
 		this.server = server;
+		this.ground = ground;
 	}
 
 	/** Accelerate in any direction within the 2d horizontal plane. The acceleration is instant; it's basically just changing velocities.
@@ -78,14 +115,26 @@ public class Ship {
 	 * 
 	 * @param delta Time in seconds that passed since the last call of this function */
 	private void airResistance(float delta) {
-		velocity.forEach(v -> Math.signum(v) * (Math.abs(v) - delta * Math.sqrt(Math.abs(v) / AIR_RESISTANCE)));
+		velocity.forEach(v -> Math.signum(v) * Math.max(0, (Math.abs(v) - delta * Math.sqrt(Math.abs(v) * AIR_RESISTANCE))));
+	}
+
+	/** Apply the force of gravity */
+	private void gravity(float delta) {
+		velocity.changeY(y -> y - GRAVITY * delta);
+	}
+
+	/** Apply the forces of the air cushion (also bounce off ground if it ever happens) */
+	private void airCushion(float delta) {
+		float distance = ground.distanceToGround(position.as3f(), rotation.getDownDirection());
+		if (distance <= 0 && velocity.getY() < 0) velocity.changeY(y -> -y);
+		else if (distance > 0) velocity.changeY(y -> y + delta * AIR_CUSHION / Math.pow(distance, CUSHION_SCALE));
 	}
 
 	/** Changes the position by given velocity
 	 * 
 	 * @param delta Time in seconds that passed since the last call of this function */
 	private void updatePosition(float delta) {
-		position.add(velocity);
+		position.add(velocity.copy().multiply(delta));
 	}
 
 	/** Handle controls from the player.
@@ -96,17 +145,18 @@ public class Ship {
 	private void handleControls(float delta, ControllerInt conn) {
 		if (conn == null) return; // Safeguard against first few frames before receiving any data
 		Collection<Action> keys = conn.getPressedKeys();
-		if (keys.contains(Action.FORWARD)) accelerate2d(delta * ACCELERATION, (float) Math.PI / 2);
+		if (keys.contains(Action.FORWARD)) accelerate2d(delta * ACCELERATION, (float) Math.PI * 1.5f);
 		if (keys.contains(Action.BREAK)) airResistance(delta * BREAK_POWER); // Breaking slows you down, no matter how you're moving
 		// if (keys.contains(Action.BREAK)) accelerate2d(delta * ACCELERATION, Math.PI * 1.5); // Breaking accelerates backwards
 		if (keys.contains(Action.STRAFE_RIGHT)) accelerate2d(delta * ACCELERATION / 2, 0);
 		if (keys.contains(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION / 2, (float) Math.PI);
-		if (keys.contains(Action.TURN_RIGHT)) rotation.changeY(y -> correctAngle(y - TURN_SPEED));
-		if (keys.contains(Action.TURN_LEFT)) rotation.changeY(y -> correctAngle(y + TURN_SPEED));
+		if (keys.contains(Action.TURN_RIGHT)) rotation.changeY(y -> correctAngle(y + delta * TURN_SPEED));
+		if (keys.contains(Action.TURN_LEFT)) rotation.changeY(y -> correctAngle(y - delta * TURN_SPEED));
+		if (keys.contains(Action.JUMP)) velocity.changeY(y -> y + delta * JUMP_POWER);
 	}
 
 	private void doCollisions() {
-		otherShips.stream().filter(ship -> ship.getPosition().distanceTo(this.position) <= ship.getSize() + this.size)
+		otherShips.stream().filter(ship -> new Vector3(ship.getPosition().x, ship.getPosition().y, ship.getPosition().z).distanceTo(this.position) <= ship.getSize() + this.size)
 			.forEach(s -> collideWith(s));
 	}
 
@@ -145,14 +195,13 @@ public class Ship {
 
 		airResistance(delta);
 		doCollisions();
+		//gravity(delta);
+		//airCushion(delta);
 		updatePosition(delta);
+		Vector3f v = new Vector3f(position.as3f().x, position.as3f().y, position.as3f().z);
+		super.setPosition(v);
 	}
 
-
-	/** @return Position of this ship's centre */
-	public Vector3 getPosition() {
-		return position.copy();
-	}
 	/** @return The ship's rotation in all three dimensions (x,y,z), in radians. Values (0,0,0) mean the ship is horizontal and facing
 	 *         towards positive x. */
 	public Vector3 getRotation() {
