@@ -4,15 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
+import org.joml.Vector2f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.util.vector.Vector2f;
-import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
 
 import audioEngine.AudioMaster;
 import audioEngine.Source;
@@ -157,7 +158,7 @@ public class MainGameLoop {
 			float x = (float) random.nextDouble() * Terrain.SIZE * size;
 			float z = (float) random.nextDouble() * Terrain.SIZE * size;
 
-			Entity entity = new Entity(fernTextureModel, random.nextInt(4),
+			Entity entity = new Entity(fernTextureModel, 
 					new Vector3f(x,
 							terrains[(int) Math.max(0, Math.min(size - 1, (x / Terrain.SIZE)))][(int) Math.max(0,
 									Math.min(size - 1, (z / Terrain.SIZE)))].getHeightOfTerrain(x, z),

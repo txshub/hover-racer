@@ -3,7 +3,7 @@ package physics;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.lwjgl.util.vector.Vector3f;
+import org.joml.Vector3f;
 
 import gameEngine.entities.Entity;
 import gameEngine.models.TexturedModel;
