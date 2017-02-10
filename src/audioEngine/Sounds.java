@@ -2,9 +2,8 @@ package audioEngine;
 
 import java.util.HashMap;
 
-/*
- * Tudor Suruceanu
- * 
+/**
+ * @author Tudor Suruceanu
  * Class storing the sounds
  */
 public class Sounds {
@@ -25,7 +24,7 @@ public class Sounds {
 	// Mapping from file to buffer
 	private static HashMap<String, Integer> map;
 	
-	/*
+	/**
 	 * Load the files
 	 */
 	public static void init() {
@@ -42,8 +41,10 @@ public class Sounds {
 		
 	}
 	
-	/*
-	 * Get the file to be played
+	/**
+	 * Get the buffer storing a certain audio file
+	 * @param s - The path to the audio file (example: Sounds.SOMETHING)
+	 * @return - The buffer to be played
 	 */
 	public static int get(String s) {
 		int buffer = map.get(s);

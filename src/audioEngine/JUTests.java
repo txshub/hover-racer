@@ -7,6 +7,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * @author Tudor Suruceanu
+ * JUnit tests for the subsystem
+ */
 public class JUTests {
 
 	Source source;
@@ -14,7 +18,7 @@ public class JUTests {
 	@Before
 	public void init() {
 		AudioMaster.init();
-		source = new Source();
+		source = AudioMaster.createMusicSource();
 	}
 	
 	@Test

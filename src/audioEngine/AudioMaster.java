@@ -8,9 +8,8 @@ import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.util.WaveData;
 
-/*
- * Tudor Suruceanu 
- * 
+/**
+ * @author Tudor Suruceanu 
  * Class managing the audio engine 
  */
 public class AudioMaster {
@@ -22,7 +21,7 @@ public class AudioMaster {
 	
 	private static MusicPlayer player;
 
-	/*
+	/**
 	 * Initialize the master
 	 */
 	public static void init() {
@@ -39,15 +38,19 @@ public class AudioMaster {
 		player = new MusicPlayer();
 	}
 	
-	/*
+	/**
 	 * Set the information related to who listens to the sounds
+	 * Currently not used outside this class
+	 * @param x X coordinate
+	 * @param y Y coordinate
+	 * @param z Z coordinate
 	 */
 	public static void setListenerData(float x, float y, float z) {
 		AL10.alListener3f(AL10.AL_POSITION, x, y, z);
 		AL10.alListener3f(AL10.AL_VELOCITY, 0, 0, 0);
 	}
 	
-	/*
+	/**
 	 * Load audio file into the system
 	 * @param file The audio file
 	 */
@@ -60,7 +63,7 @@ public class AudioMaster {
 		return buffer;
 	}
 	
-	/*
+	/**
 	 * Stop engine
 	 */
 	public static void cleanUP() {
@@ -73,8 +76,9 @@ public class AudioMaster {
 		AL.destroy();
 	}
 	
-	/*
+	/**
 	 * Create a music source
+	 * @return The new music source
 	 */
 	public static Source createMusicSource() {
 		Source s = new Source();
@@ -83,8 +87,9 @@ public class AudioMaster {
 		return s;
 	}
 	
-	/*
+	/**
 	 * Create a sfx source
+	 * @return The new SFX source
 	 */
 	public static Source createSFXSource() {
 		Source s = new Source();
@@ -93,8 +98,9 @@ public class AudioMaster {
 		return s;
 	}
 	
-	/*
+	/**
 	 * Set the volume of all the music sources
+	 * @param master The value to increase/decrease the volume by
 	 */
 	public static void setMusicVolume(float master) {
 		for (Source s : music) {
@@ -102,8 +108,9 @@ public class AudioMaster {
 		}
 	}
 	
-	/*
+	/**
 	 * Set the volume of all the sfx sources
+	 * @param master The value to increase/decrease the volume by
 	 */
 	public static void setSFXVolume(float master) {
 		for (Source s : sfx) {
@@ -111,21 +118,21 @@ public class AudioMaster {
 		}
 	}
 	
-	/*
+	/**
 	 * Start the music player
 	 */
 	public static void playMusic() {
 		player.start();
 	}
 	
-	/*
+	/**
 	 * Stop the music player
 	 */
 	public static void stopMusic() {
 		player.terminate();
 	}
 	
-	/*
+	/**
 	 * Skip the current song
 	 */
 	public static void skipMusic() {

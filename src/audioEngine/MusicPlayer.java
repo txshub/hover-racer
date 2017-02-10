@@ -2,9 +2,8 @@ package audioEngine;
 
 import java.util.Random;
 
-/*
- * Tudor Suruceanu
- * 
+/**
+ * @authorTudor Suruceanu
  * Class managing a music player
  */
 public class MusicPlayer extends Thread {
@@ -19,6 +18,7 @@ public class MusicPlayer extends Thread {
 		random = new Random();
 	}
 	
+	@Override
 	public void run() {
 		
 		int r = random.nextInt(Sounds.songs.length);
@@ -37,12 +37,18 @@ public class MusicPlayer extends Thread {
 		
 	}
 	
+	/**
+	 * Skip the song that is currently playing
+	 */
 	public void skip() {
 		if (s.isPlaying()){
 			s.stop();
 		}
 	}
 	
+	/**
+	 * Close the music player
+	 */
 	public void terminate() {
 		s.delete();
 		running = false;
