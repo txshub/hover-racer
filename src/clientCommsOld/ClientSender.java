@@ -1,4 +1,4 @@
-package clientComms;
+package clientCommsOld;
 import java.io.*;
 public class ClientSender extends Thread {
 

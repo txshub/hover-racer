@@ -16,7 +16,6 @@ public class Server extends Thread {
 		this.portNumber = portNumber;
 	}
 	
-	@Override
 	public void run() {
 		ClientTable clientTable = new ClientTable();
 		ServerSocket serverSocket = null;
@@ -34,6 +33,7 @@ public class Server extends Thread {
 				byte[] data = new byte[fromClient.readInt()];
 				fromClient.readFully(data);
 				String request = new String(data, charset);
+				if(DEBUG) System.out.println("Request to server: " + request);
 				if(request.equals("#Status")) { //Server status requested
 					DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
 					toClient.write(status.getBytes(charset));
