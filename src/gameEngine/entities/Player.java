@@ -1,7 +1,7 @@
 package gameEngine.entities;
 
-import org.joml.Vector3f;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.util.vector.Vector3f;
 
 import audioEngine.AudioMaster;
 import audioEngine.Source;
@@ -30,6 +30,10 @@ public class Player extends Entity {
 
 	private Source source = null;
 	private int jumpBuffer;
+	
+	public Player(TexturedModel model, org.joml.Vector3f position, float dx, float dy, float dz, float scale) {
+	  this(model, new Vector3f(position.x, position.y, position.z), dx, dy, dz, scale);
+	}
 	
 	public Player(TexturedModel model, Vector3f position, float dx, float dy, float dz, float scale) {
 		super(model, position, dx, dy, dz, scale);

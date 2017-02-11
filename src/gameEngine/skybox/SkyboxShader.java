@@ -1,7 +1,7 @@
 package gameEngine.skybox;
 
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
 import gameEngine.entities.Camera;
 import gameEngine.renderEngine.DisplayManager;

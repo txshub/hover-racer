@@ -3,12 +3,12 @@ package gameEngine.normalMappingRenderer;
 import java.util.List;
 import java.util.Map;
 
-import org.joml.Matrix4f;
-import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector4f;
 
 import gameEngine.entities.Camera;
 import gameEngine.entities.Entity;

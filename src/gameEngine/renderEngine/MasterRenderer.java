@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.joml.Matrix4f;
-import org.joml.Vector4f;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector4f;
 
 import gameEngine.entities.Camera;
 import gameEngine.entities.Entity;
@@ -26,7 +26,7 @@ public class MasterRenderer {
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 10000f;
 	
-	public static final float R = 255/255f;
+	public static final float R = 100/255f;
 	public static final float G = 100/255f;
 	public static final float B = 100/255f;
 
@@ -159,12 +159,12 @@ public class MasterRenderer {
 		float frustum_length = FAR_PLANE - NEAR_PLANE;
 		
 		projectionMatrix = new Matrix4f();
-		projectionMatrix.m00(x_scale);
-		projectionMatrix.m11(y_scale);
-		projectionMatrix.m22(-((FAR_PLANE + NEAR_PLANE) / frustum_length));
-		projectionMatrix.m23(-1f);
-		projectionMatrix.m32(-((2 * NEAR_PLANE * FAR_PLANE) / frustum_length));
-		projectionMatrix.m33(0);
+		projectionMatrix.m00 = x_scale;
+		projectionMatrix.m11 = y_scale;
+		projectionMatrix.m22 = -((FAR_PLANE + NEAR_PLANE) / frustum_length);
+		projectionMatrix.m23 = -1f;
+		projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
+		projectionMatrix.m33 = 0;
 	}
 	
 	public void cleanUp(){

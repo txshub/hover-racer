@@ -6,8 +6,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.joml.Vector2f;
-import org.joml.Vector3f;
+import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector3f;
 
 import gameEngine.models.RawModel;
 import gameEngine.renderEngine.Loader;
@@ -140,7 +140,7 @@ public class Terrain {
 		float heightU = getHeight(x, z+1, image);
 		float heightD = getHeight(x, z-1, image);
 		Vector3f normal = new Vector3f(heightL-heightR, 2f, heightD-heightU);
-		normal.normalize();
+		normal.normalise();
 		return normal;
 	}
 	

@@ -2,10 +2,10 @@ package gameEngine.normalMappingRenderer;
 
 import java.util.List;
 
-import org.joml.Matrix4f;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 import gameEngine.entities.Light;
 import gameEngine.shaders.ShaderProgram;
@@ -121,8 +121,8 @@ public class NormalMappingShader extends ShaderProgram{
 	private Vector3f getEyeSpacePosition(Light light, Matrix4f viewMatrix){
 		Vector3f position = light.getPosition();
 		Vector4f eyeSpacePos = new Vector4f(position.x,position.y, position.z, 1f);
-		eyeSpacePos = viewMatrix.transform(eyeSpacePos);
-		return new Vector3f(eyeSpacePos.x,eyeSpacePos.y,eyeSpacePos.z);
+		Matrix4f.transform(viewMatrix, eyeSpacePos, eyeSpacePos);
+		return new Vector3f(eyeSpacePos);
 	}
 	
 	

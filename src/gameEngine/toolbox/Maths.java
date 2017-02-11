@@ -1,8 +1,8 @@
 package gameEngine.toolbox;
 
-import org.joml.Matrix4f;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector3f;
 
 import gameEngine.entities.Camera;
 
@@ -10,10 +10,9 @@ public class Maths {
 	
 	public static Matrix4f createTransformationMatrix(Vector2f translation, Vector2f scale) {
 		Matrix4f matrix = new Matrix4f();
-		matrix.identity();
-		// TODO Unsure on this
-		matrix.translate(translation.x, translation.y, 1);
-		matrix.scale(scale.x, scale.y, 1f);
+		matrix.setIdentity();
+		Matrix4f.translate(translation, matrix, matrix);
+		Matrix4f.scale(new Vector3f(scale.x, scale.y, 1f), matrix, matrix);
 		return matrix;
 	}
 	
@@ -29,25 +28,25 @@ public class Maths {
 			float rx, float ry, float rz, float scale){
 		
 		
-		Matrix4f matrix = new Matrix4f();
-		matrix.identity();
-		matrix.translate(translation);
-		matrix.rotate((float)Math.toRadians(rx), new Vector3f(1,0,0));
-    matrix.rotate((float)Math.toRadians(ry), new Vector3f(0,1,0));
-    matrix.rotate((float)Math.toRadians(rz), new Vector3f(0,0,1));
-    matrix.scale(scale);
+		Matrix4f matrix =new Matrix4f();
+		matrix.setIdentity();
+		Matrix4f.translate(translation, matrix, matrix);
+		Matrix4f.rotate((float)Math.toRadians(rx), new Vector3f(1,0,0),matrix,matrix);
+		Matrix4f.rotate((float)Math.toRadians(ry), new Vector3f(0,1,0),matrix,matrix);
+		Matrix4f.rotate((float)Math.toRadians(rz), new Vector3f(0,0,1),matrix,matrix);
+		Matrix4f.scale(new Vector3f(scale,scale,scale), matrix,matrix);
 		return matrix;
 	}
 	public static Matrix4f createViewMatrix(Camera camera){
 		
 		Matrix4f viewMatrix =new Matrix4f();
-		viewMatrix.identity();
-		viewMatrix.rotate((float)Math.toRadians(camera.getPitch()), new Vector3f(1,0,0));
-    viewMatrix.rotate((float)Math.toRadians(camera.getYaw()), new Vector3f(0,1,0));
-    viewMatrix.rotate((float)Math.toRadians(camera.getRoll()), new Vector3f(0,0,1));
+		viewMatrix.setIdentity();
+		Matrix4f.rotate((float)Math.toRadians(camera.getPitch()), new Vector3f(1,0,0),viewMatrix,viewMatrix);
+		Matrix4f.rotate((float)Math.toRadians(camera.getYaw()), new Vector3f(0,1,0),viewMatrix,viewMatrix);
+		Matrix4f.rotate((float)Math.toRadians(camera.getRoll()), new Vector3f(0,0,1),viewMatrix,viewMatrix);
 		Vector3f cameraPos = camera.getPosition();
 		Vector3f negativeCameraPos = new Vector3f(-cameraPos.x,-cameraPos.y,-cameraPos.z);
-		viewMatrix.translate(negativeCameraPos);
+		Matrix4f.translate(negativeCameraPos, viewMatrix, viewMatrix);
 		return viewMatrix;
 	}
 	

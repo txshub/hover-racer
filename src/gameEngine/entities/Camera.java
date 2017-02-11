@@ -1,7 +1,7 @@
 package gameEngine.entities;
 
 import org.lwjgl.input.Mouse;
-import org.joml.Vector3f;
+import org.lwjgl.util.vector.Vector3f;
 
 import gameEngine.terrains.Terrain;
 
@@ -18,12 +18,12 @@ public class Camera {
 	
 	private Player player;
 	
-	public Camera(Player player){
-		this.player = player;
+	public Camera(Player entity){
+		this.player = entity;
 //		Mouse.setGrabbed(true);
 	}
 	
-	public Entity getEntity(){
+	public Player getEntity(){
 		return player;
 	}
 	
