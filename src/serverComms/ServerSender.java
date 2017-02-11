@@ -20,6 +20,7 @@ public class ServerSender extends Thread{
 				for(int i = 0; i < msg.length; i++) {
 					msgSend[i] = msg[i];
 				}
+				Server.writeByteMessage(msgSend, client);
 				client.write(msgSend);
 			} catch (IOException e) {
 				System.err.println("Error passing message to client: " + e.getMessage());
