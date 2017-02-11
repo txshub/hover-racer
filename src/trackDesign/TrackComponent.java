@@ -20,7 +20,7 @@ public class TrackComponent extends JComponent {
 	 */
 	public TrackComponent() {
 		super();
-		SeedTrack st = TrackMaker.makeTrack(10, 20, 30, 1, 70, 40, 4);
+		SeedTrack st = TrackMaker.makeTrack(10, 20, 30, 1, 40, 40, 4);
 		track = st.getTrack(); //Get a random track object
 		seed = st.getSeed();
 	}
