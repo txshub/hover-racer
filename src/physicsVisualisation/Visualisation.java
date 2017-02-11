@@ -48,8 +48,8 @@ public class Visualisation {
 		// Loop through ships and draw each of them
 		for (Ship s : ships) {
 			// float x = s.testX;
-			float x = s.getInternalPosition().getX();
-			float z = s.getInternalPosition().getZ(); // Use this line to get a top-down view
+			float x = s.getPosition().x;
+			float z = s.getPosition().y; // Use this line to get a top-down view
 			// float z = (500 - s.getPosition().getY() * 2); // Use this line to get a sideways view
 			Rectangle r =
 				new Rectangle((int) (x - shipWidth / 2) * scale, (int) (z - shipLength / 2) * scale, shipWidth * scale, shipLength * scale);
@@ -57,7 +57,7 @@ public class Visualisation {
 			AffineTransform trans = g2.getTransform();
 			//
 			g2.setColor(Color.white);
-			g2.rotate(-s.getRotation().getY(), r.getCenterX(), r.getCenterY());
+			g2.rotate(-s.getRotation().y, r.getCenterX(), r.getCenterY());
 			g2.fillRect((int) (x - shipWidth / 2) * scale, (int) (z - shipLength / 2) * scale, shipWidth * scale, 10);
 			g2.draw(r);
 			g2.fillRect((int) (x - shipWidth / 2) * scale, (int) (z - shipLength / 2) * scale, shipWidth * scale, 10);

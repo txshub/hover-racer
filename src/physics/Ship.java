@@ -53,8 +53,8 @@ public class Ship extends Entity {
 	private static final float DEFAULT_MASS = 1;
 	private static final float DEFAULT_SIZE = 1;
 	private Vector3 position;
-	private Vector3 velocity;
 	private Vector3 rotation;
+	private Vector3 velocity;
 	private Vector3 rotationalMomentum;
 	private float mass;
 	private float size;
@@ -117,7 +117,7 @@ public class Ship extends Entity {
 	 * @param force Force to accelerate with. Force 1 means changing velocity by 1 if in angle is along one axis
 	 * @param angle Direction of the acceleration in standard notation: 0 is right, 0.5pi it forward etc. */
 	public void accelerate2d(float force, float angle) {
-		final float angle2 = correctAngle(rotation.getY() + angle); // Adjust the angle for ship's own rotation
+		final float angle2 = correctAngle(rotation.y + angle); // Adjust the angle for ship's own rotation
 		velocity.changeX(x -> x + force * Math.cos(angle2));
 		velocity.changeZ(z -> z - force * Math.sin(angle2));
 	}
@@ -136,7 +136,7 @@ public class Ship extends Entity {
 
 	/** Apply the forces of the air cushion (also bounce off ground if it ever happens) */
 	private void airCushion(float delta) {
-		float distance = ground.distanceToGround(position.as3f(), rotation.getDownDirection()) / VERTICAL_SCALE;
+		float distance = ground.distanceToGround(position, rotation) / VERTICAL_SCALE;
 		if (distance <= 0 && velocity.getY() < 0) velocity.changeY(y -> -.3 * y); // If hit the ground do this
 		else if (distance > 0) velocity.changeY(y -> y + delta * AIR_CUSHION * VERTICAL_SCALE / Math.pow(distance, CUSHION_SCALE));
 	}
@@ -149,7 +149,7 @@ public class Ship extends Entity {
 	}
 
 	private void updateRotation(float delta) {
-		float before = rotation.getY();
+		float before = rotation.y;
 		rotation.forEach(rotationalMomentum, (rot, vel) -> correctAngle(rot + delta * vel)); // Add momentum
 		rotationalMomentum
 			.forEach(v -> Math.signum(v) * Math.max(0, (Math.abs(v) - delta * Math.sqrt(Math.abs(v) * ROTATIONAL_RESISTANCE))));
@@ -178,8 +178,8 @@ public class Ship extends Entity {
 	}
 
 	private void doCollisions() {
-		otherShips.stream().filter(ship -> ship.getInternalPosition().distanceTo(this.position) <= ship.getSize() + this.size)
-			.forEach(s -> collideWith(s));
+//		otherShips.stream().filter(ship -> ship.getInternalPosition().distanceTo(this.position) <= ship.getSize() + this.size)
+//			.forEach(s -> collideWith(s));
 	}
 
 	/** Changes the velocity to account for a collision with a different ship */
@@ -234,20 +234,12 @@ public class Ship extends Entity {
 		updatePosition(delta);
 
 		// Update parent
+
 		super.setPosition(position.copy());
 		super.setRotation(rotation.copy().forEach(r->Math.toDegrees(r)));
+		System.out.println(rotation.y);
 
-	}
 
-	/** @return Position of this ship's centre */
-	public Vector3 getInternalPosition() {
-		return position.copy();
-	}
-
-	/** @return The ship's rotation in all three dimensions (x,y,z), in radians. Values (0,0,0) mean the ship is horizontal and facing
-	 *         towards positive x. */
-	public Vector3 getRotation() {
-		return rotation.copy();
 	}
 	/** @return This ship's current velocities, separately in all dimensions */
 	public Vector3 getVelocity() {
@@ -262,8 +254,8 @@ public class Ship extends Entity {
 		return mass;
 	}
 
-	public float[] export() {
-		return (new ExportedShip(position, velocity, controller.getPressedKeys())).toNumbers();
-	}
+//	public float[] export() {
+//		return (new ExportedShip(position, velocity, controller.getPressedKeys())).toNumbers();
+//	}
 
 }
