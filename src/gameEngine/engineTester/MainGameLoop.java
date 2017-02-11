@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
@@ -14,8 +12,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
-import audioEngine.AudioMaster;
-import audioEngine.Source;
 import gameEngine.entities.Camera;
 import gameEngine.entities.Entity;
 import gameEngine.entities.Light;
@@ -49,7 +45,6 @@ public class MainGameLoop {
 
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
-		AudioMaster.init();
 		AL10.alDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
 
 		/************************* Terrain ********************************/ 
@@ -109,15 +104,6 @@ public class MainGameLoop {
 			entity.getModel().getTexture().setReflectivity(0.5f);
 			entity.getModel().getTexture().setShineDamper(50);
 			list.add(entity);
-			
-			Source source = new Source();
-			source.setPosition(entity.getPosition().x, entity.getPosition().y, entity.getPosition().z);
-			source.setLooping(true);
-			source.setVolume(2);
-			source.setPitch(1.2f);
-			
-			int buffer = AudioMaster.loadSound("audioEngine/bounce.wav");
-			source.play(buffer);
 		}
 
 		/************************* Grass ********************************/
@@ -318,7 +304,6 @@ public class MainGameLoop {
 		renderer.cleanUp();
 		loader.cleanUp();
 		wfb.cleanUp();
-		AudioMaster.cleanUP();
 		DisplayManager.closeDisplay();
 
 	}

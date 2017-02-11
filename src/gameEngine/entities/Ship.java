@@ -41,10 +41,6 @@ public class Ship extends Entity{
 		if (!isInAir) {
 			this.upwardsSpeed = JUMP_POWER;
 			isInAir = true;
-			
-			// Play sound
-			source.setPosition(super.getPosition().x, super.getPosition().y, super.getPosition().z);
-			source.play(jumpBuffer);
 		}
 	}
 
