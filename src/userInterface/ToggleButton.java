@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import audioEngine.AudioMaster;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -81,11 +82,17 @@ public class ToggleButton extends HBox {
                 		label.setText("ON");
                 		setStyle("-fx-background-color: #3aea3a;");
                 		label.toFront();
+                		
+                		// Tudor
+                		AudioMaster.setMusicVolume(1f);
             		}
             		else {
             			label.setText("OFF");
             			setStyle("-fx-background-color: white;");
                 		button.toFront();
+                		
+                		// Tudor
+                		AudioMaster.setMusicVolume(0f);
             		}
 		});
 	}

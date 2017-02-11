@@ -1,5 +1,6 @@
 package userInterface;
 
+import audioEngine.AudioMaster;
 import gameEngine.engineTester.MainGameLoop;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Parent;
@@ -63,6 +64,11 @@ public class GameMenu extends Parent {
 		
 		btnExit = new MenuButton ("EXIT");
 		btnExit.setOnMouseClicked(event ->{
+			
+			// Tudor - Close the audio engine
+			AudioMaster.stopMusic();
+			AudioMaster.cleanUP();
+			
 			System.exit(0);
 		});
 		
