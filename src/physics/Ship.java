@@ -51,6 +51,7 @@ public class Ship extends Entity {
 
 	private static final float DEFAULT_MASS = 1;
 	private static final float DEFAULT_SIZE = 1;
+	private static final float LEVELLING_SPEED = 0.1f;
 	private Vector3 position;
 	private Vector3 rotation;
 	private Vector3 velocity;
@@ -98,6 +99,7 @@ public class Ship extends Entity {
 		ServerShipProvider server, GroundProvider ground) {
 		super(model, startingPosition, new Vector3(0,0,0), 1);
 		this.position = new Vector3(startingPosition);
+		super.position = this.position;
 		this.velocity = new Vector3(0, 0, 0);
 		this.rotation = new Vector3(0, 0, 0);
 		this.rotationalMomentum = new Vector3(0, 0, 0);
@@ -147,9 +149,23 @@ public class Ship extends Entity {
 	}
 
 	private void updateRotation(float delta) {
-		rotation.forEach(rotationalMomentum, (rot, vel) -> correctAngle(rot + delta * vel)); // Add momentum
+		// Add momentum (doing it first to be more responsive)
+		rotation.forEach(rotationalMomentum, (rot, vel) -> correctAngle(rot + delta * vel));		
+		//Try levelling  z with the ground
+		rotationalMomentum.changeZ(z->(z-relativeAngle(rotation.z)*LEVELLING_SPEED));
+		
+		//Air resistance for rotation
 		rotationalMomentum
 			.forEach(v -> Math.signum(v) * Math.max(0, (Math.abs(v) - delta * Math.sqrt(Math.abs(v) * ROTATIONAL_RESISTANCE))));
+		
+	}
+	
+	private float relativeAngle(double angle){
+		return relativeAngle((float)angle);
+	}
+	private float relativeAngle(float angle){
+		if(angle<=Math.PI) return angle;
+		else return (float)(-2*Math.PI+angle);
 	}
 
 	/** Handle controls from the player.
@@ -162,8 +178,14 @@ public class Ship extends Entity {
 		Collection<Action> keys = conn.getPressedKeys();
 		/* if (keys.contains(Action.TURN_RIGHT)) rotation.changeY(y -> correctAngle(y - delta * TURN_SPEED));
 		 * if (keys.contains(Action.TURN_LEFT)) rotation.changeY(y -> correctAngle(y + delta * TURN_SPEED)); */
-		if (keys.contains(Action.TURN_RIGHT)) rotationalMomentum.changeY(y -> y - delta * TURN_SPEED);
-		if (keys.contains(Action.TURN_LEFT)) rotationalMomentum.changeY(y -> y + delta * TURN_SPEED);
+		if (keys.contains(Action.TURN_RIGHT)){
+			rotationalMomentum.changeY(y -> y - delta * TURN_SPEED);
+			rotationalMomentum.changeZ(z->z+delta*TURN_SPEED/1);
+		}
+		if (keys.contains(Action.TURN_LEFT)){
+			rotationalMomentum.changeY(y -> y + delta * TURN_SPEED);
+			rotationalMomentum.changeZ(z->z-delta*TURN_SPEED/1);
+		}
 		if (keys.contains(Action.FORWARD)) accelerate2d(delta * ACCELERATION, (float) Math.PI * 1.5f);
 		if (keys.contains(Action.BREAK)) airResistance(delta * BREAK_POWER); // Breaking slows you down, no matter how you're moving
 		// if (keys.contains(Action.BREAK)) accelerate2d(delta * ACCELERATION, Math.PI * 1.5); // Breaking accelerates backwards
@@ -234,7 +256,7 @@ public class Ship extends Entity {
 
 		// Update parent
 
-		super.setPosition(position.copy());
+		//super.setPosition(position.copy());
 		super.setRotation(rotation.copy().forEach(r->Math.toDegrees(r)));
 	}
 	/** @return This ship's current velocities, separately in all dimensions */
