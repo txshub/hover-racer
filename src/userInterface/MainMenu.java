@@ -3,6 +3,8 @@ package userInterface;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import audioEngine.AudioMaster;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -17,6 +19,9 @@ public class MainMenu extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
+		// Tudor - start the audio engine
+		AudioMaster.init();
+		
 		Pane root = new Pane();
 		root.setPrefSize(550, 412);
 
@@ -41,6 +46,9 @@ public class MainMenu extends Application {
 
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		
+		// Tudor - start the music
+		AudioMaster.playMusic();
 
 	}
 

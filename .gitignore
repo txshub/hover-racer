@@ -172,3 +172,4 @@ fabric.properties
 hs_err_pid*
 
 # End of https://www.gitignore.io/api/windows,osx,linux,eclipse,intellij,java
+/bin1/

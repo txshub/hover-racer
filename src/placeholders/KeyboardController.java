@@ -2,6 +2,7 @@ package placeholders;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -12,7 +13,7 @@ import java.util.HashSet;
  * This class is a KeyListener - make sure to add it where needed.
  * 
  * @author Maciej Bogacki */
-public class KeyboardController implements KeyListener {
+public class KeyboardController implements KeyListener, ControllerInt {
 
 	HashSet<Action> pressed;
 	HashMap<Integer, Action> mapping;
@@ -59,6 +60,11 @@ public class KeyboardController implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		Action action = mapping.get(e.getKeyCode());
 		if (action != null) pressed.remove(action);
+	}
+
+	@Override
+	public Collection<Action> getPressedKeys() {
+		return pressed;
 	}
 
 }

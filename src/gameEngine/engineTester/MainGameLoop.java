@@ -46,8 +46,6 @@ public class MainGameLoop {
 
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
-		AudioMaster.init();
-		AL10.alDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
 
 		/************************* Terrain ********************************/ 
 
@@ -302,7 +300,6 @@ public class MainGameLoop {
 		renderer.cleanUp();
 		loader.cleanUp();
 		//wfb.cleanUp();
-		AudioMaster.cleanUP();
 		DisplayManager.closeDisplay();
 
 	}

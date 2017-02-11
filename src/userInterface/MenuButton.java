@@ -3,6 +3,10 @@ package userInterface;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+
+import audioEngine.AudioMaster;
+import audioEngine.Sounds;
+import audioEngine.Source;
 import javafx.geometry.Pos;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
@@ -17,6 +21,9 @@ public class MenuButton extends StackPane {
 	
 	private Text buttonText;
 	
+	// Tudor - audio source
+	private Source audioSource;
+	
 	/**
 	 * Constructor for the MenuButton class that creates a menu button
 	 * with a certain style, and with the given name as the label. 
@@ -25,6 +32,8 @@ public class MenuButton extends StackPane {
 	public MenuButton (String name) {
 		buttonText = new Text(name);
 		
+		// Tudor - initialize source
+		audioSource = AudioMaster.createSFXSource();
 		
 		try {
 			Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), 20);
@@ -58,6 +67,10 @@ public class MenuButton extends StackPane {
 			buttonText.setTranslateX(15);
 			bg.setFill(Color.DIMGRAY);
 			buttonText.setFill(Color.WHITE);
+			
+			// Tudor - play sound
+			audioSource.play(Sounds.BUTTON_HOVER);
+			
 		});
 		
 		//stop hovering over button
@@ -75,6 +88,8 @@ public class MenuButton extends StackPane {
 		//clicked on button
 		this.setOnMousePressed(event -> {
 			setEffect(effect);
+			// Tudor - play sound
+			audioSource.play(Sounds.BUTTON_CLICK);
 		});
 		
 		//released button
