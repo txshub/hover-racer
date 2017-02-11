@@ -11,30 +11,36 @@ import gameEngine.terrains.Terrain;
 
 public class Player extends Ship {
 	
-	public Player(TexturedModel model, Vector3f position, float dx, float dy, float dz, float scale) {
-		super(model, position, dx, dy, dz, scale);
+	public Player(TexturedModel model,int textureIndex, Vector3f position, float rotx, float roty, float rotz, float scale) {
+		super(model, textureIndex, position, rotx, roty, rotz, scale);
+		velocity = new Vector3f(0,0,0);
+		initAudio();
+	}
+	
+	public Player(TexturedModel model, Vector3f position, float rotx, float roty, float rotz, float scale) {
+		super(model, position, rotx, roty, rotz, scale);
 		velocity = new Vector3f(0,0,0);
 		initAudio();
 	}
 
 	public void move(Terrain[][] terrains) {
-		checkInputs();
 		super.increaseRotation(0, currentTurn, 0);
+		checkInputs();
 		
-		float distance = currentRunSpeed * DisplayManager.getFrameTimeSeconds();
-		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRoty())));
-		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRoty())));
-		distance = currentStrafeSpeed * DisplayManager.getFrameTimeSeconds();
-		dx += (float) (distance * Math.cos(Math.toRadians(super.getRoty())));
-		dz += (float) (distance * -Math.sin(Math.toRadians(super.getRoty())));
+//		float distance = currentRunSpeed * DisplayManager.getFrameTimeSeconds();
+//		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRoty())));
+//		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRoty())));
+//		distance = currentStrafeSpeed * DisplayManager.getFrameTimeSeconds();
+//		dx += (float) (distance * Math.cos(Math.toRadians(super.getRoty())));
+//		dz += (float) (distance * -Math.sin(Math.toRadians(super.getRoty())));
 		
 		velocity.y = upwardsSpeed * DisplayManager.getFrameTimeSeconds();
-		super.increasePosition(velocity.x, velocity.y, velocity.z);
+		increasePosition(velocity.x, velocity.y, velocity.z);
 		
 		float terrainHeight = terrains[(int) Math.max(0,
-				Math.min(terrains.length, (super.getPosition().x / Terrain.SIZE)))][(int) Math.max(0,
-						Math.min(terrains[1].length - 1, (super.getPosition().z / Terrain.SIZE)))].getHeightOfTerrain(
-								super.getPosition().x, super.getPosition().z);
+				Math.min(terrains.length-1, (super.getPosition().x / Terrain.SIZE)))][(int) Math.max(0,
+						Math.min(terrains[1].length - 1, (getPosition().z / Terrain.SIZE)))].getHeightOfTerrain(
+								getPosition().x, getPosition().z);
 		
 		if (super.getPosition().y <= terrainHeight + 5) {
 			upwardsSpeed = 0;
@@ -46,7 +52,7 @@ public class Player extends Ship {
 		}
 		
 		// Update listener position
-		AudioMaster.setListenerData(super.getPosition().x, super.getPosition().y, super.getPosition().z);
+		AudioMaster.setListenerData(getPosition().x, getPosition().y, getPosition().z);
 	}
 
 	protected void initAudio() {

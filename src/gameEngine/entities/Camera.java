@@ -1,5 +1,7 @@
 package gameEngine.entities;
 
+import java.awt.geom.Point2D;
+
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -37,10 +39,16 @@ public class Camera {
 		calculateZoom();
 		calculatePitch();
 		calculateAngleAroundEntity();
+		
 		float horizontalDistance = calculateHorizontalDistance();
 		verticalDistance = calculateVerticalDistance();
 		calculateCameraPosition(horizontalDistance, verticalDistance);
-		this.yaw = 180 - (entity.getRoty() + angleAroundPlayer);
+		
+		float angle = (float)Math.toDegrees(getAngle(new Point2D.Double(position.x,position.z), new Point2D.Double(entity.getPosition().x,entity.getPosition().z))+Math.PI/2);
+		
+		
+		this.yaw += ((180 - entity.getRoty()) - this.yaw)/2;
+//		yaw = angle;
 		if(angleAroundPlayer >= 180){
 			angleAroundPlayer -= 360;
 		}else if(angleAroundPlayer <= -180){
@@ -133,6 +141,41 @@ public class Camera {
 			angleAroundPlayer -= angleAroundPlayer/10;
 			angleAroundPlayer += defaultangle;
 		}
+	}
+
+	/**
+	 * get's the angle from east between two points
+	 * 
+	 * @param p1
+	 *            the first point
+	 * @param p2
+	 *            the second point
+	 * @return the angle between the two points
+	 */
+	public double getAngle(Point2D.Double p1, Point2D.Double p2) {
+		if (p1.x != p2.x && p1.y != p2.y) {
+			double xdif = (p2.getX() - p1.getX());
+			double ydif = (p2.getY() - p1.getY());
+			double angle = 0; // in radians
+			angle = -Math.atan(ydif / xdif);
+			if (xdif < 0) {
+				if (ydif < 0) {
+					angle += Math.PI;
+				} else {
+					angle -= Math.PI;
+				}
+			}
+			return -angle;
+		} else if (p1.x > p2.x) {
+			return Math.PI;
+		} else if (p1.x < p2.x) {
+			return 0.0;
+		} else if (p1.y > p2.y) {
+			return -Math.PI / 2.0;
+		} else if (p1.y < p2.y) {
+			return Math.PI / 2.0;
+		}
+		return 0.0;
 	}
 	
 }

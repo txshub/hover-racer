@@ -274,9 +274,13 @@ public class MainGameLoop {
 			// }
 			// light2.setPosition(new Vector3f(point.x, point.y + 5, point.z));
 			// }
-			camera.move(terrains);
-			p1.move(terrains);
 			
+			// move entities 
+			p1.move(terrains);
+			// move camera after entities
+			camera.move(terrains);
+			
+			// render
 			for (WaterTile[] waters1 : waters) {
 				for (WaterTile water : waters1) {
 

@@ -55,16 +55,19 @@ public class Ship extends Entity{
 			if(currentTurn > maxTurn){
 				currentTurn = maxTurn;
 			}
+			if(currentTurn < -maxTurn){
+				currentTurn = -maxTurn;
+			}
 		}else{
-			this.currentTurn /= 1.5f;
+			this.currentTurn /= 1.1f;
 		}
 		
 	}
 
 	protected void move(float acceleration) {
 		
-		velocity.x += Math.sin(Math.toRadians(this.getRoty())) * acceleration;
-		velocity.z += Math.cos(Math.toRadians(this.getRoty())) * acceleration;
+		velocity.x += Math.sin(Math.toRadians(this.getRoty())) * acceleration * 3;
+		velocity.z += Math.cos(Math.toRadians(this.getRoty())) * acceleration * 3;
 		
 		float speed = (float) Math.sqrt(Math.pow(velocity.x,2) + Math.pow(velocity.z,2));
 		if(speed > maxSpeed){
@@ -72,8 +75,8 @@ public class Ship extends Entity{
 			velocity.z = (velocity.z / speed) * maxSpeed;
 		}
 		if(acceleration == 0){
-			velocity.x /= 1.5f;
-			velocity.z /= 1.5f;
+			velocity.x /= 1.1f;
+			velocity.z /= 1.1f;
 		}
 		
 	}
