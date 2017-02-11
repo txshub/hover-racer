@@ -146,5 +146,4 @@ public class Game {
       distance[i - 1] = lights.get(i).getdistance(VecCon.toLWJGL3(currentPosition));
     }
   }
-
 }
