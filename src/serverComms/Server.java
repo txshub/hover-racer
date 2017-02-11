@@ -29,9 +29,13 @@ public class Server extends Thread {
 		try {
 			while(runThread) {
 				Socket socket = serverSocket.accept();
+				System.out.println("Socket Accepted");
 				DataInputStream fromClient = new DataInputStream(socket.getInputStream());
+				System.out.println("1");
 				byte[] data = new byte[fromClient.readInt()];
+				System.out.println("2");
 				fromClient.readFully(data);
+				System.out.println("3");
 				String request = new String(data, charset);
 				if(DEBUG) System.out.println("Request to server: " + request);
 				if(request.equals("#Status")) { //Server status requested

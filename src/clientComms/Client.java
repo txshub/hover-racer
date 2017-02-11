@@ -26,7 +26,7 @@ public class Client {
 		ClientReceiver receiver = new ClientReceiver(fromServer, toServer);
 		receiver.start();
 		try {
-			toServer.write(name.getBytes());
+			sendByteMessage(name.getBytes(), toServer);
 			receiver.join();
 			toServer.close();
 			fromServer.close();
@@ -39,5 +39,10 @@ public class Client {
 			//What to do here?
 		}
 		
+	}
+	
+	public static void sendByteMessage(byte[] message, DataOutputStream toServer) throws IOException {
+		toServer.writeInt(message.length);
+		toServer.write(message);
 	}
 }
