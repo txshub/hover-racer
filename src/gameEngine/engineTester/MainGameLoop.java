@@ -39,6 +39,7 @@ import gameEngine.water.WaterFrameBuffers;
 import gameEngine.water.WaterRenderer;
 import gameEngine.water.WaterShader;
 import gameEngine.water.WaterTile;
+import trackDesign.TrackMaker;
 
 public class MainGameLoop {
 
@@ -68,6 +69,10 @@ public class MainGameLoop {
 						blendMap, "white");
 			}
 		}
+		
+		// race track
+		
+		TrackMaker.makeTrack(minTrackPoints, maxTrackPoints, minDist, seperateIterations, difficulty, maxDisp, subDivs)
 
 		// List<Terrain> list2 = new ArrayList<Terrain>();
 		// Terrain terrain = new Terrain((int) (-Terrain.SIZE / 2), (int)
@@ -279,28 +284,28 @@ public class MainGameLoop {
 			// move entities 
 			p1.move(terrains);
 			// move camera after entities
-			camera.move(terrains);
+			camera.move();
 			
 			// render
-			for (WaterTile[] waters1 : waters) {
-				for (WaterTile water : waters1) {
-
-					// reflection
-					wfb.bindReflectionFrameBuffer();
-					float distance = 2 * (camera.getPosition().y - water.getHeight());
-					camera.getPosition().y -= distance;
-					camera.invertPitch();
-					renderer.renderScene(list, normalEntities, terrains, lights, camera,
-							new Vector4f(0, 1, 0, -water.getHeight() + 0.1f));
-					camera.invertPitch();
-					camera.getPosition().y += distance;
-					// refraction
-					wfb.bindRefractionFrameBuffer();
-					renderer.renderScene(list, normalEntities, terrains, lights, camera,
-							new Vector4f(0, -1, 0, water.getHeight() + 0.1f));
-					wfb.unbindCurrentFrameBuffer();
-				}
-			}
+//			for (WaterTile[] waters1 : waters) {
+//				for (WaterTile water : waters1) {
+//
+//					// reflection
+//					wfb.bindReflectionFrameBuffer();
+//					float distance = 2 * (camera.getPosition().y - water.getHeight());
+//					camera.getPosition().y -= distance;
+//					camera.invertPitch();
+//					renderer.renderScene(list, normalEntities, terrains, lights, camera,
+//							new Vector4f(0, 1, 0, -water.getHeight() + 0.1f));
+//					camera.invertPitch();
+//					camera.getPosition().y += distance;
+//					// refraction
+//					wfb.bindRefractionFrameBuffer();
+//					renderer.renderScene(list, normalEntities, terrains, lights, camera,
+//							new Vector4f(0, -1, 0, water.getHeight() + 0.1f));
+//					wfb.unbindCurrentFrameBuffer();
+//				}
+//			}
 
 			renderer.renderScene(list, normalEntities, terrains, lights, camera, new Vector4f(0, 0, 0, 0));
 			GL11.glDisable(GL30.GL_CLIP_DISTANCE0);

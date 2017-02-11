@@ -6,15 +6,17 @@ import java.awt.Graphics2D;
  *
  */
 public class TrackPoint implements Comparable<TrackPoint>{
-	private float x,y;
+	private float x,y,z;
 	/**
 	 * Creates a new TrackPoint object
 	 * @param x X coordinate of the point
 	 * @param y Y coordinate of the point
+	 * @param z Z coordinate of the point
 	 */
-	public TrackPoint(float x, float y) {
+	public TrackPoint(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
+		this.z = z;
 	}
 	
 	/**
@@ -34,6 +36,14 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	}
 	
 	/**
+	 * Returns the Z coordinate of this point
+	 * @return The Z coordinate of this point
+	 */
+	public float getZ() {
+		return z;
+	}
+	
+	/**
 	 * Sets a new X coordinate for this point
 	 * @param x New X coordinate for this point
 	 */
@@ -47,6 +57,14 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	 */
 	public void setY(float y) {
 		this.y = y;
+	}
+	
+	/**
+	 * Sets a new Y coordinate for this point
+	 * @param y New Y coordinate for this point
+	 */
+	public void setZ(float z) {
+		this.z = z;
 	}
 	
 	/**
@@ -80,11 +98,11 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	
 	@Override
 	public String toString() {
-		return "(" + x + ", " + y + ")";
+		return "(" + x + ", " + y + ", " + z + ")";
 	}
 	
 	public void draw(Graphics2D g) {
-		g.drawOval((int)x*2, (int)y*2, 2, 2);
+		g.fillOval((int)x*2, (int)y*2, 2, 2);
 	}
 	
 	

@@ -46,7 +46,8 @@ public class TrackMaker {
 		for(int i = 0; i < trackPointCount; i++) { //Create an array of random TrackPoints
 			int x = random.nextInt(250); //Pick a random x coordinate
 			int y = random.nextInt(250); //Pick a random y coordinate
-			points.add(new TrackPoint(x,y)); //Add this new point
+			int z = random.nextInt(250); //Pick a random z coordinate
+			points.add(new TrackPoint(x,y,z)); //Add this new point
 		}
 		hullPoints = convexHull(points); //Take the outer hull of these points for the initial track
 		for(int i = 0; i < seperateIterations; i++) {
@@ -116,7 +117,7 @@ public class TrackMaker {
 			float xNew = ((points.get(i).getX() + points.get((i+1)%points.size()).getX())/2) + xAdd;
 			float yNew = ((points.get(i).getY() + points.get((i+1)%points.size()).getY())/2) + yAdd;
 			newPoints.add(points.get(i)); //Add the original point
-			newPoints.add(new TrackPoint(xNew, yNew)); //Add this new point
+			newPoints.add(new TrackPoint(xNew, yNew, points.get(i).getZ())); //Add this new point
 		}
 		return newPoints;
 	}

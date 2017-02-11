@@ -33,7 +33,7 @@ public class Camera {
 		return new Vector3f(offsetX, verticalDistance, offsetZ);
 	}
 	
-	public void move(Terrain[][] terrains){
+	public void move(){
 
 //		Mouse.setCursorPosition(Display.getWidth()/2, Display.getHeight()/2);
 		calculateZoom();
