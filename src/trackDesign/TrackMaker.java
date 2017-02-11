@@ -49,17 +49,6 @@ public class TrackMaker {
 			points.add(new TrackPoint(x,y)); //Add this new point
 		}
 		hullPoints = convexHull(points); //Take the outer hull of these points for the initial track
-		
-		
-		hullPoints = new ArrayList<>();
-		hullPoints.add(new TrackPoint(50, 50));
-		hullPoints.add(new TrackPoint(180, 180));
-		hullPoints.add(new TrackPoint(300, 50));
-		hullPoints.add(new TrackPoint(300, 300));
-		hullPoints.add(new TrackPoint(50, 300));
-		
-		
-		
 		for(int i = 0; i < seperateIterations; i++) {
 			seperatePoints(points, minDist); //Spread out the points to ensure the minimum distance
 		}

@@ -7,14 +7,11 @@ import java.util.ArrayList;
 import javax.swing.JComponent;
 
 public class TrackComponent extends JComponent {
+	private ArrayList<TrackPoint> track;
 	
-  private static final long serialVersionUID = 1L;
-  
-  private ArrayList<TrackPoint> track;
-  private int scale;
-  
-  public TrackComponent() {
-    this(TrackMaker.makeTrack(10, 20, 15, 3, 70, 40, 4));
+	public TrackComponent() {
+		super();
+		track = TrackMaker.makeTrack(10, 20, 15, 3, 70, 40, 4);
 	}
   
   public TrackComponent(ArrayList<TrackPoint> track) {
