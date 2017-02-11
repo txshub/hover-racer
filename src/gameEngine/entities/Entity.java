@@ -53,6 +53,10 @@ public class Entity {
   public void setPosition(Vector3f position) {
     this.position = position;
   }
+  
+  public void changePosition(Vector3f dPosition) {
+    position.add(dPosition);
+  }
 
   public Vector3f getRotation() {
     return rotation;
@@ -60,6 +64,10 @@ public class Entity {
 
   public void setRotation(Vector3f rotation) {
     this.rotation = rotation;
+  }
+  
+  public void changeRotation(Vector3f dRotation) {
+    rotation.add(dRotation);
   }
 
   public float getScale() {
