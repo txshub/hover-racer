@@ -24,14 +24,13 @@ public class Vector3 extends Vector3f{
 		super(v);
 	}
 
-	public Vector3 add(Vector3 v) {
-		this.x += v.getX();
-		this.y += v.getY();
-		this.z += v.getZ();
+	public Vector3 add(Vector3f v) {
+		super.add(v);
 		return this;
 	}
-	public Vector3 substract(Vector3 v) {
-		return add(v.multiply(-1));
+	public Vector3 substract(Vector3f v) {
+		add(v.mul(-1));
+		return this;
 	}
 	public Vector3 multiply(float scalar) {
 		return forEach(a -> a * scalar);
