@@ -81,7 +81,7 @@ public class MainGameLoop {
 		TexturedModel playerTModel = new TexturedModel(getModel("shipGhost", loader),
 				new ModelTexture(loader.loadTexture("ghostcloak")));
 
-		Player p1 = new Player(playerTModel, new Vector3f(50, 0, 50), 0, 0, 0, 5);
+		Player p1 = new Player(playerTModel, new Vector3f(50, 0, 50), new Vector3f(), 5);
 
 		/************************* Trees ********************************/
 
@@ -103,7 +103,8 @@ public class MainGameLoop {
 							Math.min(Math.min(temp.getHeightOfTerrain(x, z) - 2, temp.getHeightOfTerrain(x - 3, z) - 2),
 									Math.min(temp.getHeightOfTerrain(x, z - 3) - 2,
 											temp.getHeightOfTerrain(x + 3, z) - 2)),
-					temp.getHeightOfTerrain(x, z + 3) - 2), z), 0, 0, 0,
+					temp.getHeightOfTerrain(x, z + 3) - 2), z), 
+					new Vector3f(), 
 					Math.max(1f, (float) random.nextDouble() * 50f));
 			entity.getModel().getTexture().setReflectivity(0.5f);
 			entity.getModel().getTexture().setShineDamper(50);
@@ -138,7 +139,8 @@ public class MainGameLoop {
 							terrains[(int) Math.max(0, Math.min(size - 1, (x / Terrain.SIZE)))][(int) Math.max(0,
 									Math.min(size - 1, (z / Terrain.SIZE)))].getHeightOfTerrain(x, z),
 							z),
-					0, 0, 0, (float) Math.max(.75f, random.nextDouble() * 4));
+					new Vector3f(), 
+					(float) Math.max(.75f, random.nextDouble() * 4));
 			list.add(entity);
 		}
 
@@ -162,7 +164,7 @@ public class MainGameLoop {
 							terrains[(int) Math.max(0, Math.min(size - 1, (x / Terrain.SIZE)))][(int) Math.max(0,
 									Math.min(size - 1, (z / Terrain.SIZE)))].getHeightOfTerrain(x, z),
 							z),
-					0, 0, 0, (float) Math.max(.5f, random.nextDouble()));
+					new Vector3f(), (float) Math.max(.5f, random.nextDouble()));
 			list.add(entity);
 		}
 
@@ -180,7 +182,7 @@ public class MainGameLoop {
 		barrel.getTexture().setShineDamper(10f);
 		barrel.getTexture().setNormalMapID(loader.loadTexture(normalObjs + "barrelNormal"));
 
-		normalEntities.add(new Entity(barrel, new Vector3f(100, 20, 100), 0, 0, 0, 1));
+		normalEntities.add(new Entity(barrel, new Vector3f(100, 20, 100), new Vector3f(), 1));
 
 		TexturedModel boulder = new TexturedModel(NormalMappedObjLoader.loadOBJ("boulder", loader),
 				new ModelTexture(loader.loadTexture(normalObjs + "boulder")));
@@ -188,7 +190,7 @@ public class MainGameLoop {
 		boulder.getTexture().setShineDamper(50f);
 		boulder.getTexture().setNormalMapID(loader.loadTexture(normalObjs + "boulderNormal"));
 
-		normalEntities.add(new Entity(boulder, new Vector3f(110, 20, 100), 0, 0, 0, 1));
+		normalEntities.add(new Entity(boulder, new Vector3f(110, 20, 100), new Vector3f(), 1));
 
 		TexturedModel crate = new TexturedModel(NormalMappedObjLoader.loadOBJ("crate", loader),
 				new ModelTexture(loader.loadTexture(normalObjs + "crate")));
@@ -196,7 +198,7 @@ public class MainGameLoop {
 		crate.getTexture().setShineDamper(10f);
 		crate.getTexture().setNormalMapID(loader.loadTexture(normalObjs + "crateNormal"));
 
-		normalEntities.add(new Entity(crate, new Vector3f(90, 20, 100), 0, 0, 0, 0.01f));
+		normalEntities.add(new Entity(crate, new Vector3f(90, 20, 100), new Vector3f(), 0.01f));
 
 		/*************************
 		 * Lights and Others
@@ -204,10 +206,10 @@ public class MainGameLoop {
 
 		Entity lightmodel1 = new Entity(
 				new TexturedModel(getModel("dragon", loader), new ModelTexture(loader.loadTexture("white"))),
-				new Vector3f((float) Math.cos(0), 100, (float) Math.sin(0)), 0, 0, 0, 5f);
+				new Vector3f((float) Math.cos(0), 100, (float) Math.sin(0)), new Vector3f(), 5f);
 		Entity lightmodel2 = new Entity(
 				new TexturedModel(getModel("dragon", loader), new ModelTexture(loader.loadTexture("white"))),
-				new Vector3f(-20, 30, -30), 0, 0, 0, 2f);
+				new Vector3f(-20, 30, -30), new Vector3f(), 2f);
 		list.add(lightmodel1);
 		list.add(lightmodel2);
 

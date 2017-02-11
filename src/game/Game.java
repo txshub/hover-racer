@@ -33,6 +33,7 @@ import physics.Ship;
 import physics.Vector3;
 import placeholders.FlatGroundProvider;
 import placeholders.KeyboardController;
+import placeholders.LwjglController;
 
 public class Game {
   
@@ -89,7 +90,7 @@ public class Game {
     // Player Ship
     TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
         new ModelTexture(loader.loadTexture("newShipTexture")));
-    KeyboardController input = new KeyboardController();
+    LwjglController input = new LwjglController();
     ArrayList<Ship> otherShips = new ArrayList<>();
     player = new Ship(playerTModel, new Vector3f(50, 0, 50), otherShips, input, new FlatGroundProvider(2f));
     entities.add(player);
@@ -114,8 +115,8 @@ public class Game {
   public void render() {
     GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
     renderer.renderScene(entities, normalEntities, terrains, lights, camera,
-        VecCon.toLWJGL4(new Vector4f((float) Math.sin(Math.toRadians(player.getRoty())), 0,
-            (float) Math.cos(Math.toRadians(player.getRoty())), 10f)));
+        VecCon.toLWJGL4(new Vector4f((float) Math.sin(Math.toRadians(player.getRotation().y)), 0,
+            (float) Math.cos(Math.toRadians(player.getRotation().y)), 10f)));
     GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
     DisplayManager.updateDisplay();
     sortLights(lights, player.getPosition());

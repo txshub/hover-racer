@@ -40,7 +40,7 @@ public class Camera {
 		float horizontalDistance = calculateHorizontalDistance();
 		verticalDistance = calculateVerticalDistance();
 		calculateCameraPosition(horizontalDistance, verticalDistance);
-		this.yaw = 180 - (entity.getRoty() + angleAroundPlayer);
+		this.yaw = 180 - (entity.getRotation().y + angleAroundPlayer);
 		if(angleAroundPlayer >= 180){
 			angleAroundPlayer -= 360;
 		}else if(angleAroundPlayer <= -180){
@@ -74,7 +74,7 @@ public class Camera {
 	}
 	
 	private void calculateCameraPosition(float horizontalDistance, float verticalDistance){
-		float theta = entity.getRoty() + angleAroundPlayer;
+		float theta = entity.getRotation().y + angleAroundPlayer;
 		offsetX = (float) (horizontalDistance * Math.sin(Math.toRadians(theta)));
 		offsetZ = (float) (horizontalDistance * Math.cos(Math.toRadians(theta)));
 		position.x = entity.getPosition().x - offsetX;

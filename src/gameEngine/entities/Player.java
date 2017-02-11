@@ -31,25 +31,25 @@ public class Player extends Entity {
 	private Source source = null;
 	private int jumpBuffer;
 	
-	public Player(TexturedModel model, Vector3f position, float dx, float dy, float dz, float scale) {
-		super(model, position, dx, dy, dz, scale);
+	public Player(TexturedModel model, Vector3f position, Vector3f rotation, float scale) {
+		super(model, position, rotation, scale);
 		velocity = new Vector3f(0,0,0);
 		initAudio();
 	}
 
 	public void move(Terrain[][] terrains) {
 		checkInputs();
-		super.increaseRotation(0, currentTurn, 0);
+		super.changeRotation(new Vector3f(0, currentTurn, 0));
 		
 		float distance = currentRunSpeed * DisplayManager.getFrameTimeSeconds();
-		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRoty())));
-		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRoty())));
+		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotation().y)));
+		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotation().y)));
 		distance = currentStrafeSpeed * DisplayManager.getFrameTimeSeconds();
-		dx += (float) (distance * Math.cos(Math.toRadians(super.getRoty())));
-		dz += (float) (distance * -Math.sin(Math.toRadians(super.getRoty())));
+		dx += (float) (distance * Math.cos(Math.toRadians(super.getRotation().y)));
+		dz += (float) (distance * -Math.sin(Math.toRadians(super.getRotation().y)));
 		
 		velocity.y = upwardsSpeed * DisplayManager.getFrameTimeSeconds();
-		super.increasePosition(velocity.x, velocity.y, velocity.z);
+		super.changePosition(new Vector3f(velocity.x, velocity.y, velocity.z));
 		
 		float terrainHeight = terrains[(int) Math.max(0,
 				Math.min(terrains.length, (super.getPosition().x / Terrain.SIZE)))][(int) Math.max(0,
@@ -125,8 +125,8 @@ public class Player extends Entity {
 
 	private void move(float acceleration) {
 		
-		velocity.x += Math.sin(Math.toRadians(this.getRoty())) * acceleration;
-		velocity.z += Math.cos(Math.toRadians(this.getRoty())) * acceleration;
+		velocity.x += Math.sin(Math.toRadians(this.getRotation().y)) * acceleration;
+		velocity.z += Math.cos(Math.toRadians(this.getRotation().y)) * acceleration;
 		
 		float speed = (float) Math.sqrt(Math.pow(velocity.x,2) + Math.pow(velocity.z,2));
 		if(speed > maxSpeed){
