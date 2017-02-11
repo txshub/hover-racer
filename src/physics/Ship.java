@@ -6,7 +6,6 @@ import java.util.Collection;
 import org.joml.Vector3f;
 import gameEngine.entities.Entity;
 import gameEngine.models.TexturedModel;
-import gameEngine.toolbox.VecCon;
 import placeholders.Action;
 import placeholders.ControllerInt;
 import placeholders.ExportedShip;
@@ -108,7 +107,6 @@ public class Ship extends Entity {
 		this.otherShips = otherShips != null ? otherShips : new ArrayList<Ship>(); // If null set to an empty ArrayList
 		this.server = server;
 		this.ground = ground;
-		//position.changeY(y -> y / 20f); // TODO this is a temporary fix
 	}
 
 	/** Accelerate in any direction within the 2d horizontal plane. The acceleration is instant; it's basically just changing velocities.
@@ -149,12 +147,9 @@ public class Ship extends Entity {
 	}
 
 	private void updateRotation(float delta) {
-		float before = rotation.y;
 		rotation.forEach(rotationalMomentum, (rot, vel) -> correctAngle(rot + delta * vel)); // Add momentum
 		rotationalMomentum
 			.forEach(v -> Math.signum(v) * Math.max(0, (Math.abs(v) - delta * Math.sqrt(Math.abs(v) * ROTATIONAL_RESISTANCE))));
-		// System.out.println(rotation.getY() - before);
-		// System.out.println(delta);
 	}
 
 	/** Handle controls from the player.
@@ -178,8 +173,12 @@ public class Ship extends Entity {
 	}
 
 	private void doCollisions() {
-//		otherShips.stream().filter(ship -> ship.getInternalPosition().distanceTo(this.position) <= ship.getSize() + this.size)
-//			.forEach(s -> collideWith(s));
+		otherShips.stream().filter(ship -> ship.getInternalPosition().distanceTo(this.position) <= ship.getSize() + this.size)
+			.forEach(s -> collideWith(s));
+	}
+	
+	public Vector3 getInternalPosition(){
+		return position.copy();
 	}
 
 	/** Changes the velocity to account for a collision with a different ship */
@@ -254,8 +253,8 @@ public class Ship extends Entity {
 		return mass;
 	}
 
-//	public float[] export() {
-//		return (new ExportedShip(position, velocity, controller.getPressedKeys())).toNumbers();
-//	}
+	public float[] export() {
+		return (new ExportedShip(position, velocity, controller.getPressedKeys())).toNumbers();
+	}
 
 }
