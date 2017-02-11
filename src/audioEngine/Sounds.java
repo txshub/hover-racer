@@ -15,7 +15,8 @@ public class Sounds {
 	
 	// SFX
 	public static String ENGINE = "audioEngine/futuristic-machine.wav";
-	public static String BUTTON_CLICK = "audioEngine/lasertwang.wav";
+	public static String BUTTON_CLICK = "audioEngine/button-spacey.wav";
+	public static String BUTTON_HOVER = "audioEngine/button-hover.wav";
 	public static String BACKGROUND_NOISE = "audioEngine/hover-craft.wav";
 	
 	// The list of songs
@@ -37,6 +38,7 @@ public class Sounds {
 		
 		map.put(ENGINE, AudioMaster.loadSound(ENGINE));
 		map.put(BUTTON_CLICK, AudioMaster.loadSound(BUTTON_CLICK));
+		map.put(BUTTON_HOVER, AudioMaster.loadSound(BUTTON_HOVER));
 		map.put(BACKGROUND_NOISE, AudioMaster.loadSound(BACKGROUND_NOISE));
 		
 	}

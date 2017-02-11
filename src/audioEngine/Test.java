@@ -13,15 +13,14 @@ public class Test {
 
 	public static void main(String[] args) throws InterruptedException {
 		AudioMaster.init();
-		AudioMaster.setListenerData(0, 0, 0);
 		
 		Scanner in = new Scanner(System.in);
 		String c = "";
 		
-		float pitch = 1;
+//		float pitch = 1;
 //		
 //		
-//		Source engine = new Source();
+//		Source engine = AudioMaster.createSFXSource();
 //		engine.play(Sounds.ENGINE);
 //		
 //		int x = 0;
@@ -58,19 +57,19 @@ public class Test {
 //			
 //		}		
 		
-		AudioMaster.playMusic();
-		
-		while (!c.equals("stop")) {
-			
-			if (c.equals("skip")) {
-				AudioMaster.skipMusic();
-			}
-			
-			c = in.nextLine();
-			
-		}
-		
-		AudioMaster.stopMusic();
+//		AudioMaster.playMusic();
+//		
+//		while (!c.equals("stop")) {
+//			
+//			if (c.equals("skip")) {
+//				AudioMaster.skipMusic();
+//			}
+//			
+//			c = in.nextLine();
+//			
+//		}
+//		
+//		AudioMaster.stopMusic();
 		
 		AudioMaster.cleanUP();
 	}
