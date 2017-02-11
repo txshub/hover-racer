@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import trackDesign.TrackPoint;
 
+/**
+ * @author Simon
+ */
 public class SplineUtils {
 
 	public static ArrayList<TrackPoint> dividePoints(ArrayList<TrackPoint> points, int divisionCount) {

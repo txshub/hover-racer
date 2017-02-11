@@ -1,22 +1,22 @@
 package trackDesign;
+import java.awt.geom.Ellipse2D;
 import java.awt.Graphics2D;
+import java.awt.Color;
 /**
- * This class exists in order to have a sortable point, as well as a square distance measure
+ * This class exists in order to have a sortable point, as well as a distance measure
  * @author sxw588
  *
  */
 public class TrackPoint implements Comparable<TrackPoint>{
-	private float x,y,z;
+	private float x,y;
 	/**
 	 * Creates a new TrackPoint object
 	 * @param x X coordinate of the point
 	 * @param y Y coordinate of the point
-	 * @param z Z coordinate of the point
 	 */
-	public TrackPoint(float x, float y, float z) {
+	public TrackPoint(float x, float y) {
 		this.x = x;
 		this.y = y;
-		this.z = z;
 	}
 	
 	/**
@@ -36,14 +36,6 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	}
 	
 	/**
-	 * Returns the Z coordinate of this point
-	 * @return The Z coordinate of this point
-	 */
-	public float getZ() {
-		return z;
-	}
-	
-	/**
 	 * Sets a new X coordinate for this point
 	 * @param x New X coordinate for this point
 	 */
@@ -57,14 +49,6 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	 */
 	public void setY(float y) {
 		this.y = y;
-	}
-	
-	/**
-	 * Sets a new Y coordinate for this point
-	 * @param y New Y coordinate for this point
-	 */
-	public void setZ(float z) {
-		this.z = z;
 	}
 	
 	/**
@@ -98,11 +82,11 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	
 	@Override
 	public String toString() {
-		return "(" + x + ", " + y + ", " + z + ")";
+		return "(" + x + ", " + y + ")";
 	}
 	
 	public void draw(Graphics2D g) {
-		g.fillOval((int)x*2, (int)y*2, 2, 2);
+		g.drawOval((int)x*2, (int)y*2, 2, 2);
 	}
 	
 	

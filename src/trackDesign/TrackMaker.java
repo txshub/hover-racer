@@ -2,6 +2,7 @@ package trackDesign;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+
 import trackDesign.catmullrom.SplineUtils;
 /**
  * Class to make the track
@@ -21,9 +22,9 @@ public class TrackMaker {
 	 * @param subDivs The number of subdivisions between each point when smoothing is applied
 	 * @return A track in the form of an arraylist of points
 	 */
-	public static ArrayList<TrackPoint> makeTrack(int minTrackPoints, int maxTrackPoints, float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs) {
-		Random temp = new Random();
-		return makeTrack(temp.nextLong(), minTrackPoints, maxTrackPoints, minDist, seperateIterations, difficulty, maxDisp, subDivs);
+	public static SeedTrack makeTrack(int minTrackPoints, int maxTrackPoints, float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs) {
+		Random temp = new Random(); //Create a new random object
+		return makeTrack(temp.nextLong(), minTrackPoints, maxTrackPoints, minDist, seperateIterations, difficulty, maxDisp, subDivs); //Return the made track with a random seed
 	}
 	
 	/**
@@ -38,7 +39,7 @@ public class TrackMaker {
 	 * @param subDivs The number of subdivisions between each point when smoothing is applied
 	 * @return A track in the form of an arraylist of points
 	 */
-	public static ArrayList<TrackPoint> makeTrack(long seed, int minTrackPoints, int maxTrackPoints, float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs) {
+	public static SeedTrack makeTrack(long seed, int minTrackPoints, int maxTrackPoints, float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs) {
 		Random random = new Random(seed); //Make the random object
 		ArrayList<TrackPoint> points = new ArrayList<TrackPoint>();
 		ArrayList<TrackPoint> hullPoints = new ArrayList<TrackPoint>();
@@ -46,54 +47,106 @@ public class TrackMaker {
 		for(int i = 0; i < trackPointCount; i++) { //Create an array of random TrackPoints
 			int x = random.nextInt(250); //Pick a random x coordinate
 			int y = random.nextInt(250); //Pick a random y coordinate
-			int z = random.nextInt(250); //Pick a random z coordinate
-			points.add(new TrackPoint(x,y,z)); //Add this new point
+			points.add(new TrackPoint(x,y)); //Add this new point
 		}
 		hullPoints = convexHull(points); //Take the outer hull of these points for the initial track
 		for(int i = 0; i < seperateIterations; i++) {
 			seperatePoints(points, minDist); //Spread out the points to ensure the minimum distance
 		}
-		ArrayList<TrackPoint> circuit = doublePoints(hullPoints, difficulty, maxDisp, random); //Double the number of points and offset them
-		for(int i = 0; i < seperateIterations * 3; i++) {
-			//fixAngles(circuit);
+		ArrayList<TrackPoint> circuit = doublePoints(hullPoints, difficulty, maxDisp, random); //Double the number of points and offset them to account for track difficulty
+		for(int i = 0; i < 10; i++) {
+			fixAngles(circuit); //Ensure all angles are greater than 100 degrees to prevent sudden turns
 			seperatePoints(circuit, minDist); //Seperate the points again
 		}
+		mergeClosePoints(circuit, minDist);
 		ArrayList<TrackPoint> finalCircuit = SplineUtils.dividePoints(circuit, subDivs); //Apply smoothing
-		return finalCircuit; //Return this final track after smoothing
+		centreTrack(finalCircuit); //Centre the track so it doesn't go off screen at all
+		return new SeedTrack(seed,finalCircuit); //Return this final track after smoothing and centreing (however the hell you spell that word, I take CS not english)
 	}
 	
-	//Not currently working - Need to investigate
-	public static void fixAngles(ArrayList<TrackPoint> points) {
-		for(int i = 0; i < points.size(); i++) {
-			int prevPoint;
-			if(i == 0) {
-				prevPoint = points.size()-1;
-			} else {
-				prevPoint = i - 1;
+	private static void mergeClosePoints(ArrayList<TrackPoint> points, float minDist) {
+		boolean changed = true;
+		while(changed) {
+			changed = false;
+			for(int i = 0; i < points.size() - 1; i++) {
+				for(int j = i+1; j < points.size(); j++) {
+					if(points.get(i).dist(points.get(i+1)) < minDist) {
+						points.get(i).setX((points.get(i).getX() + points.get(j).getX())/2);
+						points.get(i).setY((points.get(i).getY() + points.get(j).getY())/2);
+						points.remove(j);
+						changed = true;
+						i = points.size();
+						j = points.size();
+					}
+				}
 			}
-			int next = (i+1)% points.size();
-			float pdx = points.get(i).getX() - points.get(prevPoint).getX();
-			float pdy = points.get(i).getY() - points.get(prevPoint).getY();
-			float pl = (float)Math.sqrt(pdx*pdx + pdy*pdy);
-			pdx /= pl;
-			pdy /= pl;
-			float ndx = points.get(i).getX() - points.get(next).getX();
-			float ndy = points.get(i).getY() - points.get(next).getY();
-			float nl = (float)Math.sqrt(ndx*ndx + ndy*ndy);
-			ndx /= nl;
-			ndy /= nl;
-			float angle = (float)Math.atan2(pdx * ndy - pdy * ndx, pdx * ndx + pdy * ndy);
-			if(Math.abs(angle) < Math.toRadians(100)) {
-				float newAngle = (float)(Math.signum(angle) * Math.toRadians(100));
-				float diff = newAngle - angle;
-				float cos = (float)Math.cos(diff);
-				float sin = (float)Math.sin(diff);
-				float newX = ndx * cos - ndy * sin;
-				float newY = ndx * sin + ndy * cos;
-				newX *= nl;
-				newY *= nl;
-				points.get(next).setX(newX);
-				points.get(next).setY(newY);
+		}
+		
+	}
+
+	/**
+	 * Takes a track and ensures no point is out of the 250*250 area
+	 * @param points The track
+	 */
+	public static void centreTrack(ArrayList<TrackPoint> points) {
+		float minX = 0; //Minimum X so far
+		float maxX = 250; //Maximum X so far
+		float minY = 0; //Minimum Y so far
+		float maxY = 250; // Maximum Y so far
+		for(TrackPoint point : points) { //For each of the points
+			if(point.getX() < minX) { //If the x is less than the minimum X
+				minX = point.getX(); //Update the minimum X to reflect this
+			} else if(point.getX() > maxX) { //Else if the X is larger than the maximum X
+				maxX = point.getX(); //Update the maximum X to reflect this
+			}
+			if(point.getY() < minY) { //If the y is less than the minimum Y
+				minY = point.getY(); //Update the minimum Y to reflect this
+			} else if(point.getY() > maxY) { //Else if the Y is larger than the maximum Y
+				maxY = point.getY(); //Update the maximum Y to reflect this
+			}
+		}
+		float factorX = 250f / (maxX - minX); //The factor needed for scaling so it fits within the 0-250 on X
+		float factorY = 250f / (maxY - minY); //The factor needed for scaling so it fits within the 0-250 on Y
+		for(TrackPoint point : points) { //For each point
+			point.setX(point.getX() - minX); //If any X points are negative, increase all points to prevent this
+			point.setX(point.getX() * factorX); //Scale the X so it fits perfectly between 0 & 250
+			point.setY(point.getY() - minY); //If any Y points are negative, increase all points to prevent this
+			point.setY(point.getY() * factorY); //Scale the Y so it fits perfectly between 0 & 250
+		}
+	}
+	
+	public static void fixAngles(ArrayList<TrackPoint> points) {
+		final float angle100 = (float)Math.toRadians(90); //100 degrees in radians
+		for(int i = 0; i < points.size(); i++) { //For each point
+			TrackPoint currentPoint = points.get(i); //Get this point
+			TrackPoint prevPoint; //Get the previous point
+			if(i==0) {
+				prevPoint = points.get(points.size()-1);
+			} else {
+				prevPoint = points.get(i-1);
+			}
+			TrackPoint nextPoint = points.get((i+1)%points.size()); //Get the next point
+			float angle = (float)(Math.atan2(prevPoint.getY() - currentPoint.getY(), prevPoint.getX() - currentPoint.getX()) - Math.atan2(nextPoint.getY() - currentPoint.getY(), nextPoint.getX() - currentPoint.getX())); //Find the angle between the previous and next point centred on this point
+			if(Math.abs(angle) < angle100) { //If the angle is less than 100 degrees (i.e needs to be increased)
+				if(cross(prevPoint, currentPoint, nextPoint) < 0) { //If the angle is Anti-Clockwise
+					TrackPoint belowCentre = new TrackPoint(currentPoint.getX(), currentPoint.getY() - 1); //Get a point such that the current point to this point is parallel to the negative Y axis
+					float angleToNegativeY = (float)(Math.atan2(prevPoint.getY() - currentPoint.getY(), prevPoint.getX() - currentPoint.getX()) - Math.atan2(belowCentre.getY() - currentPoint.getY(), belowCentre.getX() - currentPoint.getX())); //Find the angle to the negative Y axis
+					float angleNeeded = (angle100 * -1f) + angleToNegativeY; //Get the angle needed on the other side of the negative X to make this angle equal to 100 degrees
+					float length = currentPoint.dist(nextPoint); //Calculate the next point's new location so it's at the same distance from this point and at 100 degrees 
+					float newY = (float)Math.cos(angleNeeded) * length; //Get the X&Y for the new location
+					float nexX = (float)Math.sin(angleNeeded) * length;
+					nextPoint.setX(currentPoint.getX() + nexX); //Set the new X&Y coordinates
+					nextPoint.setY(currentPoint.getY() + newY);
+				} else { //Clockwise (Same as above but reversed)
+					TrackPoint aboveCentre = new TrackPoint(currentPoint.getX(), currentPoint.getY() + 1);
+					float angleToPositiveY = (float)(Math.atan2(prevPoint.getY() - currentPoint.getY(), prevPoint.getX() - currentPoint.getX()) - Math.atan2(aboveCentre.getY() - currentPoint.getY(), aboveCentre.getX() - currentPoint.getX()));
+					float angleNeeded = angle100 - angleToPositiveY;
+					float length = currentPoint.dist(nextPoint);
+					float newY = (float)Math.cos(angleNeeded) * length;
+					float nexX = (float)Math.sin(angleNeeded) * length;
+					nextPoint.setX(currentPoint.getX() + nexX);
+					nextPoint.setY(currentPoint.getY() + newY);
+				}
 			}
 		}
 	}
@@ -117,7 +170,7 @@ public class TrackMaker {
 			float xNew = ((points.get(i).getX() + points.get((i+1)%points.size()).getX())/2) + xAdd;
 			float yNew = ((points.get(i).getY() + points.get((i+1)%points.size()).getY())/2) + yAdd;
 			newPoints.add(points.get(i)); //Add the original point
-			newPoints.add(new TrackPoint(xNew, yNew, points.get(i).getZ())); //Add this new point
+			newPoints.add(new TrackPoint(xNew, yNew)); //Add this new point
 		}
 		return newPoints;
 	}
@@ -136,13 +189,13 @@ public class TrackMaker {
 					float len = (float)Math.sqrt((dx*dx)+(dy*dy));
 					dx /= len;
 					dy /= len;
-					float dif = minDist - len;
+					float dif = (minDist - len)/2;
 					dx *= dif;
 					dy *= dif;
 					points.get(i).setX(points.get(i).getX() + dx); //Spread the points out
 					points.get(i).setY(points.get(i).getY() + dy);
-					points.get(j).setX(points.get(j).getX() + dx);
-					points.get(j).setY(points.get(j).getY() + dy);
+					points.get(j).setX(points.get(j).getX() - dx);
+					points.get(j).setY(points.get(j).getY() - dy);
 				}
 			}
 		}
