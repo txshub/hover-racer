@@ -227,6 +227,7 @@ public class MainGameLoop {
 
 		MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrains);
 
+		
 		WaterFrameBuffers wfb = new WaterFrameBuffers();
 
 		WaterShader waterShader = new WaterShader();
