@@ -31,6 +31,7 @@ public class MusicSlider extends HBox {
 			}
 			
 			musicSlider.setBlockIncrement(1);
+			musicSlider.setPrefWidth(200);
 			
 			musicSlider.valueProperty().addListener(
 				(observable, oldValue, newValue) -> {	
@@ -43,7 +44,7 @@ public class MusicSlider extends HBox {
 				);
 			
 			getChildren().addAll(value,musicSlider);
-			setWidth(400);
+			setWidth(300);
 		}
 
 }
