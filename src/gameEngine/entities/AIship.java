@@ -14,5 +14,9 @@ public class AIship extends Ship{
 	public AIship(TexturedModel model, Vector3f position, float rotx, float roty, float rotz, float scale) {
 		super(model, position, rotx, roty, rotz, scale);
 	}
+	
+	public void AImove(){
+		// TODO Reece to implement AI
+	}
 
 }
