@@ -236,9 +236,6 @@ public class Ship extends Entity {
 
 		super.setPosition(position.copy());
 		super.setRotation(rotation.copy().forEach(r->Math.toDegrees(r)));
-		System.out.println(rotation.y);
-
-
 	}
 	/** @return This ship's current velocities, separately in all dimensions */
 	public Vector3 getVelocity() {
