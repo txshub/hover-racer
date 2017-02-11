@@ -27,7 +27,7 @@ public class DisplayManager {
 
 		try {
 			
-			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
+//			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
 			Display.create(new PixelFormat(), attribs);
 			Display.setTitle("Game Display");
 			Display.setVSyncEnabled(true);
