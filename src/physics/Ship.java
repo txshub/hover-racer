@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.joml.Vector3f;
+
 import gameEngine.entities.Entity;
 import gameEngine.models.TexturedModel;
+import gameEngine.toolbox.VecCon;
 import placeholders.Action;
 import placeholders.ControllerInt;
 import placeholders.ExportedShip;
@@ -51,10 +53,10 @@ public class Ship extends Entity {
 
 	private static final float DEFAULT_MASS = 1;
 	private static final float DEFAULT_SIZE = 1;
-	private Vector3 position;
-	private Vector3 velocity;
-	private Vector3 rotation;
-	private Vector3 rotationalMomentum;
+	private Vector3f position;
+	private Vector3f velocity;
+	private Vector3f rotation;
+	private Vector3f rotationalMomentum;
 	private float mass;
 	private float size;
 	private ControllerInt controller;
@@ -66,9 +68,9 @@ public class Ship extends Entity {
 
 	/** Creates a ship with position (0,0,0), no inputs an no other ships. For testing only */
 	public Ship() {
-		this(new Vector3(0, 0, 0), new FakeController());
+		this(new Vector3f(0, 0, 0), new FakeController());
 	}
-	public Ship(Vector3 startingPosition, ControllerInt controller) {
+	public Ship(Vector3f startingPosition, ControllerInt controller) {
 		this(null, startingPosition, new ArrayList<>(), controller, new FlatGroundProvider(0));
 	}
 	/** Creates a new server-controlled ship
@@ -76,7 +78,7 @@ public class Ship extends Entity {
 	 * @param startingPosition Vector describing this ship's starting position.
 	 * @param otherShips Other ships to possibly collide with
 	 * @param server Object providing data about the ship, as described in the interface */
-	public Ship(TexturedModel model, Vector3 startingPosition, Collection<Ship> otherShips, ServerShipProvider server,
+	public Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, ServerShipProvider server,
 		GroundProvider ground) {
 		this(model, startingPosition, otherShips, new FakeController(), server, ground);
 	}
@@ -85,25 +87,26 @@ public class Ship extends Entity {
 	 * @param startingPosition Vector describing this ship's starting position
 	 * @param otherShips Other ships to possibly collide with
 	 * @param controller Controlled providing player's desired actions, as described in the interface */
-	public Ship(TexturedModel model, Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller,
+	public Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, ControllerInt controller,
 		GroundProvider ground) {
 		this(model, startingPosition, otherShips, controller, new FakeServerProvider(), ground);
 	}
 
 
-	private Ship(TexturedModel model, Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller,
+	private Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, ControllerInt controller,
 		ServerShipProvider server, GroundProvider ground) {
-		super(model, startingPosition.as3f(), 0, 0, 0, 1);
-		position = startingPosition.copy();
-		this.velocity = new Vector3(0, 0, 0);
-		this.rotation = new Vector3(0, 0, 0);
-		this.rotationalMomentum = new Vector3(0, 0, 0);
+		super(model, VecCon.toLWJGL(startingPosition), 0, 0, 0, 1);
+		position = startingPosition;
+		this.velocity = new Vector3f(0, 0, 0);
+		this.rotation = new Vector3f(0, 0, 0);
+		this.rotationalMomentum = new Vector3f(0, 0, 0);
 		this.mass = DEFAULT_MASS;
 		this.size = DEFAULT_SIZE;
 		this.controller = controller;
 		this.otherShips = otherShips != null ? otherShips : new ArrayList<Ship>(); // If null set to an empty ArrayList
 		this.server = server;
 		this.ground = ground;
+		position.add(0,0,0);
 		position.changeY(y -> y / 20f); // TODO this is a temporary fix
 	}
 
@@ -234,17 +237,17 @@ public class Ship extends Entity {
 	}
 
 	/** @return Position of this ship's centre */
-	public Vector3 getInternalPosition() {
+	public Vector3f getInternalPosition() {
 		return position.copy();
 	}
 
 	/** @return The ship's rotation in all three dimensions (x,y,z), in radians. Values (0,0,0) mean the ship is horizontal and facing
 	 *         towards positive x. */
-	public Vector3 getRotation() {
+	public Vector3f getRotation() {
 		return rotation.copy();
 	}
 	/** @return This ship's current velocities, separately in all dimensions */
-	public Vector3 getVelocity() {
+	public Vector3f getVelocity() {
 		return velocity.copy();
 	}
 	/** @return Size, or radius of this ship's hitbox */

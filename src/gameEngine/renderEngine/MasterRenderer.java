@@ -19,6 +19,7 @@ import gameEngine.shaders.StaticShader;
 import gameEngine.shaders.TerrainShader;
 import gameEngine.skybox.SkyboxRenderer;
 import gameEngine.terrains.Terrain;
+import gameEngine.toolbox.VecCon;
 
 public class MasterRenderer {
 
@@ -77,7 +78,8 @@ public class MasterRenderer {
 		return projectionMatrix;
 	}
 	
-	public void renderScene(List<Entity> entities, List<Entity> normalEntities, Terrain[][] terrains, List<Light> lights, Camera camera, Vector4f clipPlane){
+	public void renderScene(List<Entity> entities, List<Entity> normalEntities, Terrain[][] terrains, List<Light> lights, Camera camera, org.joml.Vector4f clipPlane){
+		clipPlane = VecCon.toLWJGL(clipPlane);
 		
 		for (Entity entity2 : entities) {
 			processEntity(entity2);

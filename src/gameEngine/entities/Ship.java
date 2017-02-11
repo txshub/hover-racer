@@ -1,6 +1,7 @@
 package gameEngine.entities;
 
-import org.lwjgl.util.vector.Vector3f;
+
+import org.joml.Vector3f;
 
 import audioEngine.Source;
 import gameEngine.models.TexturedModel;
