@@ -30,9 +30,7 @@ import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
 import gameEngine.toolbox.VecCon;
 import physics.Ship;
-import physics.Vector3;
 import placeholders.FlatGroundProvider;
-import placeholders.KeyboardController;
 import placeholders.LwjglController;
 
 public class Game {
@@ -115,8 +113,7 @@ public class Game {
   public void render() {
     GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
     renderer.renderScene(entities, normalEntities, terrains, lights, camera,
-        VecCon.toLWJGL4(new Vector4f((float) Math.sin(Math.toRadians(player.getRotation().y)), 0,
-            (float) Math.cos(Math.toRadians(player.getRotation().y)), 10f)));
+        VecCon.toLWJGL4(new Vector4f()));
     GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
     DisplayManager.updateDisplay();
     sortLights(lights, player.getPosition());
