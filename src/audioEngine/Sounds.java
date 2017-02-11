@@ -13,6 +13,11 @@ public class Sounds {
 	public static String MUSIC_2 = "audioEngine/sacred-motion.wav";
 	public static String MUSIC_3 = "audioEngine/scorpio-moon.wav";
 	
+	public static String IN_GAME_1 = "audioEngine/infinity.wav";
+	public static String IN_GAME_2 = "audioEngine/mathrix.wav";
+	public static String IN_GAME_3 = "audioEngine/night-pulse.wav";
+	public static String IN_GAME_4 = "audioEngine/restricted-area.wav";
+	
 	// SFX
 	public static String ENGINE = "audioEngine/futuristic-machine.wav";
 	public static String BUTTON_CLICK = "audioEngine/button-spacey.wav";
@@ -35,6 +40,11 @@ public class Sounds {
 		map.put(MUSIC_1, AudioMaster.loadSound(MUSIC_1));
 		map.put(MUSIC_2, AudioMaster.loadSound(MUSIC_2));
 		map.put(MUSIC_3, AudioMaster.loadSound(MUSIC_3));
+		
+		map.put(IN_GAME_1, AudioMaster.loadSound(IN_GAME_1));
+		map.put(IN_GAME_2, AudioMaster.loadSound(IN_GAME_2));
+		map.put(IN_GAME_3, AudioMaster.loadSound(IN_GAME_3));
+		map.put(IN_GAME_4, AudioMaster.loadSound(IN_GAME_4));
 		
 		map.put(ENGINE, AudioMaster.loadSound(ENGINE));
 		map.put(BUTTON_CLICK, AudioMaster.loadSound(BUTTON_CLICK));
