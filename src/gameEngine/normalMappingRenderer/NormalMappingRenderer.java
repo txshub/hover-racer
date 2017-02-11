@@ -18,6 +18,7 @@ import gameEngine.models.TexturedModel;
 import gameEngine.renderEngine.MasterRenderer;
 import gameEngine.textures.ModelTexture;
 import gameEngine.toolbox.Maths;
+import gameEngine.toolbox.VecCon;
 
 public class NormalMappingRenderer {
 
@@ -79,7 +80,7 @@ public class NormalMappingRenderer {
 	}
 
 	private void prepareInstance(Entity entity) {
-		Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotx(),
+		Matrix4f transformationMatrix = Maths.createTransformationMatrix(VecCon.toLWJGL(entity.getPosition()), entity.getRotx(),
 				entity.getRoty(), entity.getRotz(), entity.getScale());
 		shader.loadTransformationMatrix(transformationMatrix);
 		shader.loadOffset(entity.getTextureXOffset(), entity.getTextureYOffset());

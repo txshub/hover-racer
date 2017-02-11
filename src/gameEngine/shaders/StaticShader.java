@@ -10,6 +10,7 @@ import org.lwjgl.util.vector.Vector4f;
 import gameEngine.entities.Camera;
 import gameEngine.entities.Light;
 import gameEngine.toolbox.Maths;
+import gameEngine.toolbox.VecCon;
 
 public class StaticShader extends ShaderProgram {
 
@@ -101,9 +102,9 @@ public class StaticShader extends ShaderProgram {
 		
 		for (int i = 0; i < MAX_LIGHTS; i++) {
 			if (i < lights.size()) {
-				super.loadVector3f(location_lightPosition[i], lights.get(i).getPosition());
-				super.loadVector3f(location_lightColour[i], lights.get(i).getColour());
-				super.loadVector3f(location_attenuation[i], lights.get(i).getAttenuation());
+				super.loadVector3f(location_lightPosition[i], VecCon.toLWJGL(lights.get(i).getPosition()));
+				super.loadVector3f(location_lightColour[i], VecCon.toLWJGL(lights.get(i).getColour()));
+				super.loadVector3f(location_attenuation[i], VecCon.toLWJGL(lights.get(i).getAttenuation()));
 			} else {
 				super.loadVector3f(location_lightPosition[i], new Vector3f(0, 0, 0));
 				super.loadVector3f(location_lightColour[i], new Vector3f(0, 0, 0));

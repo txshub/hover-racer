@@ -177,8 +177,8 @@ public class Ship extends Entity {
 	}
 
 	private void doCollisions() {
-		otherShips.stream().filter(ship -> ship.getInternalPosition().distanceTo(this.position) <= ship.getSize() + this.size)
-			.forEach(s -> collideWith(s));
+		//otherShips.stream().filter(ship -> ship.getPosition().distanceTo(this.position) <= ship.getSize() + this.size)
+			//.forEach(s -> collideWith(s));
 	}
 
 	/** Changes the velocity to account for a collision with a different ship */
@@ -227,6 +227,7 @@ public class Ship extends Entity {
 		updateRotation(delta);
 		updatePosition(delta);
 
+<<<<<<< HEAD
 		// Update parent
 		// super.setPosition(position.copy().changeY(y -> y * 10).as3f()); // TODO fix this
 		super.setPosition(position.as3f());
@@ -239,6 +240,10 @@ public class Ship extends Entity {
 	/** @return Position of this ship's centre */
 	public Vector3f getInternalPosition() {
 		return position.copy();
+=======
+		Vector3f v = new Vector3f(position.as3f().x, position.as3f().y, position.as3f().z);
+		super.setPosition(VecCon.toLWJGL3(v));
+>>>>>>> branch 'master' of git@git-teaching.cs.bham.ac.uk:mod-team-proj-2016/e1.git
 	}
 
 	/** @return The ship's rotation in all three dimensions (x,y,z), in radians. Values (0,0,0) mean the ship is horizontal and facing

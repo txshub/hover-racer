@@ -78,8 +78,8 @@ public class MasterRenderer {
 		return projectionMatrix;
 	}
 	
-	public void renderScene(List<Entity> entities, List<Entity> normalEntities, Terrain[][] terrains, List<Light> lights, Camera camera, org.joml.Vector4f clipPlane){
-		clipPlane = VecCon.toLWJGL(clipPlane);
+	public void renderScene(List<Entity> entities, List<Entity> normalEntities, Terrain[][] terrains, List<Light> lights, Camera camera, org.joml.Vector4f clipPlane1){
+		Vector4f clipPlane = VecCon.toLWJGL(clipPlane1);
 		
 		for (Entity entity2 : entities) {
 			processEntity(entity2);

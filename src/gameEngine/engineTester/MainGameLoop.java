@@ -51,7 +51,7 @@ public class MainGameLoop {
 		AudioMaster.init();
 		AL10.alDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
 
-		/************************* Terrain ********************************/ 
+		/************************* Terrain ********************************/
 
 		TerrainTexture background = new TerrainTexture(loader.loadTexture("grassy2"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mud"));
@@ -69,11 +69,11 @@ public class MainGameLoop {
 			}
 		}
 
-//		 List<Terrain> list2 = new ArrayList<Terrain>();
-//		 Terrain terrain = new Terrain((int) (-Terrain.SIZE / 2), (int)
-//		 (-Terrain.SIZE / 2), loader, texturePack,
-//		 blendMap, "heightMap2");
-//		 list2.add(terrain);
+		// List<Terrain> list2 = new ArrayList<Terrain>();
+		// Terrain terrain = new Terrain((int) (-Terrain.SIZE / 2), (int)
+		// (-Terrain.SIZE / 2), loader, texturePack,
+		// blendMap, "heightMap2");
+		// list2.add(terrain);
 
 		/************************* Player ********************************/
 
@@ -102,18 +102,18 @@ public class MainGameLoop {
 							Math.min(Math.min(temp.getHeightOfTerrain(x, z) - 2, temp.getHeightOfTerrain(x - 3, z) - 2),
 									Math.min(temp.getHeightOfTerrain(x, z - 3) - 2,
 											temp.getHeightOfTerrain(x + 3, z) - 2)),
-					temp.getHeightOfTerrain(x, z + 3) - 2), z), 0, 0, 0,
-					Math.max(1f, (float) random.nextDouble() * 50f));
+							temp.getHeightOfTerrain(x, z + 3) - 2), z),
+					0, 0, 0, Math.max(1f, (float) random.nextDouble() * 50f));
 			entity.getModel().getTexture().setReflectivity(0.5f);
 			entity.getModel().getTexture().setShineDamper(50);
 			list.add(entity);
-			
+
 			Source source = new Source();
 			source.setPosition(entity.getPosition().x, entity.getPosition().y, entity.getPosition().z);
 			source.setLooping(true);
 			source.setVolume(2);
 			source.setPitch(1.2f);
-			
+
 			int buffer = AudioMaster.loadSound("audioEngine/bounce.wav");
 			source.play(buffer);
 		}
@@ -213,12 +213,12 @@ public class MainGameLoop {
 		Light sun = new Light(new Vector3f((float) Math.cos(0), 100, (float) Math.sin(0) + Terrain.SIZE / 2),
 				new Vector3f(1f, 1f, 1f));
 		Light light2 = new Light(new Vector3f(0, 10, 0), new Vector3f(1, 0.5f, 0.5f), new Vector3f(0.1f, 0, 0.002f));
-		// Light light3 = new Light(new Vector3f(-50, 30, -30), new
-		// Vector3f(0.3f, 0.7f, 1), new Vector3f(1,0.001f,0.001f));
+		Light light3 = new Light(new Vector3f(-50, 30, -30), new Vector3f(0.3f, 0.7f, 1),
+				new Vector3f(1, 0.001f, 0.001f));
 		List<Light> lights = new ArrayList<Light>();
 		lights.add(sun);
 		lights.add(light2);
-		// lights.add(light3);
+		lights.add(light3);
 
 		Camera camera = new Camera(p1);
 
@@ -247,7 +247,7 @@ public class MainGameLoop {
 		List<GuiTexture> guis = new ArrayList<GuiTexture>();
 		GuiTexture crosshair = new GuiTexture(loader.loadTexture("crosshair"), new Vector2f(0, 0),
 				new Vector2f(64f / Display.getWidth(), 60f / Display.getHeight()));
-//		guis.add(crosshair);
+		// guis.add(crosshair);
 		// GuiTexture gui2 = new GuiTexture(loader.loadTexture("fern"), new
 		// Vector2f(.5f, .5f), new Vector2f(.25f, .25f));
 		// guis.add(gui);
@@ -275,6 +275,8 @@ public class MainGameLoop {
 			// light2.setPosition(new Vector3f(point.x, point.y + 5, point.z));
 			// }
 			camera.move(terrains);
+			p1.move(terrains);
+			
 			for (WaterTile[] waters1 : waters) {
 				for (WaterTile water : waters1) {
 
@@ -295,18 +297,17 @@ public class MainGameLoop {
 				}
 			}
 
-			renderer.renderScene(list, normalEntities, terrains, lights, camera,
-					new Vector4f(0,0,0,0));
+			renderer.renderScene(list, normalEntities, terrains, lights, camera, new Vector4f(0, 0, 0, 0));
 			GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
 			waterRenderer.render(waters, camera, sun);
 			guiRender.render(guis);
 			DisplayManager.updateDisplay();
 			sortLights(lights, p1.getPosition());
-			
-			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
+
+			if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 				break;
 			}
-			
+
 		}
 
 		/************************* Clean up ********************************/

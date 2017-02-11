@@ -7,6 +7,7 @@ import gameEngine.entities.Camera;
 import gameEngine.entities.Light;
 import gameEngine.shaders.ShaderProgram;
 import gameEngine.toolbox.Maths;
+import gameEngine.toolbox.VecCon;
  
 public class WaterShader extends ShaderProgram {
  
@@ -64,8 +65,8 @@ public class WaterShader extends ShaderProgram {
     }
     
     public void loadLight(Light sun){
-    	super.loadVector3f(location_lightColour, sun.getColour());
-    	super.loadVector3f(location_lightPosition, sun.getPosition());
+    	super.loadVector3f(location_lightColour, VecCon.toLWJGL(sun.getColour()));
+    	super.loadVector3f(location_lightPosition, VecCon.toLWJGL(sun.getPosition()));
     }
     
     public void connectTextureUnits(){

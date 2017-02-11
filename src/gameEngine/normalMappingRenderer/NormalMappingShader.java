@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Vector4f;
 
 import gameEngine.entities.Light;
 import gameEngine.shaders.ShaderProgram;
+import gameEngine.toolbox.VecCon;
 
 public class NormalMappingShader extends ShaderProgram{
 	
@@ -100,8 +101,8 @@ public class NormalMappingShader extends ShaderProgram{
 		for(int i=0;i<MAX_LIGHTS;i++){
 			if(i<lights.size()){
 				super.loadVector3f(location_lightPositionEyeSpace[i], getEyeSpacePosition(lights.get(i), viewMatrix));
-				super.loadVector3f(location_lightColour[i], lights.get(i).getColour());
-				super.loadVector3f(location_attenuation[i], lights.get(i).getAttenuation());
+				super.loadVector3f(location_lightColour[i], VecCon.toLWJGL(lights.get(i).getColour()));
+				super.loadVector3f(location_attenuation[i], VecCon.toLWJGL(lights.get(i).getAttenuation()));
 			}else{
 				super.loadVector3f(location_lightPositionEyeSpace[i], new Vector3f(0, 0, 0));
 				super.loadVector3f(location_lightColour[i], new Vector3f(0, 0, 0));
@@ -119,7 +120,7 @@ public class NormalMappingShader extends ShaderProgram{
 	}
 	
 	private Vector3f getEyeSpacePosition(Light light, Matrix4f viewMatrix){
-		Vector3f position = light.getPosition();
+		Vector3f position = VecCon.toLWJGL(light.getPosition());
 		Vector4f eyeSpacePos = new Vector4f(position.x,position.y, position.z, 1f);
 		Matrix4f.transform(viewMatrix, eyeSpacePos, eyeSpacePos);
 		return new Vector3f(eyeSpacePos);
