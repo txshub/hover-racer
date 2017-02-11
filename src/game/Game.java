@@ -82,8 +82,8 @@ public class Game {
     // Lighting
     lights = new ArrayList<Light>();
     Light sun = new Light(
-        VecCon.toLWJGL3(new Vector3f((float) Math.cos(0), 100, (float) Math.sin(0) + Terrain.SIZE / 2)),
-        VecCon.toLWJGL3(new Vector3f(1f, 1f, 1f)));
+        new Vector3f((float) Math.cos(0), 100, (float) Math.sin(0) + Terrain.SIZE / 2),
+        new Vector3f(1f, 1f, 1f));
     lights.add(sun);
 
     // Player Ship
@@ -91,7 +91,7 @@ public class Game {
         new ModelTexture(loader.loadTexture("newShipTexture")));
     KeyboardController input = new KeyboardController();
     ArrayList<Ship> otherShips = new ArrayList<>();
-    player = new Ship(playerTModel, new Vector3(50, 0, 50), otherShips, input, new FlatGroundProvider(2f));
+    player = new Ship(playerTModel, new Vector3f(50, 0, 50), otherShips, input, new FlatGroundProvider(2f));
     entities.add(player);
 
     // Player following camera
@@ -114,11 +114,11 @@ public class Game {
   public void render() {
     GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
     renderer.renderScene(entities, normalEntities, terrains, lights, camera,
-        VecCon.toLWJGL(new Vector4f((float) Math.sin(Math.toRadians(player.getRoty())), 0,
-            (float) Math.cos(Math.toRadians(player.getRoty())), 10f)));
+        new Vector4f((float) Math.sin(Math.toRadians(player.getRoty())), 0,
+            (float) Math.cos(Math.toRadians(player.getRoty())), 10f));
     GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
     DisplayManager.updateDisplay();
-    sortLights(lights, VecCon.toJOML(player.getPosition()));
+    sortLights(lights, player.getPosition());
   }
   
   public void cleanUp() {
@@ -143,7 +143,7 @@ public class Game {
   private static void sortLights(List<Light> lights, Vector3f currentPosition) {
     float[] distance = new float[lights.size() - 1];
     for (int i = 1; i < lights.size(); i++) {
-      distance[i - 1] = lights.get(i).getdistance(VecCon.toLWJGL3(currentPosition));
+      distance[i - 1] = lights.get(i).getdistance(currentPosition);
     }
   }
 }
