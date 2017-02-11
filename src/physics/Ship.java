@@ -7,6 +7,7 @@ import org.joml.Vector3f;
 
 import gameEngine.entities.Entity;
 import gameEngine.models.TexturedModel;
+import gameEngine.toolbox.VecCon;
 import placeholders.Action;
 import placeholders.ControllerInt;
 import placeholders.ExportedShip;
@@ -199,7 +200,7 @@ public class Ship extends Entity {
 		//airCushion(delta);
 		updatePosition(delta);
 		Vector3f v = new Vector3f(position.as3f().x, position.as3f().y, position.as3f().z);
-		super.setPosition(v);
+		super.setPosition(VecCon.toLWJGL3(v));
 	}
 
 	/** @return The ship's rotation in all three dimensions (x,y,z), in radians. Values (0,0,0) mean the ship is horizontal and facing
