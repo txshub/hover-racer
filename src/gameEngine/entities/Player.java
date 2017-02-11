@@ -9,7 +9,7 @@ import gameEngine.models.TexturedModel;
 import gameEngine.renderEngine.DisplayManager;
 import gameEngine.terrains.Terrain;
 
-public class Player extends Entity {
+public class Player extends Ship {
 
 	private final float TURN_SPEED = 120;
 	private final float GRAVITY = -50;
