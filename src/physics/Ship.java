@@ -51,7 +51,8 @@ public class Ship extends Entity {
 
 	private static final float DEFAULT_MASS = 1;
 	private static final float DEFAULT_SIZE = 1;
-	private static final float LEVELLING_SPEED = 0.1f;
+	private static final float LEVELLING_SPEED = 0.2f;
+	private static final float SPEED_OF_ROTATION_WHILE_TURNING = 1.25f;
 	private Vector3 position;
 	private Vector3 rotation;
 	private Vector3 velocity;
@@ -159,12 +160,9 @@ public class Ship extends Entity {
 			.forEach(v -> Math.signum(v) * Math.max(0, (Math.abs(v) - delta * Math.sqrt(Math.abs(v) * ROTATIONAL_RESISTANCE))));
 		
 	}
-	
+
 	private float relativeAngle(double angle){
-		return relativeAngle((float)angle);
-	}
-	private float relativeAngle(float angle){
-		if(angle<=Math.PI) return angle;
+		if(angle<=Math.PI) return (float) angle;
 		else return (float)(-2*Math.PI+angle);
 	}
 
@@ -180,11 +178,11 @@ public class Ship extends Entity {
 		 * if (keys.contains(Action.TURN_LEFT)) rotation.changeY(y -> correctAngle(y + delta * TURN_SPEED)); */
 		if (keys.contains(Action.TURN_RIGHT)){
 			rotationalMomentum.changeY(y -> y - delta * TURN_SPEED);
-			rotationalMomentum.changeZ(z->z+delta*TURN_SPEED/1);
+			rotationalMomentum.changeZ(z->z+delta*TURN_SPEED*SPEED_OF_ROTATION_WHILE_TURNING);
 		}
 		if (keys.contains(Action.TURN_LEFT)){
 			rotationalMomentum.changeY(y -> y + delta * TURN_SPEED);
-			rotationalMomentum.changeZ(z->z-delta*TURN_SPEED/1);
+			rotationalMomentum.changeZ(z->z-delta*TURN_SPEED*SPEED_OF_ROTATION_WHILE_TURNING);
 		}
 		if (keys.contains(Action.FORWARD)) accelerate2d(delta * ACCELERATION, (float) Math.PI * 1.5f);
 		if (keys.contains(Action.BREAK)) airResistance(delta * BREAK_POWER); // Breaking slows you down, no matter how you're moving
