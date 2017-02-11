@@ -33,6 +33,7 @@ import physics.Ship;
 import physics.Vector3;
 import placeholders.FlatGroundProvider;
 import placeholders.KeyboardController;
+import placeholders.LwjglController;
 
 public class Game {
   
@@ -75,7 +76,7 @@ public class Game {
     for (int i = 0; i < size; i++) {
       for (int j = 0; j < size; j++) {
         terrains[i][j] = new Terrain((int) (Terrain.SIZE) * i, (int) (Terrain.SIZE) * j, loader,
-            texturePack, blendMap, "new/flatMap");
+            texturePack, blendMap, "new/FlatMap");
       }
     }
 
@@ -89,9 +90,9 @@ public class Game {
     // Player Ship
     TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
         new ModelTexture(loader.loadTexture("newShipTexture")));
-    KeyboardController input = new KeyboardController();
+    LwjglController input = new LwjglController();
     ArrayList<Ship> otherShips = new ArrayList<>();
-    player = new Ship(playerTModel, new Vector3f(50, 0, 50), otherShips, input, new FlatGroundProvider(2f));
+    player = new Ship(playerTModel, new Vector3f(50, 0, 50), otherShips, input, new FlatGroundProvider(-40f));
     entities.add(player);
 
     // Player following camera
