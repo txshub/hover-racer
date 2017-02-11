@@ -299,12 +299,7 @@ public class MainGameLoop {
 		guiRender.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
-<<<<<<< HEAD
 		//wfb.cleanUp();
-		AudioMaster.cleanUP();
-=======
-		wfb.cleanUp();
->>>>>>> tudor
 		DisplayManager.closeDisplay();
 
 	}
