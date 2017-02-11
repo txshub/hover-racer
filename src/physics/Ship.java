@@ -34,6 +34,9 @@ public class Ship {
 	public Ship() {
 		this(new Vector3(0, 0, 0), new ArrayList<>(), new FakeController(), new FakeServerProvider());
 	}
+	public Ship(Vector3 startingPosition, ControllerInt controller) {
+		this(startingPosition, new ArrayList<>(), controller, new FakeServerProvider());
+	}
 	/** Creates a new server-controlled ship
 	 * 
 	 * @param startingPosition Vector describing this ship's starting position.
@@ -96,13 +99,13 @@ public class Ship {
 	private void handleControls(float delta, ControllerInt conn) {
 		if (conn == null) return; // Safeguard against first few frames before receiving any data
 		Collection<Action> keys = conn.getPressedKeys();
-		if (keys.contains(Action.FORWARD)) accelerate2d(delta * ACCELERATION, (float) Math.PI / 2);
+		if (keys.contains(Action.FORWARD)) accelerate2d(delta * ACCELERATION, (float) Math.PI * 1.5f);
 		if (keys.contains(Action.BREAK)) airResistance(delta * BREAK_POWER); // Breaking slows you down, no matter how you're moving
 		// if (keys.contains(Action.BREAK)) accelerate2d(delta * ACCELERATION, Math.PI * 1.5); // Breaking accelerates backwards
 		if (keys.contains(Action.STRAFE_RIGHT)) accelerate2d(delta * ACCELERATION / 2, 0);
 		if (keys.contains(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION / 2, (float) Math.PI);
-		if (keys.contains(Action.TURN_RIGHT)) rotation.changeY(y -> correctAngle(y - TURN_SPEED));
-		if (keys.contains(Action.TURN_LEFT)) rotation.changeY(y -> correctAngle(y + TURN_SPEED));
+		if (keys.contains(Action.TURN_RIGHT)) rotation.changeY(y -> correctAngle(y + delta * TURN_SPEED));
+		if (keys.contains(Action.TURN_LEFT)) rotation.changeY(y -> correctAngle(y - delta * TURN_SPEED));
 	}
 
 	private void doCollisions() {

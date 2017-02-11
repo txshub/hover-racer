@@ -4,7 +4,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
-import audioEngine.AudioMaster;
 import audioEngine.Source;
 import gameEngine.engineTester.MainGameLoop;
 import gameEngine.models.TexturedModel;
@@ -27,12 +26,8 @@ public class Player extends Entity {
 
 	private boolean isInAir = false;
 
-	private Source source = null;
-	private int jumpBuffer;
-	
 	public Player(TexturedModel model, Vector3f position, float dx, float dy, float dz, float scale) {
 		super(model, position, dx, dy, dz, scale);
-		initAudio();
 	}
 	
 	public void turn(){
@@ -63,23 +58,12 @@ public class Player extends Entity {
 			isInAir = true;
 		}
 		
-		// Update listener position
-		AudioMaster.setListenerData(super.getPosition().x, super.getPosition().y, super.getPosition().z);
 	}
 
-	private void initAudio() {
-		source = new Source();
-		jumpBuffer = AudioMaster.loadSound("audioEngine/bounce.wav");
-	}
-	
 	private void jump() {
 		if (!isInAir) {
 			this.upwardsSpeed = JUMP_POWER;
 			isInAir = true;
-			
-			// Play sound
-			source.setPosition(super.getPosition().x, super.getPosition().y, super.getPosition().z);
-			source.play(jumpBuffer);
 		}
 	}
 
