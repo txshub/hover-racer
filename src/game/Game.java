@@ -32,7 +32,7 @@ import gameEngine.toolbox.VecCon;
 import physics.Ship;
 import physics.Vector3;
 import placeholders.FlatGroundProvider;
-import placeholders.KeyboardController;
+import placeholders.LwjglController;
 
 public class Game {
   
