@@ -15,6 +15,7 @@ import gameEngine.models.TexturedModel;
 import gameEngine.shaders.StaticShader;
 import gameEngine.textures.ModelTexture;
 import gameEngine.toolbox.Maths;
+import gameEngine.toolbox.VecCon;
 
 public class EntityRenderer {
 	
@@ -66,7 +67,7 @@ public class EntityRenderer {
 		GL30.glBindVertexArray(0);
 	}
 	private void prepareInstance(Entity entity){
-		Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(),entity.getRotx()
+		Matrix4f transformationMatrix = Maths.createTransformationMatrix(VecCon.toLWJGL3(entity.getPosition()),entity.getRotx()
 				,entity.getRoty(),entity.getRotz(),entity.getScale());
 		shader.loadTransformationMatrix(transformationMatrix);
 		shader.loadOffset(entity.getTextureXOffset(),entity.getTextureYOffset());

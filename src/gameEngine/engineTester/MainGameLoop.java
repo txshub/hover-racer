@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.joml.Vector2f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.util.vector.Vector2f;
-import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
 
 import audioEngine.AudioMaster;
 import audioEngine.Source;
@@ -35,6 +35,7 @@ import gameEngine.textures.ModelTexture;
 import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
+import gameEngine.toolbox.VecCon;
 import gameEngine.water.WaterFrameBuffers;
 import gameEngine.water.WaterRenderer;
 import gameEngine.water.WaterShader;
@@ -210,9 +211,9 @@ public class MainGameLoop {
 		list.add(lightmodel1);
 		list.add(lightmodel2);
 
-		Light sun = new Light(new Vector3f((float) Math.cos(0), 100, (float) Math.sin(0) + Terrain.SIZE / 2),
-				new Vector3f(1f, 1f, 1f));
-		Light light2 = new Light(new Vector3f(0, 10, 0), new Vector3f(1, 0.5f, 0.5f), new Vector3f(0.1f, 0, 0.002f));
+		Light sun = new Light(VecCon.toLWJGL3(new Vector3f((float) Math.cos(0), 100, (float) Math.sin(0) + Terrain.SIZE / 2)),
+				VecCon.toLWJGL3(new Vector3f(1f, 1f, 1f)));
+		Light light2 = new Light(VecCon.toLWJGL3(new Vector3f(0, 10, 0)), VecCon.toLWJGL3(new Vector3f(1, 0.5f, 0.5f)), VecCon.toLWJGL3(new Vector3f(0.1f, 0, 0.002f)));
 		// Light light3 = new Light(new Vector3f(-50, 30, -30), new
 		// Vector3f(0.3f, 0.7f, 1), new Vector3f(1,0.001f,0.001f));
 		List<Light> lights = new ArrayList<Light>();
@@ -245,8 +246,8 @@ public class MainGameLoop {
 		/************************* Guis ********************************/
 
 		List<GuiTexture> guis = new ArrayList<GuiTexture>();
-		GuiTexture crosshair = new GuiTexture(loader.loadTexture("crosshair"), new Vector2f(0, 0),
-				new Vector2f(64f / Display.getWidth(), 60f / Display.getHeight()));
+		GuiTexture crosshair = new GuiTexture(loader.loadTexture("crosshair"), new org.lwjgl.util.vector.Vector2f(0, 0),
+				new org.lwjgl.util.vector.Vector2f(64f / Display.getWidth(), 60f / Display.getHeight()));
 //		guis.add(crosshair);
 		// GuiTexture gui2 = new GuiTexture(loader.loadTexture("fern"), new
 		// Vector2f(.5f, .5f), new Vector2f(.25f, .25f));
@@ -262,9 +263,9 @@ public class MainGameLoop {
 			GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 			picker.update();
 			time += DisplayManager.getFrameTimeSeconds();
-			sun.setPosition(new Vector3f(sun.getPosition().x + (float) Math.sin(time) * 10, sun.getPosition().y,
+			sun.setPosition(new org.lwjgl.util.vector.Vector3f(sun.getPosition().x + (float) Math.sin(time) * 10, sun.getPosition().y,
 					sun.getPosition().z + (float) Math.cos(time) * 10));
-			lightmodel1.setPosition(sun.getPosition());
+			lightmodel1.setPosition(VecCon.toJOML3(sun.getPosition()));
 			// point = picker.getCurrentTerrainPoint();
 			// if (point != null) {
 			// lightmodel2.setPosition(point);
@@ -284,19 +285,19 @@ public class MainGameLoop {
 					camera.getPosition().y -= distance;
 					camera.invertPitch();
 					renderer.renderScene(list, normalEntities, terrains, lights, camera,
-							new Vector4f(0, 1, 0, -water.getHeight() + 0.1f));
+							new org.lwjgl.util.vector.Vector4f(0, 1, 0, -water.getHeight() + 0.1f));
 					camera.invertPitch();
 					camera.getPosition().y += distance;
 					// refraction
 					wfb.bindRefractionFrameBuffer();
 					renderer.renderScene(list, normalEntities, terrains, lights, camera,
-							new Vector4f(0, -1, 0, water.getHeight() + 0.1f));
+							new org.lwjgl.util.vector.Vector4f(0, -1, 0, water.getHeight() + 0.1f));
 					wfb.unbindCurrentFrameBuffer();
 				}
 			}
 
 			renderer.renderScene(list, normalEntities, terrains, lights, camera,
-					new Vector4f(0,0,0,0));
+					new org.lwjgl.util.vector.Vector4f(0,0,0,0));
 			GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
 			waterRenderer.render(waters, camera, sun);
 			guiRender.render(guis);
@@ -329,7 +330,7 @@ public class MainGameLoop {
 	private static void sortLights(List<Light> lights, Vector3f currentPosition) {
 		float[] distance = new float[lights.size() - 1];
 		for (int i = 1; i < lights.size(); i++) {
-			distance[i - 1] = lights.get(i).getdistance(currentPosition);
+			distance[i - 1] = lights.get(i).getdistance(VecCon.toLWJGL3(currentPosition));
 		}
 
 	}

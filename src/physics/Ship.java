@@ -3,11 +3,7 @@ package physics;
 import java.util.ArrayList;
 import java.util.Collection;
 
-<<<<<<< HEAD
 import org.joml.Vector3f;
-
-=======
->>>>>>> shipPhysics
 import gameEngine.entities.Entity;
 import gameEngine.models.TexturedModel;
 import gameEngine.toolbox.VecCon;
@@ -74,9 +70,9 @@ public class Ship extends Entity {
 
 	/** Creates a ship with position (0,0,0), no inputs an no other ships. For testing only */
 	public Ship() {
-		this(new Vector3(0, 0, 0), new FakeController());
+		this(new Vector3f(0, 0, 0), new FakeController());
 	}
-	public Ship(Vector3 startingPosition, ControllerInt controller) {
+	public Ship(Vector3f startingPosition, ControllerInt controller) {
 		this(null, startingPosition, new ArrayList<>(), controller, new FlatGroundProvider(0));
 	}
 	/** Creates a new server-controlled ship
@@ -84,7 +80,7 @@ public class Ship extends Entity {
 	 * @param startingPosition Vector describing this ship's starting position.
 	 * @param otherShips Other ships to possibly collide with
 	 * @param server Object providing data about the ship, as described in the interface */
-	public Ship(TexturedModel model, Vector3 startingPosition, Collection<Ship> otherShips, ServerShipProvider server,
+	public Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, ServerShipProvider server,
 		GroundProvider ground) {
 		this(model, startingPosition, otherShips, new FakeController(), server, ground);
 	}
@@ -93,16 +89,15 @@ public class Ship extends Entity {
 	 * @param startingPosition Vector describing this ship's starting position
 	 * @param otherShips Other ships to possibly collide with
 	 * @param controller Controlled providing player's desired actions, as described in the interface */
-	public Ship(TexturedModel model, Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller,
+	public Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, ControllerInt controller,
 		GroundProvider ground) {
 		this(model, startingPosition, otherShips, controller, new FakeServerProvider(), ground);
 	}
 
 
-	private Ship(TexturedModel model, Vector3 startingPosition, Collection<Ship> otherShips, ControllerInt controller,
+	private Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, ControllerInt controller,
 		ServerShipProvider server, GroundProvider ground) {
-		super(model, startingPosition.as3f(), 0, 0, 0, 1);
-		position = startingPosition.copy();
+		super(model, startingPosition, 0, 0, 0, 1);
 		this.velocity = new Vector3(0, 0, 0);
 		this.rotation = new Vector3(0, 0, 0);
 		this.rotationalMomentum = new Vector3(0, 0, 0);
@@ -112,7 +107,7 @@ public class Ship extends Entity {
 		this.otherShips = otherShips != null ? otherShips : new ArrayList<Ship>(); // If null set to an empty ArrayList
 		this.server = server;
 		this.ground = ground;
-		position.changeY(y -> y / 20f); // TODO this is a temporary fix
+		//position.changeY(y -> y / 20f); // TODO this is a temporary fix
 	}
 
 	/** Accelerate in any direction within the 2d horizontal plane. The acceleration is instant; it's basically just changing velocities.
@@ -239,7 +234,7 @@ public class Ship extends Entity {
 
 		// Update parent
 		// super.setPosition(position.copy().changeY(y -> y * 10).as3f()); // TODO fix this
-		super.setPosition(position.as3f());
+		//super.setPosition(position);
 		super.setRotx((float) Math.toDegrees(rotation.getX()));
 		super.setRoty((float) Math.toDegrees(rotation.getY()));
 		super.setRotz((float) Math.toDegrees(rotation.getZ()));

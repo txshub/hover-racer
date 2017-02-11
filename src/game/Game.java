@@ -32,7 +32,7 @@ import gameEngine.toolbox.VecCon;
 import physics.Ship;
 import physics.Vector3;
 import placeholders.FlatGroundProvider;
-import placeholders.LwjglController;
+import placeholders.KeyboardController;
 
 public class Game {
   
@@ -91,7 +91,7 @@ public class Game {
         new ModelTexture(loader.loadTexture("newShipTexture")));
     KeyboardController input = new KeyboardController();
     ArrayList<Ship> otherShips = new ArrayList<>();
-    player = new Ship(playerTModel, new Vector3(50, 0, 50), otherShips, input, new FlatGroundProvider(2f));
+    player = new Ship(playerTModel, new Vector3f(50, 0, 50), otherShips, input, new FlatGroundProvider(2f));
     entities.add(player);
 
     // Player following camera
@@ -118,7 +118,7 @@ public class Game {
             (float) Math.cos(Math.toRadians(player.getRoty())), 10f)));
     GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
     DisplayManager.updateDisplay();
-    sortLights(lights, VecCon.toJOML3(player.getPosition()));
+    sortLights(lights, player.getPosition());
   }
   
   public void cleanUp() {

@@ -1,12 +1,14 @@
 package gameEngine.skybox;
 
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import gameEngine.entities.Camera;
 import gameEngine.renderEngine.DisplayManager;
 import gameEngine.shaders.ShaderProgram;
 import gameEngine.toolbox.Maths;
+import gameEngine.toolbox.VecCon;
 
 public class SkyboxShader extends ShaderProgram{
 
@@ -41,7 +43,8 @@ public class SkyboxShader extends ShaderProgram{
 	
 	public void loadViewMatrix(Camera camera){
 		Matrix4f matrix = Maths.createViewMatrix(camera);
-		matrix.translate(camera.getEntity().getPosition());
+		Vector3f cameraPos = VecCon.toLWJGL3(camera.getEntity().getPosition());
+		matrix.translate(new Vector2f(cameraPos.x, cameraPos.y));
 		rotation += (ROTATE_SPEED * DisplayManager.getFrameTimeSeconds());
 		matrix.rotate((float)Math.toRadians(rotation), new Vector3f(0,1,0));
 		super.loadMatrix(location_viewMatrix, matrix);
