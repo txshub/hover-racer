@@ -1,9 +1,10 @@
 package physics;
 
+import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
 import org.joml.Matrix3f;
-import org.joml.Vector3f;
+import org.lwjgl.util.vector.Vector3f;
 
 /** Utility class representing a 3-dimensional vector. Custom built for the Ship class - use {@link as3f} to convert to Vector3f
  * 
@@ -51,6 +52,12 @@ public class Vector3 {
 		changeZ(f);
 		return this;
 	}
+	public Vector3 forEach(Vector3 v, DoubleBinaryOperator f) {
+		changeX(x -> f.applyAsDouble(x, v.getX()));
+		changeY(y -> f.applyAsDouble(y, v.getY()));
+		changeZ(z -> f.applyAsDouble(z, v.getZ()));
+		return this;
+	}
 	public float distanceTo(Vector3 v) {
 		return (float) (Math.sqrt(Math.pow(x - v.getX(), 2) + Math.pow(y - v.getY(), 2) + Math.pow(z - v.getZ(), 2)));
 	}
@@ -90,14 +97,17 @@ public class Vector3 {
 		return z;
 	}
 
-	public void changeX(DoubleUnaryOperator f) {
+	public Vector3 changeX(DoubleUnaryOperator f) {
 		this.x = (float) f.applyAsDouble(x);
+		return this;
 	}
-	public void changeY(DoubleUnaryOperator f) {
+	public Vector3 changeY(DoubleUnaryOperator f) {
 		this.y = (float) f.applyAsDouble(y);
+		return this;
 	}
-	public void changeZ(DoubleUnaryOperator f) {
+	public Vector3 changeZ(DoubleUnaryOperator f) {
 		this.z = (float) f.applyAsDouble(z);
+		return this;
 	}
 	public Vector3f as3f() {
 		return new Vector3f(x, y, z);
