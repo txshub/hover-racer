@@ -64,6 +64,9 @@ public class Ship extends Entity {
 	private ServerShipProvider server;
 	private ExportedShip fromServer;
 	private GroundProvider ground;
+	
+	long lastPrint=0;
+	double deltaSum=0;
 
 
 	/** Creates a ship with position (0,0,0), no inputs an no other ships. For testing only */
@@ -204,12 +207,17 @@ public class Ship extends Entity {
 	 * 
 	 * @param delta Time in seconds that passed since the last call of this function */
 	public void update(float preDelta) {
-		// if (preDelta != 1) System.out.println((preDelta - 1) / 60 + " sec");
-		while (preDelta > 1.2) {
-			update(1);
-			preDelta--;
+		deltaSum+=preDelta;
+		//deltaSum++;
+		if(System.nanoTime()-lastPrint>1000000000){
+			System.out.println(deltaSum);
+			lastPrint=System.nanoTime();
+			deltaSum=0;
 		}
-		float delta = preDelta / 60f;
+		// if (preDelta != 1) System.out.println((preDelta - 1) / 60 + " sec");
+
+		//float delta = preDelta / 60f;
+		float delta = (float)1/60; //TODO get Reece to fix deltas
 		if (server.getShip().isPresent()) { // If received data from server, just update and don't do physics
 			this.fromServer = server.getShip().get();
 			this.position = fromServer.getPosition();
