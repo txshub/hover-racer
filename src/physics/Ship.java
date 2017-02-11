@@ -97,7 +97,7 @@ public class Ship extends Entity {
 
 	private Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, ControllerInt controller,
 		ServerShipProvider server, GroundProvider ground) {
-		super(model, startingPosition, 0, 0, 0, 1);
+		super(model, startingPosition, new Vector3(0,0,0), 1);
 		this.velocity = new Vector3(0, 0, 0);
 		this.rotation = new Vector3(0, 0, 0);
 		this.rotationalMomentum = new Vector3(0, 0, 0);
@@ -234,10 +234,8 @@ public class Ship extends Entity {
 
 		// Update parent
 		// super.setPosition(position.copy().changeY(y -> y * 10).as3f()); // TODO fix this
-		//super.setPosition(position);
-		super.setRotx((float) Math.toDegrees(rotation.getX()));
-		super.setRoty((float) Math.toDegrees(rotation.getY()));
-		super.setRotz((float) Math.toDegrees(rotation.getZ()));
+		super.setPosition(position.copy());
+		super.setRotation(rotation.copy());
 
 	}
 

@@ -4,38 +4,33 @@ import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
 import org.joml.Matrix3f;
-import org.lwjgl.util.vector.Vector3f;
+import org.joml.Vector3f;
 
 /** Utility class representing a 3-dimensional vector. Custom built for the Ship class - use {@link as3f} to convert to Vector3f
  * 
  * @author Maciej Bogacki */
-public class Vector3 {
+public class Vector3 extends Vector3f{
 
-	float x, y, z;
+	//float x, y, z;
 
 
 	public Vector3(float x, float y, float z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		super(x,y,z);
 	}
 	public Vector3(float[] values) {
-		this.x = values[0];
-		this.y = values[1];
-		this.z = values[2];
+		super(values[0],values[1],values[2]);
 	}
-	public Vector3(Vector3 v) {
-		this.x = v.getX();
-		this.y = v.getY();
-		this.z = v.getZ();
+	public Vector3(Vector3f v) {
+		super(v);
 	}
 
 
 	public Vector3 add(Vector3 v) {
-		this.x += v.getX();
+		return v.add(v);
+		/*this.x += v.getX();
 		this.y += v.getY();
 		this.z += v.getZ();
-		return this;
+		return this;*/
 	}
 	public Vector3 substract(Vector3 v) {
 		return add(v.multiply(-1));
@@ -52,14 +47,14 @@ public class Vector3 {
 		changeZ(f);
 		return this;
 	}
-	public Vector3 forEach(Vector3 v, DoubleBinaryOperator f) {
-		changeX(x -> f.applyAsDouble(x, v.getX()));
-		changeY(y -> f.applyAsDouble(y, v.getY()));
-		changeZ(z -> f.applyAsDouble(z, v.getZ()));
-		return this;
+	public Vector3 forEach(Vector3f v, DoubleBinaryOperator f) { 		
+		changeX(x -> f.applyAsDouble(x, v.x)); 		
+		changeY(y -> f.applyAsDouble(y, v.y)); 		
+		changeZ(z -> f.applyAsDouble(z, v.z)); 		
+		return this; 	
 	}
-	public float distanceTo(Vector3 v) {
-		return (float) (Math.sqrt(Math.pow(x - v.getX(), 2) + Math.pow(y - v.getY(), 2) + Math.pow(z - v.getZ(), 2)));
+	public float distanceTo(Vector3f v) {
+		return (float) (Math.sqrt(Math.pow(x - v.x, 2) + Math.pow(y - v.y, 2) + Math.pow(z - v.z, 2)));
 	}
 	public Vector3f getDownDirection() {
 		// return new Vector3f(0,-1,0).mul(getRotationMatrix(1, x)).mul(getRotationMatrix(2, y)).mul(getRotationMatrix(3, z));
@@ -97,17 +92,14 @@ public class Vector3 {
 		return z;
 	}
 
-	public Vector3 changeX(DoubleUnaryOperator f) {
+	public void changeX(DoubleUnaryOperator f) {
 		this.x = (float) f.applyAsDouble(x);
-		return this;
 	}
-	public Vector3 changeY(DoubleUnaryOperator f) {
+	public void changeY(DoubleUnaryOperator f) {
 		this.y = (float) f.applyAsDouble(y);
-		return this;
 	}
-	public Vector3 changeZ(DoubleUnaryOperator f) {
+	public void changeZ(DoubleUnaryOperator f) {
 		this.z = (float) f.applyAsDouble(z);
-		return this;
 	}
 	public Vector3f as3f() {
 		return new Vector3f(x, y, z);
