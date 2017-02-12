@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import org.joml.Vector3f;
 import org.lwjgl.LWJGLException;
 
 import physics.Ship;
@@ -29,7 +30,7 @@ public class Window {
 		 * Ship testShip = new Ship(new Vector3(10f, 10f, 30f), new LwjglController()); */
 
 		KeyboardController input = new KeyboardController();
-		Ship testShip = new Ship(new Vector3(10f, 10f, 30f), input);
+		Ship testShip = new Ship(new Vector3f(10f, 10f, 30f), input);
 		ArrayList<Ship> ships = new ArrayList<Ship>();
 		ships.add(testShip);
 

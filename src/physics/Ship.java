@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.joml.Vector3f;
-
 import gameEngine.entities.Entity;
 import gameEngine.models.TexturedModel;
-import gameEngine.toolbox.VecCon;
 import placeholders.Action;
 import placeholders.ControllerInt;
 import placeholders.ExportedShip;
@@ -53,10 +51,12 @@ public class Ship extends Entity {
 
 	private static final float DEFAULT_MASS = 1;
 	private static final float DEFAULT_SIZE = 1;
-	private Vector3f position;
-	private Vector3f velocity;
-	private Vector3f rotation;
-	private Vector3f rotationalMomentum;
+	private static final float LEVELLING_SPEED = 0.2f;
+	private static final float SPEED_OF_ROTATION_WHILE_TURNING = 1.25f;
+	private Vector3 position;
+	private Vector3 rotation;
+	private Vector3 velocity;
+	private Vector3 rotationalMomentum;
 	private float mass;
 	private float size;
 	private ControllerInt controller;
@@ -98,19 +98,18 @@ public class Ship extends Entity {
 
 	private Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, ControllerInt controller,
 		ServerShipProvider server, GroundProvider ground) {
-		super(model, VecCon.toLWJGL(startingPosition), 0, 0, 0, 1);
-		position = startingPosition;
-		this.velocity = new Vector3f(0, 0, 0);
-		this.rotation = new Vector3f(0, 0, 0);
-		this.rotationalMomentum = new Vector3f(0, 0, 0);
+		super(model, startingPosition, new Vector3(0,0,0), 1);
+		this.position = new Vector3(startingPosition);
+		super.position = this.position;
+		this.velocity = new Vector3(0, 0, 0);
+		this.rotation = new Vector3(0, 0, 0);
+		this.rotationalMomentum = new Vector3(0, 0, 0);
 		this.mass = DEFAULT_MASS;
 		this.size = DEFAULT_SIZE;
 		this.controller = controller;
 		this.otherShips = otherShips != null ? otherShips : new ArrayList<Ship>(); // If null set to an empty ArrayList
 		this.server = server;
 		this.ground = ground;
-		position.add(0,0,0);
-		position.changeY(y -> y / 20f); // TODO this is a temporary fix
 	}
 
 	/** Accelerate in any direction within the 2d horizontal plane. The acceleration is instant; it's basically just changing velocities.
@@ -119,7 +118,7 @@ public class Ship extends Entity {
 	 * @param force Force to accelerate with. Force 1 means changing velocity by 1 if in angle is along one axis
 	 * @param angle Direction of the acceleration in standard notation: 0 is right, 0.5pi it forward etc. */
 	public void accelerate2d(float force, float angle) {
-		final float angle2 = correctAngle(rotation.getY() + angle); // Adjust the angle for ship's own rotation
+		final float angle2 = correctAngle(rotation.y + angle); // Adjust the angle for ship's own rotation
 		velocity.changeX(x -> x + force * Math.cos(angle2));
 		velocity.changeZ(z -> z - force * Math.sin(angle2));
 	}
@@ -138,7 +137,7 @@ public class Ship extends Entity {
 
 	/** Apply the forces of the air cushion (also bounce off ground if it ever happens) */
 	private void airCushion(float delta) {
-		float distance = ground.distanceToGround(position.as3f(), rotation.getDownDirection()) / VERTICAL_SCALE;
+		float distance = ground.distanceToGround(position, rotation) / VERTICAL_SCALE;
 		if (distance <= 0 && velocity.getY() < 0) velocity.changeY(y -> -.3 * y); // If hit the ground do this
 		else if (distance > 0) velocity.changeY(y -> y + delta * AIR_CUSHION * VERTICAL_SCALE / Math.pow(distance, CUSHION_SCALE));
 	}
@@ -151,12 +150,20 @@ public class Ship extends Entity {
 	}
 
 	private void updateRotation(float delta) {
-		float before = rotation.getY();
-		rotation.forEach(rotationalMomentum, (rot, vel) -> correctAngle(rot + delta * vel)); // Add momentum
+		// Add momentum (doing it first to be more responsive)
+		rotation.forEach(rotationalMomentum, (rot, vel) -> correctAngle(rot + delta * vel));		
+		//Try levelling  z with the ground
+		rotationalMomentum.changeZ(z->(z-relativeAngle(rotation.z)*LEVELLING_SPEED));
+		
+		//Air resistance for rotation
 		rotationalMomentum
 			.forEach(v -> Math.signum(v) * Math.max(0, (Math.abs(v) - delta * Math.sqrt(Math.abs(v) * ROTATIONAL_RESISTANCE))));
-		// System.out.println(rotation.getY() - before);
-		// System.out.println(delta);
+		
+	}
+
+	private float relativeAngle(double angle){
+		if(angle<=Math.PI) return (float) angle;
+		else return (float)(-2*Math.PI+angle);
 	}
 
 	/** Handle controls from the player.
@@ -169,8 +176,14 @@ public class Ship extends Entity {
 		Collection<Action> keys = conn.getPressedKeys();
 		/* if (keys.contains(Action.TURN_RIGHT)) rotation.changeY(y -> correctAngle(y - delta * TURN_SPEED));
 		 * if (keys.contains(Action.TURN_LEFT)) rotation.changeY(y -> correctAngle(y + delta * TURN_SPEED)); */
-		if (keys.contains(Action.TURN_RIGHT)) rotationalMomentum.changeY(y -> y - delta * TURN_SPEED);
-		if (keys.contains(Action.TURN_LEFT)) rotationalMomentum.changeY(y -> y + delta * TURN_SPEED);
+		if (keys.contains(Action.TURN_RIGHT)){
+			rotationalMomentum.changeY(y -> y - delta * TURN_SPEED);
+			rotationalMomentum.changeZ(z->z+delta*TURN_SPEED*SPEED_OF_ROTATION_WHILE_TURNING);
+		}
+		if (keys.contains(Action.TURN_LEFT)){
+			rotationalMomentum.changeY(y -> y + delta * TURN_SPEED);
+			rotationalMomentum.changeZ(z->z-delta*TURN_SPEED*SPEED_OF_ROTATION_WHILE_TURNING);
+		}
 		if (keys.contains(Action.FORWARD)) accelerate2d(delta * ACCELERATION, (float) Math.PI * 1.5f);
 		if (keys.contains(Action.BREAK)) airResistance(delta * BREAK_POWER); // Breaking slows you down, no matter how you're moving
 		// if (keys.contains(Action.BREAK)) accelerate2d(delta * ACCELERATION, Math.PI * 1.5); // Breaking accelerates backwards
@@ -182,6 +195,10 @@ public class Ship extends Entity {
 	private void doCollisions() {
 		//otherShips.stream().filter(ship -> ship.getPosition().distanceTo(this.position) <= ship.getSize() + this.size)
 			//.forEach(s -> collideWith(s));
+	}
+	
+	public Vector3 getInternalPosition(){
+		return position.copy();
 	}
 
 	/** Changes the velocity to account for a collision with a different ship */
@@ -235,29 +252,8 @@ public class Ship extends Entity {
 		updateRotation(delta);
 		updatePosition(delta);
 
-<<<<<<< HEAD
-		// Update parent
-		// super.setPosition(position.copy().changeY(y -> y * 10).as3f()); // TODO fix this
-		super.setPosition(position.as3f());
-		super.setRotx((float) Math.toDegrees(rotation.getX()));
-		super.setRoty((float) Math.toDegrees(rotation.getY()));
-		super.setRotz((float) Math.toDegrees(rotation.getZ()));
-
-	}
-
-	/** @return Position of this ship's centre */
-	public Vector3f getInternalPosition() {
-		return position.copy();
-=======
-		Vector3f v = new Vector3f(position.as3f().x, position.as3f().y, position.as3f().z);
-		super.setPosition(VecCon.toLWJGL3(v));
->>>>>>> branch 'master' of git@git-teaching.cs.bham.ac.uk:mod-team-proj-2016/e1.git
-	}
-
-	/** @return The ship's rotation in all three dimensions (x,y,z), in radians. Values (0,0,0) mean the ship is horizontal and facing
-	 *         towards positive x. */
-	public Vector3f getRotation() {
-		return rotation.copy();
+		//super.setPosition(position.copy());
+		super.setRotation(rotation.copy().forEach(r->Math.toDegrees(r)));
 	}
 	/** @return This ship's current velocities, separately in all dimensions */
 	public Vector3f getVelocity() {

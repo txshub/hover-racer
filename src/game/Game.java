@@ -30,9 +30,9 @@ import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
 import gameEngine.toolbox.VecCon;
 import physics.Ship;
-import physics.Vector3;
 import placeholders.FlatGroundProvider;
 import placeholders.KeyboardController;
+import placeholders.LwjglController;
 
 public class Game {
   
@@ -75,7 +75,7 @@ public class Game {
     for (int i = 0; i < size; i++) {
       for (int j = 0; j < size; j++) {
         terrains[i][j] = new Terrain((int) (Terrain.SIZE) * i, (int) (Terrain.SIZE) * j, loader,
-            texturePack, blendMap, "new/flatMap");
+            texturePack, blendMap, "new/FlatMap");
       }
     }
 
@@ -89,9 +89,9 @@ public class Game {
     // Player Ship
     TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
         new ModelTexture(loader.loadTexture("newShipTexture")));
-    KeyboardController input = new KeyboardController();
+    LwjglController input = new LwjglController();
     ArrayList<Ship> otherShips = new ArrayList<>();
-    player = new Ship(playerTModel, new Vector3f(50, 0, 50), otherShips, input, new FlatGroundProvider(2f));
+    player = new Ship(playerTModel, new Vector3f(50, 0, 50), otherShips, input, new FlatGroundProvider(-40f));
     entities.add(player);
 
     // Player following camera
@@ -114,8 +114,7 @@ public class Game {
   public void render() {
     GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
     renderer.renderScene(entities, normalEntities, terrains, lights, camera,
-        new Vector4f((float) Math.sin(Math.toRadians(player.getRoty())), 0,
-            (float) Math.cos(Math.toRadians(player.getRoty())), 10f));
+        VecCon.toLWJGL(new Vector4f()));
     GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
     DisplayManager.updateDisplay();
     sortLights(lights, player.getPosition());
@@ -146,4 +145,9 @@ public class Game {
       distance[i - 1] = lights.get(i).getdistance(currentPosition);
     }
   }
+<<<<<<< HEAD
 }
+=======
+
+}
+>>>>>>> integration

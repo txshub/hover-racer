@@ -11,14 +11,8 @@ import gameEngine.terrains.Terrain;
 
 public class Player extends Ship {
 	
-	public Player(TexturedModel model,int textureIndex, Vector3f position, float rotx, float roty, float rotz, float scale) {
-		super(model, textureIndex, position, rotx, roty, rotz, scale);
-		velocity = new Vector3f(0,0,0);
-		initAudio();
-	}
-	
-	public Player(TexturedModel model, Vector3f position, float rotx, float roty, float rotz, float scale) {
-		super(model, position, rotx, roty, rotz, scale);
+	public Player(TexturedModel model, Vector3f position, Vector3f rotation, float scale) {
+		super(model, position, rotation, scale);
 		velocity = new Vector3f(0,0,0);
 		initAudio();
 	}

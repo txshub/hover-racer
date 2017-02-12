@@ -82,7 +82,7 @@ public class Camera {
 	}
 	
 	private void calculateCameraPosition(float horizontalDistance, float verticalDistance){
-		float theta = entity.getRoty() + angleAroundPlayer;
+		float theta = entity.getRotation().y + angleAroundPlayer;
 		offsetX = (float) (horizontalDistance * Math.sin(Math.toRadians(theta)));
 		offsetZ = (float) (horizontalDistance * Math.cos(Math.toRadians(theta)));
 		position.x = entity.getPosition().x - offsetX;

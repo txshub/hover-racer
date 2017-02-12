@@ -1,32 +1,76 @@
 package audioEngine;
 
-/*
- * Test class -- NOT IMPORTANT
+import java.util.Scanner;
+
+import sun.net.www.content.audio.x_aiff;
+
+
+/**
+ * @author Tudor Suruceanu
+ * Usage example
  */
 public class Test {
 
 	public static void main(String[] args) throws InterruptedException {
 		AudioMaster.init();
-		AudioMaster.setListenerData(0, 0, 0);
 		
-		int buffer = AudioMaster.loadSound("audioEngine/bounce.wav");
-		Source source = new Source();
-		source.setLooping(true);
-		source.play(buffer);
+		Scanner in = new Scanner(System.in);
+		String c = "";
 		
-		float xPos = 8;
-		source.setPosition(xPos, 0, 2);
+//		float pitch = 1;
+//		
+//		
+//		Source engine = AudioMaster.createSFXSource();
+//		engine.play(Sounds.ENGINE);
+//		
+//		int x = 0;
+//		
+//		Thread.sleep(3000);
+//		
+//		while (x < 500) {
+//
+//			if (pitch < 2) {
+//				pitch += 0.01f;
+//				engine.setPitch(pitch);
+//			}
+//			
+//			x++;
+//			Thread.sleep(10);
+//			
+//		}
+//		
+//		while (pitch > 1) {
+//			
+//			pitch -= 0.01f;
+//			engine.setPitch(pitch);
+//			Thread.sleep(10);
+//			
+//		}		
+//		
+//		Thread.sleep(3000);
+//		
+//		while (pitch > 0) {
+//
+//			pitch -= 0.01f;
+//			engine.setPitch(pitch);
+//			Thread.sleep(10);
+//			
+//		}		
 		
-		char c = ' ';
-		while (c != 'q') {
-			
-			xPos -= 0.03f;
-			source.setPosition(xPos, 0, 2);
-			Thread.sleep(10);
-			
-		}
+//		AudioMaster.playMusic();
+//		
+//		while (!c.equals("stop")) {
+//			
+//			if (c.equals("skip")) {
+//				AudioMaster.skipMusic();
+//			}
+//			
+//			c = in.nextLine();
+//			
+//		}
+//		
+//		AudioMaster.stopMusic();
 		
-		source.delete();
 		AudioMaster.cleanUP();
 	}
 

@@ -1,6 +1,6 @@
 package placeholders;
 
-import org.lwjgl.util.vector.Vector3f;
+import org.joml.Vector3f;
 
 /** Provides a Ship object with information about the ground below. See methods for details.
  * 

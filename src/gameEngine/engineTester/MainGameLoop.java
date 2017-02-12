@@ -14,8 +14,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
-import audioEngine.AudioMaster;
-import audioEngine.Source;
 import gameEngine.entities.Camera;
 import gameEngine.entities.Entity;
 import gameEngine.entities.Light;
@@ -35,6 +33,7 @@ import gameEngine.textures.ModelTexture;
 import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
+import gameEngine.toolbox.VecCon;
 import gameEngine.water.WaterFrameBuffers;
 import gameEngine.water.WaterRenderer;
 import gameEngine.water.WaterShader;
@@ -49,7 +48,6 @@ public class MainGameLoop {
 
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
-		AudioMaster.init();
 		AL10.alDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
 
 		/************************* Terrain ********************************/
@@ -85,7 +83,7 @@ public class MainGameLoop {
 		TexturedModel playerTModel = new TexturedModel(getModel("shipGhost", loader),
 				new ModelTexture(loader.loadTexture("ghostcloak")));
 
-		Player p1 = new Player(playerTModel, new Vector3f(50, 0, 50), 0, 0, 0, 5);
+		Player p1 = new Player(playerTModel, new Vector3f(50, 0, 50), new Vector3f(), 5);
 
 		/************************* Trees ********************************/
 
@@ -107,20 +105,12 @@ public class MainGameLoop {
 							Math.min(Math.min(temp.getHeightOfTerrain(x, z) - 2, temp.getHeightOfTerrain(x - 3, z) - 2),
 									Math.min(temp.getHeightOfTerrain(x, z - 3) - 2,
 											temp.getHeightOfTerrain(x + 3, z) - 2)),
-							temp.getHeightOfTerrain(x, z + 3) - 2), z),
-					0, 0, 0, Math.max(1f, (float) random.nextDouble() * 50f));
+					temp.getHeightOfTerrain(x, z + 3) - 2), z), 
+					new Vector3f(), 
+					Math.max(1f, (float) random.nextDouble() * 50f));
 			entity.getModel().getTexture().setReflectivity(0.5f);
 			entity.getModel().getTexture().setShineDamper(50);
 			list.add(entity);
-
-			Source source = new Source();
-			source.setPosition(entity.getPosition().x, entity.getPosition().y, entity.getPosition().z);
-			source.setLooping(true);
-			source.setVolume(2);
-			source.setPitch(1.2f);
-
-			int buffer = AudioMaster.loadSound("audioEngine/bounce.wav");
-			source.play(buffer);
 		}
 
 		/************************* Grass ********************************/
@@ -142,7 +132,8 @@ public class MainGameLoop {
 							terrains[(int) Math.max(0, Math.min(size - 1, (x / Terrain.SIZE)))][(int) Math.max(0,
 									Math.min(size - 1, (z / Terrain.SIZE)))].getHeightOfTerrain(x, z),
 							z),
-					0, 0, 0, (float) Math.max(.75f, random.nextDouble() * 4));
+					new Vector3f(), 
+					(float) Math.max(.75f, random.nextDouble() * 4));
 			list.add(entity);
 		}
 
@@ -166,7 +157,7 @@ public class MainGameLoop {
 							terrains[(int) Math.max(0, Math.min(size - 1, (x / Terrain.SIZE)))][(int) Math.max(0,
 									Math.min(size - 1, (z / Terrain.SIZE)))].getHeightOfTerrain(x, z),
 							z),
-					0, 0, 0, (float) Math.max(.5f, random.nextDouble()));
+					new Vector3f(), (float) Math.max(.5f, random.nextDouble()));
 			list.add(entity);
 		}
 
@@ -184,7 +175,7 @@ public class MainGameLoop {
 		barrel.getTexture().setShineDamper(10f);
 		barrel.getTexture().setNormalMapID(loader.loadTexture(normalObjs + "barrelNormal"));
 
-		normalEntities.add(new Entity(barrel, new Vector3f(100, 20, 100), 0, 0, 0, 1));
+		normalEntities.add(new Entity(barrel, new Vector3f(100, 20, 100), new Vector3f(), 1));
 
 		TexturedModel boulder = new TexturedModel(NormalMappedObjLoader.loadOBJ("boulder", loader),
 				new ModelTexture(loader.loadTexture(normalObjs + "boulder")));
@@ -192,7 +183,7 @@ public class MainGameLoop {
 		boulder.getTexture().setShineDamper(50f);
 		boulder.getTexture().setNormalMapID(loader.loadTexture(normalObjs + "boulderNormal"));
 
-		normalEntities.add(new Entity(boulder, new Vector3f(110, 20, 100), 0, 0, 0, 1));
+		normalEntities.add(new Entity(boulder, new Vector3f(110, 20, 100), new Vector3f(), 1));
 
 		TexturedModel crate = new TexturedModel(NormalMappedObjLoader.loadOBJ("crate", loader),
 				new ModelTexture(loader.loadTexture(normalObjs + "crate")));
@@ -200,7 +191,7 @@ public class MainGameLoop {
 		crate.getTexture().setShineDamper(10f);
 		crate.getTexture().setNormalMapID(loader.loadTexture(normalObjs + "crateNormal"));
 
-		normalEntities.add(new Entity(crate, new Vector3f(90, 20, 100), 0, 0, 0, 0.01f));
+		normalEntities.add(new Entity(crate, new Vector3f(90, 20, 100), new Vector3f(), 0.01f));
 
 		/*************************
 		 * Lights and Others
@@ -208,18 +199,18 @@ public class MainGameLoop {
 
 		Entity lightmodel1 = new Entity(
 				new TexturedModel(getModel("dragon", loader), new ModelTexture(loader.loadTexture("white"))),
-				new Vector3f((float) Math.cos(0), 100, (float) Math.sin(0)), 0, 0, 0, 5f);
+				new Vector3f((float) Math.cos(0), 100, (float) Math.sin(0)), new Vector3f(), 5f);
 		Entity lightmodel2 = new Entity(
 				new TexturedModel(getModel("dragon", loader), new ModelTexture(loader.loadTexture("white"))),
-				new Vector3f(-20, 30, -30), 0, 0, 0, 2f);
+				new Vector3f(-20, 30, -30), new Vector3f(), 2f);
 		list.add(lightmodel1);
 		list.add(lightmodel2);
 
-		Light sun = new Light(new Vector3f((float) Math.cos(0), 100, (float) Math.sin(0) + Terrain.SIZE / 2),
-				new Vector3f(1f, 1f, 1f));
-		Light light2 = new Light(new Vector3f(0, 10, 0), new Vector3f(1, 0.5f, 0.5f), new Vector3f(0.1f, 0, 0.002f));
-		Light light3 = new Light(new Vector3f(-50, 30, -30), new Vector3f(0.3f, 0.7f, 1),
-				new Vector3f(1, 0.001f, 0.001f));
+		Light sun = new Light(VecCon.toLWJGL3(new Vector3f((float) Math.cos(0), 100, (float) Math.sin(0) + Terrain.SIZE / 2)),
+				VecCon.toLWJGL3(new Vector3f(1f, 1f, 1f)));
+		Light light2 = new Light(VecCon.toLWJGL3(new Vector3f(0, 10, 0)), VecCon.toLWJGL3(new Vector3f(1, 0.5f, 0.5f)), VecCon.toLWJGL3(new Vector3f(0.1f, 0, 0.002f)));
+		// Light light3 = new Light(new Vector3f(-50, 30, -30), new
+		// Vector3f(0.3f, 0.7f, 1), new Vector3f(1,0.001f,0.001f));
 		List<Light> lights = new ArrayList<Light>();
 		lights.add(sun);
 		lights.add(light2);
@@ -251,9 +242,9 @@ public class MainGameLoop {
 		/************************* Guis ********************************/
 
 		List<GuiTexture> guis = new ArrayList<GuiTexture>();
-		GuiTexture crosshair = new GuiTexture(loader.loadTexture("crosshair"), new Vector2f(0, 0),
-				new Vector2f(64f / Display.getWidth(), 60f / Display.getHeight()));
-		// guis.add(crosshair);
+		GuiTexture crosshair = new GuiTexture(loader.loadTexture("crosshair"), new org.lwjgl.util.vector.Vector2f(0, 0),
+				new org.lwjgl.util.vector.Vector2f(64f / Display.getWidth(), 60f / Display.getHeight()));
+//		guis.add(crosshair);
 		// GuiTexture gui2 = new GuiTexture(loader.loadTexture("fern"), new
 		// Vector2f(.5f, .5f), new Vector2f(.25f, .25f));
 		// guis.add(gui);
@@ -268,9 +259,9 @@ public class MainGameLoop {
 			GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 			picker.update();
 			time += DisplayManager.getFrameTimeSeconds();
-			sun.setPosition(new Vector3f(sun.getPosition().x + (float) Math.sin(time) * 10, sun.getPosition().y,
+			sun.setPosition(new org.lwjgl.util.vector.Vector3f(sun.getPosition().x + (float) Math.sin(time) * 10, sun.getPosition().y,
 					sun.getPosition().z + (float) Math.cos(time) * 10));
-			lightmodel1.setPosition(sun.getPosition());
+			lightmodel1.setPosition(VecCon.toJOML3(sun.getPosition()));
 			// point = picker.getCurrentTerrainPoint();
 			// if (point != null) {
 			// lightmodel2.setPosition(point);
@@ -326,7 +317,6 @@ public class MainGameLoop {
 		renderer.cleanUp();
 		loader.cleanUp();
 		wfb.cleanUp();
-		AudioMaster.cleanUP();
 		DisplayManager.closeDisplay();
 
 	}
@@ -340,7 +330,7 @@ public class MainGameLoop {
 	private static void sortLights(List<Light> lights, Vector3f currentPosition) {
 		float[] distance = new float[lights.size() - 1];
 		for (int i = 1; i < lights.size(); i++) {
-			distance[i - 1] = lights.get(i).getdistance(currentPosition);
+			distance[i - 1] = lights.get(i).getdistance(VecCon.toLWJGL3(currentPosition));
 		}
 
 	}

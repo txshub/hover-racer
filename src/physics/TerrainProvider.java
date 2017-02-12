@@ -1,6 +1,6 @@
 package physics;
 
-import org.lwjgl.util.vector.Vector3f;
+import org.joml.Vector3f;
 
 import gameEngine.terrains.Terrain;
 import placeholders.GroundProvider;
@@ -17,8 +17,8 @@ public class TerrainProvider implements GroundProvider{
 	public float distanceToGround(Vector3f position, Vector3f direction) {
 		//TODO directionality
 		try{
-			float groundHeight = terrain.getHeightOfTerrain(position.getX(), position.getZ());
-			return position.getY() - groundHeight;
+			float groundHeight = terrain.getHeightOfTerrain(position.x, position.z);
+			return position.y - groundHeight;
 		}catch(ArrayIndexOutOfBoundsException e){
 			System.err.println("Vehicle out of terrain.");
 			return 5;
