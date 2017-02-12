@@ -221,6 +221,13 @@ public class Ship extends Entity {
 		if (keys.contains(Action.STRAFE_RIGHT)) accelerate2d(delta * ACCELERATION / 2, (float) Math.PI);
 		if (keys.contains(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION / 2, 0);
 		if (keys.contains(Action.JUMP)) velocity.changeY(y -> y + delta * JUMP_POWER * VERTICAL_SCALE);
+		
+		// Tudor
+		if (keys.contains(Action.MUSIC_UP)) AudioMaster.increaseMusicVolume();
+		if (keys.contains(Action.MUSIC_DOWN)) AudioMaster.decreaseMusicVolume();
+		if (keys.contains(Action.MUSIC_SKIP)) AudioMaster.skipInGameMusic();
+		if (keys.contains(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
+		if (keys.contains(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
 	}
 
 	private void doCollisions() {

@@ -12,13 +12,15 @@ public class Source {
 
 	private int sourceId;
 	private float initVolume;
+	private float currentVolume;
 	
 	public Source() {
 		
 		sourceId = AL10.alGenSources();
-		initVolume = 1;
+		initVolume = 0.5f;
+		currentVolume = 0.5f;
 		
-		setCurrentVolume(1);
+		setCurrentVolume(0.5f);
 		setPitch(1);
 		setPosition(0, 0, 0);
 		setVelocity(0, 0, 0);
@@ -108,7 +110,19 @@ public class Source {
 	 * @param volume The new value for the volume
 	 */
 	public void setCurrentVolume(float volume) {
+		if (volume > 1) {
+			volume = 1;
+		}
+		if (volume < 0) {
+			volume = 0;
+		}
+		
 		AL10.alSourcef(sourceId, AL10.AL_GAIN, volume);
+		currentVolume = volume;
+	}
+	
+	public float getCurrentVolume() {
+		return currentVolume;
 	}
 	
 	/**

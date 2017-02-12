@@ -6,7 +6,11 @@ package placeholders;
  * 
  * @author Maciej Bogacki */
 public enum Action {
-	FORWARD, BREAK, STRAFE_LEFT, STRAFE_RIGHT, TURN_LEFT, TURN_RIGHT, JUMP;
+	
+	// Tudor
+	FORWARD, BREAK, STRAFE_LEFT, STRAFE_RIGHT, TURN_LEFT, TURN_RIGHT, JUMP, MUSIC_UP, MUSIC_DOWN, SFX_UP, SFX_DOWN, MUSIC_SKIP;
 
-	public static Action[] ordered = new Action[]{FORWARD, BREAK, STRAFE_LEFT, STRAFE_RIGHT, TURN_LEFT, TURN_RIGHT, JUMP};
+	public static Action[] ordered = new Action[]{
+			FORWARD, BREAK, STRAFE_LEFT, STRAFE_RIGHT, TURN_LEFT, TURN_RIGHT, JUMP, MUSIC_UP, MUSIC_DOWN, SFX_UP, SFX_DOWN, MUSIC_SKIP
+	};
 }

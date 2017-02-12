@@ -27,6 +27,14 @@ public class LwjglController implements ControllerInt {
 		res.put(Keyboard.KEY_RIGHT, Action.TURN_RIGHT); // right arrow
 		res.put(Keyboard.KEY_LEFT, Action.TURN_LEFT); // left arrow
 		res.put(Keyboard.KEY_SPACE, Action.JUMP); // space
+		
+		// Tudor 
+		res.put(Keyboard.KEY_M, Action.MUSIC_UP); // m
+		res.put(Keyboard.KEY_N, Action.MUSIC_DOWN); // n
+		res.put(Keyboard.KEY_B, Action.SFX_UP); // b
+		res.put(Keyboard.KEY_V, Action.SFX_DOWN); // v
+		res.put(Keyboard.KEY_K, Action.MUSIC_SKIP); // k
+		
 		return res;
 	}
 
