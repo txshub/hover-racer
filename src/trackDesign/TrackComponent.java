@@ -15,14 +15,33 @@ public class TrackComponent extends JComponent {
 	
 	private ArrayList<TrackPoint> track; //The arraylist of points that make up the track
 	private long seed;
+	
+	/**
+	 * Testing method to input a predefined track
+	 * @param track
+	 */
+	public TrackComponent(ArrayList<TrackPoint> track) {
+	  super();
+	  this.track = track;
+	  this.seed = -1;
+	}
+	
 	/**
 	 * Creates the TrackComponent object
 	 */
 	public TrackComponent() {
 		super();
-		SeedTrack st = TrackMaker.makeTrack(10, 20, 30, 1, 40, 40, 4);
-		track = st.getTrack(); //Get a random track object
+		SeedTrack st = TrackMaker.makeTrack(10, 20, 30, 1, 40, 40, 4); // Generate a random track
+		track = st.getTrack();
 		seed = st.getSeed();
+	}
+	
+	/**
+	 * Return the track represented by this TrackComponent
+	 * @return the ArrayList of TrackPoints
+	 */
+	public ArrayList<TrackPoint> getTrack() {
+	  return track;
 	}
 	
 	/**

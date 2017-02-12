@@ -80,7 +80,7 @@ public class NormalMappingRenderer {
 	}
 
 	private void prepareInstance(Entity entity) {
-		Matrix4f transformationMatrix = Maths.createTransformationMatrix(VecCon.toLWJGL3(entity.getPosition()), entity.getRotation().x,
+		Matrix4f transformationMatrix = Maths.createTransformationMatrix(VecCon.toLWJGL(entity.getPosition()), entity.getRotation().x,
 				entity.getRotation().y, entity.getRotation().y, entity.getScale());
 		shader.loadTransformationMatrix(transformationMatrix);
 		shader.loadOffset(entity.getTextureXOffset(), entity.getTextureYOffset());

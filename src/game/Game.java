@@ -107,14 +107,13 @@ public class Game {
   
   public void update(double delta) {
     player.update((float) delta);
-    camera.move(terrains);
+    camera.move();
     picker.update();
   }
   
   public void render() {
     GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
-    renderer.renderScene(entities, normalEntities, terrains, lights, camera,
-        VecCon.toLWJGL(new Vector4f()));
+    renderer.renderScene(entities, normalEntities, terrains, lights, camera, new Vector4f());
     GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
     DisplayManager.updateDisplay();
     sortLights(lights, player.getPosition());
@@ -145,9 +144,5 @@ public class Game {
       distance[i - 1] = lights.get(i).getdistance(currentPosition);
     }
   }
-<<<<<<< HEAD
+  
 }
-=======
-
-}
->>>>>>> integration

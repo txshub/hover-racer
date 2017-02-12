@@ -67,7 +67,7 @@ public class EntityRenderer {
 		GL30.glBindVertexArray(0);
 	}
 	private void prepareInstance(Entity entity){
-		Matrix4f transformationMatrix = Maths.createTransformationMatrix(VecCon.toLWJGL3(entity.getPosition()),entity.getRotation().x,
+		Matrix4f transformationMatrix = Maths.createTransformationMatrix(VecCon.toLWJGL(entity.getPosition()),entity.getRotation().x,
 		    entity.getRotation().y,entity.getRotation().z,entity.getScale());
 		shader.loadTransformationMatrix(transformationMatrix);
 		shader.loadOffset(entity.getTextureXOffset(),entity.getTextureYOffset());

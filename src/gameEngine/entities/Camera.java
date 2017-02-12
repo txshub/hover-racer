@@ -47,7 +47,7 @@ public class Camera {
 		float angle = (float)Math.toDegrees(getAngle(new Point2D.Double(position.x,position.z), new Point2D.Double(entity.getPosition().x,entity.getPosition().z))+Math.PI/2);
 		
 		
-		this.yaw += ((180 - entity.getRoty()) - this.yaw)/2;
+		this.yaw += ((180 - entity.getRotation().y) - this.yaw)/2;
 //		yaw = angle;
 		if(angleAroundPlayer >= 180){
 			angleAroundPlayer -= 360;

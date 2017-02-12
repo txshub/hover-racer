@@ -18,7 +18,7 @@ public class Player extends Ship {
 	}
 
 	public void move(Terrain[][] terrains) {
-		super.increaseRotation(0, currentTurn, 0);
+		changeRotation(new Vector3f(0, currentTurn, 0));
 		checkInputs();
 		
 //		float distance = currentRunSpeed * DisplayManager.getFrameTimeSeconds();
@@ -29,17 +29,17 @@ public class Player extends Ship {
 //		dz += (float) (distance * -Math.sin(Math.toRadians(super.getRoty())));
 		
 		velocity.y = upwardsSpeed * DisplayManager.getFrameTimeSeconds();
-		increasePosition(velocity.x, velocity.y, velocity.z);
+		changePosition(new Vector3f(velocity.x, velocity.y, velocity.z));
 		
 		float terrainHeight = terrains[(int) Math.max(0,
-				Math.min(terrains.length-1, (super.getPosition().x / Terrain.SIZE)))][(int) Math.max(0,
+				Math.min(terrains.length-1, (getPosition().x / Terrain.SIZE)))][(int) Math.max(0,
 						Math.min(terrains[1].length - 1, (getPosition().z / Terrain.SIZE)))].getHeightOfTerrain(
 								getPosition().x, getPosition().z);
 		
 		if (super.getPosition().y <= terrainHeight + 5) {
 			upwardsSpeed = 0;
 			isInAir = false;
-			super.getPosition().y = terrainHeight + 5;
+			getPosition().y = terrainHeight + 5;
 		} else {
 			upwardsSpeed += GRAVITY * DisplayManager.getFrameTimeSeconds();
 			isInAir = true;

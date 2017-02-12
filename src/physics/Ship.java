@@ -203,7 +203,7 @@ public class Ship extends Entity {
 
 	/** Changes the velocity to account for a collision with a different ship */
 	private void collideWith(Ship ship) {
-		velocity.add(ship.getVelocity().substract(this.velocity).multiply(ship.getMass()).multiply(1 / this.getMass()).multiply(0.5));
+		velocity.add(ship.getVelocity().sub(this.velocity).mul(ship.getMass()).mul(1 / this.getMass()).mul(0.5f));
 	}
 
 	/** Corrects an angle to fit between 0 and 2pi (e.g. 7.13pi->1.13pi, -0.13pi->1.87pi) */
