@@ -16,7 +16,7 @@ public class Source {
 		sourceId = AL10.alGenSources();
 		initVolume = 1;
 		
-		setCurrentVolume(1);
+		setCurrentVolume(0.5f * initVolume);
 		setPitch(1);
 		setPosition(0, 0, 0);
 		setVelocity(0, 0, 0);

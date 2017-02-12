@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import audioEngine.AudioMaster;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -39,6 +40,7 @@ public class MusicSlider extends HBox {
 						value.setText(Integer.toString(i));
 						
 						//TUDOR ADD AUDIO STUFF
+						AudioMaster.setMusicVolume((float)(i / 10.0));
 					}
 					
 				);
