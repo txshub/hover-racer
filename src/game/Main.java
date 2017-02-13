@@ -60,13 +60,16 @@ public class Main {
       
       // Log the ups and fps to the window title every 1000ms
       if (System.currentTimeMillis() > timer + 1000) {
-        System.out.println("Hover Racer - ups: " + ups + " | fps: " + fps);
+//        System.out.println("Hover Racer - ups: " + ups + " | fps: " + fps);
         timer += 1000;
         fps = 0;
         ups = 0;
       }
+      if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
+    	  break;
+      }
     }
-    
+
     game.cleanUp();
   }
   
