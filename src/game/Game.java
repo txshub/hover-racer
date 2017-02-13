@@ -93,9 +93,24 @@ public class Game {
     trackSeed = st.getSeed();
     
     float trackWidth = 10;
-    float trackHeight = 40; 
+    float trackHeight = 0; 
     
-    float[] vertices = new float[trackPoints.size() * 3 * 2];
+    float[] vertices = new float[trackPoints.size() * 3 * 3];
+    int[] indices = new int[trackPoints.size() * 3 * 4];
+    float[] texCoords = new float[indices.length];
+    float[] normals = new float[vertices.length];
+    
+    // TODO Actually implement textures
+    for (int i = 0; i < texCoords.length; i++) {
+      texCoords[i] = 0;
+    }
+    
+    // TODO Actually implement normals
+    for (int i = 0; i < normals.length; i += 3) {
+      normals[i] = 0;
+      normals[i+1] = 1;
+      normals[i+2] = 0;
+    }
     
     for (int i = 0; i < trackPoints.size(); i++) {
       TrackPoint curPoint = trackPoints.get(i);
@@ -107,20 +122,44 @@ public class Game {
       Vector2f left = new Vector2f(-dirVec.y, dirVec.x).mul(trackWidth / 2);
       Vector2f right = new Vector2f(dirVec.y, -dirVec.x).mul(trackWidth / 2);
       
-      vertices[i * 6] = curPoint.getX() + left.x;
-      vertices[i * 6 + 1] = trackHeight;
-      vertices[i * 6 + 2] = curPoint.getY() + left.y;
+      vertices[i * 9] = curPoint.getX() + left.x;
+      vertices[i * 9 + 1] = trackHeight;
+      vertices[i * 9 + 2] = curPoint.getY() + left.y;
       
-      vertices[i * 6 + 3] = curPoint.getX() + right.x;
-      vertices[i * 6 + 4] = trackHeight;
-      vertices[i * 6 + 5] = curPoint.getY() + right.y;
+      vertices[i * 9 + 3] = curPoint.getX();
+      vertices[i * 9 + 4] = trackHeight;
+      vertices[i * 6 + 5] = curPoint.getY();
+      
+      vertices[i * 6 + 6] = curPoint.getX() + right.x;
+      vertices[i * 6 + 7] = trackHeight;
+      vertices[i * 6 + 8] = curPoint.getY() + right.y;
+      
+      if (i > 0) {
+        int k = i * 3;
+        
+        indices[i * 12 + 0] = k - 3;
+        indices[i * 12 + 1] = k - 2;
+        indices[i * 12 + 2] = k;
+        
+        indices[i * 12 + 3] = k - 3;
+        indices[i * 12 + 4] = k - 2;
+        indices[i * 12 + 5] = k + 1;
+        
+        indices[i * 12 + 6] = k - 1;
+        indices[i * 12 + 7] = k + 2;
+        indices[i * 12 + 8] = k - 2;
+        
+        indices[i * 12 + 9] = k - 1;
+        indices[i * 12 + 10] = k + 1;
+        indices[i * 12 + 11] = k - 2;
+      }
     }
     
     TexturedModel trackModel = new TexturedModel(
-        loader.loadToVAO(vertices, 3),
-        new ModelTexture(loader.loadTexture("path")));
+        loader.loadToVAO(vertices, texCoords, normals, indices),
+        new ModelTexture(loader.loadTexture("mud")));
     
-    Entity track = new Entity(trackModel, new Vector3f(), new Vector3f(), 1f);
+    Entity track = new Entity(trackModel, new Vector3f(20, 0, 20), new Vector3f(), 1f);
     entities.add(track);
     
     
@@ -142,7 +181,7 @@ public class Game {
         new ModelTexture(loader.loadTexture("newShipTexture")));
     LwjglController input = new LwjglController();
     ArrayList<Ship> otherShips = new ArrayList<>();
-    player = new Ship(playerTModel, new Vector3f(50, 0, 50), otherShips, input, new FlatGroundProvider(-40f));
+    player = new Ship(playerTModel, new Vector3f(50, 20, 50), otherShips, input, new FlatGroundProvider(-40f));
     entities.add(player);
 
     // Player following camera
