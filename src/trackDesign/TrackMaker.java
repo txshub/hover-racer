@@ -59,6 +59,7 @@ public class TrackMaker {
 			seperatePoints(circuit, minDist); //Seperate the points again
 		}
 		mergeClosePoints(circuit, minDist);
+		if(circuit.size() < 3) return makeTrack(random.nextLong(),minTrackPoints,maxTrackPoints,minDist,seperateIterations,difficulty,maxDisp,subDivs); //If the track generation has failed spectatularly, try again
 		ArrayList<TrackPoint> finalCircuit = SplineUtils.dividePoints(circuit, subDivs); //Apply smoothing
 		centreTrack(finalCircuit); //Centre the track so it doesn't go off screen at all
 		return new SeedTrack(seed,finalCircuit); //Return this final track after smoothing and centreing (however the hell you spell that word, I take CS not english)
