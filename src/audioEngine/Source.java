@@ -20,7 +20,7 @@ public class Source {
 		initVolume = 0.5f;
 		currentVolume = 0.5f;
 		
-		setCurrentVolume(0.5f);
+		setCurrentVolume(0.5f * initVolume);
 		setPitch(1);
 		setPosition(0, 0, 0);
 		setVelocity(0, 0, 0);
