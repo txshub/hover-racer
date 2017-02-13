@@ -31,7 +31,7 @@ public class Window {
     track.add(new TrackPoint(120, 140));
     track.add(new TrackPoint(80, 200));
     
-    TrackComponent trackComponent = new TrackComponent(track);
+    TrackComponent trackComponent = new TrackComponent();
     track = trackComponent.getTrack();
     
     ShipManager shipManager = new ShipManager();
