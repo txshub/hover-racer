@@ -69,8 +69,7 @@ public class Main {
     	  break;
       }
     }
-    Game.input.close = true;
-    Game.input.interrupt();
+
     game.cleanUp();
   }
   
