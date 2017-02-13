@@ -2,8 +2,13 @@ package game;
 
 import java.awt.GraphicsEnvironment;
 
+import org.lwjgl.input.Keyboard;
+
+import placeholders.InputController;
+
 public class Main {
 
+	
   public static void main(String[] args) {
     Game game = new Game();
     
@@ -61,6 +66,8 @@ public class Main {
         ups = 0;
       }
     }
+    
+    game.cleanUp();
   }
   
 }

@@ -26,61 +26,62 @@ public class MasterRenderer {
 	private static final float FOV = 70f;
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 10000f;
-	
-	public static final float R = 100/255f;
-	public static final float G = 100/255f;
-	public static final float B = 100/255f;
+
+	public static final float R = 100 / 255f;
+	public static final float G = 100 / 255f;
+	public static final float B = 100 / 255f;
 
 	Matrix4f projectionMatrix;
-	
+
 	private EntityRenderer renderer;
 	private StaticShader shader = new StaticShader();
-	
+
 	private TerrainRenderer terrainRenderer;
 	private TerrainShader terrainShader = new TerrainShader();
-	
+
 	private NormalMappingRenderer normalMapRend;
-	
+
 	private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
 	private Map<TexturedModel, List<Entity>> normalEntities = new HashMap<TexturedModel, List<Entity>>();
 	private List<Terrain> terrains = new ArrayList<Terrain>();
-	
+
 	private SkyboxRenderer skyboxRenderer;
-	
+
 	public MasterRenderer(Loader loader) {
 
 		enableCulling();
 		createProjectionMatrix();
-		renderer = new EntityRenderer(shader,projectionMatrix);
+		renderer = new EntityRenderer(shader, projectionMatrix);
 		terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
 		skyboxRenderer = new SkyboxRenderer(loader, projectionMatrix);
 		normalMapRend = new NormalMappingRenderer(projectionMatrix);
-		
+
 	}
-	
-	public void prepare(){
-		
+
+	public void prepare() {
+
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT|GL11.GL_DEPTH_BUFFER_BIT);
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		GL11.glClearColor(R, G, B, 1f);
 	}
-	
-	public static void enableCulling(){
+
+	public static void enableCulling() {
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glCullFace(GL11.GL_BACK);
 	}
-	
-	public static void disableCulling(){
+
+	public static void disableCulling() {
 		GL11.glDisable(GL11.GL_CULL_FACE);
 	}
-	
-	public Matrix4f getProjectionMatrix(){
+
+	public Matrix4f getProjectionMatrix() {
 		return projectionMatrix;
 	}
-	
-	public void renderScene(List<Entity> entities, List<Entity> normalEntities, Terrain[][] terrains, List<Light> lights, Camera camera, org.joml.Vector4f clipPlane1){
+
+	public void renderScene(List<Entity> entities, List<Entity> normalEntities, Terrain[][] terrains,
+			List<Light> lights, Camera camera, org.joml.Vector4f clipPlane1) {
 		Vector4f clipPlane = VecCon.toLWJGL(clipPlane1);
-		
+
 		for (Entity entity2 : entities) {
 			processEntity(entity2);
 		}
@@ -94,9 +95,9 @@ public class MasterRenderer {
 		}
 		render(lights, camera, clipPlane);
 	}
-	
-	public void render(List<Light> lights, Camera camera, Vector4f clipPlane){
-		
+
+	public void render(List<Light> lights, Camera camera, Vector4f clipPlane) {
+
 		prepare();
 		shader.start();
 		shader.loadClipPlane(clipPlane);
@@ -105,9 +106,9 @@ public class MasterRenderer {
 		shader.loadViewMatrix(camera);
 		renderer.render(entities);
 		shader.stop();
-		
+
 		normalMapRend.render(normalEntities, clipPlane, lights, camera);
-		
+
 		terrainShader.start();
 		terrainShader.loadClipPlane(clipPlane);
 		terrainShader.loadSkyColour(R, G, B);
@@ -115,51 +116,53 @@ public class MasterRenderer {
 		terrainShader.loadViewMatrix(camera);
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
-		
-		skyboxRenderer.render(camera,R,G,B);
-		
+
+		skyboxRenderer.render(camera, R, G, B);
+
 		normalEntities.clear();
 		entities.clear();
 		terrains.clear();
-		
+
 	}
-	
-	public void processTerrain(Terrain terrain){
+
+	public void processTerrain(Terrain terrain) {
 		terrains.add(terrain);
 	}
-	
-	public void processEntity(Entity entity){
+
+	public void processEntity(Entity entity) {
 		TexturedModel texturedModel = entity.getModel();
-		List<Entity> batch = entities.get(texturedModel);
-		if(batch!=null){
-			batch.add(entity);
-		}else{
-			List<Entity> newBatch = new ArrayList<Entity>();
-			newBatch.add(entity);
-			entities.put(texturedModel, newBatch);			
+		if (texturedModel != null) {
+			List<Entity> batch = entities.get(texturedModel);
+			if (batch != null) {
+				batch.add(entity);
+			} else {
+				List<Entity> newBatch = new ArrayList<Entity>();
+				newBatch.add(entity);
+				entities.put(texturedModel, newBatch);
+			}
 		}
-		
+
 	}
-	
-	public void processNormalEntity(Entity entity){
+
+	public void processNormalEntity(Entity entity) {
 		TexturedModel texturedModel = entity.getModel();
 		List<Entity> batch = normalEntities.get(texturedModel);
-		if(batch!=null){
+		if (batch != null) {
 			batch.add(entity);
-		}else{
+		} else {
 			List<Entity> newBatch = new ArrayList<Entity>();
 			newBatch.add(entity);
-			normalEntities.put(texturedModel, newBatch);			
+			normalEntities.put(texturedModel, newBatch);
 		}
-		
+
 	}
-	
-	private void createProjectionMatrix(){
-		float aspectRatio = (float)Display.getWidth() / (float) Display.getHeight();
-		float y_scale = (float)((1f / Math.tan(Math.toRadians(FOV/2f))) * aspectRatio);
+
+	private void createProjectionMatrix() {
+		float aspectRatio = (float) Display.getWidth() / (float) Display.getHeight();
+		float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
 		float x_scale = y_scale / aspectRatio;
 		float frustum_length = FAR_PLANE - NEAR_PLANE;
-		
+
 		projectionMatrix = new Matrix4f();
 		projectionMatrix.m00 = x_scale;
 		projectionMatrix.m11 = y_scale;
@@ -168,11 +171,11 @@ public class MasterRenderer {
 		projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
 		projectionMatrix.m33 = 0;
 	}
-	
-	public void cleanUp(){
+
+	public void cleanUp() {
 		shader.cleanUp();
 		normalMapRend.cleanUp();
 		terrainShader.cleanUp();
 	}
-	
+
 }

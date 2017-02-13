@@ -6,6 +6,7 @@ import java.util.List;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.Display;
@@ -31,7 +32,7 @@ import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
 import physics.Ship;
 import placeholders.FlatGroundProvider;
-import placeholders.LwjglController;
+import placeholders.InputController;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
@@ -51,13 +52,21 @@ public class Game {
   private long trackSeed;
   private ArrayList<TrackPoint> trackPoints;
   
+  private boolean running;
+  
   public Game() {
     init();
   }
+
+  public static InputController input;
   
   private void init() {
+    running = true;
+    
     DisplayManager.createDisplay();
     loader = new Loader();
+    Game.input = new InputController();
+    Game.input.start();
     AudioMaster.init();
     AL10.alDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
 
@@ -223,7 +232,6 @@ public class Game {
     // Player Ship
     TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
         new ModelTexture(loader.loadTexture("newShipTexture")));
-    LwjglController input = new LwjglController();
     ArrayList<Ship> otherShips = new ArrayList<>();
     player = new Ship(playerTModel, new Vector3f(50, 20, 50), otherShips, input, new FlatGroundProvider(-40f));
     entities.add(player);
@@ -240,6 +248,9 @@ public class Game {
   }
   
   public void update(double delta) {
+    // Check if the escape key was pressed to exit the game
+    if (input.checkAction(InputController.Action.EXIT)) running = false;
+    
     player.update((float) delta);
     camera.move();
     picker.update();
@@ -257,12 +268,14 @@ public class Game {
     guiRender.cleanUp();
     renderer.cleanUp();
     loader.cleanUp();
+    InputController.close = true;
+    input.interrupt();
     AudioMaster.cleanUP();
     DisplayManager.closeDisplay();
   }
 
   public boolean shouldClose() {
-    return Display.isCloseRequested();
+    return Display.isCloseRequested() || !running;
   }
 
   private static RawModel getModel(String fileName, Loader loader) {

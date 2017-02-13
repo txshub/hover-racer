@@ -4,15 +4,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.joml.Vector3f;
+
 import gameEngine.entities.Entity;
 import gameEngine.models.TexturedModel;
-import placeholders.Action;
 import placeholders.ControllerInt;
 import placeholders.ExportedShip;
 import placeholders.FakeController;
 import placeholders.FakeServerProvider;
 import placeholders.FlatGroundProvider;
 import placeholders.GroundProvider;
+import placeholders.InputController;
+import placeholders.InputController.Action;
 import placeholders.ServerShipProvider;
 
 /** A single ship entity. Can be controlled by an AI or the player. Handles all the physics, namely (currently):
@@ -59,7 +61,7 @@ public class Ship extends Entity {
 	private Vector3 rotationalMomentum;
 	private float mass;
 	private float size;
-	private ControllerInt controller;
+	private InputController controller;
 	private Collection<Ship> otherShips;
 	private ServerShipProvider server;
 	private ExportedShip fromServer;
@@ -69,13 +71,6 @@ public class Ship extends Entity {
 	double deltaSum=0;
 
 
-	/** Creates a ship with position (0,0,0), no inputs an no other ships. For testing only */
-	public Ship() {
-		this(new Vector3f(0, 0, 0), new FakeController());
-	}
-	public Ship(Vector3f startingPosition, ControllerInt controller) {
-		this(null, startingPosition, new ArrayList<>(), controller, new FlatGroundProvider(0));
-	}
 	/** Creates a new server-controlled ship
 	 * 
 	 * @param startingPosition Vector describing this ship's starting position.
@@ -83,20 +78,20 @@ public class Ship extends Entity {
 	 * @param server Object providing data about the ship, as described in the interface */
 	public Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, ServerShipProvider server,
 		GroundProvider ground) {
-		this(model, startingPosition, otherShips, new FakeController(), server, ground);
+		this(model, startingPosition, otherShips, new InputController(), server, ground);
 	}
 	/** Creates a player-controlled ship
 	 * 
 	 * @param startingPosition Vector describing this ship's starting position
 	 * @param otherShips Other ships to possibly collide with
 	 * @param controller Controlled providing player's desired actions, as described in the interface */
-	public Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, ControllerInt controller,
+	public Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, InputController controller,
 		GroundProvider ground) {
 		this(model, startingPosition, otherShips, controller, new FakeServerProvider(), ground);
 	}
 
 
-	private Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, ControllerInt controller,
+	private Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, InputController controller,
 		ServerShipProvider server, GroundProvider ground) {
 		super(model, startingPosition, new Vector3(0,0,0), 1);
 		this.position = new Vector3(startingPosition);
@@ -171,25 +166,23 @@ public class Ship extends Entity {
 	 * and ServerShip.
 	 * 
 	 * @param controller2 */
-	private void handleControls(float delta, ControllerInt conn) {
-		if (conn == null) return; // Safeguard against first few frames before receiving any data
-		Collection<Action> keys = conn.getPressedKeys();
+	private void handleControls(float delta) {
 		/* if (keys.contains(Action.TURN_RIGHT)) rotation.changeY(y -> correctAngle(y - delta * TURN_SPEED));
 		 * if (keys.contains(Action.TURN_LEFT)) rotation.changeY(y -> correctAngle(y + delta * TURN_SPEED)); */
-		if (keys.contains(Action.TURN_RIGHT)){
+		if (controller.checkAction(Action.TURN_RIGHT)){
 			rotationalMomentum.changeY(y -> y - delta * TURN_SPEED);
 			rotationalMomentum.changeZ(z->z+delta*TURN_SPEED*SPEED_OF_ROTATION_WHILE_TURNING);
 		}
-		if (keys.contains(Action.TURN_LEFT)){
+		if (controller.checkAction(Action.TURN_LEFT)){
 			rotationalMomentum.changeY(y -> y + delta * TURN_SPEED);
 			rotationalMomentum.changeZ(z->z-delta*TURN_SPEED*SPEED_OF_ROTATION_WHILE_TURNING);
 		}
-		if (keys.contains(Action.FORWARD)) accelerate2d(delta * ACCELERATION, (float) Math.PI * 1.5f);
-		if (keys.contains(Action.BREAK)) airResistance(delta * BREAK_POWER); // Breaking slows you down, no matter how you're moving
+		if (controller.checkAction(Action.FORWARD)) accelerate2d(delta * ACCELERATION, (float) Math.PI * 1.5f);
+		if (controller.checkAction(Action.BREAK)) airResistance(delta * BREAK_POWER); // Breaking slows you down, no matter how you're moving
 		// if (keys.contains(Action.BREAK)) accelerate2d(delta * ACCELERATION, Math.PI * 1.5); // Breaking accelerates backwards
-		if (keys.contains(Action.STRAFE_RIGHT)) accelerate2d(delta * ACCELERATION / 2, (float) Math.PI);
-		if (keys.contains(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION / 2, 0);
-		if (keys.contains(Action.JUMP)) velocity.changeY(y -> y + delta * JUMP_POWER * VERTICAL_SCALE);
+		if (controller.checkAction(Action.STRAFE_RIGHT)) accelerate2d(delta * ACCELERATION / 2, (float) Math.PI);
+		if (controller.checkAction(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION / 2, 0);
+		if (controller.checkAction(Action.JUMP)) velocity.changeY(y -> y + delta * JUMP_POWER * VERTICAL_SCALE);
 	}
 
 	private void doCollisions() {
@@ -227,7 +220,7 @@ public class Ship extends Entity {
 		deltaSum+=preDelta;
 		//deltaSum++;
 		if(System.nanoTime()-lastPrint>1000000000){
-			System.out.println(deltaSum);
+//			System.out.println(deltaSum);
 			lastPrint=System.nanoTime();
 			deltaSum=0;
 		}
@@ -242,8 +235,8 @@ public class Ship extends Entity {
 			return;
 		}
 
-		if (controller != null) handleControls(delta, controller); // Steer the ship with user controls
-		else handleControls(delta, fromServer); // Steer the ship with controls from server (only when missed packets)
+		if (controller != null) handleControls(delta); // Steer the ship with user controls
+		else handleControls(delta); // Steer the ship with controls from server (only when missed packets)
 		// Do physics
 		airResistance(delta);
 		doCollisions();
@@ -266,10 +259,6 @@ public class Ship extends Entity {
 	/** @return This ship's mass */
 	public float getMass() {
 		return mass;
-	}
-
-	public float[] export() {
-		return (new ExportedShip(position, velocity, controller.getPressedKeys())).toNumbers();
 	}
 
 }
