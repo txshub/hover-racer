@@ -2,6 +2,10 @@ package gameEngine.entities;
 
 import org.joml.Vector3f;
 
+/**
+ * @author rtm592
+ *
+ */
 public class Light {
 	
 	private Vector3f position;

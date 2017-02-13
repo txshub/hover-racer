@@ -1,5 +1,9 @@
 package gameEngine.normalMappingObjConverter;
 
+/**
+ * @author rtm592
+ *
+ */
 public class ModelDataNM {
 
 	private float[] vertices;

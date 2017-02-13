@@ -15,6 +15,10 @@ import gameEngine.renderEngine.Loader;
 import gameEngine.renderEngine.MasterRenderer;
 import gameEngine.toolbox.Maths;
  
+/**
+ * @author rtm592
+ *
+ */
 public class WaterRenderer {
  
     private RawModel quad;

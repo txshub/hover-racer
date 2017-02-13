@@ -25,6 +25,10 @@ import de.matthiasmann.twl.utils.PNGDecoder.Format;
 import gameEngine.models.RawModel;
 import gameEngine.textures.TextureData;
 
+/**
+ * @author rtm592
+ *
+ */
 public class Loader {
 
 	List<Integer> vaos = new ArrayList<Integer>();

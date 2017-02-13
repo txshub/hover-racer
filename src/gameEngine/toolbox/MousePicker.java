@@ -10,6 +10,10 @@ import org.lwjgl.util.vector.Vector4f;
 import gameEngine.entities.Camera;
 import gameEngine.terrains.Terrain;
 
+/**
+ * @author rtm592
+ *
+ */
 public class MousePicker {
 
 	private static final int RECURSION_COUNT = 200;

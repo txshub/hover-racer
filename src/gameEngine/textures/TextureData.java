@@ -2,6 +2,10 @@ package gameEngine.textures;
 
 import java.nio.ByteBuffer;
 
+/**
+ * @author rtm592
+ *
+ */
 public class TextureData {
 	
 	private int width, height;

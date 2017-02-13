@@ -15,6 +15,10 @@ import gameEngine.terrains.Terrain;
 import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.Maths;
 
+/**
+ * @author rtm592
+ *
+ */
 public class TerrainRenderer {
 
 	private TerrainShader shader;

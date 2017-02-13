@@ -1,5 +1,9 @@
 package gameEngine.objConverter;
 
+/**
+ * @author rtm592
+ *
+ */
 public class ModelData {
 
 	private float[] vertices;

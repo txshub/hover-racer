@@ -4,6 +4,10 @@ import org.joml.Vector3f;
 
 import gameEngine.models.TexturedModel;
 
+/**
+ * @author rtm592
+ *
+ */
 public class Entity {
 
 	private TexturedModel model;

@@ -9,6 +9,10 @@ import gameEngine.models.TexturedModel;
 import gameEngine.renderEngine.DisplayManager;
 import gameEngine.terrains.Terrain;
 
+/**
+ * @author rtm592
+ *
+ */
 public class Player extends Ship {
 	
 	public Player(TexturedModel model, Vector3f position, Vector3f rotation, float scale) {

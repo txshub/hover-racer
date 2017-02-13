@@ -5,6 +5,10 @@ import org.joml.Vector3f;
 import audioEngine.Source;
 import gameEngine.models.TexturedModel;
 
+/**
+ * @author rtm592
+ *
+ */
 public class Ship extends Entity{
 
 	protected final float TURN_SPEED = 120;

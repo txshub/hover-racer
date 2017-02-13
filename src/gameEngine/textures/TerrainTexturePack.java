@@ -1,5 +1,9 @@
 package gameEngine.textures;
 
+/**
+ * @author rtm592
+ *
+ */
 public class TerrainTexturePack {
 
 	private TerrainTexture backgroundTexture;

@@ -17,6 +17,10 @@ import gameEngine.textures.ModelTexture;
 import gameEngine.toolbox.Maths;
 import gameEngine.toolbox.VecCon;
 
+/**
+ * @author rtm592
+ *
+ */
 public class EntityRenderer {
 	
 	private StaticShader shader;

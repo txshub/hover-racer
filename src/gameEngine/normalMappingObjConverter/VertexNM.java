@@ -5,6 +5,10 @@ import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
 
+/**
+ * @author rtm592
+ *
+ */
 public class VertexNM {
 	
 	private static final int NO_INDEX = -1;

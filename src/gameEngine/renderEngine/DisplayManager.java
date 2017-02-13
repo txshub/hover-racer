@@ -10,6 +10,10 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.PixelFormat;
 
+/**
+ * @author rtm592
+ *
+ */
 public class DisplayManager {
 
 	public static final int WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;

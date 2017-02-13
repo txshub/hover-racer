@@ -11,6 +11,10 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+/**
+ * @author rtm592
+ *
+ */
 public class OBJFileLoader {
 
 	private static final String RES_LOC = "src/resources/objectModels/";

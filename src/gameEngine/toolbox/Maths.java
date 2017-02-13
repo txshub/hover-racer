@@ -6,6 +6,10 @@ import org.lwjgl.util.vector.Vector3f;
 
 import gameEngine.entities.Camera;
 
+/**
+ * @author rtm592
+ *
+ */
 public class Maths {
 	
 	// used for conversion to a gui

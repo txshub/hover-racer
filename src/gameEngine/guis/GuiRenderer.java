@@ -13,6 +13,10 @@ import gameEngine.renderEngine.Loader;
 import gameEngine.toolbox.Maths;
 import gameEngine.toolbox.VecCon;
 
+/**
+ * @author rtm592
+ *
+ */
 public class GuiRenderer {
 
 	private RawModel quad;

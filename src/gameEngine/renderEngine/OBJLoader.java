@@ -12,6 +12,10 @@ import org.lwjgl.util.vector.Vector3f;
 
 import gameEngine.models.RawModel;
 
+/**
+ * @author rtm592
+ *
+ */
 public class OBJLoader {
 
 	public static RawModel loadObject(String fileName, Loader loader){

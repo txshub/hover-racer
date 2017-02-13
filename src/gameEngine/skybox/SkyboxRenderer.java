@@ -11,6 +11,10 @@ import gameEngine.models.RawModel;
 import gameEngine.renderEngine.DisplayManager;
 import gameEngine.renderEngine.Loader;
 
+/**
+ * @author rtm592
+ *
+ */
 public class SkyboxRenderer {
 
 	private static final float SIZE = 1500f;

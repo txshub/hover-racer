@@ -2,6 +2,10 @@ package gameEngine.water;
 
 import gameEngine.terrains.Terrain;
 
+/**
+ * @author rtm592
+ *
+ */
 public class WaterTile {
 
 	public static final float TILE_SIZE = (Terrain.SIZE/2);

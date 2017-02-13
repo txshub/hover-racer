@@ -11,6 +11,10 @@ import gameEngine.entities.Light;
 import gameEngine.shaders.ShaderProgram;
 import gameEngine.toolbox.VecCon;
 
+/**
+ * @author rtm592
+ *
+ */
 public class NormalMappingShader extends ShaderProgram{
 	
 	private static final String VERTEX_FILE = "src/gameEngine/normalMappingRenderer/normalMapVShader.txt";

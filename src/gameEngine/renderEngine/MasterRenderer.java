@@ -21,6 +21,10 @@ import gameEngine.skybox.SkyboxRenderer;
 import gameEngine.terrains.Terrain;
 import gameEngine.toolbox.VecCon;
 
+/**
+ * @author rtm592
+ *
+ */
 public class MasterRenderer {
 
 	private static final float FOV = 70f;

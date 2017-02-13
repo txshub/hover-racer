@@ -9,6 +9,10 @@ import gameEngine.shaders.ShaderProgram;
 import gameEngine.toolbox.Maths;
 import gameEngine.toolbox.VecCon;
  
+/**
+ * @author rtm592
+ *
+ */
 public class WaterShader extends ShaderProgram {
  
     private final static String VERTEX_FILE = "src/gameEngine/water/waterVertex.txt";

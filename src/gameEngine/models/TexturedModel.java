@@ -2,6 +2,10 @@ package gameEngine.models;
 
 import gameEngine.textures.ModelTexture;
 
+/**
+ * @author rtm592
+ *
+ */
 public class TexturedModel {
 	
 	private RawModel rawModel;

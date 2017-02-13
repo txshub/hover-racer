@@ -14,6 +14,10 @@ import org.lwjgl.util.vector.Vector3f;
 import gameEngine.models.RawModel;
 import gameEngine.renderEngine.Loader;
 
+/**
+ * @author rtm592
+ *
+ */
 public class NormalMappedObjLoader {
 
 	private static final String RES_LOC = "src/resources/normalMappedModels/";

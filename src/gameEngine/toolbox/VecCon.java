@@ -1,5 +1,9 @@
 package gameEngine.toolbox;
 
+/**
+ * @author rtm592
+ *
+ */
 public class VecCon {
 
 	public static org.lwjgl.util.vector.Vector2f toLWJGL(org.joml.Vector2f vec){

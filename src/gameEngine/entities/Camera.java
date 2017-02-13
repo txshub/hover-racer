@@ -7,6 +7,10 @@ import org.lwjgl.util.vector.Vector3f;
 
 import gameEngine.terrains.Terrain;
 
+/**
+ * @author rtm592
+ *
+ */
 public class Camera {
 
 	private float distanceFromPlayer = 100;

@@ -15,6 +15,10 @@ import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.Maths;
 
+/**
+ * @author rtm592
+ *
+ */
 public class Terrain {
 
 	public static final float SIZE = 800, MAX_HEIGHT = 40, MAX_PIXEL_COLOR = 256 * 256 * 256;

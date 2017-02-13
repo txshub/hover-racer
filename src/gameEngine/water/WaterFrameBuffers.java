@@ -8,6 +8,10 @@ import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
  
+/**
+ * @author rtm592
+ *
+ */
 public class WaterFrameBuffers {
  
     protected static final int REFLECTION_WIDTH = 320;

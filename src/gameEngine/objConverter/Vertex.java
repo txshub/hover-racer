@@ -2,6 +2,10 @@ package gameEngine.objConverter;
 
 import org.lwjgl.util.vector.Vector3f;
 
+/**
+ * @author rtm592
+ *
+ */
 public class Vertex {
 	
 	private static final int NO_INDEX = -1;

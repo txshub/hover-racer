@@ -11,6 +11,10 @@ import gameEngine.entities.Light;
 import gameEngine.toolbox.Maths;
 import gameEngine.toolbox.VecCon;
 
+/**
+ * @author rtm592
+ *
+ */
 public class TerrainShader extends ShaderProgram {
 
 	private static final String VERTEX_FILE = "src/gameEngine/shaders/terrainVertexShader.txt";

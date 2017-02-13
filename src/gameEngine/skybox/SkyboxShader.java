@@ -10,6 +10,10 @@ import gameEngine.shaders.ShaderProgram;
 import gameEngine.toolbox.Maths;
 import gameEngine.toolbox.VecCon;
 
+/**
+ * @author rtm592
+ *
+ */
 public class SkyboxShader extends ShaderProgram{
 
 	private static final String VERTEX_FILE = "src/gameEngine/skybox/skyboxVertexShader.txt";

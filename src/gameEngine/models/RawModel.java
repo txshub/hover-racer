@@ -1,5 +1,9 @@
 package gameEngine.models;
 
+/**
+ * @author rtm592
+ *
+ */
 public class RawModel {
 
 	private int vaoID;

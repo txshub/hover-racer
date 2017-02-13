@@ -2,6 +2,10 @@ package gameEngine.guis;
 
 import org.joml.Vector2f;
 
+/**
+ * @author rtm592
+ *
+ */
 public class GuiTexture {
 
 	private int texture;
