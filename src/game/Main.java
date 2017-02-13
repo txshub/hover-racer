@@ -6,6 +6,11 @@ import org.lwjgl.input.Keyboard;
 
 import placeholders.InputController;
 
+/**
+ * 
+ * @author Reece Bennett
+ *
+ */
 public class Main {
 
 	

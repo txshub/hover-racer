@@ -2,6 +2,11 @@ package ai;
 
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author Reece Bennett
+ *
+ */
 public class ShipManager {
 
   private ArrayList<Ship> ships;

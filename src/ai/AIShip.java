@@ -6,6 +6,11 @@ import org.joml.Vector2f;
 
 import trackDesign.TrackPoint;
 
+/**
+ * 
+ * @author Reece Bennett
+ *
+ */
 public class AIShip extends Ship {
   
   private ArrayList<TrackPoint> track;
