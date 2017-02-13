@@ -8,6 +8,7 @@ import gameEngine.entities.Camera;
 
 public class Maths {
 	
+	// used for conversion to a gui
 	public static Matrix4f createTransformationMatrix(Vector2f translation, Vector2f scale) {
 		Matrix4f matrix = new Matrix4f();
 		matrix.setIdentity();

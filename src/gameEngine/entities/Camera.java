@@ -38,7 +38,7 @@ public class Camera {
 //		Mouse.setCursorPosition(Display.getWidth()/2, Display.getHeight()/2);
 		calculateZoom();
 		calculatePitch();
-		calculateAngleAroundEntity();
+//		calculateAngleAroundEntity();
 		
 		float horizontalDistance = calculateHorizontalDistance();
 		verticalDistance = calculateVerticalDistance();
