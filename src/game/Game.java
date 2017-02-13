@@ -31,7 +31,7 @@ import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
 import physics.Ship;
 import placeholders.FlatGroundProvider;
-import placeholders.LwjglController;
+import placeholders.InputController;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
@@ -54,10 +54,14 @@ public class Game {
   public Game() {
     init();
   }
+
+  public static InputController input;
   
   private void init() {
     DisplayManager.createDisplay();
     loader = new Loader();
+    Game.input = new InputController();
+    Game.input.start();
     AudioMaster.init();
     AL10.alDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
 
@@ -121,7 +125,7 @@ public class Game {
         new ModelTexture(loader.loadTexture("path")));
     
     Entity track = new Entity(trackModel, new Vector3f(), new Vector3f(), 1f);
-    entities.add(track);
+//    entities.add(track);
     
     
     
@@ -140,9 +144,8 @@ public class Game {
     // Player Ship
     TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
         new ModelTexture(loader.loadTexture("newShipTexture")));
-    LwjglController input = new LwjglController();
     ArrayList<Ship> otherShips = new ArrayList<>();
-    player = new Ship(playerTModel, new Vector3f(50, 0, 50), otherShips, input, new FlatGroundProvider(-40f));
+    player = new Ship(playerTModel, new Vector3f(50, 0, 50), otherShips, Game.input, new FlatGroundProvider(-40f));
     entities.add(player);
 
     // Player following camera
