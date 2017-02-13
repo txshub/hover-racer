@@ -2,8 +2,13 @@ package game;
 
 import java.awt.GraphicsEnvironment;
 
+import org.lwjgl.input.Keyboard;
+
+import placeholders.InputController;
+
 public class Main {
 
+	
   public static void main(String[] args) {
     Game game = new Game();
     
@@ -55,12 +60,18 @@ public class Main {
       
       // Log the ups and fps to the window title every 1000ms
       if (System.currentTimeMillis() > timer + 1000) {
-        System.out.println("Hover Racer - ups: " + ups + " | fps: " + fps);
+//        System.out.println("Hover Racer - ups: " + ups + " | fps: " + fps);
         timer += 1000;
         fps = 0;
         ups = 0;
       }
+      if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
+    	  break;
+      }
     }
+    Game.input.close = true;
+    Game.input.interrupt();
+    game.cleanUp();
   }
   
 }

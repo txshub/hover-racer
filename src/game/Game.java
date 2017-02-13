@@ -3,6 +3,7 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.openal.AL10;
@@ -28,11 +29,12 @@ import gameEngine.textures.ModelTexture;
 import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
-import gameEngine.toolbox.VecCon;
 import physics.Ship;
 import placeholders.FlatGroundProvider;
-import placeholders.KeyboardController;
-import placeholders.LwjglController;
+import placeholders.InputController;
+import trackDesign.SeedTrack;
+import trackDesign.TrackMaker;
+import trackDesign.TrackPoint;
 
 public class Game {
   
@@ -46,14 +48,20 @@ public class Game {
   private MousePicker picker;
   private MasterRenderer renderer;
   private GuiRenderer guiRender;
+  private long trackSeed;
+  private ArrayList<TrackPoint> trackPoints;
   
   public Game() {
     init();
   }
+
+  public static InputController input;
   
   private void init() {
     DisplayManager.createDisplay();
     loader = new Loader();
+    Game.input = new InputController();
+    Game.input.start();
     AudioMaster.init();
     AL10.alDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
 
@@ -78,6 +86,53 @@ public class Game {
             texturePack, blendMap, "new/FlatMap");
       }
     }
+    
+    
+    
+    
+    
+    // Track
+    SeedTrack st = TrackMaker.makeTrack(10, 20, 30, 1, 40, 40, 4);
+    trackPoints = st.getTrack();
+    trackSeed = st.getSeed();
+    
+    float trackWidth = 10;
+    float trackHeight = 40; 
+    
+    float[] vertices = new float[trackPoints.size() * 3 * 2];
+    
+    for (int i = 0; i < trackPoints.size(); i++) {
+      TrackPoint curPoint = trackPoints.get(i);
+      int j = i;
+      if (j + 1 >= trackPoints.size()) j = -1;
+      TrackPoint nextPoint = trackPoints.get(j + 1);
+      
+      Vector2f dirVec = new Vector2f(nextPoint.getX() - curPoint.getX(), nextPoint.getY() - curPoint.getY()).normalize();
+      Vector2f left = new Vector2f(-dirVec.y, dirVec.x).mul(trackWidth / 2);
+      Vector2f right = new Vector2f(dirVec.y, -dirVec.x).mul(trackWidth / 2);
+      
+      vertices[i * 6] = curPoint.getX() + left.x;
+      vertices[i * 6 + 1] = trackHeight;
+      vertices[i * 6 + 2] = curPoint.getY() + left.y;
+      
+      vertices[i * 6 + 3] = curPoint.getX() + right.x;
+      vertices[i * 6 + 4] = trackHeight;
+      vertices[i * 6 + 5] = curPoint.getY() + right.y;
+    }
+    
+    TexturedModel trackModel = new TexturedModel(
+        loader.loadToVAO(vertices, 3),
+        new ModelTexture(loader.loadTexture("path")));
+    
+    Entity track = new Entity(trackModel, new Vector3f(), new Vector3f(), 1f);
+//    entities.add(track);
+    
+    
+    
+    
+    
+    
+    
 
     // Lighting
     lights = new ArrayList<Light>();
@@ -89,9 +144,8 @@ public class Game {
     // Player Ship
     TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
         new ModelTexture(loader.loadTexture("newShipTexture")));
-    LwjglController input = new LwjglController();
     ArrayList<Ship> otherShips = new ArrayList<>();
-    player = new Ship(playerTModel, new Vector3f(50, 0, 50), otherShips, input, new FlatGroundProvider(-40f));
+    player = new Ship(playerTModel, new Vector3f(50, 0, 50), otherShips, Game.input, new FlatGroundProvider(-40f));
     entities.add(player);
 
     // Player following camera
