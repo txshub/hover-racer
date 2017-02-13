@@ -92,6 +92,16 @@ public class Game {
     trackPoints = st.getTrack();
     trackSeed = st.getSeed();
     
+//    trackPoints = new ArrayList<>();
+//    trackPoints.add(new TrackPoint(50, 0));
+//    trackPoints.add(new TrackPoint(0, 50));
+//    trackPoints.add(new TrackPoint(0, 100));
+//    trackPoints.add(new TrackPoint(50, 150));
+//    trackPoints.add(new TrackPoint(100, 150));
+//    trackPoints.add(new TrackPoint(150, 100));
+//    trackPoints.add(new TrackPoint(150, 50));
+//    trackPoints.add(new TrackPoint(100, 0));
+    
     float trackWidth = 10;
     float trackHeight = 0; 
     
@@ -112,54 +122,88 @@ public class Game {
       normals[i+2] = 0;
     }
     
-    for (int i = 0; i < trackPoints.size(); i++) {
-      TrackPoint curPoint = trackPoints.get(i);
-      int j = i;
-      if (j + 1 >= trackPoints.size()) j = -1;
-      TrackPoint nextPoint = trackPoints.get(j + 1);
+    for (int i = 0; i <= trackPoints.size(); i++) {
       
-      Vector2f dirVec = new Vector2f(nextPoint.getX() - curPoint.getX(), nextPoint.getY() - curPoint.getY()).normalize();
-      Vector2f left = new Vector2f(-dirVec.y, dirVec.x).mul(trackWidth / 2);
-      Vector2f right = new Vector2f(dirVec.y, -dirVec.x).mul(trackWidth / 2);
+      if (i < trackPoints.size()) {
+        TrackPoint curPoint = trackPoints.get(i);
+        int j = i;
+        if (j + 1 >= trackPoints.size()) j = -1;
+        TrackPoint nextPoint = trackPoints.get(j + 1);
+        
+        //System.out.println("Cur: " + curPoint + " Next: " + nextPoint + " " + (nextPoint.getX() - curPoint.getX()));
+        
+        Vector2f dirVec = new Vector2f(nextPoint.getX() - curPoint.getX(), nextPoint.getY() - curPoint.getY()).normalize();
+        Vector2f left = new Vector2f(dirVec.y, -dirVec.x).mul(trackWidth / 2);
+        Vector2f right = new Vector2f(-dirVec.y, dirVec.x).mul(trackWidth / 2);
+        
+        //System.out.println("Dir: " + dirVec + " Left: " + left.length() + " Right: " + right.length());
+        
+        vertices[i * 9] = curPoint.getX() + left.x;
+        vertices[i * 9 + 1] = trackHeight;
+        vertices[i * 9 + 2] = curPoint.getY() + left.y;
+        
+        vertices[i * 9 + 3] = curPoint.getX();
+        vertices[i * 9 + 4] = trackHeight;
+        vertices[i * 9 + 5] = curPoint.getY();
+        
+        vertices[i * 9 + 6] = curPoint.getX() + right.x;
+        vertices[i * 9 + 7] = trackHeight;
+        vertices[i * 9 + 8] = curPoint.getY() + right.y;
+        
+//        System.out.println("Left: " + vertices[i*9] + " " + vertices[i*9+1] + " " + vertices[i*9+2]
+//            + " Center: " + vertices[i*9+3] + " " + vertices[i*9+4] + " " + vertices[i*9+5]
+//            + " Right: " + vertices[i*9+6] + " " + vertices[i*9+7] + " " + vertices[i*9+8]);
+      }
       
-      vertices[i * 9] = curPoint.getX() + left.x;
-      vertices[i * 9 + 1] = trackHeight;
-      vertices[i * 9 + 2] = curPoint.getY() + left.y;
-      
-      vertices[i * 9 + 3] = curPoint.getX();
-      vertices[i * 9 + 4] = trackHeight;
-      vertices[i * 6 + 5] = curPoint.getY();
-      
-      vertices[i * 6 + 6] = curPoint.getX() + right.x;
-      vertices[i * 6 + 7] = trackHeight;
-      vertices[i * 6 + 8] = curPoint.getY() + right.y;
-      
-      if (i > 0) {
+      if (i > 0 && i < trackPoints.size()) {
         int k = i * 3;
         
-        indices[i * 12 + 0] = k - 3;
-        indices[i * 12 + 1] = k - 2;
-        indices[i * 12 + 2] = k;
+        indices[(i-1) * 12 + 0] = k - 3;
+        indices[(i-1) * 12 + 1] = k - 2;
+        indices[(i-1) * 12 + 2] = k + 1;
         
-        indices[i * 12 + 3] = k - 3;
-        indices[i * 12 + 4] = k - 2;
-        indices[i * 12 + 5] = k + 1;
+        indices[(i-1) * 12 + 3] = k - 3;
+        indices[(i-1) * 12 + 4] = k + 1;
+        indices[(i-1) * 12 + 5] = k;
         
-        indices[i * 12 + 6] = k - 1;
-        indices[i * 12 + 7] = k + 2;
-        indices[i * 12 + 8] = k - 2;
+        indices[(i-1) * 12 + 6] = k - 2;
+        indices[(i-1) * 12 + 7] = k - 1;
+        indices[(i-1) * 12 + 8] = k + 1;
         
-        indices[i * 12 + 9] = k - 1;
-        indices[i * 12 + 10] = k + 1;
-        indices[i * 12 + 11] = k - 2;
+        indices[(i-1) * 12 + 9] = k - 1;
+        indices[(i-1) * 12 + 10] = k + 2;
+        indices[(i-1) * 12 + 11] = k + 1;
+      } else if (i > 0) {
+        int k = i * 3;
+        
+        indices[(i-1) * 12 + 0] = k - 3;
+        indices[(i-1) * 12 + 1] = k - 2;
+        indices[(i-1) * 12 + 2] = 0 + 1;
+        
+        indices[(i-1) * 12 + 3] = k - 3;
+        indices[(i-1) * 12 + 4] = 0 + 1;
+        indices[(i-1) * 12 + 5] = 0;
+        
+        indices[(i-1) * 12 + 6] = k - 2;
+        indices[(i-1) * 12 + 7] = k - 1;
+        indices[(i-1) * 12 + 8] = 0 + 1;
+        
+        indices[(i-1) * 12 + 9] = k - 1;
+        indices[(i-1) * 12 + 10] = 0 + 2;
+        indices[(i-1) * 12 + 11] = 0 + 1;
       }
-    }
+    } 
+    
+//    for (int i = 0; i < indices.length; i += 3) {
+//      System.out.println("Face" + (i/3) + ": " + indices[i] + " " + indices[i+1] + " " + indices[i+2] + " - "
+//          + vertices[indices[i]] + " " + vertices[indices[i+1]] + " " + vertices[indices[i+2]]);
+//    }
     
     TexturedModel trackModel = new TexturedModel(
         loader.loadToVAO(vertices, texCoords, normals, indices),
         new ModelTexture(loader.loadTexture("mud")));
     
-    Entity track = new Entity(trackModel, new Vector3f(20, 0, 20), new Vector3f(), 1f);
+    Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 2f);
     entities.add(track);
     
     
