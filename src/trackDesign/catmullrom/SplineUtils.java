@@ -33,8 +33,7 @@ public class SplineUtils {
 				p3 = points.get(i+2);
 			}
 			Spline2D s = new Spline2D(p0, p1, p2, p3);
-			subPoints.add(p1);
-			for(int j = 0; j <= divisionCount; j++) {
+			for(int j = 0; j < divisionCount; j++) {
 				subPoints.add(s.q(j * increments));
 			}
 		}
