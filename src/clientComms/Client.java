@@ -4,11 +4,22 @@ import java.net.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Main client class for client/server communications
+ * @author simon
+ *
+ */
 public class Client {
 	public final static Charset charset = StandardCharsets.UTF_8;
+	private DataOutputStream toServer;
 	
+	/**
+	 * Creates a client object and connects to a given server on a given port automagically
+	 * @param name The client's nickname to pass to the server first
+	 * @param portNumber The port to send the request on
+	 * @param machineName The machinename of the server host (for testing purposes use localhost)
+	 */
 	public Client(String name, int portNumber, String machineName) {
-		DataOutputStream toServer = null;
 		DataInputStream fromServer = null;
 		Socket server = null;
 		try {
@@ -23,10 +34,10 @@ public class Client {
 			//What to do here
 		}
 		
-		ClientReceiver receiver = new ClientReceiver(fromServer, toServer);
+		ClientReceiver receiver = new ClientReceiver(fromServer, this);
 		receiver.start();
 		try {
-			sendByteMessage(name.getBytes(), toServer);
+			sendByteMessage(name.getBytes());
 			receiver.join();
 			toServer.close();
 			fromServer.close();
@@ -41,7 +52,12 @@ public class Client {
 		
 	}
 	
-	public static void sendByteMessage(byte[] message, DataOutputStream toServer) throws IOException {
+	/**
+	 * Sends a message to the server
+	 * @param message The byte message to send
+	 * @throws IOException If there is a problem with writing
+	 */
+	public void sendByteMessage(byte[] message) throws IOException {
 		toServer.writeInt(message.length);
 		toServer.write(message);
 	}

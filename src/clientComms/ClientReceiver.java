@@ -1,15 +1,28 @@
 package clientComms;
 import java.io.*;
 
+/**
+ * Thread to receive any messages passed from the server
+ * @author simon
+ *
+ */
 public class ClientReceiver extends Thread {
 	private DataInputStream server;
-	private DataOutputStream serverSender;
+	private Client client;
 	
-	public ClientReceiver(DataInputStream server, DataOutputStream toServer) {
+	/**
+	 * Creates a ClientReceiver object
+	 * @param server the stream to listen on for any messages from the server
+	 * @param client The client to send messages to the server through if need be
+	 */
+	public ClientReceiver(DataInputStream server, Client client) {
 		this.server = server;
-		this.serverSender = serverSender;
+		this.client = client;
 	}
 	
+	/**
+	 * Waits for messages from the server then deals with then appropriately
+	 */
 	@Override
 	public void run() {
 		try {
