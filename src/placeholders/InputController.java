@@ -11,7 +11,7 @@ public class InputController extends Thread {
 	public static boolean close = false;
 
 	public enum Action {
-		FORWARD, BREAK, STRAFE_LEFT, STRAFE_RIGHT, TURN_LEFT, TURN_RIGHT, JUMP;
+		FORWARD, BACKWARDS, STRAFE_LEFT, STRAFE_RIGHT, TURN_LEFT, TURN_RIGHT, JUMP;
 
 	}
 
@@ -27,7 +27,7 @@ public class InputController extends Thread {
 	private HashMap<Integer, Action> getDefaultSettings() {
 		HashMap<Integer, Action> res = new HashMap<Integer, Action>();
 		res.put(Keyboard.KEY_W, Action.FORWARD); // w
-		res.put(Keyboard.KEY_S, Action.BREAK); // s
+		res.put(Keyboard.KEY_S, Action.BACKWARDS); // s
 		res.put(Keyboard.KEY_A, Action.STRAFE_LEFT); // a
 		res.put(Keyboard.KEY_D, Action.STRAFE_RIGHT); // d
 		res.put(Keyboard.KEY_RIGHT, Action.TURN_RIGHT); // right arrow

@@ -19,7 +19,7 @@ public class SkyboxShader extends ShaderProgram{
 	private static final String VERTEX_FILE = "src/gameEngine/skybox/skyboxVertexShader.txt";
 	private static final String FRAGMENT_FILE = "src/gameEngine/skybox/skyboxFragmentShader.txt";
 	
-	private static final float ROTATE_SPEED = 0.1f;
+	private static final float ROTATE_SPEED = 1f;
 	
 	private int location_projectionMatrix;
 	private int location_viewMatrix;
@@ -48,7 +48,7 @@ public class SkyboxShader extends ShaderProgram{
 	public void loadViewMatrix(Camera camera){
 		Matrix4f matrix = Maths.createViewMatrix(camera);
 		Vector3f cameraPos = VecCon.toLWJGL(camera.getEntity().getPosition());
-		matrix.translate(new Vector2f(cameraPos.x, cameraPos.y));
+		matrix.translate(new Vector3f(cameraPos.x, cameraPos.y, cameraPos.z));
 		rotation += (ROTATE_SPEED * DisplayManager.getFrameTimeSeconds());
 		matrix.rotate((float)Math.toRadians(rotation), new Vector3f(0,1,0));
 		super.loadMatrix(location_viewMatrix, matrix);

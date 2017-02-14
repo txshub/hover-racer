@@ -31,11 +31,11 @@ public class DisplayManager {
 
 		try {
 			
-			Display.setDisplayMode(new DisplayMode(1500, 1000));
+//			Display.setDisplayMode(new DisplayMode(1500, 1000));
 			Display.create(new PixelFormat(), attribs);
 			Display.setTitle("Game Display");
 			Display.setVSyncEnabled(true);
-			Display.setFullscreen(false);
+			Display.setFullscreen(true);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}

@@ -38,7 +38,7 @@ public class Ship extends Entity {
 
 	private static final float SCALE = 3;
 	private static final float VERTICAL_SCALE = 10;
-	private static final float ACCELERATION = 20 * SCALE; // How fast does the ship accelerate
+	private static final float ACCELERATION = 30 * SCALE; // How fast does the ship accelerate
 	private static final float BREAK_POWER = 10; // How fast does it break
 	private static final float TURN_SPEED = 4f; // How fast does it turn
 	private static final float AIR_RESISTANCE = 10; // How fast do ships slow down (this and acceleration determines the max speed)
@@ -177,12 +177,24 @@ public class Ship extends Entity {
 			rotationalMomentum.changeY(y -> y + delta * TURN_SPEED);
 			rotationalMomentum.changeZ(z->z-delta*TURN_SPEED*SPEED_OF_ROTATION_WHILE_TURNING);
 		}
-		if (controller.checkAction(Action.FORWARD)) accelerate2d(delta * ACCELERATION, (float) Math.PI * 1.5f);
-		if (controller.checkAction(Action.BREAK)) airResistance(delta * BREAK_POWER); // Breaking slows you down, no matter how you're moving
-		// if (keys.contains(Action.BREAK)) accelerate2d(delta * ACCELERATION, Math.PI * 1.5); // Breaking accelerates backwards
-		if (controller.checkAction(Action.STRAFE_RIGHT)) accelerate2d(delta * ACCELERATION / 2, (float) Math.PI);
-		if (controller.checkAction(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION / 2, 0);
-		if (controller.checkAction(Action.JUMP)) velocity.changeY(y -> y + delta * JUMP_POWER * VERTICAL_SCALE);
+		if (controller.checkAction(Action.FORWARD)) {
+			accelerate2d(delta * ACCELERATION, (float) Math.PI * 1.5f);
+		}
+		if (controller.checkAction(Action.BACKWARDS)) {
+			accelerate2d(delta * -ACCELERATION/2, (float) Math.PI * 1.5f); 
+			// Breaking slows you down, no matter how you're moving
+		}
+		// if (keys.contains(Action.BREAK)) accelerate2d(delta * ACCELERATION, Math.PI * 1.5); 
+		// Breaking accelerates backwards
+		if (controller.checkAction(Action.STRAFE_RIGHT)) {
+			accelerate2d(delta * ACCELERATION / 2, (float) Math.PI);
+		}
+		if (controller.checkAction(Action.STRAFE_LEFT)) {
+			accelerate2d(delta * ACCELERATION / 2, 0);
+		}
+		if (controller.checkAction(Action.JUMP)) {
+			velocity.changeY(y -> y + delta * JUMP_POWER * VERTICAL_SCALE);
+		}
 	}
 
 	private void doCollisions() {

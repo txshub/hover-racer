@@ -1,11 +1,7 @@
 package gameEngine.entities;
 
-import java.awt.geom.Point2D;
-
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
-
-import gameEngine.terrains.Terrain;
 
 /**
  * @author rtm592
@@ -42,14 +38,14 @@ public class Camera {
 //		Mouse.setCursorPosition(Display.getWidth()/2, Display.getHeight()/2);
 		calculateZoom();
 		calculatePitch();
-//		calculateAngleAroundEntity();
+		calculateAngleAroundEntity();
 		
 		float horizontalDistance = calculateHorizontalDistance();
 		verticalDistance = calculateVerticalDistance();
 		calculateCameraPosition(horizontalDistance, verticalDistance);
 		
 		
-		this.yaw = (180 - entity.getRotation().y);
+		this.yaw = (180 - entity.getRotation().y) - angleAroundPlayer;
 		if(angleAroundPlayer >= 180){
 			angleAroundPlayer -= 360;
 		}else if(angleAroundPlayer <= -180){
