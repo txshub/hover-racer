@@ -68,7 +68,6 @@ public class Game {
     Game.input = new InputController();
     Game.input.start();
     AudioMaster.init();
-    AL10.alDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
 
     entities = new ArrayList<Entity>();
     normalEntities = new ArrayList<Entity>();
@@ -245,6 +244,9 @@ public class Game {
 
     // Camera rotation with right click
     picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrains);
+    
+    // Tudor 
+    AudioMaster.playInGameMusic();
   }
   
   public void update(double delta) {

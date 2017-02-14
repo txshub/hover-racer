@@ -1,7 +1,11 @@
 package audioEngine;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.print.attribute.standard.DateTimeAtCompleted;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.openal.AL;
@@ -20,6 +24,8 @@ public class AudioMaster {
 	private static List<Source> sources = new ArrayList<Source>();
 	
 	private static MusicPlayer player;
+	private static InGamePlayer inGame;
+	
 
 	/**
 	 * Initialize the master
@@ -36,6 +42,7 @@ public class AudioMaster {
 		setListenerData(0, 0, 0);
 		
 		player = new MusicPlayer();
+		inGame = new InGamePlayer();
 	}
 	
 	/**
@@ -137,5 +144,50 @@ public class AudioMaster {
 	 */
 	public static void skipMusic() {
 		player.skip();
+	}
+	
+	/**
+	 * Start the in-game music player
+	 */
+	public static void playInGameMusic() {
+		inGame.start();
+	}
+	
+	/**
+	 * Stop the in-game music player
+	 */
+	public static void stopInGameMusic() {
+		inGame.stop();
+	}
+	
+	/**
+	 * Skip the in-game current song
+	 */
+	public static void skipInGameMusic() {
+		inGame.skip();
+	}
+	
+	public static void increaseMusicVolume() {
+		for (Source s : music) {
+			s.setCurrentVolume(s.getCurrentVolume() + 0.1f);
+		}
+	}
+	
+	public static void decreaseMusicVolume() {
+		for (Source s : music) {
+			s.setCurrentVolume(s.getCurrentVolume() - 0.1f);
+		}	
+	}
+	
+	public static void increaseSFXVolume() {
+		for (Source s : sfx) {
+			s.setCurrentVolume(s.getCurrentVolume() + 0.1f);
+		}
+	}
+	
+	public static void decreaseSFXVolume() {
+		for (Source s : sfx) {
+			s.setCurrentVolume(s.getCurrentVolume() - 0.1f);
+		}
 	}
 }

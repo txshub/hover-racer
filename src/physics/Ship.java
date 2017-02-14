@@ -5,6 +5,9 @@ import java.util.Collection;
 
 import org.joml.Vector3f;
 
+import audioEngine.AudioMaster;
+import audioEngine.Sounds;
+import audioEngine.Source;
 import gameEngine.entities.Entity;
 import gameEngine.models.TexturedModel;
 import placeholders.ControllerInt;
@@ -71,6 +74,27 @@ public class Ship extends Entity {
 	double deltaSum=0;
 
 
+	// Tudor
+	private Source engineSource;
+	
+	/** Creates a ship with position (0,0,0), no inputs an no other ships. For testing only */
+	public Ship() {
+		this(new Vector3f(0, 0, 0), new FakeController());
+		
+		// Tudor
+		engineSource = AudioMaster.createSFXSource();
+		engineSource.setLooping(true);
+		engineSource.play(Sounds.ENGINE);
+	}
+	public Ship(Vector3f startingPosition, ControllerInt controller) {
+		this(null, startingPosition, new ArrayList<>(), controller, new FlatGroundProvider(0));
+		
+		// Tudor
+		engineSource = AudioMaster.createSFXSource();
+		engineSource.setLooping(true);
+		engineSource.play(Sounds.ENGINE);
+	}
+
 	/** Creates a new server-controlled ship
 	 * 
 	 * @param startingPosition Vector describing this ship's starting position.
@@ -78,7 +102,12 @@ public class Ship extends Entity {
 	 * @param server Object providing data about the ship, as described in the interface */
 	public Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, ServerShipProvider server,
 		GroundProvider ground) {
-		this(model, startingPosition, otherShips, new InputController(), server, ground);
+		this(model, startingPosition, otherShips, new FakeController(), server, ground);
+		
+		// Tudor
+		engineSource = AudioMaster.createSFXSource();
+		engineSource.setLooping(true);
+		engineSource.play(Sounds.ENGINE);
 	}
 	/** Creates a player-controlled ship
 	 * 
@@ -88,6 +117,11 @@ public class Ship extends Entity {
 	public Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, InputController controller,
 		GroundProvider ground) {
 		this(model, startingPosition, otherShips, controller, new FakeServerProvider(), ground);
+		
+		// Tudor
+		engineSource = AudioMaster.createSFXSource();
+		engineSource.setLooping(true);
+		engineSource.play(Sounds.ENGINE);
 	}
 
 
@@ -105,6 +139,11 @@ public class Ship extends Entity {
 		this.otherShips = otherShips != null ? otherShips : new ArrayList<Ship>(); // If null set to an empty ArrayList
 		this.server = server;
 		this.ground = ground;
+		
+		// Tudor
+		engineSource = AudioMaster.createSFXSource();
+		engineSource.setLooping(true);
+		engineSource.play(Sounds.ENGINE);
 	}
 
 	/** Accelerate in any direction within the 2d horizontal plane. The acceleration is instant; it's basically just changing velocities.
@@ -180,9 +219,16 @@ public class Ship extends Entity {
 		if (controller.checkAction(Action.FORWARD)) accelerate2d(delta * ACCELERATION, (float) Math.PI * 1.5f);
 		if (controller.checkAction(Action.BREAK)) airResistance(delta * BREAK_POWER); // Breaking slows you down, no matter how you're moving
 		// if (keys.contains(Action.BREAK)) accelerate2d(delta * ACCELERATION, Math.PI * 1.5); // Breaking accelerates backwards
-		if (controller.checkAction(Action.STRAFE_RIGHT)) accelerate2d(delta * ACCELERATION / 2, (float) Math.PI);
-		if (controller.checkAction(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION / 2, 0);
-		if (controller.checkAction(Action.JUMP)) velocity.changeY(y -> y + delta * JUMP_POWER * VERTICAL_SCALE);
+		if (keys.contains(Action.STRAFE_RIGHT)) accelerate2d(delta * ACCELERATION / 2, (float) Math.PI);
+		if (keys.contains(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION / 2, 0);
+		if (keys.contains(Action.JUMP)) velocity.changeY(y -> y + delta * JUMP_POWER * VERTICAL_SCALE);
+		
+		// Tudor
+		if (keys.contains(Action.MUSIC_UP)) AudioMaster.increaseMusicVolume();
+		if (keys.contains(Action.MUSIC_DOWN)) AudioMaster.decreaseMusicVolume();
+		if (keys.contains(Action.MUSIC_SKIP)) AudioMaster.skipInGameMusic();
+		if (keys.contains(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
+		if (keys.contains(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
 	}
 
 	private void doCollisions() {
@@ -247,6 +293,14 @@ public class Ship extends Entity {
 
 		//super.setPosition(position.copy());
 		super.setRotation(rotation.copy().forEach(r->Math.toDegrees(r)));
+		
+		// Tudor
+		float pitch = (velocity.length() / 170f) + 1f;
+		if (pitch > 2f) {
+			pitch = 2f;
+		}
+		engineSource.setPitch(pitch);
+		
 	}
 	/** @return This ship's current velocities, separately in all dimensions */
 	public Vector3f getVelocity() {

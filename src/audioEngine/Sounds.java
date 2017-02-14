@@ -13,6 +13,7 @@ public class Sounds {
 	public static String MUSIC_2 = "audioEngine/sacred-motion.wav";
 	public static String MUSIC_3 = "audioEngine/scorpio-moon.wav";
 	
+	// In-game music
 	public static String IN_GAME_1 = "audioEngine/infinity.wav";
 	public static String IN_GAME_2 = "audioEngine/mathrix.wav";
 	public static String IN_GAME_3 = "audioEngine/night-pulse.wav";
@@ -26,6 +27,7 @@ public class Sounds {
 	
 	// The list of songs
 	public static String[] songs = { MUSIC_1, MUSIC_2, MUSIC_3 };
+	public static String[] inGame = { IN_GAME_1, IN_GAME_2, IN_GAME_3, IN_GAME_4 };
 	
 	// Mapping from file to buffer
 	private static HashMap<String, Integer> map;
