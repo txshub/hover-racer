@@ -2,6 +2,11 @@ package ai;
 
 import org.joml.Vector2f;
 
+/**
+ * 
+ * @author Reece Bennett
+ *
+ */
 public class Ship {
 
   protected Vector2f pos;

@@ -7,6 +7,11 @@ import javax.swing.JFrame;
 import trackDesign.TrackComponent;
 import trackDesign.TrackPoint;
 
+/**
+ * 
+ * @author Reece Bennett
+ *
+ */
 public class Window {
 
   public static void main(String[] args) {

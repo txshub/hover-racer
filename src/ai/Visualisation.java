@@ -11,6 +11,11 @@ import javax.swing.JComponent;
 
 import trackDesign.TrackComponent;
 
+/**
+ * 
+ * @author Reece Bennett
+ *
+ */
 public class Visualisation extends JComponent {
 
   private static final long serialVersionUID = 1L;

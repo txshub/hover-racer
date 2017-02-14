@@ -16,8 +16,8 @@ import org.lwjgl.opengl.PixelFormat;
  */
 public class DisplayManager {
 
-	public static final int WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
-	public static final int HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
+	public static final int WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width = 1280;
+	public static final int HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height = 720;
 	public static final int MAX_FPS = 120;
 
 	private static long lastFrameTime;
@@ -31,7 +31,7 @@ public class DisplayManager {
 
 		try {
 			
-//			Display.setDisplayMode(new DisplayMode(1500, 1000));
+			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
 			Display.create(new PixelFormat(), attribs);
 			Display.setTitle("Game Display");
 			Display.setVSyncEnabled(true);

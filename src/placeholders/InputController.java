@@ -11,7 +11,7 @@ public class InputController extends Thread {
 	public static boolean close = false;
 
 	public enum Action {
-		FORWARD, BACKWARDS, STRAFE_LEFT, STRAFE_RIGHT, TURN_LEFT, TURN_RIGHT, JUMP;
+		FORWARD, BACKWARDS, STRAFE_LEFT, STRAFE_RIGHT, TURN_LEFT, TURN_RIGHT, JUMP,EXIT;
 
 	}
 
@@ -33,6 +33,7 @@ public class InputController extends Thread {
 		res.put(Keyboard.KEY_RIGHT, Action.TURN_RIGHT); // right arrow
 		res.put(Keyboard.KEY_LEFT, Action.TURN_LEFT); // left arrow
 		res.put(Keyboard.KEY_SPACE, Action.JUMP); // space
+		res.put(Keyboard.KEY_ESCAPE, Action.EXIT);
 		return res;
 	}
 

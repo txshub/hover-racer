@@ -6,6 +6,7 @@ import java.util.List;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.Display;
@@ -51,6 +52,8 @@ public class Game {
   private long trackSeed;
   private ArrayList<TrackPoint> trackPoints;
   
+  private boolean running;
+  
   public Game() {
     init();
   }
@@ -58,12 +61,13 @@ public class Game {
   public static InputController input;
   
   private void init() {
+    running = true;
+    
     DisplayManager.createDisplay();
     loader = new Loader();
     Game.input = new InputController();
     Game.input.start();
     AudioMaster.init();
-    AL10.alDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
 
     entities = new ArrayList<Entity>();
     normalEntities = new ArrayList<Entity>();
@@ -96,36 +100,119 @@ public class Game {
     trackPoints = st.getTrack();
     trackSeed = st.getSeed();
     
+//    trackPoints = new ArrayList<>();
+//    trackPoints.add(new TrackPoint(50, 0));
+//    trackPoints.add(new TrackPoint(0, 50));
+//    trackPoints.add(new TrackPoint(0, 100));
+//    trackPoints.add(new TrackPoint(50, 150));
+//    trackPoints.add(new TrackPoint(100, 150));
+//    trackPoints.add(new TrackPoint(150, 100));
+//    trackPoints.add(new TrackPoint(150, 50));
+//    trackPoints.add(new TrackPoint(100, 0));
+    
     float trackWidth = 10;
-    float trackHeight = 40; 
+    float trackHeight = 0; 
     
-    float[] vertices = new float[trackPoints.size() * 3 * 2];
+    float[] vertices = new float[trackPoints.size() * 3 * 3];
+    int[] indices = new int[trackPoints.size() * 3 * 4];
+    float[] texCoords = new float[indices.length];
+    float[] normals = new float[vertices.length];
     
-    for (int i = 0; i < trackPoints.size(); i++) {
-      TrackPoint curPoint = trackPoints.get(i);
-      int j = i;
-      if (j + 1 >= trackPoints.size()) j = -1;
-      TrackPoint nextPoint = trackPoints.get(j + 1);
-      
-      Vector2f dirVec = new Vector2f(nextPoint.getX() - curPoint.getX(), nextPoint.getY() - curPoint.getY()).normalize();
-      Vector2f left = new Vector2f(-dirVec.y, dirVec.x).mul(trackWidth / 2);
-      Vector2f right = new Vector2f(dirVec.y, -dirVec.x).mul(trackWidth / 2);
-      
-      vertices[i * 6] = curPoint.getX() + left.x;
-      vertices[i * 6 + 1] = trackHeight;
-      vertices[i * 6 + 2] = curPoint.getY() + left.y;
-      
-      vertices[i * 6 + 3] = curPoint.getX() + right.x;
-      vertices[i * 6 + 4] = trackHeight;
-      vertices[i * 6 + 5] = curPoint.getY() + right.y;
+    // TODO Actually implement textures
+    for (int i = 0; i < texCoords.length; i++) {
+      texCoords[i] = 0;
     }
     
-    TexturedModel trackModel = new TexturedModel(
-        loader.loadToVAO(vertices, 3),
-        new ModelTexture(loader.loadTexture("path")));
+    // TODO Actually implement normals
+    for (int i = 0; i < normals.length; i += 3) {
+      normals[i] = 0;
+      normals[i+1] = 1;
+      normals[i+2] = 0;
+    }
     
-    Entity track = new Entity(trackModel, new Vector3f(), new Vector3f(), 1f);
-//    entities.add(track);
+    for (int i = 0; i <= trackPoints.size(); i++) {
+      
+      if (i < trackPoints.size()) {
+        TrackPoint curPoint = trackPoints.get(i);
+        int j = i;
+        if (j + 1 >= trackPoints.size()) j = -1;
+        TrackPoint nextPoint = trackPoints.get(j + 1);
+        
+        //System.out.println("Cur: " + curPoint + " Next: " + nextPoint + " " + (nextPoint.getX() - curPoint.getX()));
+        
+        Vector2f dirVec = new Vector2f(nextPoint.getX() - curPoint.getX(), nextPoint.getY() - curPoint.getY()).normalize();
+        Vector2f left = new Vector2f(dirVec.y, -dirVec.x).mul(trackWidth / 2);
+        Vector2f right = new Vector2f(-dirVec.y, dirVec.x).mul(trackWidth / 2);
+        
+        //System.out.println("Dir: " + dirVec + " Left: " + left.length() + " Right: " + right.length());
+        
+        vertices[i * 9] = curPoint.getX() + left.x;
+        vertices[i * 9 + 1] = trackHeight;
+        vertices[i * 9 + 2] = curPoint.getY() + left.y;
+        
+        vertices[i * 9 + 3] = curPoint.getX();
+        vertices[i * 9 + 4] = trackHeight;
+        vertices[i * 9 + 5] = curPoint.getY();
+        
+        vertices[i * 9 + 6] = curPoint.getX() + right.x;
+        vertices[i * 9 + 7] = trackHeight;
+        vertices[i * 9 + 8] = curPoint.getY() + right.y;
+        
+//        System.out.println("Left: " + vertices[i*9] + " " + vertices[i*9+1] + " " + vertices[i*9+2]
+//            + " Center: " + vertices[i*9+3] + " " + vertices[i*9+4] + " " + vertices[i*9+5]
+//            + " Right: " + vertices[i*9+6] + " " + vertices[i*9+7] + " " + vertices[i*9+8]);
+      }
+      
+      if (i > 0 && i < trackPoints.size()) {
+        int k = i * 3;
+        
+        indices[(i-1) * 12 + 0] = k - 3;
+        indices[(i-1) * 12 + 1] = k - 2;
+        indices[(i-1) * 12 + 2] = k + 1;
+        
+        indices[(i-1) * 12 + 3] = k - 3;
+        indices[(i-1) * 12 + 4] = k + 1;
+        indices[(i-1) * 12 + 5] = k;
+        
+        indices[(i-1) * 12 + 6] = k - 2;
+        indices[(i-1) * 12 + 7] = k - 1;
+        indices[(i-1) * 12 + 8] = k + 1;
+        
+        indices[(i-1) * 12 + 9] = k - 1;
+        indices[(i-1) * 12 + 10] = k + 2;
+        indices[(i-1) * 12 + 11] = k + 1;
+      } else if (i > 0) {
+        int k = i * 3;
+        
+        indices[(i-1) * 12 + 0] = k - 3;
+        indices[(i-1) * 12 + 1] = k - 2;
+        indices[(i-1) * 12 + 2] = 0 + 1;
+        
+        indices[(i-1) * 12 + 3] = k - 3;
+        indices[(i-1) * 12 + 4] = 0 + 1;
+        indices[(i-1) * 12 + 5] = 0;
+        
+        indices[(i-1) * 12 + 6] = k - 2;
+        indices[(i-1) * 12 + 7] = k - 1;
+        indices[(i-1) * 12 + 8] = 0 + 1;
+        
+        indices[(i-1) * 12 + 9] = k - 1;
+        indices[(i-1) * 12 + 10] = 0 + 2;
+        indices[(i-1) * 12 + 11] = 0 + 1;
+      }
+    } 
+    
+//    for (int i = 0; i < indices.length; i += 3) {
+//      System.out.println("Face" + (i/3) + ": " + indices[i] + " " + indices[i+1] + " " + indices[i+2] + " - "
+//          + vertices[indices[i]] + " " + vertices[indices[i+1]] + " " + vertices[indices[i+2]]);
+//    }
+    
+    TexturedModel trackModel = new TexturedModel(
+        loader.loadToVAO(vertices, texCoords, normals, indices),
+        new ModelTexture(loader.loadTexture("mud")));
+    
+    Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 2f);
+    entities.add(track);
     
     
     
@@ -145,7 +232,7 @@ public class Game {
     TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
         new ModelTexture(loader.loadTexture("newShipTexture")));
     ArrayList<Ship> otherShips = new ArrayList<>();
-    player = new Ship(playerTModel, new Vector3f(50, 0, 50), otherShips, Game.input, new FlatGroundProvider(-40f));
+    player = new Ship(playerTModel, new Vector3f(50, 20, 50), otherShips, input, new FlatGroundProvider(-40f));
     entities.add(player);
 
     // Player following camera
@@ -157,9 +244,15 @@ public class Game {
 
     // Camera rotation with right click
     picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrains);
+    
+    // Tudor 
+    AudioMaster.playInGameMusic();
   }
   
   public void update(double delta) {
+    // Check if the escape key was pressed to exit the game
+    if (input.checkAction(InputController.Action.EXIT)) running = false;
+    
     player.update((float) delta);
     camera.move();
     picker.update();
@@ -177,12 +270,14 @@ public class Game {
     guiRender.cleanUp();
     renderer.cleanUp();
     loader.cleanUp();
+    InputController.close = true;
+    input.interrupt();
     AudioMaster.cleanUP();
     DisplayManager.closeDisplay();
   }
 
   public boolean shouldClose() {
-    return Display.isCloseRequested();
+    return Display.isCloseRequested() || !running;
   }
 
   private static RawModel getModel(String fileName, Loader loader) {

@@ -5,6 +5,11 @@ import java.awt.event.KeyListener;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * 
+ * @author Reece Bennett
+ *
+ */
 public class Input implements KeyListener {
   
   private Set<Integer> heldKeys;

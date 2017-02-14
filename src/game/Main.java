@@ -6,6 +6,11 @@ import org.lwjgl.input.Keyboard;
 
 import placeholders.InputController;
 
+/**
+ * 
+ * @author Reece Bennett
+ *
+ */
 public class Main {
 
 	
@@ -69,8 +74,7 @@ public class Main {
     	  break;
       }
     }
-    Game.input.close = true;
-    Game.input.interrupt();
+
     game.cleanUp();
   }
   

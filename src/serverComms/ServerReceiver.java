@@ -25,7 +25,7 @@ public class ServerReceiver extends Thread {
 				if(messageIn.length == 0) return;
 				switch(new String(messageIn, Server.charset)) {
 				default:
-					//Nothing right now
+					System.out.println("Got message: " + messageIn + " from client " + clientName);
 				}
 			}
 		} catch (IOException e) {
