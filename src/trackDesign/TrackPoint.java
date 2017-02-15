@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
  *
  */
 public class TrackPoint extends Vector2f implements Comparable<TrackPoint> {
-	private float x,y;
 	/**
 	 * Creates a new TrackPoint object
 	 * @param x X coordinate of the point

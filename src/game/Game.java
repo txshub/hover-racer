@@ -124,7 +124,7 @@ public class Game {
   }
 
   private TexturedModel createTrackModel(long seed) {
-    float trackWidth = 10;
+    float trackWidth = 50;
     float trackHeight = 0;
 
     float[] vertices = new float[trackPoints.size() * 3 * 3];
@@ -142,6 +142,7 @@ public class Game {
 //        texCoords[i+1] = 3;
 //      }
 //    }
+    
     for (int i = 0; i < texCoords.length; i++) {
       texCoords[i] = 0;
     }
@@ -151,6 +152,11 @@ public class Game {
       normals[i] = 0;
       normals[i + 1] = 1;
       normals[i + 2] = 0;
+    }
+    
+    // Scale up the track
+    for (TrackPoint p : trackPoints) {
+      p.mul(5);
     }
 
     for (int i = 0; i <= trackPoints.size(); i++) {
@@ -300,5 +306,4 @@ public class Game {
       distance[i - 1] = lights.get(i).getdistance(currentPosition);
     }
   }
-
 }

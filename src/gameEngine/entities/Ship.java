@@ -11,19 +11,19 @@ import gameEngine.models.TexturedModel;
  */
 public class Ship extends Entity{
 
-	protected final float TURN_SPEED = 120;
+	protected final float TURN_SPEED = 0.05f;
 	protected final float GRAVITY = -50;
 	protected final float JUMP_POWER = 30;
 	protected float TERRAIN_HEIGHT = 0;
 
 	protected Vector3f velocity;
 
-	protected float acceleration = 1f;
+	protected float acceleration = 0.2f;
 	protected float maxSpeed = 30;
 	protected float currentRunSpeed = 0;
 	protected float currentStrafeSpeed = 0;
 	protected float currentTurn = 0;
-	protected float maxTurn = 5;
+	protected float maxTurn = 1;
 	protected float upwardsSpeed = 0;
 
 	protected boolean isInAir = false;
@@ -53,9 +53,11 @@ public class Ship extends Entity{
 			currentTurn += i;
 			if(currentTurn > maxTurn){
 				currentTurn = maxTurn;
+			}else if(currentTurn < -maxTurn){
+				currentTurn = -maxTurn;
 			}
 		}else{
-			this.currentTurn /= 1.5f;
+			this.currentTurn /= 1.1f;
 		}
 		
 	}
@@ -71,8 +73,8 @@ public class Ship extends Entity{
 			velocity.z = (velocity.z / speed) * maxSpeed;
 		}
 		if(acceleration == 0){
-			velocity.x /= 1.5f;
-			velocity.z /= 1.5f;
+			velocity.x /= 1.01f;
+			velocity.z /= 1.01f;
 		}
 		
 	}
