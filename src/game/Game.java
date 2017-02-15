@@ -17,6 +17,7 @@ import audioEngine.AudioMaster;
 import gameEngine.entities.Camera;
 import gameEngine.entities.Entity;
 import gameEngine.entities.Light;
+import gameEngine.entities.Player;
 import gameEngine.guis.GuiRenderer;
 import gameEngine.models.RawModel;
 import gameEngine.models.TexturedModel;
@@ -33,6 +34,7 @@ import gameEngine.toolbox.MousePicker;
 import physics.Ship;
 import placeholders.FlatGroundProvider;
 import placeholders.InputController;
+import placeholders.InputController.Action;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
@@ -44,7 +46,7 @@ public class Game {
 	private ArrayList<Entity> normalEntities;
 	private Terrain[][] terrains;
 	private ArrayList<Light> lights;
-	private Ship player;
+	private Player player;
 	private Camera camera;
 	private MousePicker picker;
 	private MasterRenderer renderer;
@@ -68,9 +70,6 @@ public class Game {
 		Game.input = new InputController();
 		Game.input.start();
 		AudioMaster.init();
-
-		entities = new ArrayList<Entity>();
-		normalEntities = new ArrayList<Entity>();
 
 		// Terrain
 		TerrainTexture background = new TerrainTexture(loader.loadTexture("grassy2"));
@@ -108,12 +107,12 @@ public class Game {
 				new Vector3f(1f, 1f, 1f));
 		lights.add(sun);
 
-		// Player Ship
-		TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
-				new ModelTexture(loader.loadTexture("newShipTexture")));
-		ArrayList<Ship> otherShips = new ArrayList<>();
-		player = new Ship(playerTModel, new Vector3f(50, 20, 50), otherShips, input, new FlatGroundProvider(-40f));
-		entities.add(player);
+	    // Player Ship
+	    TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
+	        new ModelTexture(loader.loadTexture("newShipTexture")));
+	    ArrayList<Ship> otherShips = new ArrayList<>();
+	    player = new Player(playerTModel, new Vector3f(50, 20, 50), new Vector3f(), 1f);
+	    entities.add(player);
 
 		// Player following camera
 		camera = new Camera(player);
@@ -165,6 +164,7 @@ public class Game {
 			normals[i + 1] = 1;
 			normals[i + 2] = 0;
 		}
+		
 
 		for (int i = 0; i <= trackPoints.size(); i++) {
 
@@ -253,7 +253,7 @@ public class Game {
 		if (input.checkAction(InputController.Action.EXIT))
 			running = false;
 
-		player.update((float) delta);
+		player.move(terrains);
 		camera.move();
 		picker.update();
 	}
