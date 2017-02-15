@@ -65,7 +65,7 @@ public class Game {
     loader = new Loader();
     Game.input = new InputController();
     Game.input.start();
-    //AudioMaster.init();
+    AudioMaster.init();
 
     entities = new ArrayList<Entity>();
     normalEntities = new ArrayList<Entity>();

@@ -26,12 +26,17 @@ public class AudioMaster {
 	private static MusicPlayer player;
 	private static InGamePlayer inGame;
 	
+	private static boolean initialised = false;
+	
 
 	/**
-	 * Initialize the master
+	 * Initialise the master
 	 */
 	public static void init() {
-		try {
+	  // Don't reinitialise the engine
+	  if (initialised) return;
+		
+	  try {
 			AL.create();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
@@ -43,6 +48,8 @@ public class AudioMaster {
 		
 		player = new MusicPlayer();
 		inGame = new InGamePlayer();
+		
+		initialised = true;
 	}
 	
 	/**
