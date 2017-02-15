@@ -30,6 +30,7 @@ import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
 import physics.Ship;
 import placeholders.InputController;
+import placeholders.InputController.Action;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
@@ -81,7 +82,7 @@ public class Game {
     for (int i = 0; i < size; i++) {
       for (int j = 0; j < size; j++) {
         terrains[i][j] = new Terrain((int) (Terrain.SIZE) * i, (int) (Terrain.SIZE) * j, loader,
-            texturePack, blendMap, "new/FlatMap");
+            texturePack, blendMap, "new/FlatHeightMap");
       }
     }
 
@@ -97,7 +98,7 @@ public class Game {
     // Lighting
     lights = new ArrayList<Light>();
     Light sun = new Light(
-        new Vector3f((float) Math.cos(0), 100, (float) Math.sin(0) + Terrain.SIZE / 2),
+        new Vector3f(256, 500, 256),
         new Vector3f(1f, 1f, 1f));
     lights.add(sun);
 
@@ -132,14 +133,17 @@ public class Game {
     float[] normals = new float[vertices.length];
 
     // TODO Actually implement textures
-    for (int i = 0; i < texCoords.length; i += 2) {
-      if ((i / 2) % 2 == 0) {
-        texCoords[i] = 0;
-        texCoords[i+1] = 0;
-      } else {
-        texCoords[i] = 1;
-        texCoords[i+1] = 3;
-      }
+//    for (int i = 0; i < texCoords.length; i += 2) {
+//      if ((i / 2) % 2 == 0) {
+//        texCoords[i] = 0;
+//        texCoords[i+1] = 0;
+//      } else {
+//        texCoords[i] = 1;
+//        texCoords[i+1] = 3;
+//      }
+//    }
+    for (int i = 0; i < texCoords.length; i++) {
+      texCoords[i] = 0;
     }
 
     // TODO Actually implement normals
@@ -244,9 +248,18 @@ public class Game {
 
   public void update(double delta) {
     input.run();
+    
     // Check if the escape key was pressed to exit the game
-    if (input.checkAction(InputController.Action.EXIT))
+    if (input.checkAction(Action.EXIT))
       running = false;
+    
+    // Check for audio controls
+    /** @author Tudor */
+    if (input.checkAction(Action.MUSIC_UP)) AudioMaster.increaseMusicVolume();
+    if (input.checkAction(Action.MUSIC_DOWN)) AudioMaster.decreaseMusicVolume();
+    if (input.checkAction(Action.MUSIC_SKIP)) AudioMaster.skipInGameMusic();
+    if (input.checkAction(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
+    if (input.checkAction(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
 
     player.move(terrains);
     camera.move();

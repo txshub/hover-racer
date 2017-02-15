@@ -27,7 +27,7 @@ public class Ship extends Entity{
 	protected float upwardsSpeed = 0;
 
 	protected boolean isInAir = false;
-
+	
 	protected Source source = null;
 	protected int jumpBuffer;
 
