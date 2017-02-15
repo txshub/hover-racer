@@ -80,19 +80,10 @@ public class Ship extends Entity {
 	/** Creates a ship with position (0,0,0), no inputs an no other ships. For testing only */
 	public Ship() {
 		this(new Vector3f(0, 0, 0), new FakeController());
-		
-		// Tudor
-		engineSource = AudioMaster.createSFXSource();
-		engineSource.setLooping(true);
-		engineSource.play(Sounds.ENGINE);
 	}
+	
 	public Ship(Vector3f startingPosition, ControllerInt controller) {
-		this(null, startingPosition, new ArrayList<>(), controller, new FlatGroundProvider(0));
-		
-		// Tudor
-		engineSource = AudioMaster.createSFXSource();
-		engineSource.setLooping(true);
-		engineSource.play(Sounds.ENGINE);
+		this(null, startingPosition, new ArrayList<>(), controller, new FakeServerProvider(), new FlatGroundProvider(0));
 	}
 
 	/** Creates a new server-controlled ship
@@ -103,12 +94,8 @@ public class Ship extends Entity {
 	public Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, ServerShipProvider server,
 		GroundProvider ground) {
 		this(model, startingPosition, otherShips, new FakeController(), server, ground);
-		
-		// Tudor
-		engineSource = AudioMaster.createSFXSource();
-		engineSource.setLooping(true);
-		engineSource.play(Sounds.ENGINE);
 	}
+	
 	/** Creates a player-controlled ship
 	 * 
 	 * @param startingPosition Vector describing this ship's starting position
@@ -117,13 +104,7 @@ public class Ship extends Entity {
 	public Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, InputController controller,
 		GroundProvider ground) {
 		this(model, startingPosition, otherShips, controller, new FakeServerProvider(), ground);
-		
-		// Tudor
-		engineSource = AudioMaster.createSFXSource();
-		engineSource.setLooping(true);
-		engineSource.play(Sounds.ENGINE);
 	}
-
 
 	private Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, InputController controller,
 		ServerShipProvider server, GroundProvider ground) {
@@ -219,17 +200,12 @@ public class Ship extends Entity {
 		if (controller.checkAction(Action.FORWARD)) accelerate2d(delta * ACCELERATION, (float) Math.PI * 1.5f);
 		if (controller.checkAction(Action.BREAK)) airResistance(delta * BREAK_POWER); // Breaking slows you down, no matter how you're moving
 		// if (keys.contains(Action.BREAK)) accelerate2d(delta * ACCELERATION, Math.PI * 1.5); // Breaking accelerates backwards
-		if (keys.contains(Action.STRAFE_RIGHT)) accelerate2d(delta * ACCELERATION / 2, (float) Math.PI);
-		if (keys.contains(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION / 2, 0);
-		if (keys.contains(Action.JUMP)) velocity.changeY(y -> y + delta * JUMP_POWER * VERTICAL_SCALE);
+		if (controller.checkAction(Action.STRAFE_RIGHT)) accelerate2d(delta * ACCELERATION / 2, (float) Math.PI);
+		if (controller.checkAction(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION / 2, 0);
+		if (controller.checkAction(Action.JUMP)) velocity.changeY(y -> y + delta * JUMP_POWER * VERTICAL_SCALE);
 		
-		// Tudor
-		if (keys.contains(Action.MUSIC_UP)) AudioMaster.increaseMusicVolume();
-		if (keys.contains(Action.MUSIC_DOWN)) AudioMaster.decreaseMusicVolume();
-		if (keys.contains(Action.MUSIC_SKIP)) AudioMaster.skipInGameMusic();
-		if (keys.contains(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
-		if (keys.contains(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
-	}
+		
+	}  
 
 	private void doCollisions() {
 		//otherShips.stream().filter(ship -> ship.getPosition().distanceTo(this.position) <= ship.getSize() + this.size)

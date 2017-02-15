@@ -6,7 +6,7 @@ import gameEngine.models.TexturedModel;
 
 /**
  * @author rtm592
- *
+ * @author Reece Bennett
  */
 public class Entity {
 

@@ -17,6 +17,7 @@ import audioEngine.AudioMaster;
 import gameEngine.entities.Camera;
 import gameEngine.entities.Entity;
 import gameEngine.entities.Light;
+import gameEngine.entities.Player;
 import gameEngine.guis.GuiRenderer;
 import gameEngine.models.RawModel;
 import gameEngine.models.TexturedModel;
@@ -33,6 +34,7 @@ import gameEngine.toolbox.MousePicker;
 import physics.Ship;
 import placeholders.FlatGroundProvider;
 import placeholders.InputController;
+import placeholders.InputController.Action;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
@@ -44,7 +46,7 @@ public class Game {
   private ArrayList<Entity> normalEntities;
   private Terrain[][] terrains;
   private ArrayList<Light> lights;
-  private Ship player;
+  private Player player;
   private Camera camera;
   private MousePicker picker;
   private MasterRenderer renderer;
@@ -232,7 +234,7 @@ public class Game {
     TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
         new ModelTexture(loader.loadTexture("newShipTexture")));
     ArrayList<Ship> otherShips = new ArrayList<>();
-    player = new Ship(playerTModel, new Vector3f(50, 20, 50), otherShips, input, new FlatGroundProvider(-40f));
+    player = new Player(playerTModel, new Vector3f(50, 20, 50), new Vector3f(), 1f);
     entities.add(player);
 
     // Player following camera
@@ -253,7 +255,15 @@ public class Game {
     // Check if the escape key was pressed to exit the game
     if (input.checkAction(InputController.Action.EXIT)) running = false;
     
-    player.update((float) delta);
+    // Check for audio controls
+    /** @author Tudor */
+    if (input.checkAction(InputController.Action.MUSIC_UP)) AudioMaster.increaseMusicVolume();
+    if (input.checkAction(InputController.Action.MUSIC_DOWN)) AudioMaster.decreaseMusicVolume();
+    if (input.checkAction(InputController.Action.MUSIC_SKIP)) AudioMaster.skipInGameMusic();
+    if (input.checkAction(InputController.Action.SFX_UP)) AudioMaster.increaseSFXVolume();
+    if (input.checkAction(InputController.Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
+    
+    player.move(terrains);
     camera.move();
     picker.update();
   }

@@ -18,7 +18,7 @@ public class Player extends Ship {
 	public Player(TexturedModel model, Vector3f position, Vector3f rotation, float scale) {
 		super(model, position, rotation, scale);
 		velocity = new Vector3f(0,0,0);
-		initAudio();
+		//initAudio();
 	}
 
 	public void move(Terrain[][] terrains) {
@@ -37,7 +37,7 @@ public class Player extends Ship {
 		
 		float terrainHeight = terrains[(int) Math.max(0,
 				Math.min(terrains.length-1, (getPosition().x / Terrain.SIZE)))][(int) Math.max(0,
-						Math.min(terrains[1].length - 1, (getPosition().z / Terrain.SIZE)))].getHeightOfTerrain(
+						Math.min(terrains[0].length - 1, (getPosition().z / Terrain.SIZE)))].getHeightOfTerrain(
 								getPosition().x, getPosition().z);
 		
 		if (super.getPosition().y <= terrainHeight + 5) {
@@ -60,14 +60,14 @@ public class Player extends Ship {
 
 	protected void checkInputs() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			maxSpeed = 60;
+			maxSpeed = 3f;
 		} else {
-			maxSpeed = 30;
+			maxSpeed = 1;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			turn(1);
+			turn(0.5f);
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			turn(-1);
+			turn(-0.5f);
 		} else {
 			turn(0);
 		}
