@@ -1,13 +1,12 @@
 package trackDesign;
-import java.awt.geom.Ellipse2D;
+import org.joml.Vector2f;
 import java.awt.Graphics2D;
-import java.awt.Color;
 /**
  * This class exists in order to have a sortable point, as well as a distance measure
  * @author sxw588
  *
  */
-public class TrackPoint implements Comparable<TrackPoint>{
+public class TrackPoint extends Vector2f implements Comparable<TrackPoint> {
 	private float x,y;
 	/**
 	 * Creates a new TrackPoint object
@@ -15,6 +14,7 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	 * @param y Y coordinate of the point
 	 */
 	public TrackPoint(float x, float y) {
+		super();
 		this.x = x;
 		this.y = y;
 	}
@@ -56,10 +56,11 @@ public class TrackPoint implements Comparable<TrackPoint>{
 	 * @param p The point to measure distance to
 	 * @return The distance between this and point p
 	 */
+	@Deprecated
 	public float dist(TrackPoint p) {
 		float dx = this.x - p.getX();
 		float dy = this.y - p.getY();
-		return (int) Math.sqrt((dx*dx) + (dy*dy));
+		return (float) Math.sqrt((dx*dx) + (dy*dy));
 	}
 	
 	@Override
