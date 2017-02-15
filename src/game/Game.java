@@ -91,9 +91,9 @@ public class Game {
 		// + vertices[indices[i]] + " " + vertices[indices[i+1]] + " " +
 		// vertices[indices[i+2]]);
 		// }
-
-		TexturedModel trackModel = createTrackModel((new Random()).nextLong());
-
+		trackSeed = (new Random()).nextLong();
+		TexturedModel trackModel = createTrackModel(trackSeed);
+		
 		Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 2f);
 		entities.add(track);
 
@@ -141,7 +141,7 @@ public class Game {
 		// trackPoints.add(new TrackPoint(150, 50));
 		// trackPoints.add(new TrackPoint(100, 0));
 
-		float trackWidth = 10;
+		float trackWidth = 50;
 		float trackHeight = 0;
 
 		float[] vertices = new float[trackPoints.size() * 3 * 3];
@@ -160,7 +160,9 @@ public class Game {
 			normals[i + 1] = 1;
 			normals[i + 2] = 0;
 		}
-
+		for (int i = 0; i < trackPoints.size(); i++) {
+			trackPoints.get(i).mul(10f);
+		}
 		for (int i = 0; i <= trackPoints.size(); i++) {
 
 			if (i < trackPoints.size()) {
@@ -169,9 +171,6 @@ public class Game {
 				if (j + 1 >= trackPoints.size())
 					j = -1;
 				TrackPoint nextPoint = trackPoints.get(j + 1);
-
-				// System.out.println("Cur: " + curPoint + " Next: " + nextPoint
-				// + " " + (nextPoint.getX() - curPoint.getX()));
 
 				Vector2f dirVec = new Vector2f(nextPoint.getX() - curPoint.getX(), nextPoint.getY() - curPoint.getY())
 						.normalize();

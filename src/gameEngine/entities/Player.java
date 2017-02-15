@@ -14,32 +14,37 @@ import gameEngine.terrains.Terrain;
  *
  */
 public class Player extends Ship {
-	
+
 	public Player(TexturedModel model, Vector3f position, Vector3f rotation, float scale) {
 		super(model, position, rotation, scale);
-		velocity = new Vector3f(0,0,0);
-		//initAudio();
+		velocity = new Vector3f(0, 0, 0);
+		// initAudio();
 	}
 
 	public void move(Terrain[][] terrains) {
 		changeRotation(new Vector3f(0, currentTurn, 0));
+		
 		checkInputs();
-		
-//		float distance = currentRunSpeed * DisplayManager.getFrameTimeSeconds();
-//		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRoty())));
-//		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRoty())));
-//		distance = currentStrafeSpeed * DisplayManager.getFrameTimeSeconds();
-//		dx += (float) (distance * Math.cos(Math.toRadians(super.getRoty())));
-//		dz += (float) (distance * -Math.sin(Math.toRadians(super.getRoty())));
-		
+
+		// float distance = currentRunSpeed *
+		// DisplayManager.getFrameTimeSeconds();
+		// float dx = (float) (distance *
+		// Math.sin(Math.toRadians(super.getRoty())));
+		// float dz = (float) (distance *
+		// Math.cos(Math.toRadians(super.getRoty())));
+		// distance = currentStrafeSpeed * DisplayManager.getFrameTimeSeconds();
+		// dx += (float) (distance * Math.cos(Math.toRadians(super.getRoty())));
+		// dz += (float) (distance *
+		// -Math.sin(Math.toRadians(super.getRoty())));
+
 		velocity.y = upwardsSpeed * DisplayManager.getFrameTimeSeconds();
 		changePosition(new Vector3f(velocity.x, velocity.y, velocity.z));
-		
+
 		float terrainHeight = terrains[(int) Math.max(0,
-				Math.min(terrains.length-1, (getPosition().x / Terrain.SIZE)))][(int) Math.max(0,
-						Math.min(terrains[0].length - 1, (getPosition().z / Terrain.SIZE)))].getHeightOfTerrain(
-								getPosition().x, getPosition().z);
-		
+				Math.min(terrains.length - 1, (getPosition().x / Terrain.SIZE)))][(int) Math.max(0,
+						Math.min(terrains[0].length - 1, (getPosition().z / Terrain.SIZE)))]
+								.getHeightOfTerrain(getPosition().x, getPosition().z);
+
 		if (super.getPosition().y <= terrainHeight + 5) {
 			upwardsSpeed = 0;
 			isInAir = false;
@@ -48,7 +53,7 @@ public class Player extends Ship {
 			upwardsSpeed += GRAVITY * DisplayManager.getFrameTimeSeconds();
 			isInAir = true;
 		}
-		
+
 		// Update listener position
 		AudioMaster.setListenerData(getPosition().x, getPosition().y, getPosition().z);
 	}
@@ -60,14 +65,16 @@ public class Player extends Ship {
 
 	protected void checkInputs() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			maxSpeed = 3f;
+			maxSpeed = 30f;
+			acceleration = 0.2f;
 		} else {
-			maxSpeed = 1;
+			maxSpeed = 10;
+			acceleration = 0.1f;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			turn(0.5f);
+			turn(TURN_SPEED);
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			turn(-0.5f);
+			turn(-TURN_SPEED);
 		} else {
 			turn(0);
 		}
