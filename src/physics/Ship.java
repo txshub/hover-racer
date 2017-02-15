@@ -41,7 +41,7 @@ public class Ship extends Entity {
 
 	private static final float SCALE = 3;
 	private static final float VERTICAL_SCALE = 10;
-	private static final float ACCELERATION = 20 * SCALE; // How fast does the ship accelerate
+	private static final float ACCELERATION = 30 * SCALE; // How fast does the ship accelerate
 	private static final float BREAK_POWER = 10; // How fast does it break
 	private static final float TURN_SPEED = 4f; // How fast does it turn
 	private static final float AIR_RESISTANCE = 10; // How fast do ships slow down (this and acceleration determines the max speed)
@@ -78,24 +78,37 @@ public class Ship extends Entity {
 	private Source engineSource;
 	
 	/** Creates a ship with position (0,0,0), no inputs an no other ships. For testing only */
-	public Ship() {
-		this(new Vector3f(0, 0, 0), new FakeController());
-	}
-	
-	public Ship(Vector3f startingPosition, ControllerInt controller) {
-		this(null, startingPosition, new ArrayList<>(), controller, new FakeServerProvider(), new FlatGroundProvider(0));
-	}
+//	public Ship() {
+//		this(new Vector3f(0, 0, 0), new FakeController());
+//		
+//		// Tudor
+//		engineSource = AudioMaster.createSFXSource();
+//		engineSource.setLooping(true);
+//		engineSource.play(Sounds.ENGINE);
+//	}
+//	public Ship(Vector3f startingPosition, ControllerInt controller) {
+//		this(null, startingPosition, new ArrayList<>(), controller, new FlatGroundProvider(0));
+//		
+//		// Tudor
+//		engineSource = AudioMaster.createSFXSource();
+//		engineSource.setLooping(true);
+//		engineSource.play(Sounds.ENGINE);
+//	}
 
 	/** Creates a new server-controlled ship
 	 * 
 	 * @param startingPosition Vector describing this ship's starting position.
 	 * @param otherShips Other ships to possibly collide with
 	 * @param server Object providing data about the ship, as described in the interface */
-	public Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, ServerShipProvider server,
-		GroundProvider ground) {
-		this(model, startingPosition, otherShips, new FakeController(), server, ground);
-	}
-	
+//	public Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, ServerShipProvider server,
+//		GroundProvider ground) {
+//		this(model, startingPosition, otherShips, new FakeController(), server, ground);
+//		
+//		// Tudor
+//		engineSource = AudioMaster.createSFXSource();
+//		engineSource.setLooping(true);
+//		engineSource.play(Sounds.ENGINE);
+//	}
 	/** Creates a player-controlled ship
 	 * 
 	 * @param startingPosition Vector describing this ship's starting position

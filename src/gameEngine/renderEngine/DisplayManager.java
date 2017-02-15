@@ -35,7 +35,7 @@ public class DisplayManager {
 			Display.create(new PixelFormat(), attribs);
 			Display.setTitle("Game Display");
 			Display.setVSyncEnabled(true);
-			Display.setFullscreen(false);
+			Display.setFullscreen(true);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
