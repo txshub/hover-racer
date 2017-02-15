@@ -36,9 +36,10 @@ public class Ship extends Entity{
   protected float thrust;
   protected float rotThrust; 
   protected float mass;
-  protected float maxAcceleration = 100000f;
+  protected float maxAcceleration = 1000f;
+  protected float maxTurn = 2f;
   
-  private final float K = 0.0000001f; // Drag constant
+  private final float DRAG = 1f; // Drag constant
   private final Vector3f G = new Vector3f(0, -9.81f, 0); // Acceleration due to gravity
 
 	public Ship(TexturedModel model, Vector3f position, Vector3f rotation, float scale) {
@@ -59,20 +60,19 @@ public class Ship extends Entity{
   }
 
 	protected void update(float dt) {
-	  System.out.println(acceleration);
 	  // Update rotation
-	  rotVelocity.y = rotThrust;
+	  rotVelocity.y = rotThrust * maxTurn;
 	  rotation.add(rotVelocity);
 	  
 	  // Update acceleration
+	  acceleration = new Vector3f();
+	  
 	  // Apply input
 	  float rotY = (float) Math.toRadians(rotation.y);
 	  Vector3f power = new Vector3f(
-	      (float) (thrust * maxAcceleration * Math.sin(rotY)) / mass, 
+	      (float) ((thrust * maxAcceleration * Math.sin(rotY)) / mass), 
 	      0f, 
-	      (float) (thrust * maxAcceleration * Math.cos(rotY)) / mass);
-	  
-	  System.out.println(power);
+	      (float) ((thrust * maxAcceleration * Math.cos(rotY)) / mass));
 	  
 	  acceleration.add(power);
     
@@ -80,19 +80,19 @@ public class Ship extends Entity{
     //acceleration.add(G.x, G.y, G.z);
 	
     // Apply drag
-//    Vector3f dragForce = new Vector3f(
-//        (float) (K * velocity.x * Math.abs(velocity.x)),
-//        (float) (K * velocity.y * Math.abs(velocity.y)),
-//        (float) (K * velocity.z * Math.abs(velocity.z)));
-//    System.out.println(dragForce);
-//    acceleration.add(dragForce);
+    Vector3f dragForce = new Vector3f(
+        -velocity.x * DRAG,
+        -velocity.y * DRAG,
+        -velocity.z * DRAG);
+    
+    acceleration.add(dragForce);
     
     // Update velocity (again)
-    velocity.add(acceleration.mul(dt).mul(0.1f));
+    velocity.add(new Vector3f(acceleration).mul(dt));
 	  
 	  // Update position with velocity
-	  position.add(velocity.mul(dt));
+	  position.add(new Vector3f(velocity).mul(dt));
 	  
-	  System.out.println("dt: " + dt + " T: " + thrust + " RT: " + rotThrust + " R: " + rotation + " A: " + acceleration + " V: " + velocity + " P: " + position);
+	  System.out.println("dt: " + dt + " T: " + thrust + " RT: " + rotThrust + " P: " + power + " DF: " + dragForce + " R: " + rotation + " A: " + acceleration + " V: " + velocity + " P: " + position);
 	}
 }
