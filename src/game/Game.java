@@ -106,7 +106,7 @@ public class Game {
     TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
         new ModelTexture(loader.loadTexture("newShipTexture")));
     ArrayList<Ship> otherShips = new ArrayList<>();
-    player = new Player(playerTModel, new Vector3f(50, 20, 50), new Vector3f(), 1f);
+    player = new Player(playerTModel, new Vector3f(50, 20, 50), new Vector3f(), 1f, input);
     entities.add(player);
 
     // Player following camera
@@ -267,9 +267,9 @@ public class Game {
     if (input.checkAction(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
     if (input.checkAction(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
 
-    player.move(terrains);
-    camera.move();
-    picker.update();
+    player.update((float) delta);
+//    camera.move();
+//    picker.update();
   }
 
   public void render() {

@@ -11,71 +11,88 @@ import gameEngine.models.TexturedModel;
  */
 public class Ship extends Entity{
 
-	protected final float TURN_SPEED = 0.05f;
-	protected final float GRAVITY = -50;
-	protected final float JUMP_POWER = 30;
-	protected float TERRAIN_HEIGHT = 0;
+//	protected final float TURN_SPEED = 0.05f;
+//	protected final float GRAVITY = -50;
+//	protected final float JUMP_POWER = 30;
+//	protected float TERRAIN_HEIGHT = 0;
+//
+//	protected float acceleration = 0.2f;
+//	protected float maxSpeed = 30;
+//	protected float currentRunSpeed = 0;
+//	protected float currentStrafeSpeed = 0;
+//	protected float currentTurn = 0;
+//	protected float maxTurn = 1;
+//	protected float upwardsSpeed = 0;
+//
+//	protected boolean isInAir = false;
+//	
+//	protected Source source = null;
+//	protected int jumpBuffer;
 
-	protected Vector3f velocity;
-
-	protected float acceleration = 0.2f;
-	protected float maxSpeed = 30;
-	protected float currentRunSpeed = 0;
-	protected float currentStrafeSpeed = 0;
-	protected float currentTurn = 0;
-	protected float maxTurn = 1;
-	protected float upwardsSpeed = 0;
-
-	protected boolean isInAir = false;
-	
-	protected Source source = null;
-	protected int jumpBuffer;
-
-	public Ship(TexturedModel model, int textureIndex, Vector3f position, Vector3f rotation,
-			float scale) {
-		super(model, textureIndex, position, rotation, scale);
-	}
+  private Vector3f velocity;
+  private Vector3f acceleration;
+  private Vector3f rotVelocity;
+  
+  protected float thrust;
+  protected float rotThrust; 
+  protected float mass;
+  protected float maxAcceleration = 100000f;
+  
+  private final float K = 0.0000001f; // Drag constant
+  private final Vector3f G = new Vector3f(0, -9.81f, 0); // Acceleration due to gravity
 
 	public Ship(TexturedModel model, Vector3f position, Vector3f rotation, float scale) {
-		super(model, position, rotation, scale);
+		this(model, 0, position, rotation, scale);
 	}
+
+  public Ship(TexturedModel model, int textureIndex, Vector3f position, Vector3f rotation,
+      float scale) {
+    super(model, textureIndex, position, rotation, scale);
+    
+    velocity = new Vector3f();
+    acceleration = new Vector3f();
+    rotVelocity = new Vector3f();
+    
+    thrust = 0;
+    rotThrust = 0;
+    mass = 1;
+  }
+
+	protected void update(float dt) {
+	  System.out.println(acceleration);
+	  // Update rotation
+	  rotVelocity.y = rotThrust;
+	  rotation.add(rotVelocity);
+	  
+	  // Update acceleration
+	  // Apply input
+	  float rotY = (float) Math.toRadians(rotation.y);
+	  Vector3f power = new Vector3f(
+	      (float) (thrust * maxAcceleration * Math.sin(rotY)) / mass, 
+	      0f, 
+	      (float) (thrust * maxAcceleration * Math.cos(rotY)) / mass);
+	  
+	  System.out.println(power);
+	  
+	  acceleration.add(power);
+    
+    // Apply gravity
+    //acceleration.add(G.x, G.y, G.z);
 	
-	protected void jump() {
-		if (!isInAir) {
-			this.upwardsSpeed = JUMP_POWER;
-			isInAir = true;
-		}
-	}
-
-	protected void turn(float i) {
-		
-		if(i != 0){
-			currentTurn += i;
-			if(currentTurn > maxTurn){
-				currentTurn = maxTurn;
-			}else if(currentTurn < -maxTurn){
-				currentTurn = -maxTurn;
-			}
-		}else{
-			this.currentTurn /= 1.1f;
-		}
-		
-	}
-
-	protected void move(float acceleration) {
-		
-		velocity.x += Math.sin(Math.toRadians(this.getRotation().y)) * acceleration;
-		velocity.z += Math.cos(Math.toRadians(this.getRotation().y)) * acceleration;
-		
-		float speed = (float) Math.sqrt(Math.pow(velocity.x,2) + Math.pow(velocity.z,2));
-		if(speed > maxSpeed){
-			velocity.x = (velocity.x / speed) * maxSpeed;
-			velocity.z = (velocity.z / speed) * maxSpeed;
-		}
-		if(acceleration == 0){
-			velocity.x /= 1.01f;
-			velocity.z /= 1.01f;
-		}
-		
+    // Apply drag
+//    Vector3f dragForce = new Vector3f(
+//        (float) (K * velocity.x * Math.abs(velocity.x)),
+//        (float) (K * velocity.y * Math.abs(velocity.y)),
+//        (float) (K * velocity.z * Math.abs(velocity.z)));
+//    System.out.println(dragForce);
+//    acceleration.add(dragForce);
+    
+    // Update velocity (again)
+    velocity.add(acceleration.mul(dt).mul(0.1f));
+	  
+	  // Update position with velocity
+	  position.add(velocity.mul(dt));
+	  
+	  System.out.println("dt: " + dt + " T: " + thrust + " RT: " + rotThrust + " R: " + rotation + " A: " + acceleration + " V: " + velocity + " P: " + position);
 	}
 }
