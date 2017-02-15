@@ -2,6 +2,7 @@ package game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -91,7 +92,7 @@ public class Game {
 		// vertices[indices[i+2]]);
 		// }
 
-		TexturedModel trackModel = createTrackModel();
+		TexturedModel trackModel = createTrackModel((new Random()).nextLong());
 
 		Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 2f);
 		entities.add(track);
@@ -102,12 +103,12 @@ public class Game {
 				new Vector3f(1f, 1f, 1f));
 		lights.add(sun);
 
-	    // Player Ship
-	    TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
-	        new ModelTexture(loader.loadTexture("newShipTexture")));
-	    ArrayList<Ship> otherShips = new ArrayList<>();
-	    player = new Player(playerTModel, new Vector3f(50, 20, 50), new Vector3f(), 1f);
-	    entities.add(player);
+		// Player Ship
+		TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
+				new ModelTexture(loader.loadTexture("newShipTexture")));
+		ArrayList<Ship> otherShips = new ArrayList<>();
+		player = new Player(playerTModel, new Vector3f(50, 20, 50), new Vector3f(), 1f);
+		entities.add(player);
 
 		// Player following camera
 		camera = new Camera(player);
@@ -122,11 +123,11 @@ public class Game {
 		// Tudor
 		AudioMaster.playInGameMusic();
 	}
-	
-	private TexturedModel createTrackModel(){
+
+	private TexturedModel createTrackModel(long seed) {
 
 		// Track
-		SeedTrack st = TrackMaker.makeTrack(10, 20, 30, 1, 40, 40, 4);
+		SeedTrack st = TrackMaker.makeTrack(seed, 10, 20, 30, 1, 40, 40, 4);
 		trackPoints = st.getTrack();
 		trackSeed = st.getSeed();
 
@@ -159,7 +160,6 @@ public class Game {
 			normals[i + 1] = 1;
 			normals[i + 2] = 0;
 		}
-		
 
 		for (int i = 0; i <= trackPoints.size(); i++) {
 
@@ -240,7 +240,7 @@ public class Game {
 		}
 		return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
 				new ModelTexture(loader.loadTexture("mud")));
-		
+
 	}
 
 	public void update(double delta) {
