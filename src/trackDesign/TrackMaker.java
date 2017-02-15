@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import org.joml.Vector2f;
+
 import trackDesign.catmullrom.SplineUtils;
 /**
  * Class to make the track
@@ -58,11 +60,46 @@ public class TrackMaker {
 			fixAngles(circuit); //Ensure all angles are greater than 100 degrees to prevent sudden turns
 			seperatePoints(circuit, minDist); //Seperate the points again
 		}
-		mergeClosePoints(circuit, minDist);
-		if(circuit.size() < 3) return makeTrack(random.nextLong(),minTrackPoints,maxTrackPoints,minDist,seperateIterations,difficulty,maxDisp,subDivs); //If the track generation has failed spectatularly, try again
+		mergeClosePoints(circuit, minDist*2);
+		spreadAngles(circuit);
+		if(circuit.size() < 5) return makeTrack(random.nextLong(),minTrackPoints,maxTrackPoints,minDist,seperateIterations,difficulty,maxDisp,subDivs); //If the track generation has failed spectatularly, try again
+		makeWidths(circuit,random);
 		ArrayList<TrackPoint> finalCircuit = SplineUtils.dividePoints(circuit, subDivs); //Apply smoothing
 		centreTrack(finalCircuit); //Centre the track so it doesn't go off screen at all
-		return new SeedTrack(seed,finalCircuit); //Return this final track after smoothing and centreing (however the hell you spell that word, I take CS not english)
+		return new SeedTrack(seed,finalCircuit); //Return this final track after smoothing and centring
+	}
+	
+	private static void makeWidths(ArrayList<TrackPoint> points, Random random) {
+		for(TrackPoint p: points) {
+			int rand = random.nextInt(100);
+			if(rand < 10) {
+				p.setWidth(3);
+			} else if(rand < 30) {
+				p.setWidth(4);
+			} else if(rand < 70) {
+				p.setWidth(5);
+			} else if(rand < 90) {
+				p.setWidth(6);
+			} else {
+				p.setWidth(7);
+			}
+		}
+	}
+	
+	private static void spreadAngles(ArrayList<TrackPoint> points) {
+		boolean changed = true;
+		final float threshold = (float) Math.toRadians(50);
+		while(changed) {
+			changed = false;
+			for(int i = 0; i < points.size(); i++) {
+				int next = (i+1)%points.size();
+				int after = (i+2)%points.size();
+				float angle = (float)(Math.atan2(points.get(i).getY() - points.get(next).getY(), points.get(i).getX() - points.get(next).getX()) - Math.atan2(points.get(after).getY() - points.get(next).getY(), points.get(after).getX() - points.get(next).getX())); //Find the angle between the previous and next point centred on this point
+				if(angle < threshold) {
+					points.remove(after);
+				}
+			}
+		}
 	}
 	
 	private static void mergeClosePoints(ArrayList<TrackPoint> points, float minDist) {
@@ -71,7 +108,7 @@ public class TrackMaker {
 			changed = false;
 			for(int i = 0; i < points.size() - 1; i++) {
 				for(int j = i+1; j < points.size(); j++) {
-					if(points.get(i).dist(points.get(i+1)) < minDist) {
+					if(points.get(i).distance(points.get(i+1)) < minDist) {
 						points.get(i).setX((points.get(i).getX() + points.get(j).getX())/2);
 						points.get(i).setY((points.get(i).getY() + points.get(j).getY())/2);
 						points.remove(j);
