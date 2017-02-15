@@ -36,7 +36,6 @@ import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
 
 public class Game {
-=======
 
 	private Loader loader;
 	private ArrayList<Entity> entities;
