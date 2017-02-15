@@ -6,9 +6,6 @@ import java.util.List;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -32,9 +29,7 @@ import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
 import physics.Ship;
-import placeholders.FlatGroundProvider;
 import placeholders.InputController;
-import placeholders.InputController.Action;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
@@ -53,6 +48,7 @@ public class Game {
 	private GuiRenderer guiRender;
 	private long trackSeed;
 	private ArrayList<TrackPoint> trackPoints;
+	public static InputController input;
 
 	private boolean running;
 
@@ -60,15 +56,12 @@ public class Game {
 		init();
 	}
 
-	public static InputController input;
-
 	private void init() {
 		running = true;
 
 		DisplayManager.createDisplay();
 		loader = new Loader();
 		Game.input = new InputController();
-		Game.input.start();
 		AudioMaster.init();
 
 		// Terrain
@@ -249,6 +242,7 @@ public class Game {
 	}
 
 	public void update(double delta) {
+		input.run();
 		// Check if the escape key was pressed to exit the game
 		if (input.checkAction(InputController.Action.EXIT))
 			running = false;
@@ -271,7 +265,6 @@ public class Game {
 		renderer.cleanUp();
 		loader.cleanUp();
 		InputController.close = true;
-		input.interrupt();
 		AudioMaster.cleanUP();
 		DisplayManager.closeDisplay();
 	}
