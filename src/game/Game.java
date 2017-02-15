@@ -6,9 +6,6 @@ import java.util.List;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.openal.AL10;
-import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -32,7 +29,6 @@ import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
 import physics.Ship;
-import placeholders.FlatGroundProvider;
 import placeholders.InputController;
 import placeholders.InputController.Action;
 import trackDesign.SeedTrack;
@@ -253,15 +249,15 @@ public class Game {
   
   public void update(double delta) {
     // Check if the escape key was pressed to exit the game
-    if (input.checkAction(InputController.Action.EXIT)) running = false;
+    if (input.checkAction(Action.EXIT)) running = false;
     
     // Check for audio controls
     /** @author Tudor */
-    if (input.checkAction(InputController.Action.MUSIC_UP)) AudioMaster.increaseMusicVolume();
-    if (input.checkAction(InputController.Action.MUSIC_DOWN)) AudioMaster.decreaseMusicVolume();
-    if (input.checkAction(InputController.Action.MUSIC_SKIP)) AudioMaster.skipInGameMusic();
-    if (input.checkAction(InputController.Action.SFX_UP)) AudioMaster.increaseSFXVolume();
-    if (input.checkAction(InputController.Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
+    if (input.checkAction(Action.MUSIC_UP)) AudioMaster.increaseMusicVolume();
+    if (input.checkAction(Action.MUSIC_DOWN)) AudioMaster.decreaseMusicVolume();
+    if (input.checkAction(Action.MUSIC_SKIP)) AudioMaster.skipInGameMusic();
+    if (input.checkAction(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
+    if (input.checkAction(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
     
     player.move(terrains);
     camera.move();
