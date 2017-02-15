@@ -171,14 +171,11 @@ public class Game {
 				if (j + 1 >= trackPoints.size())
 					j = -1;
 				TrackPoint nextPoint = trackPoints.get(j + 1);
-
 				Vector2f dirVec = new Vector2f(nextPoint.getX() - curPoint.getX(), nextPoint.getY() - curPoint.getY())
 						.normalize();
 				Vector2f left = new Vector2f(dirVec.y, -dirVec.x).mul(trackWidth / 2);
 				Vector2f right = new Vector2f(-dirVec.y, dirVec.x).mul(trackWidth / 2);
 
-				// System.out.println("Dir: " + dirVec + " Left: " +
-				// left.length() + " Right: " + right.length());
 
 				vertices[i * 9] = curPoint.getX() + left.x;
 				vertices[i * 9 + 1] = trackHeight;
