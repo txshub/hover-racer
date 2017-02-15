@@ -7,16 +7,16 @@ import java.awt.Graphics2D;
  *
  */
 public class TrackPoint extends Vector2f implements Comparable<TrackPoint> {
-	private float x,y;
+	
+	float width = 5f;
+	
 	/**
 	 * Creates a new TrackPoint object
 	 * @param x X coordinate of the point
 	 * @param y Y coordinate of the point
 	 */
 	public TrackPoint(float x, float y) {
-		super();
-		this.x = x;
-		this.y = y;
+		super(x,y);
 	}
 	
 	/**
@@ -36,6 +36,14 @@ public class TrackPoint extends Vector2f implements Comparable<TrackPoint> {
 	}
 	
 	/**
+	 * Returns the width of the track at this point
+	 * @return The width of the track at this point
+	 */
+	public float getWidth() {
+		return width;
+	}
+	
+	/**
 	 * Sets a new X coordinate for this point
 	 * @param x New X coordinate for this point
 	 */
@@ -51,6 +59,13 @@ public class TrackPoint extends Vector2f implements Comparable<TrackPoint> {
 		this.y = y;
 	}
 	
+	/**
+	 * Sets a new width for this point
+	 * @param width New width for this point
+	 */
+	public void setWidth(float width) {
+		this.width = width;
+	}
 	/**
 	 * Returns the distance between this and point p
 	 * @param p The point to measure distance to

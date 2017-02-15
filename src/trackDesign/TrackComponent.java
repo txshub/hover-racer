@@ -14,6 +14,7 @@ import javax.swing.JComponent;
 public class TrackComponent extends JComponent {
 	
 	private ArrayList<TrackPoint> track; //The arraylist of points that make up the track
+	private ArrayList<TrackPoint> track2;
 	private long seed;
 	
 	/**
@@ -31,9 +32,10 @@ public class TrackComponent extends JComponent {
 	 */
 	public TrackComponent() {
 		super();
-		SeedTrack st = TrackMaker.makeTrack(10, 20, 30, 1, 40, 40, 4); // Generate a random track
+		SeedTrack st = TrackMaker.makeTrack(10, 20, 30, 1,30, 40, 10); // Generate a random track
 		track = st.getTrack();
 		seed = st.getSeed();
+		track2 = TrackMaker.makeTrack(seed, 10, 20, 30, 1,30, 40, 1).getTrack();
 	}
 	
 	/**
@@ -55,6 +57,10 @@ public class TrackComponent extends JComponent {
 		for(int i = 0; i < track.size(); i++) {
 			//track.get(i).draw(g2);
 			g2.drawLine((int)track.get(i).getX()*2, (int)track.get(i).getY()*2, (int)track.get((i+1)%track.size()).getX()*2, (int)track.get((i+1)%track.size()).getY()*2);
+		}
+		g2.setColor(Color.RED);
+		for(int i = 0; i < track2.size(); i++) {
+			//g2.drawLine((int)track2.get(i).getX()*2, (int)track2.get(i).getY()*2, (int)track2.get((i+1)%track2.size()).getX()*2, (int)track2.get((i+1)%track2.size()).getY()*2);
 		}
 	}
 }
