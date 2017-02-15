@@ -12,7 +12,7 @@ public class Camera {
 	private float distanceFromPlayer = 100;
 	private float angleAroundPlayer = 0;
 	private long aagTimer = System.currentTimeMillis(), pTimer = System.currentTimeMillis();
-	private int defaultPitch = 20, defaultangle = 0;
+	private int defaultPitch = 10, defaultangle = 0;
 	private float offsetX, verticalDistance, offsetZ;
 	
 	private Vector3f position = new Vector3f(0,0,0);
