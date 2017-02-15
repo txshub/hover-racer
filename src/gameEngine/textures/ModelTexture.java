@@ -1,36 +1,58 @@
 package gameEngine.textures;
 
-/**
- * @author rtm592
- *
- */
 public class ModelTexture {
-
+	
 	private int textureID;
-	private int normalMapID;
-
+	private int normalMap;
+	
 	private float shineDamper = 1;
 	private float reflectivity = 0;
-
+	
 	private boolean hasTransparency = false;
 	private boolean useFakeLighting = false;
 	
-	private int numOfRows = 1;
-
-	public ModelTexture(int ID) {
-		this.textureID = ID;
-	}
-
-	public int getID() {
-		return textureID;
-	}
+	private int numberOfRows = 1;
 	
-	public int getNormalMapID() {
-		return normalMapID;
+	public ModelTexture(int texture){
+		this.textureID = texture;
+	}
+		
+	public int getNumberOfRows() {
+		return numberOfRows;
 	}
 
-	public void setNormalMapID(int normalMapID) {
-		this.normalMapID = normalMapID;
+	public int getNormalMap() {
+		return normalMap;
+	}
+
+	public void setNormalMap(int normalMap) {
+		this.normalMap = normalMap;
+	}
+
+	public void setNumberOfRows(int numberOfRows) {
+		this.numberOfRows = numberOfRows;
+	}
+
+	public boolean isHasTransparency() {
+		return hasTransparency;
+	}
+
+	public boolean isUseFakeLighting() {
+		return useFakeLighting;
+	}
+
+
+	public void setUseFakeLighting(boolean useFakeLighting) {
+		this.useFakeLighting = useFakeLighting;
+	}
+
+	public void setHasTransparency(boolean hasTransparency) {
+		this.hasTransparency = hasTransparency;
+	}
+
+
+	public int getID(){
+		return textureID;
 	}
 
 	public float getShineDamper() {
@@ -48,31 +70,5 @@ public class ModelTexture {
 	public void setReflectivity(float reflectivity) {
 		this.reflectivity = reflectivity;
 	}
-
-	public boolean hasTransparency() {
-		return hasTransparency;
-	}
-
-	public void setHasTransparency(boolean hasTransparency) {
-		this.hasTransparency = hasTransparency;
-	}
-
-	public boolean useFakeLighting() {
-		return useFakeLighting;
-	}
-
-	public void setUseFakeLighting(boolean useFakeLighting) {
-		this.useFakeLighting = useFakeLighting;
-	}
-
-	public int getNumOfRows() {
-		return numOfRows;
-	}
-
-	public void setNumOfRows(int numOfRows) {
-		this.numOfRows = numOfRows;
-	}
-	
-	
 
 }
