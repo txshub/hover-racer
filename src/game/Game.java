@@ -63,6 +63,8 @@ public class Game {
 		loader = new Loader();
 		Game.input = new InputController();
 		AudioMaster.init();
+		entities = new ArrayList<Entity>();
+		normalEntities = new ArrayList<Entity>();
 
 		// Terrain
 		TerrainTexture background = new TerrainTexture(loader.loadTexture("grassy2"));
