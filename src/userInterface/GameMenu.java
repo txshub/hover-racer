@@ -1,23 +1,13 @@
 package userInterface;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
 import audioEngine.AudioMaster;
+import game.Main;
 import gameEngine.engineTester.MainGameLoop;
 import javafx.animation.TranslateTransition;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 public class GameMenu extends Parent {
@@ -50,7 +40,7 @@ public class GameMenu extends Parent {
 		btnPlayGame = new MenuButton("PLAY AGAINST RACERS");
 		btnPlayGame.setOnMouseClicked(event -> {
 			//enter the server lobby in the actual game
-			MainGameLoop.main(null);
+			Main.main(null);
 		});
 		
 		btnPlayAI = new MenuButton("PLAY AGAINST AI");
