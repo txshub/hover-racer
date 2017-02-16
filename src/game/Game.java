@@ -88,7 +88,7 @@ public class Game {
     trackSeed = st.getSeed();
 
     TexturedModel trackModel = createTrackModel(trackSeed);
-    Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 2f);
+    Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 3f);
     entities.add(track);
 
     // Lighting
@@ -102,7 +102,7 @@ public class Game {
     TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
         new ModelTexture(loader.loadTexture("newShipTexture")));
     ArrayList<Ship> otherShips = new ArrayList<>();
-    player = new Player(playerTModel, new Vector3f(50, 20, 50), new Vector3f(), 1f, input);
+    player = new Player(playerTModel, st.getStart().mul(3), new Vector3f(), 1f, input);
     entities.add(player);
 
     // Player following camera

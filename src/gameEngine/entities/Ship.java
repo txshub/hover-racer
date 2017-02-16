@@ -33,10 +33,10 @@ public class Ship extends Entity {
 	private Vector3f acceleration;
 	private Vector3f rotVelocity;
 
-	protected float thrust;
+	protected float thrust;      
 	protected float rotThrust;
 	protected float mass;
-	protected float maxSpeed = 10f, maxAcceleration = 1f;
+	protected float maxSpeed = 10f, maxAcceleration = 0.5f;
 
 	protected float maxTurn = 1f, turnSpeed = 0.1f;
 
