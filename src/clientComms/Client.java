@@ -39,7 +39,7 @@ public class Client {
 		ClientReceiver receiver = new ClientReceiver(fromServer, this);
 		receiver.start();
 		try {
-			sendByteMessage(name.getBytes(charset), Byte.parseByte(Server.userSendingTag, 2));
+			sendByteMessage(name.getBytes(charset), Server.userSendingTag);
 			receiver.join();
 			toServer.close();
 			fromServer.close();
@@ -59,14 +59,14 @@ public class Client {
 	 * @param message The byte message to send
 	 * @throws IOException If there is a problem with writing
 	 */
-	public void sendByteMessage(byte[] message, byte type) throws IOException {
+	public void sendByteMessage(byte[] message, String type) throws IOException {
 		toServer.writeInt(message.length+1);
 		byte[] out = new byte[message.length+1];
-		out[0] = type;
+		out[0] = Byte.parseByte(type, 2);
 		for(int i = 0; i < message.length; i++) {
 			out[i+1] = message[i];
 		}
 		toServer.write(out);
-		if(Server.DEBUG) System.out.println("Sent message " + new String(message, charset) + " with tag " + Byte.toString(type));
+		if(Server.DEBUG) System.out.println("Sent message " + new String(message, charset) + " with tag " + type);
 	}
 }
