@@ -1,9 +1,9 @@
 package serverComms;
 import java.io.*;
 import java.net.*;
+import java.util.Date;
 
 public class ServerReceiver extends Thread {
-
 	private DetectTimeout detect;
 	private String clientName;
 	private DataInputStream client;
@@ -24,6 +24,8 @@ public class ServerReceiver extends Thread {
 			while(true) {
 				byte[] messageIn = new byte[client.readInt()];
 				client.readFully(messageIn);
+				Date d = new Date();
+				System.out.println("Received Message at " + d.getSeconds());
 				detect.messageReceived = true;
 				detect.interrupt();
 				if(messageIn == null || messageIn.length == 0) return;
