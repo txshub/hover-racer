@@ -79,12 +79,12 @@ public class Client extends Thread {
 	 * @throws IOException If there is a problem with writing
 	 */
 	public void sendByteMessage(byte[] message, String type) throws IOException {
-		toServer.writeInt(message.length+1);
 		byte[] out = new byte[message.length+1];
 		out[0] = Byte.parseByte(type, 2);
 		for(int i = 0; i < message.length; i++) {
 			out[i+1] = message[i];
 		}
+		toServer.writeInt(out.length);
 		toServer.write(out);
 		toServer.flush();
 		if(DEBUG) System.out.println("Sent message " + new String(message, charset) + " with tag " + type);
