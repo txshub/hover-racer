@@ -109,6 +109,11 @@ public class Ship extends Entity {
 //		engineSource.setLooping(true);
 //		engineSource.play(Sounds.ENGINE);
 //	}
+	
+	public Ship(TexturedModel model, Vector3f position, InputController controller) {
+	  this(model, position, new ArrayList<Ship>(), controller, new FlatGroundProvider(0));
+	}
+	
 	/** Creates a player-controlled ship
 	 * 
 	 * @param startingPosition Vector describing this ship's starting position
@@ -213,8 +218,8 @@ public class Ship extends Entity {
 		if (controller.checkAction(Action.FORWARD)) accelerate2d(delta * ACCELERATION, (float) Math.PI * 1.5f);
 		if (controller.checkAction(Action.BREAK)) airResistance(delta * BREAK_POWER); // Breaking slows you down, no matter how you're moving
 		// if (keys.contains(Action.BREAK)) accelerate2d(delta * ACCELERATION, Math.PI * 1.5); // Breaking accelerates backwards
-		if (controller.checkAction(Action.STRAFE_RIGHT)) accelerate2d(delta * ACCELERATION / 2, (float) Math.PI);
-		if (controller.checkAction(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION / 2, 0);
+		if (controller.checkAction(Action.STRAFE_RIGHT)) accelerate2d(delta * ACCELERATION, (float) Math.PI);
+		if (controller.checkAction(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION, 0);
 		if (controller.checkAction(Action.JUMP)) velocity.changeY(y -> y + delta * JUMP_POWER * VERTICAL_SCALE);
 		
 		

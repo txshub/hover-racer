@@ -21,7 +21,7 @@ import gameEngine.toolbox.Maths;
  */
 public class Terrain {
 
-	public static final float SIZE = 800, MAX_HEIGHT = 40, MAX_PIXEL_COLOR = 256 * 256 * 256;
+	public static final float SIZE = 4096, MAX_HEIGHT = 40, MAX_PIXEL_COLOR = 256 * 256 * 256;
 
 	private float x;
 	private float z;

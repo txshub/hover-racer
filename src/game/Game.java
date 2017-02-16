@@ -36,13 +36,16 @@ import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
 
 public class Game {
+  
+  // Set this to print debug messages
+  public static boolean debug = true;
 
   private Loader loader;
   private ArrayList<Entity> entities;
   private ArrayList<Entity> normalEntities;
   private Terrain[][] terrains;
   private ArrayList<Light> lights;
-  private Player player;
+  private Ship player;
   private Camera camera;
   private MousePicker picker;
   private MasterRenderer renderer;
@@ -68,14 +71,16 @@ public class Game {
     normalEntities = new ArrayList<Entity>();
 
     // Terrain
-    TerrainTexture background = new TerrainTexture(loader.loadTexture("grassy2"));
-    TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mud"));
-    TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("grassFlowers"));
-    TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("path"));
+    TerrainTexture background = new TerrainTexture(loader.loadTexture("new/GridTexture"));
+    TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("new/GridTexture"));
+    TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("new/GridTexture"));
+    TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("new/GridTexture"));
     TerrainTexturePack texturePack = new TerrainTexturePack(background, rTexture, gTexture,
         bTexture);
 
-    TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
+    // TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
+    
+    TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("new/GridTexture"));
 
     int size = 1;
     terrains = new Terrain[size][size];
@@ -98,15 +103,14 @@ public class Game {
     // Lighting
     lights = new ArrayList<Light>();
     Light sun = new Light(
-        new Vector3f(256, 500, 256),
+        new Vector3f(256, 1000, 256),
         new Vector3f(1f, 1f, 1f));
     lights.add(sun);
 
     // Player Ship
     TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
         new ModelTexture(loader.loadTexture("newShipTexture")));
-    ArrayList<Ship> otherShips = new ArrayList<>();
-    player = new Player(playerTModel, new Vector3f(50, 20, 50), new Vector3f(), 1f);
+    player = new Ship(playerTModel, new Vector3f(50, 20, 50), input);
     entities.add(player);
 
     // Player following camera
@@ -245,7 +249,7 @@ public class Game {
       }
     }
     return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
-        new ModelTexture(loader.loadTexture("mud")));
+        new ModelTexture(loader.loadTexture("new/TrackTexture")));
 
   }
 
@@ -264,7 +268,7 @@ public class Game {
     if (input.checkAction(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
     if (input.checkAction(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
 
-    player.move(terrains);
+    player.update((float) delta);
     camera.move();
     picker.update();
   }
