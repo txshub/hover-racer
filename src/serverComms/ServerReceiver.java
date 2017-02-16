@@ -24,7 +24,11 @@ public class ServerReceiver extends Thread {
 				client.readFully(messageIn);
 				if(messageIn.length == 0) return;
 				ByteArrayByte fullMsg = new ByteArrayByte(messageIn);
-				if(fullMsg.getType()==Byte.parseByte(Server.userSendingTag, 2));
+				if(fullMsg.getType()==Byte.parseByte(Server.userSendingTag, 2)) {
+					
+				} else if(fullMsg.getType()==Byte.parseByte(Server.statusTag, 2)) {
+					System.out.println(new String(fullMsg.getMsg(),Server.charset));
+				}
 			}
 		} catch (IOException e) {
 			//What to do?
