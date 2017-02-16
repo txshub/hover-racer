@@ -1,6 +1,9 @@
 package clientComms;
 import java.io.*;
 
+import serverComms.ByteArrayByte;
+import serverComms.Server;
+
 /**
  * Thread to receive any messages passed from the server
  * @author simon
@@ -33,8 +36,12 @@ public class ClientReceiver extends Thread {
 					server.close();
 					throw new IOException("Got null from the server");
 				}
-				switch(new String(msg, Client.charset)) {
-				default:
+				ByteArrayByte fullMsg = new ByteArrayByte(msg);
+				if(fullMsg.getType()==Byte.parseByte(Server.badUserTag, 2)) {
+					System.out.println("Username not valid, please pick another");
+					System.exit(1);
+				} else if(fullMsg.getType()==Byte.parseByte(Server.acceptedUserTag, 2)) {
+					System.out.println("Username valid. Now connected to the server");
 				}
 			}
 		} catch (IOException e) {

@@ -6,13 +6,13 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class CommQueue {
-	private BlockingQueue<Byte[]> queue = new LinkedBlockingQueue<Byte[]>();
+	private BlockingQueue<ByteArrayByte> queue = new LinkedBlockingQueue<ByteArrayByte>();
 	
-	public void offer(Byte[] msg) {
+	public void offer(ByteArrayByte msg) {
 		queue.offer(msg);
 	}
 	
-	public Byte[] take() {
+	public ByteArrayByte take() {
 		while(true) {
 			try {
 				return(queue.take());

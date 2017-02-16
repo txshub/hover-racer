@@ -23,10 +23,8 @@ public class ServerReceiver extends Thread {
 				byte[] messageIn = new byte[client.readInt()];
 				client.readFully(messageIn);
 				if(messageIn.length == 0) return;
-				switch(new String(messageIn, Server.charset)) {
-				default:
-					System.out.println("Got message: " + messageIn + " from client " + clientName);
-				}
+				ByteArrayByte fullMsg = new ByteArrayByte(messageIn);
+				if(fullMsg.getType()==Byte.parseByte(Server.userSendingTag, 2));
 			}
 		} catch (IOException e) {
 			//What to do?
