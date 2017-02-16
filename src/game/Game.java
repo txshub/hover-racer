@@ -76,7 +76,7 @@ public class Game {
     System.out.println("Before client");
     
     // Communication stuff
-    client = new Client("Client", 4444, "localHost");
+    //client = new Client("Client", 4444, "localHost");
     
     System.out.println("After client");
 
@@ -138,7 +138,6 @@ public class Game {
   }
 
   public void update(double delta) {
-    System.out.println("Update");
     input.run();
     
     // Check if the escape key was pressed to exit the game
@@ -179,8 +178,11 @@ public class Game {
     renderer.cleanUp();
     loader.cleanUp();
     InputController.close = true;
-    AudioMaster.cleanUp();
+    AudioMaster.stopInGameMusic();
     DisplayManager.closeDisplay();
+    
+    // TODO Clean this up
+    player.cleanUp();
   }
 
   public boolean shouldClose() {
