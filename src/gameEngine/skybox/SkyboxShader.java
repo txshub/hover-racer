@@ -1,7 +1,6 @@
 package gameEngine.skybox;
 
 import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import gameEngine.entities.Camera;
@@ -34,7 +33,7 @@ public class SkyboxShader extends ShaderProgram{
 	}
 	
 	public void loadFogColour(float r, float g, float b){
-		super.loadVector3f(location_fogColour, new Vector3f(r,g,b));
+		super.loadVector(location_fogColour, new Vector3f(r,g,b));
 	}
 	
 	public void loadProjectionMatrix(Matrix4f matrix){
@@ -71,7 +70,7 @@ public class SkyboxShader extends ShaderProgram{
 
 	@Override
 	protected void bindAttributes() {
-		super.bindAttributes(0, "position");
+		super.bindAttribute(0, "position");
 		
 	}
 	

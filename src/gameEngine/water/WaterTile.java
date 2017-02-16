@@ -1,19 +1,13 @@
 package gameEngine.water;
 
-import gameEngine.terrains.Terrain;
-
-/**
- * @author rtm592
- *
- */
 public class WaterTile {
-
-	public static final float TILE_SIZE = (Terrain.SIZE/2);
+	
+	public static final float TILE_SIZE = 60;
 	
 	private float height;
 	private float x,z;
 	
-	public WaterTile(float centerX, float centerZ, float height) {
+	public WaterTile(float centerX, float centerZ, float height){
 		this.x = centerX;
 		this.z = centerZ;
 		this.height = height;
@@ -30,5 +24,7 @@ public class WaterTile {
 	public float getZ() {
 		return z;
 	}
-	
+
+
+
 }

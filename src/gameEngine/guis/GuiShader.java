@@ -4,10 +4,6 @@ import org.lwjgl.util.vector.Matrix4f;
 
 import gameEngine.shaders.ShaderProgram;
 
-/**
- * @author rtm592
- *
- */
 public class GuiShader extends ShaderProgram{
 	
 	private static final String VERTEX_FILE = "src/gameEngine/guis/guiVertexShader.txt";
@@ -30,7 +26,7 @@ public class GuiShader extends ShaderProgram{
 
 	@Override
 	protected void bindAttributes() {
-		super.bindAttributes(0, "position");
+		super.bindAttribute(0, "position");
 	}
 	
 	

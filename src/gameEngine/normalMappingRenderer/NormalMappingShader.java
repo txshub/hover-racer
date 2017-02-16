@@ -11,11 +11,9 @@ import gameEngine.entities.Light;
 import gameEngine.shaders.ShaderProgram;
 import gameEngine.toolbox.VecCon;
 
-/**
- * @author rtm592
- *
- */
 public class NormalMappingShader extends ShaderProgram{
+	
+	private static final int MAX_LIGHTS = 4;
 	
 	private static final String VERTEX_FILE = "src/gameEngine/normalMappingRenderer/normalMapVShader.txt";
 	private static final String FRAGMENT_FILE = "src/gameEngine/normalMappingRenderer/normalMapFShader.txt";
@@ -41,10 +39,10 @@ public class NormalMappingShader extends ShaderProgram{
 
 	@Override
 	protected void bindAttributes() {
-		super.bindAttributes(0, "position");
-		super.bindAttributes(1, "textureCoordinates");
-		super.bindAttributes(2, "normal");
-		super.bindAttributes(3, "tangent");
+		super.bindAttribute(0, "position");
+		super.bindAttribute(1, "textureCoordinates");
+		super.bindAttribute(2, "normal");
+		super.bindAttribute(3, "tangent");
 	}
 
 	@Override
@@ -77,7 +75,7 @@ public class NormalMappingShader extends ShaderProgram{
 	}
 	
 	protected void loadClipPlane(Vector4f plane){
-		super.loadVector4f(location_plane, plane);
+		super.loadVector(location_plane, plane);
 	}
 	
 	protected void loadNumberOfRows(int numberOfRows){
@@ -85,11 +83,11 @@ public class NormalMappingShader extends ShaderProgram{
 	}
 	
 	protected void loadOffset(float x, float y){
-		super.loadVector2f(location_offset, new Vector2f(x,y));
+		super.load2DVector(location_offset, new Vector2f(x,y));
 	}
 	
 	protected void loadSkyColour(float r, float g, float b){
-		super.loadVector3f(location_skyColour, new Vector3f(r,g,b));
+		super.loadVector(location_skyColour, new Vector3f(r,g,b));
 	}
 	
 	protected void loadShineVariables(float damper,float reflectivity){
@@ -104,13 +102,13 @@ public class NormalMappingShader extends ShaderProgram{
 	protected void loadLights(List<Light> lights, Matrix4f viewMatrix){
 		for(int i=0;i<MAX_LIGHTS;i++){
 			if(i<lights.size()){
-				super.loadVector3f(location_lightPositionEyeSpace[i], getEyeSpacePosition(lights.get(i), viewMatrix));
-				super.loadVector3f(location_lightColour[i], VecCon.toLWJGL(lights.get(i).getColour()));
-				super.loadVector3f(location_attenuation[i], VecCon.toLWJGL(lights.get(i).getAttenuation()));
+				super.loadVector(location_lightPositionEyeSpace[i], getEyeSpacePosition(lights.get(i), viewMatrix));
+				super.loadVector(location_lightColour[i], VecCon.toLWJGL(lights.get(i).getColour()));
+				super.loadVector(location_attenuation[i], VecCon.toLWJGL(lights.get(i).getAttenuation()));
 			}else{
-				super.loadVector3f(location_lightPositionEyeSpace[i], new Vector3f(0, 0, 0));
-				super.loadVector3f(location_lightColour[i], new Vector3f(0, 0, 0));
-				super.loadVector3f(location_attenuation[i], new Vector3f(1, 0, 0));
+				super.loadVector(location_lightPositionEyeSpace[i], new Vector3f(0, 0, 0));
+				super.loadVector(location_lightColour[i], new Vector3f(0, 0, 0));
+				super.loadVector(location_attenuation[i], new Vector3f(1, 0, 0));
 			}
 		}
 	}

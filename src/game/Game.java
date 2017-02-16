@@ -40,7 +40,7 @@ public class Game {
   private Loader loader;
   private ArrayList<Entity> entities;
   private ArrayList<Entity> normalEntities;
-  private Terrain[][] terrains;
+  private ArrayList<Terrain> terrains;
   private ArrayList<Light> lights;
   private Player player;
   private Camera camera;
@@ -78,13 +78,9 @@ public class Game {
     TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
 
     int size = 1;
-    terrains = new Terrain[size][size];
-    for (int i = 0; i < size; i++) {
-      for (int j = 0; j < size; j++) {
-        terrains[i][j] = new Terrain((int) (Terrain.SIZE) * i, (int) (Terrain.SIZE) * j, loader,
-            texturePack, blendMap, "new/FlatHeightMap");
-      }
-    }
+    terrains = new ArrayList<Terrain>();
+        terrains.add(new Terrain((int) (Terrain.SIZE), (int) (Terrain.SIZE), loader,
+            texturePack, blendMap, "new/FlatHeightMap"));
 
     // Track
     SeedTrack st = TrackMaker.makeTrack(10, 20, 30, 1, 40, 40, 4);
@@ -117,7 +113,7 @@ public class Game {
     guiRender = new GuiRenderer(loader);
 
     // Camera rotation with right click
-    picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrains);
+//    picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrains);
 
     // Tudor
     AudioMaster.playInGameMusic();
@@ -165,10 +161,9 @@ public class Game {
   }
 
   private static RawModel getModel(String fileName, Loader loader) {
-    ModelData data = OBJFileLoader.loadOBJ(fileName);
+    RawModel data = OBJFileLoader.loadOBJ(fileName,loader);
 
-    return loader.loadToVAO(data.getVertices(), data.getTextureCoords(), data.getNormals(),
-        data.getIndices());
+    return data;
   }
 
   private TexturedModel createTrackModel(long seed) {
