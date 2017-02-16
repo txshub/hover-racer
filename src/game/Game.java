@@ -173,9 +173,6 @@ public class Game {
         p = (i + 1) >= trackPoints.size() ? 0 : i + 1; 
         TrackPoint nextPoint = trackPoints.get(p);
 
-        // System.out.println("Cur: " + curPoint + " Next: " + nextPoint
-        // + " " + (nextPoint.getX() - curPoint.getX()));
-
         Vector2f dirFromPrev = new Vector2f(curPoint.getX() - prevPoint.getX(),
             curPoint.getY() - prevPoint.getY());
         
