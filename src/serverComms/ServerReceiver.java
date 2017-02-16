@@ -30,6 +30,7 @@ public class ServerReceiver extends Thread {
 				ByteArrayByte fullMsg = new ByteArrayByte(messageIn);
 				if(fullMsg.getType()==Byte.parseByte(Server.clientDisconnect, 2)) {
 					table.remove(clientName);
+					if(Server.DEBUG) System.out.println("Client Disconnected");
 				} else if(fullMsg.getType()==Byte.parseByte(Server.userSendingTag, 2)) {
 					
 				} else if(fullMsg.getType()==Byte.parseByte(Server.statusTag, 2)) {

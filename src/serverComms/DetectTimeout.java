@@ -14,7 +14,10 @@ public class DetectTimeout extends Thread{
 	public void run() {
 		try {
 			Thread.sleep(5000);
-			if(!messageReceived) table.remove(user);
+			if(!messageReceived) {
+				if(Server.DEBUG) System.out.println("Client " + user + " disconnected");
+				table.remove(user);
+			}
 		} catch (InterruptedException e) {
 			
 		}
