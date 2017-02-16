@@ -1,13 +1,8 @@
 package gameEngine.entities;
 
 import org.joml.Vector3f;
-import org.lwjgl.input.Keyboard;
 
-import audioEngine.AudioMaster;
-import audioEngine.Source;
 import gameEngine.models.TexturedModel;
-import gameEngine.renderEngine.DisplayManager;
-import gameEngine.terrains.Terrain;
 import placeholders.InputController;
 import placeholders.InputController.Action;
 
