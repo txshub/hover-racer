@@ -67,6 +67,7 @@ public class Client {
 			out[i+1] = message[i];
 		}
 		toServer.write(out);
+		toServer.flush();
 		if(Server.DEBUG) System.out.println("Sent message " + new String(message, charset) + " with tag " + Byte.toString(type));
 	}
 }

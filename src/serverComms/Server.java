@@ -102,6 +102,7 @@ public class Server extends Thread {
 			out[i+1] = msg[i];
 		}
 		client.write(out);
+		client.flush();
 		
 	}
 }
