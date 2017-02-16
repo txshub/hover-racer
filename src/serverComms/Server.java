@@ -22,6 +22,7 @@ public class Server extends Thread {
 	public final static String acceptedUserTag  = "00000011";
 	public final static String clientDisconnect = "00000100";
 	public final static String dontDisconnect   = "00000101";
+	public final static String positionUpdate   = "00000110";
 	
 	/**
 	 * Creates a Server object

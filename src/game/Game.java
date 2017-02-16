@@ -76,7 +76,8 @@ public class Game {
     System.out.println("Before client");
     
     // Communication stuff
-    //client = new Client("Client", 4444, "localHost");
+    client = new Client("Client", 4444, "localHost");
+    client.start();
     
     System.out.println("After client");
 
@@ -157,12 +158,14 @@ public class Game {
     picker.update();
     
     // Send our position to the server
-//    try {
-//      client.sendByteMessage("Hello world!".getBytes(), Server.statusTag);
-//    } catch (IOException e) {
-//      // TODO Auto-generated catch block
-//      e.printStackTrace();
-//    }
+    try {
+      String message = "p: " + player.getPosition() + " v: " + player.getVelocity();
+      System.out.println("Sending '" + message + "' to server");
+      client.sendByteMessage(message.getBytes(), Server.statusTag);
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
   public void render() {
