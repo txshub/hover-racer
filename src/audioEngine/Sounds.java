@@ -7,23 +7,25 @@ import java.util.HashMap;
  * Class storing the sounds
  */
 public class Sounds {
+  
+  private static String PATH = "resources/audio/";
 	
 	// Music
-	public static String MUSIC_1 = "audioEngine/the-northern-lights.wav";
-	public static String MUSIC_2 = "audioEngine/sacred-motion.wav";
-	public static String MUSIC_3 = "audioEngine/scorpio-moon.wav";
+	public static String MUSIC_1 = PATH + "the-northern-lights.wav";
+	public static String MUSIC_2 = PATH + "sacred-motion.wav";
+	public static String MUSIC_3 = PATH + "scorpio-moon.wav";
 	
 	// In-game music
-	public static String IN_GAME_1 = "audioEngine/infinity.wav";
-	public static String IN_GAME_2 = "audioEngine/mathrix.wav";
-	public static String IN_GAME_3 = "audioEngine/night-pulse.wav";
-	public static String IN_GAME_4 = "audioEngine/restricted-area.wav";
+	public static String IN_GAME_1 = PATH + "infinity.wav";
+	public static String IN_GAME_2 = PATH + "mathrix.wav";
+	public static String IN_GAME_3 = PATH + "night-pulse.wav";
+	public static String IN_GAME_4 = PATH + "restricted-area.wav";
 	
 	// SFX
-	public static String ENGINE = "audioEngine/futuristic-machine.wav";
-	public static String BUTTON_CLICK = "audioEngine/button-spacey.wav";
-	public static String BUTTON_HOVER = "audioEngine/button-hover.wav";
-	public static String BACKGROUND_NOISE = "audioEngine/hover-craft.wav";
+	public static String ENGINE = PATH + "futuristic-machine.wav";
+	public static String BUTTON_CLICK = PATH + "button-spacey.wav";
+	public static String BUTTON_HOVER = PATH + "button-hover.wav";
+	public static String BACKGROUND_NOISE = PATH + "hover-craft.wav";
 	
 	// The list of songs
 	public static String[] songs = { MUSIC_1, MUSIC_2, MUSIC_3 };

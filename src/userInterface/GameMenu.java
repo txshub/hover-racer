@@ -40,12 +40,14 @@ public class GameMenu extends Parent {
 		btnPlayGame = new MenuButton("PLAY AGAINST RACERS");
 		btnPlayGame.setOnMouseClicked(event -> {
 			//enter the server lobby in the actual game
+		  AudioMaster.stopMusic();
 			Main.main(null);
 		});
 		
 		btnPlayAI = new MenuButton("PLAY AGAINST AI");
 		btnPlayAI.setOnMouseClicked(event -> {
 			//enter the game with the computer-controlled players
+      AudioMaster.stopMusic();
 			MainGameLoop.main(null);
 		});
 		
@@ -73,7 +75,7 @@ public class GameMenu extends Parent {
 			
 			// Tudor - Close the audio engine
 			AudioMaster.stopMusic();
-			AudioMaster.cleanUP();
+			AudioMaster.cleanUp();
 			
 			System.exit(0);
 		});

@@ -80,7 +80,7 @@ public class AudioMaster {
 	/**
 	 * Stop engine
 	 */
-	public static void cleanUP() {
+	public static void cleanUp() {
 		for (int buffer : buffers) {
 			AL10.alDeleteBuffers(buffer);
 		}
@@ -88,6 +88,7 @@ public class AudioMaster {
 			source.delete();
 		}
 		AL.destroy();
+		initialised = false;
 	}
 	
 	/**
