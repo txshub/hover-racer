@@ -198,4 +198,10 @@ public class AudioMaster {
 			s.setCurrentVolume(s.getCurrentVolume() - 0.1f);
 		}
 	}
+	
+	public static void deleteSource(Source s) {
+		sources.remove(s);
+		sfx.remove(s);
+		music.remove(s);
+	}
 }
