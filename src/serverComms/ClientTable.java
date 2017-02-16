@@ -29,6 +29,10 @@ public class ClientTable {
 		queueTable.put(name, new CommQueue());
 		
 	}
+	
+	public void remove(String name) {
+		queueTable.remove(name);
+	}
 
 	/**
 	 * Returns the queue associated with a given user

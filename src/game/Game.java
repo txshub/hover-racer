@@ -1,5 +1,6 @@
 package game;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
 import audioEngine.AudioMaster;
+import clientComms.Client;
 import gameEngine.entities.Camera;
 import gameEngine.entities.Entity;
 import gameEngine.entities.Light;
@@ -30,6 +32,7 @@ import gameEngine.toolbox.MousePicker;
 import physics.Ship;
 import placeholders.InputController;
 import placeholders.InputController.Action;
+import serverComms.Server;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
@@ -38,7 +41,6 @@ public class Game {
 
 	// Set this to print debug messages
 	public static boolean debug = true;
-
 	private Loader loader;
 	private ArrayList<Entity> entities;
 	private ArrayList<Entity> normalEntities;
@@ -52,6 +54,7 @@ public class Game {
 	private long trackSeed;
 	private ArrayList<TrackPoint> trackPoints;
 	public static InputController input;
+	private Client client;
 
 	private boolean running;
 
@@ -68,6 +71,14 @@ public class Game {
 		AudioMaster.init();
 		entities = new ArrayList<Entity>();
 		normalEntities = new ArrayList<Entity>();
+
+		System.out.println("Before client");
+
+		// Communication stuff
+		client = new Client("Client", 4444, "localHost");
+		client.start();
+
+		System.out.println("After client");
 
 		// Terrain
 		TerrainTexture background = new TerrainTexture(loader.loadTexture("new/GridTexture"));
@@ -274,6 +285,19 @@ public class Game {
 		player.update((float) delta);
 		camera.move();
 		picker.update();
+
+		// Send our position to the server
+		try {
+			String message = "p: " + player.getPosition() + " v: " + player.getVelocity();
+			System.out.println("Sending '" + message + "' to server");
+			client.sendByteMessage(message.getBytes(), Server.statusTag);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// TODO Clean this up
+		player.cleanUp();
+
 	}
 
 	public void render() {

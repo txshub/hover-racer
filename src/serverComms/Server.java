@@ -16,10 +16,13 @@ public class Server extends Thread {
 	private int portNumber;
 	public final static boolean DEBUG = true;
 	public volatile boolean runThread = true;
-	public final static String userSendingTag  = "00000000";
-	public final static String badUserTag      = "00000001";
-	public final static String statusTag       = "00000010";
-	public final static String acceptedUserTag = "00000011";
+	public final static String userSendingTag   = "00000000";
+	public final static String badUserTag       = "00000001";
+	public final static String statusTag        = "00000010";
+	public final static String acceptedUserTag  = "00000011";
+	public final static String clientDisconnect = "00000100";
+	public final static String dontDisconnect   = "00000101";
+	public final static String positionUpdate   = "00000110";
 	
 	/**
 	 * Creates a Server object
