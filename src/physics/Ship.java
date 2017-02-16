@@ -308,5 +308,9 @@ public class Ship extends Entity {
 	public float getMass() {
 		return mass;
 	}
+	
+	public void cleanUp() {
+	  engineSource.delete();
+	}
 
 }
