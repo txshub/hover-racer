@@ -41,7 +41,7 @@ public class Ship extends Entity {
 
 	private static final float SCALE = 3;
 	private static final float VERTICAL_SCALE = 10;
-	private static final float ACCELERATION = 30 * SCALE; // How fast does the ship accelerate
+	private static final float ACCELERATION = 50 * SCALE; // How fast does the ship accelerate
 	private static final float BREAK_POWER = 10; // How fast does it break
 	private static final float TURN_SPEED = 4f; // How fast does it turn
 	private static final float AIR_RESISTANCE = 10; // How fast do ships slow down (this and acceleration determines the max speed)
