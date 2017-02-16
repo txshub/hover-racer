@@ -11,9 +11,13 @@ import serverComms.Server;
  * @author simon
  *
  */
-public class Client {
+public class Client extends Thread {
 	public final static Charset charset = StandardCharsets.UTF_8;
+	public static final boolean DEBUG = false;
 	private DataOutputStream toServer;
+	String name;
+	int portNumber;
+	String machineName;
 	
 	/**
 	 * Creates a client object and connects to a given server on a given port automagically
@@ -22,6 +26,13 @@ public class Client {
 	 * @param machineName The machinename of the server host (for testing purposes use localhost)
 	 */
 	public Client(String name, int portNumber, String machineName) {
+		this.name = name;
+		this.portNumber = portNumber;
+		this.machineName = machineName;
+	}
+	
+	@Override
+	public void run() {
 		DataInputStream fromServer = null;
 		Socket server = null;
 		try {
@@ -40,6 +51,7 @@ public class Client {
 		receiver.start();
 		try {
 			sendByteMessage(name.getBytes(charset), Server.userSendingTag);
+			(new StopDisconnect(this)).start();
 			receiver.join();
 			toServer.close();
 			fromServer.close();
@@ -51,7 +63,14 @@ public class Client {
 			System.err.println("Unexpected interruption: " + e.getMessage());
 			//What to do here?
 		}
-		
+	}
+	
+	public void cleanup() {
+		try {
+			sendByteMessage(new byte[0],Server.clientDisconnect);
+		} catch (IOException e) {
+			//Closing anyway so oh well
+		}
 	}
 	
 	/**
@@ -67,6 +86,6 @@ public class Client {
 			out[i+1] = message[i];
 		}
 		toServer.write(out);
-		if(Server.DEBUG) System.out.println("Sent message " + new String(message, charset) + " with tag " + type);
+		if(DEBUG) System.out.println("Sent message " + new String(message, charset) + " with tag " + type);
 	}
 }
