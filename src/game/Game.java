@@ -312,6 +312,7 @@ public class Game {
 		guiRender.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
+		client.cleanup();
 		InputController.close = true;
 		// AudioMaster.cleanUp();
 		DisplayManager.closeDisplay();

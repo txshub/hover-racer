@@ -86,6 +86,7 @@ public class Client extends Thread {
 			out[i+1] = message[i];
 		}
 		toServer.write(out);
+		toServer.flush();
 		if(DEBUG) System.out.println("Sent message " + new String(message, charset) + " with tag " + type);
 	}
 }
