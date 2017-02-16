@@ -11,10 +11,10 @@ import placeholders.InputController;
  * @author Reece Bennett
  *
  */
-public class Main {
+public class MainGameLoop {
 
 	
-  public static void main(String[] args) {
+  public void main() {
     Game game = new Game();
     
     // Set the FPS and UPS caps
