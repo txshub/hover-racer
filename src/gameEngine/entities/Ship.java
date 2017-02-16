@@ -36,9 +36,9 @@ public class Ship extends Entity {
 	protected float thrust;
 	protected float rotThrust;
 	protected float mass;
-	protected float maxAcceleration = 1000f;
+	protected float maxSpeed = 10f, maxAcceleration = 1f;
 
-	protected float maxTurn = 5f, turnSpeed = 0.5f;
+	protected float maxTurn = 1f, turnSpeed = 0.1f;
 
 	private final float DRAG = 1f; // Drag constant
 	private final Vector3f G = new Vector3f(0, -9.81f, 0); // Acceleration due
@@ -61,8 +61,10 @@ public class Ship extends Entity {
 	}
 
 	protected void update(float dt) {
+		float dragFactor = 0.99f;
+		
 		// Update rotation
-		rotVelocity.y *= 0.9f;
+		rotVelocity.y *= 0.95;
 		rotVelocity.y += rotThrust * turnSpeed;
 		if (rotVelocity.y < -maxTurn) {
 			rotVelocity.y = -maxTurn;
@@ -71,12 +73,33 @@ public class Ship extends Entity {
 		}
 		rotation.add(rotVelocity);
 
+//		if (rotThrust > 0) {
+//			rotVelocity.y = Math.min(maxTurn, rotVelocity.y + rotThrust);
+//		} else if (rotThrust < 0) {
+//			rotVelocity.y = Math.max(-maxTurn, rotVelocity.y + rotThrust);
+//		} else {
+//			if (rotVelocity.y > 0) {
+//				rotVelocity.y = Math.max(0, rotVelocity.y - 0.25f);
+//			} else if (rotVelocity.y < 0) {
+//				rotVelocity.y = Math.min(0, rotVelocity.y + 0.25f);
+//			}
+//		}
+		rotation.add(rotVelocity);
+
 		// Update acceleration
 		acceleration = new Vector3f();
-		
-		float y;
-		float z;
 
+		velocity.mul(dragFactor);
+
+		velocity.x += thrust * maxAcceleration * Math.sin(Math.toRadians(rotation.y)); 
+		velocity.y = 0;
+		velocity.z += thrust * maxAcceleration * Math.cos(Math.toRadians(rotation.y));
+		
+		float length = velocity.length();
+		if(length > maxSpeed){
+			velocity = velocity.normalize().mul(maxSpeed);
+		}
+		
 		// Apply input
 		// float rotY = (float) Math.toRadians(rotation.y);
 		// Vector3f power = new Vector3f(
@@ -101,7 +124,7 @@ public class Ship extends Entity {
 		// velocity.add(new Vector3f(acceleration).mul(dt));
 
 		// Update position with velocity
-		 position.add(new Vector3f(velocity));
+		position.add(new Vector3f(velocity));
 
 		// System.out.println("dt: " + dt + " T: " + thrust + " RT: " +
 		// rotThrust + " P: " + power + " DF: " + dragForce + " R: " + rotation
