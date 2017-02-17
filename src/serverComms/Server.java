@@ -50,24 +50,24 @@ public class Server extends Thread {
 			while(runThread) {
 				Socket socket = serverSocket.accept();
 				if(DEBUG) System.out.println("Socket Accepted");
-				DataInputStream fromClient = new DataInputStream(socket.getInputStream());
+				DataInputStream fromClient = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 				byte[] data = new byte[fromClient.readInt()];
 				fromClient.readFully(data);
 				ByteArrayByte msg = new ByteArrayByte(data);
 				if(DEBUG) System.out.println("Request to server: " + new String(msg.getMsg(),charset));
 				if(msg.getType()==statusTag) { //Server status requested
-					DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
+					DataOutputStream toClient = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 					writeByteMessage((status).getBytes(charset), statusTag, toClient);
 					if(DEBUG) System.out.println("Sent status to client");
 				} else { //Request is the client's username
 					String name = new String(msg.getMsg(), charset);
 					if(clientTable.userExists(name)) { //Can't have that username
-						DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
+						DataOutputStream toClient = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 						writeByteMessage(("Bad Username").getBytes(charset), badUserTag, toClient);
 						if(DEBUG) System.out.println("Sent Bad Username to client");
 					} else { //Valid Username
 						clientTable.add(name);
-						DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
+						DataOutputStream toClient = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 						ServerSender sender = new ServerSender(clientTable.getQueue(name), toClient);
 						sender.start();
 						clientTable.getQueue(name).offer(new ByteArrayByte(("Valid").getBytes(charset),acceptedUserTag));

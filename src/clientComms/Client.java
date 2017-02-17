@@ -38,8 +38,8 @@ public class Client extends Thread {
 		Socket server = null;
 		try {
 			server = new Socket(machineName, portNumber);
-			toServer = new DataOutputStream(server.getOutputStream());
-			fromServer = new DataInputStream(server.getInputStream());
+			toServer = new DataOutputStream(new BufferedOutputStream(server.getOutputStream()));
+			fromServer = new DataInputStream(new BufferedInputStream(server.getInputStream()));
 		} catch (UnknownHostException e) {
 			System.err.println("Unknown host: " + machineName);
 			//What to do here?
