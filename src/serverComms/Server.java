@@ -16,13 +16,14 @@ public class Server extends Thread {
 	private int portNumber;
 	public final static boolean DEBUG = true;
 	public volatile boolean runThread = true;
-	public final static String userSendingTag   = "00000000";
-	public final static String badUserTag       = "00000001";
-	public final static String statusTag        = "00000010";
-	public final static String acceptedUserTag  = "00000011";
-	public final static String clientDisconnect = "00000100";
-	public final static String dontDisconnect   = "00000101";
-	public final static String positionUpdate   = "00000110";
+	public final static byte badPacket        = Byte.parseByte("0");
+	public final static byte userSendingTag   = Byte.parseByte("1");
+	public final static byte badUserTag       = Byte.parseByte("2");
+	public final static byte statusTag        = Byte.parseByte("3");
+	public final static byte acceptedUserTag  = Byte.parseByte("4");
+	public final static byte clientDisconnect = Byte.parseByte("5");
+	public final static byte dontDisconnect   = Byte.parseByte("6");
+	public final static byte positionUpdate   = Byte.parseByte("7");
 	
 	/**
 	 * Creates a Server object
@@ -54,7 +55,7 @@ public class Server extends Thread {
 				fromClient.readFully(data);
 				ByteArrayByte msg = new ByteArrayByte(data);
 				if(DEBUG) System.out.println("Request to server: " + new String(msg.getMsg(),charset));
-				if(msg.getType()==Byte.parseByte(statusTag, 2)) { //Server status requested
+				if(msg.getType()==statusTag) { //Server status requested
 					DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
 					writeByteMessage((status).getBytes(charset), statusTag, toClient);
 					if(DEBUG) System.out.println("Sent status to client");
@@ -79,24 +80,8 @@ public class Server extends Thread {
 			System.err.println("IO error: " + e.getMessage());
 		}
 	}
-
-	/**
-	 * Passes the given message to the given client
-	 * @param msg the given message
-	 * @param client the given client
-	 * @throws IOException If any errors occur during write
-	 */
-	public static void writeByteMessage(byte[] msg, String type, DataOutputStream client) throws IOException {
-		client.writeInt(msg.length + 1);
-		byte[] out = new byte[msg.length+1];
-		out[0] = Byte.parseByte(type,2);
-		for(int i = 0; i < msg.length; i++) {
-			out[i+1] = msg[i];
-		}
-		client.write(out);
-		
-	}
-
+	
+	
 	public static void writeByteMessage(byte[] msg, byte type, DataOutputStream client) throws IOException {
 		client.writeInt(msg.length + 1);
 		byte[] out = new byte[msg.length+1];

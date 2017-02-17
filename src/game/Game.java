@@ -289,11 +289,12 @@ public class Game {
 		// Send our position to the server
 		try {
 			String message = "p: " + player.getPosition() + " v: " + player.getVelocity();
-			System.out.println("Sending '" + message + "' to server");
+			if(client.DEBUG) System.out.println("Sending '" + message + "' to server");
 			client.sendByteMessage(message.getBytes(), Server.statusTag);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.exit(1);
 		}
 		// TODO Clean this up
 		player.cleanUp();

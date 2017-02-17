@@ -5,9 +5,9 @@ public class ByteArrayByte {
 	private byte[] msg;
 	private byte type;
 	
-	public ByteArrayByte(byte[] msg, String tag) {
+	public ByteArrayByte(byte[] msg, byte type) {
 		this.msg = msg;
-		this.type = Byte.parseByte(tag, 2);
+		this.type = type;
 	}
 	
 	public ByteArrayByte(byte[] typeMessage) {

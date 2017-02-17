@@ -37,11 +37,13 @@ public class ClientReceiver extends Thread {
 					throw new IOException("Got null from the server");
 				}
 				ByteArrayByte fullMsg = new ByteArrayByte(msg);
-				if(fullMsg.getType()==Byte.parseByte(Server.badUserTag, 2)) {
+				if(fullMsg.getType()==Server.badUserTag) {
 					System.out.println("Username not valid, please pick another");
 					System.exit(1);
-				} else if(fullMsg.getType()==Byte.parseByte(Server.acceptedUserTag, 2)) {
+				} else if(fullMsg.getType()==Server.acceptedUserTag) {
 					System.out.println("Username valid. Now connected to the server");
+				} else if(fullMsg.getType()==Server.badPacket) {
+					System.out.println("Need To Reconnect");
 				}
 			}
 		} catch (IOException e) {

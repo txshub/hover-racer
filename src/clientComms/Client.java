@@ -18,6 +18,7 @@ public class Client extends Thread {
 	String name;
 	int portNumber;
 	String machineName;
+	StopDisconnect serverStop;
 	
 	/**
 	 * Creates a client object and connects to a given server on a given port automagically
@@ -51,7 +52,8 @@ public class Client extends Thread {
 		receiver.start();
 		try {
 			sendByteMessage(name.getBytes(charset), Server.userSendingTag);
-			(new StopDisconnect(this)).start();
+			serverStop = new StopDisconnect(this);
+			serverStop.start();
 			receiver.join();
 			toServer.close();
 			fromServer.close();
@@ -66,6 +68,7 @@ public class Client extends Thread {
 	}
 	
 	public void cleanup() {
+		serverStop.interrupt();
 		try {
 			sendByteMessage(new byte[0],Server.clientDisconnect);
 		} catch (IOException e) {
@@ -78,9 +81,9 @@ public class Client extends Thread {
 	 * @param message The byte message to send
 	 * @throws IOException If there is a problem with writing
 	 */
-	public void sendByteMessage(byte[] message, String type) throws IOException {
+	public void sendByteMessage(byte[] message, byte type) throws IOException {
 		byte[] out = new byte[message.length+1];
-		out[0] = Byte.parseByte(type, 2);
+		out[0] = type;
 		for(int i = 0; i < message.length; i++) {
 			out[i+1] = message[i];
 		}

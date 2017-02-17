@@ -22,21 +22,33 @@ public class ServerReceiver extends Thread {
 		try {
 			detect = new DetectTimeout(table, clientName);
 			while(true) {
-				byte[] messageIn = new byte[client.readInt()];
+				int in = client.readInt();
+				byte[] messageIn = new byte[in];
 				client.readFully(messageIn);
 				Date d = new Date();
 				System.out.println("Received Message at " + d.getSeconds());
 				detect.messageReceived = true;
-				detect.interrupt();
-				if(messageIn == null || messageIn.length == 0) return;
-				ByteArrayByte fullMsg = new ByteArrayByte(messageIn);
-				if(fullMsg.getType()==Byte.parseByte(Server.clientDisconnect, 2)) {
+				ByteArrayByte fullMsg;
+				if(messageIn == null || messageIn.length == 0) {
+					fullMsg = new ByteArrayByte(new byte[0], Server.badPacket);
+				} else {
+					fullMsg = new ByteArrayByte(messageIn);
+				}
+				if (fullMsg.getType()==Server.badPacket) {
+					System.out.println("Got Bad Packet, ignoring it");
+					System.out.println(in + messageIn.toString());
+					table.getQueue(clientName).offer(new ByteArrayByte(("Socket Closed").getBytes(), Server.badPacket));
+				} else if(fullMsg.getType()==Server.clientDisconnect) {
 					table.remove(clientName);
 					if(Server.DEBUG) System.out.println("Client Disconnected");
-				} else if(fullMsg.getType()==Byte.parseByte(Server.userSendingTag, 2)) {
+				} else if(fullMsg.getType()==Server.userSendingTag) {
 					
-				} else if(fullMsg.getType()==Byte.parseByte(Server.statusTag, 2)) {
-					System.out.println(new String(fullMsg.getMsg(),Server.charset));
+				} else if(fullMsg.getType()==Server.statusTag) {
+					//System.out.println(new String(fullMsg.getMsg(),Server.charset));
+				} else if(fullMsg.getType()==Server.dontDisconnect) {
+					//Do Nothing - It's just making sure we don't disconnect
+				} else {
+					System.out.println("Unknown Message Type: " + fullMsg.getType());
 				}
 				detect = new DetectTimeout(table, clientName);
 				detect.start();
