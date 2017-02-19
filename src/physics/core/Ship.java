@@ -5,16 +5,10 @@ import java.util.Collection;
 
 import org.joml.Vector3f;
 
-import audioEngine.AudioMaster;
-import audioEngine.Sounds;
-import audioEngine.Source;
 import gameEngine.entities.Entity;
 import gameEngine.models.TexturedModel;
 import physics.network.ExportedShip;
 import physics.network.ServerShipProvider;
-import physics.placeholders.FakeServerProvider;
-import physics.placeholders.FlatGroundProvider;
-import physics.support.Action;
 import physics.support.GroundProvider;
 import physics.support.InputController;
 
@@ -74,79 +68,6 @@ public abstract class Ship extends Entity {
 
 	long lastPrint = 0;
 	double deltaSum = 0;
-
-
-	// Tudor
-	private Source engineSource;
-
-	/** Creates a ship with position (0,0,0), no inputs an no other ships. For testing only */
-	// public Ship() {
-	// this(new Vector3f(0, 0, 0), new FakeController());
-	//
-	// // Tudor
-	// engineSource = AudioMaster.createSFXSource();
-	// engineSource.setLooping(true);
-	// engineSource.play(Sounds.ENGINE);
-	// }
-	// public Ship(Vector3f startingPosition, ControllerInt controller) {
-	// this(null, startingPosition, new ArrayList<>(), controller, new FlatGroundProvider(0));
-	//
-	// // Tudor
-	// engineSource = AudioMaster.createSFXSource();
-	// engineSource.setLooping(true);
-	// engineSource.play(Sounds.ENGINE);
-	// }
-
-	/** Creates a new server-controlled ship
-	 * 
-	 * @param startingPosition Vector describing this ship's starting position.
-	 * @param otherShips Other ships to possibly collide with
-	 * @param server Object providing data about the ship, as described in the interface */
-	// public Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, ServerShipProvider server,
-	// GroundProvider ground) {
-	// this(model, startingPosition, otherShips, new FakeController(), server, ground);
-	//
-	// // Tudor
-	// engineSource = AudioMaster.createSFXSource();
-	// engineSource.setLooping(true);
-	// engineSource.play(Sounds.ENGINE);
-	// }
-
-	public Ship(TexturedModel model, Vector3f position, InputController controller) {
-		this(model, position, new ArrayList<Ship>(), controller, new FlatGroundProvider(0));
-	}
-
-	/** Creates a player-controlled ship
-	 * 
-	 * @param startingPosition Vector describing this ship's starting position
-	 * @param otherShips Other ships to possibly collide with
-	 * @param controller Controlled providing player's desired actions, as described in the interface */
-	public Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, InputController controller,
-		GroundProvider ground) {
-		this(model, startingPosition, otherShips, controller, new FakeServerProvider(), ground);
-	}
-
-	// TODO remove this constructor after Ship subclasses are created
-	private Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, InputController controller,
-		ServerShipProvider server, GroundProvider ground) {
-		super(model, startingPosition, new Vector3(0, 0, 0), 1);
-		this.position = new Vector3(startingPosition);
-		super.position = this.position;
-		this.velocity = new Vector3(0, 0, 0);
-		this.rotation = new Vector3(0, 0, 0);
-		this.rotationalVelocity = new Vector3(0, 0, 0);
-		this.mass = DEFAULT_MASS;
-		this.size = DEFAULT_SIZE;
-		this.controller = controller;
-		this.otherShips = otherShips != null ? otherShips : new ArrayList<Ship>(); // If null set to an empty ArrayList
-		this.server = server;
-		this.ground = ground;
-
-		// Tudor
-		engineSource = AudioMaster.createSFXSource();
-		engineSource.setLooping(true);
-		engineSource.play(Sounds.ENGINE);
-	}
 
 	protected Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground) {
 		super(model, startingPosition, new Vector3(0, 0, 0), 1);
@@ -213,31 +134,6 @@ public abstract class Ship extends Entity {
 	private float relativeAngle(double angle) {
 		if (angle <= Math.PI) return (float) angle;
 		else return (float) (-2 * Math.PI + angle);
-	}
-
-	/** Handle controls from the player.
-	 * Once we have server controlled ships, this method (or even whole update) could be abstract and differently implemented by PlayerShip
-	 * and ServerShip.
-	 * 
-	 * @param controller2 */
-	private void handleControls(float delta) {
-		/* if (keys.contains(Action.TURN_RIGHT)) rotation.changeY(y -> correctAngle(y - delta * TURN_SPEED));
-		 * if (keys.contains(Action.TURN_LEFT)) rotation.changeY(y -> correctAngle(y + delta * TURN_SPEED)); */
-		if (controller.checkAction(Action.TURN_RIGHT)) {
-			rotationalVelocity.changeY(y -> y - delta * TURN_SPEED);
-			rotationalVelocity.changeZ(z -> z + delta * TURN_SPEED * SPEED_OF_ROTATION_WHILE_TURNING);
-		}
-		if (controller.checkAction(Action.TURN_LEFT)) {
-			rotationalVelocity.changeY(y -> y + delta * TURN_SPEED);
-			rotationalVelocity.changeZ(z -> z - delta * TURN_SPEED * SPEED_OF_ROTATION_WHILE_TURNING);
-		}
-		if (controller.checkAction(Action.FORWARD)) accelerate2d(delta * ACCELERATION, (float) Math.PI * 1.5f);
-		if (controller.checkAction(Action.BREAK)) airResistance(delta * BREAK_POWER); // Breaking slows you down, no matter how you're
-																						// moving
-		// if (keys.contains(Action.BREAK)) accelerate2d(delta * ACCELERATION, Math.PI * 1.5); // Breaking accelerates backwards
-		if (controller.checkAction(Action.STRAFE_RIGHT)) accelerate2d(delta * ACCELERATION, (float) Math.PI);
-		if (controller.checkAction(Action.STRAFE_LEFT)) accelerate2d(delta * ACCELERATION, 0);
-		if (controller.checkAction(Action.JUMP)) velocity.changeY(y -> y + delta * JUMP_POWER * VERTICAL_SCALE);
 	}
 
 	protected void steer(float thrust, float turn, float brokenDelta) {
@@ -321,12 +217,6 @@ public abstract class Ship extends Entity {
 		// Update parent
 		super.setRotation(rotation.copy().forEach(r -> Math.toDegrees(r)));
 
-		// Update sound TODO encapsulate sound
-		/* float pitch = (velocity.length() / MAX_SPEED) + 1f;
-		 * if (pitch > 2f) {
-		 * pitch = 2f;
-		 * }
-		 * engineSource.setPitch(pitch); */
 		return true;
 	}
 
@@ -349,9 +239,10 @@ public abstract class Ship extends Entity {
 	public float getMass() {
 		return mass;
 	}
-
-	public void cleanUp() {
-		engineSource.delete();
+	/** @return Approximated max speed. This is the point where air resistance and acceleration would average out. Actual speed might be
+	 *         more due to other factors. Currently only used by the sound engine. */
+	public float getMaxSpeed() {
+		return MAX_SPEED;
 	}
 
 	/** Updates this ship. This includes receiving packets from server for RemoteShip, taking input from the player for PlayerShip and
