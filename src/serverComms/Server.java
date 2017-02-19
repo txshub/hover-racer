@@ -16,6 +16,10 @@ public class Server extends Thread {
 	private int portNumber;
 	public final static boolean DEBUG = true;
 	public volatile boolean runThread = true;
+	public final static String userSendingTag  = "00000000";
+	public final static String badUserTag      = "00000001";
+	public final static String statusTag       = "00000010";
+	public final static String acceptedUserTag = "00000011";
 	
 	/**
 	 * Creates a Server object
@@ -45,21 +49,26 @@ public class Server extends Thread {
 				DataInputStream fromClient = new DataInputStream(socket.getInputStream());
 				byte[] data = new byte[fromClient.readInt()];
 				fromClient.readFully(data);
-				String request = new String(data, charset);
-				if(DEBUG) System.out.println("Request to server: " + request);
-				if(request.equals("#Status")) { //Server status requested
+				ByteArrayByte msg = new ByteArrayByte(data);
+				if(DEBUG) System.out.println("Request to server: " + new String(msg.getMsg(),charset));
+				if(msg.getType()==Byte.parseByte(statusTag, 2)) { //Server status requested
 					DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
-					toClient.write(status.getBytes(charset));
+					writeByteMessage((status).getBytes(charset), statusTag, toClient);
+					if(DEBUG) System.out.println("Sent status to client");
 				} else { //Request is the client's username
-					if(clientTable.userExists(request)) { //Can't have that username
+					String name = new String(msg.getMsg(), charset);
+					if(clientTable.userExists(name)) { //Can't have that username
 						DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
-						toClient.write(("Bad Username").getBytes(charset));
+						writeByteMessage(("Bad Username").getBytes(charset), badUserTag, toClient);
+						if(DEBUG) System.out.println("Sent Bad Username to client");
 					} else { //Valid Username
-						clientTable.add(request);
+						clientTable.add(name);
 						DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
-						ServerSender sender = new ServerSender(clientTable.getQueue(request), toClient);
+						ServerSender sender = new ServerSender(clientTable.getQueue(name), toClient);
 						sender.start();
-						(new ServerReceiver(socket, request, fromClient, clientTable, sender)).start();
+						clientTable.getQueue(name).offer(new ByteArrayByte(("Valid").getBytes(charset),acceptedUserTag));
+						if(DEBUG) System.out.println("Sent Accepted User to client");
+						(new ServerReceiver(socket, name, fromClient, clientTable, sender)).start();
 					}
 				}
 			}
@@ -74,9 +83,26 @@ public class Server extends Thread {
 	 * @param client the given client
 	 * @throws IOException If any errors occur during write
 	 */
-	public static void writeByteMessage(byte[] msg, DataOutputStream client) throws IOException {
+	public static void writeByteMessage(byte[] msg, String type, DataOutputStream client) throws IOException {
 		client.writeInt(msg.length + 1);
-		client.write(msg);
+		byte[] out = new byte[msg.length+1];
+		out[0] = Byte.parseByte(type,2);
+		for(int i = 0; i < msg.length; i++) {
+			out[i+1] = msg[i];
+		}
+		client.write(out);
+		
+	}
+
+	public static void writeByteMessage(byte[] msg, byte type, DataOutputStream client) throws IOException {
+		client.writeInt(msg.length + 1);
+		byte[] out = new byte[msg.length+1];
+		out[0] = type;
+		for(int i = 0; i < msg.length; i++) {
+			out[i+1] = msg[i];
+		}
+		client.write(out);
+		client.flush();
 		
 	}
 }

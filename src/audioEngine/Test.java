@@ -69,7 +69,7 @@ public class Test {
 //		
 //		AudioMaster.stopMusic();
 		
-		AudioMaster.cleanUP();
+		AudioMaster.cleanUp();
 	}
 
 }

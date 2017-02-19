@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Tudor Suruceanu
@@ -34,7 +35,7 @@ public class JUTests {
 	
 	@After
 	public void cleanUP() {
-		AudioMaster.cleanUP();
+		AudioMaster.cleanUp();
 	}
 
 }

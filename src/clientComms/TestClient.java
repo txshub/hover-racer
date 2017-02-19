@@ -11,6 +11,7 @@ public class TestClient {
 	 * @param args Any program arguments to subsequently be ignored
 	 */
 	public static void main(String[] args) {
+		System.out.println("Test");
 		Client client = new Client("Bob", 4444, "localhost");
 	}
 }

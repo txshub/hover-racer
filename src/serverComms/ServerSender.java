@@ -27,12 +27,8 @@ public class ServerSender extends Thread{
 	public void run() {
 		while(continueSending) {
 			try {
-				Byte[] msg = queue.take();
-				byte[] msgSend = new byte[msg.length];
-				for(int i = 0; i < msg.length; i++) {
-					msgSend[i] = msg[i];
-				}
-				Server.writeByteMessage(msgSend,toClient);
+				ByteArrayByte msg = queue.take();
+				Server.writeByteMessage(msg.getMsg(),msg.getType(),toClient);
 			} catch (IOException e) {
 				System.err.println("Error passing message to client: " + e.getMessage());
 			}

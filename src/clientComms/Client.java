@@ -4,6 +4,8 @@ import java.net.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+import serverComms.Server;
+
 /**
  * Main client class for client/server communications
  * @author simon
@@ -37,7 +39,7 @@ public class Client {
 		ClientReceiver receiver = new ClientReceiver(fromServer, this);
 		receiver.start();
 		try {
-			sendByteMessage(name.getBytes());
+			sendByteMessage(name.getBytes(charset), Byte.parseByte(Server.userSendingTag, 2));
 			receiver.join();
 			toServer.close();
 			fromServer.close();
@@ -57,8 +59,15 @@ public class Client {
 	 * @param message The byte message to send
 	 * @throws IOException If there is a problem with writing
 	 */
-	public void sendByteMessage(byte[] message) throws IOException {
-		toServer.writeInt(message.length);
-		toServer.write(message);
+	public void sendByteMessage(byte[] message, byte type) throws IOException {
+		toServer.writeInt(message.length+1);
+		byte[] out = new byte[message.length+1];
+		out[0] = type;
+		for(int i = 0; i < message.length; i++) {
+			out[i+1] = message[i];
+		}
+		toServer.write(out);
+		toServer.flush();
+		if(Server.DEBUG) System.out.println("Sent message " + new String(message, charset) + " with tag " + Byte.toString(type));
 	}
 }
