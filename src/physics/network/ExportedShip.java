@@ -1,10 +1,12 @@
-package placeholders;
+package physics.network;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import physics.Vector3;
+import physics.core.Vector3;
+import physics.placeholders.ControllerInt;
+import physics.support.Action;
 
 /** An object representing a Ship entity, exported for transmission over the network. It serves as an intermediate step between a Ship
  * object and a float array. This will likely be upgraded to a byte array later
@@ -41,6 +43,12 @@ public class ExportedShip implements ControllerInt {
 	}
 	public Vector3 getVelocity() {
 		return velocity;
+	}
+	public Vector3 getRotation() {
+		return null; // TODO add rotational stuff
+	}
+	public Vector3 getRotationalVelocity() {
+		return null; // TODO add rotational stuff
 	}
 	public Collection<Action> getKeys() {
 		return keys;

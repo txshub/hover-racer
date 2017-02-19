@@ -1,4 +1,4 @@
-package physics;
+package physics.core;
 
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
