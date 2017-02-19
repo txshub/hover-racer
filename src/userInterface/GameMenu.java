@@ -3,6 +3,7 @@ package userInterface;
 import audioEngine.AudioMaster;
 import game.MainGameLoop;
 import javafx.animation.TranslateTransition;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -11,10 +12,11 @@ import javafx.util.Duration;
 
 public class GameMenu extends Parent {
 
-	VBox menu0, menu1, menu2, menu3;
-	MenuButton btnPlayGame, btnPlayAI, btnOptions, btnSound, btnMusic, btnExit, btnBack, btnBack2, btnBack3;
+	VBox menu0, menu1, menu2, menu3, menu4;
+	MenuButton btnPlayGame, btnPlayAI, btnOptions, btnSound, btnMusic, btnExit, btnBack, btnBack2, btnBack3, btnBack4;
 	SoundSlider soundSlider;
 	MusicSlider musicSlider;
+	ServerLobby serverLobby;
 	final int OFFSET = 600;
 
 	public GameMenu() {
@@ -23,6 +25,7 @@ public class GameMenu extends Parent {
 		menu1 = new VBox(10);
 		menu2 = new VBox(10);
 		menu3 = new VBox(10);
+		menu4 = new VBox(10);
 
 		menu0.setTranslateX(100);
 		menu0.setTranslateY(160);
@@ -36,11 +39,29 @@ public class GameMenu extends Parent {
 		menu3.setTranslateX(700);
 		menu3.setTranslateY(160);
 
+		menu4.setTranslateX(700);
+		menu4.setTranslateY(160);
+		
 		btnPlayGame = new MenuButton("PLAY AGAINST RACERS");
 		btnPlayGame.setOnMouseClicked(event -> {
 			// enter the server lobby in the actual game
 			AudioMaster.stopMusic();
-			new MainGameLoop().main();
+			//new MainGameLoop().main();
+			getChildren().add(menu4);
+			
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu0);
+			trans.setToX(menu0.getTranslateX() - OFFSET);
+
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.5), menu4);
+			trans1.setToX(menu4.getTranslateX() - OFFSET);
+
+			trans.play();
+			trans1.play();
+
+			trans.setOnFinished(evt -> {
+				getChildren().remove(menu0);
+			});
+
 		});
 
 		btnPlayAI = new MenuButton("PLAY AGAINST AI");
@@ -48,6 +69,7 @@ public class GameMenu extends Parent {
 			// enter the game with the computer-controlled players
 			AudioMaster.stopMusic();
 			new MainGameLoop().main();
+			((Node) event.getSource()).getScene().getWindow().hide();
 		});
 
 		btnOptions = new MenuButton("SETTINGS");
@@ -132,6 +154,24 @@ public class GameMenu extends Parent {
 				getChildren().remove(menu3);
 			});
 		});
+		
+		btnBack4 = new MenuButton("BACK");
+		btnBack4.setOnMouseClicked(event -> {
+			getChildren().add(menu0);
+
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu4);
+			trans.setToX(menu4.getTranslateX() + OFFSET);
+
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.5), menu0);
+			trans1.setToX(menu4.getTranslateX());
+
+			trans.play();
+			trans1.play();
+
+			trans.setOnFinished(evt -> {
+				getChildren().remove(menu4);
+			});
+		});
 
 		btnSound = new MenuButton("SOUND EFFECTS");
 		btnSound.setOnMouseClicked(event -> {
@@ -182,7 +222,8 @@ public class GameMenu extends Parent {
 		menu2.getChildren().addAll(soundSlider, btnBack2);
 		// background music
 		menu3.getChildren().addAll(musicSlider, btnBack3);
-
+		//server lobby window 1
+		menu4.getChildren().addAll(serverLobby,btnBack4);
 		// game menu background
 		Rectangle bg2 = new Rectangle(550, 412);
 		bg2.setFill(Color.GREY);
