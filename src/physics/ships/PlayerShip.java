@@ -1,5 +1,6 @@
 package physics.ships;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.joml.Vector3f;
@@ -19,11 +20,11 @@ public class PlayerShip extends Ship {
 	InputController input;
 	ShipSounds sound;
 
-	public PlayerShip(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground,
+	public PlayerShip(byte id, TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground,
 		InputController input) {
-		super(model, startingPosition, otherShips, ground);
-		this.input = input;
-		this.sound = new ShipSounds(this, otherShips);
+		super(id, model, startingPosition, otherShips, ground);
+		this.input = input; // Deal with input
+		this.sound = new ShipSounds(this, otherShips == null ? otherShips : new ArrayList<Ship>()); // Create ShipSounds
 	}
 
 	@Override
@@ -40,6 +41,11 @@ public class PlayerShip extends Ship {
 		// Steer and update ship
 		super.steer(thrust, turn, strafe, jump, delta);
 		super.updatePhysics(delta);
+		sound.update(delta);
+	}
+
+	public void cleanUp() {
+		sound.cleanUp();
 	}
 
 }

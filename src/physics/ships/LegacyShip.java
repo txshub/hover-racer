@@ -14,9 +14,9 @@ public class LegacyShip extends Ship {
 
 	private ControllerInt input;
 
-	public LegacyShip(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground,
+	public LegacyShip(byte id, TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground,
 		ControllerInt input) {
-		super(model, startingPosition, otherShips, ground);
+		super(id, model, startingPosition, otherShips, ground);
 		this.input = input;
 	}
 

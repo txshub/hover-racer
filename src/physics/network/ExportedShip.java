@@ -1,42 +1,59 @@
 package physics.network;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.nio.ByteBuffer;
 
 import physics.core.Vector3;
-import physics.placeholders.ControllerInt;
-import physics.support.Action;
 
 /** An object representing a Ship entity, exported for transmission over the network. It serves as an intermediate step between a Ship
  * object and a float array. This will likely be upgraded to a byte array later
  * 
  * @author Maciej Bogacki */
-public class ExportedShip implements ControllerInt {
+public class ExportedShip {
 
+	byte id;
 	Vector3 position;
 	Vector3 velocity;
-	Collection<Action> keys;
-	public ExportedShip(Vector3 position, Vector3 velocity, Collection<Action> keys) {
-		super();
+	Vector3 rotation;
+	Vector3 rotationalVelocity;
+
+	public ExportedShip(byte id, Vector3 position, Vector3 velocity, Vector3 rotation, Vector3 rotationalVelocity) {
+		this.id = id;
 		this.position = position;
 		this.velocity = velocity;
-		this.keys = keys;
+		this.rotation = rotation;
+		this.rotationalVelocity = rotationalVelocity;
 	}
 
-	public ExportedShip(float[] n) {
-		this.position = new Vector3(n[0], n[1], n[2]);
-		this.velocity = new Vector3(n[3], n[4], n[5]);
-		boolean[] boolkeys = decompose((int) n[6]);
-		keys = new ArrayList<Action>();
-		for (int i = 0; i < boolkeys.length; i++) {
-			if (boolkeys[i]) keys.add(Action.ordered[i]);
-		}
-		// this.keys = Arrays.stream(Action.ordered).filter(
-		// a -> n[6] % powOf2(Arrays.asList(Action.ordered).indexOf(a)) - n[6] % powOf2(Arrays.asList(Action.ordered).indexOf(a) - 1) == 0)
-		// .collect(Collectors.toList());
-
+	public ExportedShip(byte[] numbers) {
+		ByteBuffer buffer = ByteBuffer.wrap(numbers);
+		this.id = buffer.get(); // This move the buffer - order matters
+		this.position = makeVector(buffer);
+		this.velocity = makeVector(buffer);
+		this.rotation = makeVector(buffer);
+		this.rotationalVelocity = makeVector(buffer);
 	}
+
+
+	public byte[] toNumbers() {
+		ByteBuffer buffer = ByteBuffer.allocate(49); // (4 per float)*(3 per vector)*(4 vectors)
+		buffer.put(id);
+		addVector(position, buffer);
+		addVector(velocity, buffer);
+		addVector(rotation, buffer);
+		addVector(rotationalVelocity, buffer);
+		return buffer.array();
+	}
+
+
+	private void addVector(Vector3 vector, ByteBuffer buffer) {
+		buffer.putFloat(vector.x);
+		buffer.putFloat(vector.y);
+		buffer.putFloat(vector.z);
+	}
+	private Vector3 makeVector(ByteBuffer buffer) {
+		return new Vector3(buffer.getFloat(), buffer.getFloat(), buffer.getFloat());
+	}
+
 
 	public Vector3 getPosition() {
 		return position;
@@ -45,60 +62,28 @@ public class ExportedShip implements ControllerInt {
 		return velocity;
 	}
 	public Vector3 getRotation() {
-		return null; // TODO add rotational stuff
+		return rotation;
 	}
 	public Vector3 getRotationalVelocity() {
-		return null; // TODO add rotational stuff
-	}
-	public Collection<Action> getKeys() {
-		return keys;
-	}
-
-	public float[] toNumbers() {
-		int comKeys = keys.stream().mapToInt(k -> powOf2(Arrays.asList(Action.ordered).indexOf(k))).sum();
-		System.out.println();
-		return new float[]{position.getX(), position.getY(), position.getZ(), velocity.getX(), velocity.getY(), velocity.getZ(), comKeys};
-	}
-	private int powOf2(int x) {
-		return (int) Math.pow(2, x);
-	}
-	private boolean[] decompose(int x) {
-		boolean[] res = new boolean[Action.ordered.length];
-		int i = 0;
-		while (x > 0) {
-			if (x % 2 == 0) res[i++] = false;
-			else res[i++] = true;
-			x /= 2;
-		}
-		return res;
+		return rotationalVelocity;
 	}
 
 	public static void main(String[] args) {
-		ArrayList<Action> keys = new ArrayList<Action>();
-		// keys.add(Action.FORWARD);
-		// keys.add(Action.STRAFE_RIGHT);
-		// keys.add(Action.BREAK);
-		keys.addAll(Arrays.asList(Action.ordered));
-		ExportedShip first = new ExportedShip(new Vector3(1, 2, 3), new Vector3(6, 7, 8), keys);
-		float[] numbers = first.toNumbers();
-		System.out.println(numbers[6]);
-		System.out.println(first);
+		ExportedShip first =
+			new ExportedShip((byte) 42, new Vector3(1, 2, 3), new Vector3(6, 7, 8), new Vector3(11, 12, 13), new Vector3(26, 27, 28));
+		byte[] numbers = first.toNumbers();
+		// System.out.println(numbers[6]);
+		// System.out.println(first);
 		System.out.println(new ExportedShip(numbers));
 	}
 
 	@Override
 	public String toString() {
-		String res = position + ", " + velocity;
-		for (Action action : keys) {
-			res += action + ", ";
-		}
+		String res = "Id: " + id + "\nPosition: " + position + "\nVelocity: " + velocity + "\nRotation: " + rotation
+			+ "\nRotational Velocity: " + rotationalVelocity;
 		return res;
 	}
 
-	@Override
-	public Collection<Action> getPressedKeys() {
-		return getKeys();
-	}
 
 
 }

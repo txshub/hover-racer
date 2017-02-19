@@ -29,7 +29,7 @@ public class Window {
 		 * Ship testShip = new Ship(new Vector3(10f, 10f, 30f), new LwjglController()); */
 
 		KeyboardController input = new KeyboardController();
-		Ship testShip = new LegacyShip(null, new Vector3f(10f, 10f, 30f), null, new FlatGroundProvider(5), input);
+		Ship testShip = new LegacyShip((byte) 1, null, new Vector3f(10f, 10f, 30f), null, new FlatGroundProvider(5), input);
 		ArrayList<Ship> ships = new ArrayList<Ship>();
 		ships.add(testShip);
 

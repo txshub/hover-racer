@@ -66,11 +66,14 @@ public abstract class Ship extends Entity {
 	private ExportedShip fromServer;
 	private GroundProvider ground;
 
+	private byte id;
+
 	long lastPrint = 0;
 	double deltaSum = 0;
 
-	protected Ship(TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground) {
+	protected Ship(byte id, TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground) {
 		super(model, startingPosition, new Vector3(0, 0, 0), 1);
+		this.id = id;
 		this.position = new Vector3(startingPosition);
 		super.position = this.position;
 		this.velocity = new Vector3(0, 0, 0);
@@ -195,17 +198,9 @@ public abstract class Ship extends Entity {
 	/** Updates all physics
 	 * 
 	 * @param delta Time in seconds that passed since the last call of this function */
-	public boolean updatePhysics(float preDelta) {
+	public void updatePhysics(float preDelta) {
 		float delta = (float) 1 / 60; // TODO fix deltas
-		/* if (server.getShip().isPresent()) { // If received data from server, just update and don't do physics
-		 * this.fromServer = server.getShip().get();
-		 * this.position = fromServer.getPosition();
-		 * this.velocity = fromServer.getVelocity();
-		 * return true;
-		 * }
-		 * 
-		 * if (controller != null) handleControls(delta); // Steer the ship with user controls
-		 * else handleControls(delta); // Steer the ship with controls from server (only when missed packets) */
+
 		// Do physics
 		airResistance(delta);
 		doCollisions();
@@ -216,15 +211,17 @@ public abstract class Ship extends Entity {
 
 		// Update parent
 		super.setRotation(rotation.copy().forEach(r -> Math.toDegrees(r)));
-
-		return true;
 	}
 
-	public void updateFromPacket(ExportedShip remote) {
+	public void updateFromPacket(byte[] bytes) {
+		ExportedShip remote = new ExportedShip(bytes);
 		this.position = remote.getPosition();
 		this.velocity = remote.getVelocity();
 		this.rotation = remote.getRotation();
 		this.rotationalVelocity = remote.getRotationalVelocity();
+	}
+	public byte[] export() {
+		return new ExportedShip(id, position, velocity, rotation, rotationalVelocity).toNumbers();
 	}
 
 	/** @return This ship's current velocities, separately in all dimensions */
@@ -250,5 +247,11 @@ public abstract class Ship extends Entity {
 	 * 
 	 * @param delta Time since last call of this function (TODO specify units) */
 	public abstract void update(float delta);
+
+	@Override
+	public String toString() {
+		return "Ship No " + id + " at " + position + " facing " + rotation + "\nLinear velocity is " + velocity + " and angular velocity is"
+			+ rotationalVelocity;
+	}
 
 }

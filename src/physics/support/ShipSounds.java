@@ -19,21 +19,21 @@ import physics.core.Ship;
  * @author Maciej Bogacki (TODOs left for Tudor to fill in) */
 public class ShipSounds {
 
-	private Ship center;
-	private Source engineSource;
+	private Ship player;
+	private Source playerSource;
 	private Map<Ship, Source> otherShips;
 
 	/** Creates a new ShipSounds class
 	 * 
-	 * @param center The player's ship, where the sound is centred on
+	 * @param player The player's ship, where the sound is centred on
 	 * @param otherShips Other ships that also make sounds */
-	public ShipSounds(Ship center, Collection<Ship> otherShips) {
-		this.center = center;
+	public ShipSounds(Ship player, Collection<Ship> otherShips) {
+		this.player = player;
 
 		// Create player ship's Source
-		engineSource = AudioMaster.createSFXSource();
-		engineSource.setLooping(true);
-		engineSource.play(Sounds.ENGINE);
+		playerSource = AudioMaster.createSFXSource();
+		playerSource.setLooping(true);
+		playerSource.play(Sounds.ENGINE);
 		// TODO anything else you want do when creating player's source
 
 		// Create other ship's Sources
@@ -44,19 +44,20 @@ public class ShipSounds {
 			// TODO anything else you want to do when creating other ship's Sources. Use entry.getValue() for Source and entry.getKey() for
 			// corresponding Ship)
 		}
+		update(0f);
 	}
 
 	/** Updates all sources with positions, velocities, pitch, volume etc. Called on each update of physics.
 	 * 
 	 * @param delta Time since last call of this method (may or may not be helpful) */
 	public void update(float delta) {
-		engineSource.setPitch(Math.max(2, center.getVelocity().length() / center.getMaxSpeed()) + 1f); // Updates palyer's Ship
+		playerSource.setPitch(Math.max(2, player.getVelocity().length() / player.getMaxSpeed()) + 1f); // Updates palyer's Ship
 		// Updates all other ships
 		for (Entry<Ship, Source> entry : this.otherShips.entrySet()) {
 			Ship ship = entry.getKey();
 			Source source = entry.getValue();
-			Vector3f position = ship.getPosition().sub(center.getPosition()); // TODO change to camera's position instead
-			Vector3f velocity = ship.getVelocity().sub(center.getVelocity());
+			Vector3f position = ship.getPosition().sub(player.getPosition()); // TODO change to camera's position instead
+			Vector3f velocity = ship.getVelocity().sub(player.getVelocity());
 
 			source.setPosition(position.x, position.y, position.z); // Set relative position
 			source.setVelocity(velocity.x, velocity.y, velocity.z); // Set relative velocity
@@ -72,14 +73,14 @@ public class ShipSounds {
 	 * @param first First ship involved
 	 * @param second Second ship involved */
 	public void collision(Ship first, Ship second) {
-		Vector3f position = first.getPosition().sub(center.getPosition()).div(2); // Position relative to player
+		Vector3f position = first.getPosition().sub(player.getPosition()).div(2); // Position relative to player
 		float force = first.getVelocity().sub(second.getVelocity()).length(); // Force of the collision (relative speeds)
 		// TODO Make a collision sound happen
 	}
 
 	/** Cleans up sound Sources */
 	public void cleanUp() {
-		engineSource.delete();
+		playerSource.delete();
 		otherShips.values().forEach(s -> s.delete());
 		// TODO anything else you need to do when cleaning up
 	}
