@@ -12,6 +12,8 @@ public class UpgradeType {
 
 	/** Name of the upgrade, as shown to the player. Must be unique */
 	public String name;
+	/** Which piece of the ship does this upgrade correspond to (pick other if it doesn't) */
+	public Piece piece;
 	/** Stats raised (or lowered) by this upgrade, per level of this upgrade. */
 	public Map<Stat, Float> stats;
 	/** How many levels of this upgrade can a player have. Negative values mean there is no cap. */
@@ -30,12 +32,13 @@ public class UpgradeType {
 	 * @param stats Stats raised (or lowered) by this upgrade, per level of this upgrade.
 	 * @param maxLevel How many levels of this upgrade can a player have. Negative values mean there is no cap.
 	 * @param cost Cost per level of this upgrade */
-	public UpgradeType(String name, Map<Stat, Float> stats, int maxLevel, double cost) {
+	public UpgradeType(String name, Map<Stat, Float> stats, int maxLevel, double cost, Piece piece) {
 		super();
 		this.name = name;
 		this.stats = stats;
 		this.maxLevel = maxLevel;
 		this.baseCost = cost;
+		this.piece = piece;
 	}
 	/** Creates a new upgrade, with cost of each level being the same
 	 * 
@@ -44,14 +47,16 @@ public class UpgradeType {
 	 * @param maxLevel How many levels of this upgrade can a player have. Negative values mean there is no cap.
 	 * @param costFunction Function that returns the cost of nth level of this upgrade. If cost is always the same use the other
 	 *        constructor. */
-	public UpgradeType(String name, Map<Stat, Float> stats, int maxLevel, Function<Integer, Double> costFunction) {
+	public UpgradeType(String name, Map<Stat, Float> stats, int maxLevel, Function<Integer, Double> costFunction, Piece piece) {
 		super();
 		this.name = name;
 		this.stats = stats;
 		this.maxLevel = maxLevel;
 		this.baseCost = costFunction.apply(1);
 		this.costFunction = costFunction;
+		this.piece = piece;
 	}
+
 
 	/** Returns the cost of a specific level (i.e. cost of upgrading from level (n-1) to n), not rounded. Note that level must be at least
 	 * 1, otherwise an {@link IllegalArgumentException} will be thrown. Returns -1 if max level is exceeded (i.e. purchase is

@@ -37,7 +37,7 @@ public class UpgradeCreator {
 		System.out.println("Enter max level (negative for no limit).");
 		int maxLevel = Integer.parseInt(in.nextLine());
 		if (maxLevel < -1) maxLevel = -1;
-		UpgradeType upgrade = new UpgradeType(name, stats, maxLevel, cost);
+		UpgradeType upgrade = new UpgradeType(name, stats, maxLevel, cost, Piece.OTHER);
 		String json = (new Gson()).toJson(upgrade);
 		System.out.println("Created " + json);
 		save(name, json);
