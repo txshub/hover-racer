@@ -4,7 +4,7 @@ import java.awt.GraphicsEnvironment;
 
 import org.lwjgl.input.Keyboard;
 
-import placeholders.InputController;
+import physics.support.InputController;
 
 /**
  * 

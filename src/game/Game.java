@@ -29,9 +29,11 @@ import gameEngine.textures.ModelTexture;
 import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
-import physics.Ship;
-import placeholders.InputController;
-import placeholders.InputController.Action;
+import physics.core.Ship;
+import physics.placeholders.FlatGroundProvider;
+import physics.ships.PlayerShip;
+import physics.support.Action;
+import physics.support.InputController;
 import serverComms.Server;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
@@ -96,8 +98,8 @@ public class Game {
 		terrains = new Terrain[size][size];
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
-				terrains[i][j] = new Terrain((int) (Terrain.SIZE) * i, (int) (Terrain.SIZE) * j, loader, texturePack,
-						blendMap, "new/FlatHeightMap");
+				terrains[i][j] =
+					new Terrain((int) (Terrain.SIZE) * i, (int) (Terrain.SIZE) * j, loader, texturePack, blendMap, "new/FlatHeightMap");
 			}
 		}
 
@@ -117,9 +119,8 @@ public class Game {
 		lights.add(sun);
 
 		// Player Ship
-		TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
-				new ModelTexture(loader.loadTexture("newShipTexture")));
-		player = new Ship(playerTModel, new Vector3f(50, 20, 50), input);
+		TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader), new ModelTexture(loader.loadTexture("newShipTexture")));
+		player = new PlayerShip(playerTModel, new Vector3f(50, 20, 50), null, new FlatGroundProvider(10f), input);
 		entities.add(player);
 
 		// Player following camera
@@ -186,11 +187,9 @@ public class Game {
 				p = (i + 1) >= trackPoints.size() ? 0 : i + 1;
 				TrackPoint nextPoint = trackPoints.get(p);
 
-				Vector2f dirFromPrev = new Vector2f(curPoint.getX() - prevPoint.getX(),
-						curPoint.getY() - prevPoint.getY());
+				Vector2f dirFromPrev = new Vector2f(curPoint.getX() - prevPoint.getX(), curPoint.getY() - prevPoint.getY());
 
-				Vector2f dirToNext = new Vector2f(nextPoint.getX() - curPoint.getX(),
-						nextPoint.getY() - curPoint.getY());
+				Vector2f dirToNext = new Vector2f(nextPoint.getX() - curPoint.getX(), nextPoint.getY() - curPoint.getY());
 
 				Vector2f dirVec = dirFromPrev.add(dirToNext).normalize();
 
@@ -258,7 +257,7 @@ public class Game {
 			}
 		}
 		return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
-				new ModelTexture(loader.loadTexture("new/TrackTexture")));
+			new ModelTexture(loader.loadTexture("new/TrackTexture")));
 
 	}
 
@@ -266,21 +265,15 @@ public class Game {
 		input.run();
 
 		// Check if the escape key was pressed to exit the game
-		if (input.checkAction(Action.EXIT))
-			running = false;
+		if (input.checkAction(Action.EXIT)) running = false;
 
 		// Check for audio controls
 		/** @author Tudor */
-		if (input.checkAction(Action.MUSIC_UP))
-			AudioMaster.increaseMusicVolume();
-		if (input.checkAction(Action.MUSIC_DOWN))
-			AudioMaster.decreaseMusicVolume();
-		if (input.checkAction(Action.MUSIC_SKIP))
-			AudioMaster.skipInGameMusic();
-		if (input.checkAction(Action.SFX_UP))
-			AudioMaster.increaseSFXVolume();
-		if (input.checkAction(Action.SFX_DOWN))
-			AudioMaster.decreaseSFXVolume();
+		if (input.checkAction(Action.MUSIC_UP)) AudioMaster.increaseMusicVolume();
+		if (input.checkAction(Action.MUSIC_DOWN)) AudioMaster.decreaseMusicVolume();
+		if (input.checkAction(Action.MUSIC_SKIP)) AudioMaster.skipInGameMusic();
+		if (input.checkAction(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
+		if (input.checkAction(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
 
 		player.update((float) delta);
 		camera.move();
@@ -289,7 +282,7 @@ public class Game {
 		// Send our position to the server
 		try {
 			String message = "p: " + player.getPosition() + " v: " + player.getVelocity();
-			if(client.DEBUG) System.out.println("Sending '" + message + "' to server");
+			if (client.DEBUG) System.out.println("Sending '" + message + "' to server");
 			client.sendByteMessage(message.getBytes(), Server.statusTag);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
