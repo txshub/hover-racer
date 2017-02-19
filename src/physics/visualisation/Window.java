@@ -1,4 +1,4 @@
-package physicsVisualisation;
+package physics.visualisation;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -10,11 +10,10 @@ import javax.swing.JFrame;
 import org.joml.Vector3f;
 import org.lwjgl.LWJGLException;
 
-import physics.Ship;
-import physics.Vector3;
-// import trackDesign.TrackComponent;
-// import trackDesign.TrackPoint;
-import placeholders.KeyboardController;
+import physics.core.Ship;
+import physics.placeholders.FlatGroundProvider;
+import physics.placeholders.KeyboardController;
+import physics.ships.LegacyShip;
 
 /** Class for handling the basic ship physics visualisation.
  * Redone based on code by Reece Bennett that he used to test his AI. */
@@ -30,7 +29,7 @@ public class Window {
 		 * Ship testShip = new Ship(new Vector3(10f, 10f, 30f), new LwjglController()); */
 
 		KeyboardController input = new KeyboardController();
-		Ship testShip = new Ship(new Vector3f(10f, 10f, 30f), input);
+		Ship testShip = new LegacyShip(null, new Vector3f(10f, 10f, 30f), null, new FlatGroundProvider(5), input);
 		ArrayList<Ship> ships = new ArrayList<Ship>();
 		ships.add(testShip);
 
