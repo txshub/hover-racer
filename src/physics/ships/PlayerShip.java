@@ -22,7 +22,8 @@ public class PlayerShip extends Ship {
 
 	public PlayerShip(byte id, TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground,
 		InputController input) {
-		super(id, model, startingPosition, otherShips, ground);
+		super(id, model, startingPosition, ground);
+		super.addOtherShips(otherShips);
 		this.input = input; // Deal with input
 		this.sound = new ShipSounds(this, otherShips != null ? otherShips : new ArrayList<Ship>()); // Create ShipSounds
 	}

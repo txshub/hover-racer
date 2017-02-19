@@ -1,6 +1,5 @@
 package physics.ships;
 
-import java.util.Collection;
 import java.util.Optional;
 
 import org.joml.Vector3f;
@@ -15,9 +14,8 @@ public class RemoteShip extends Ship {
 
 	private ServerShipProvider remote;
 
-	public RemoteShip(byte id, TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground,
-		ServerShipProvider remote) {
-		super(id, model, startingPosition, otherShips, ground);
+	public RemoteShip(byte id, TexturedModel model, Vector3f startingPosition, GroundProvider ground, ServerShipProvider remote) {
+		super(id, model, startingPosition, ground);
 		this.remote = remote;
 	}
 

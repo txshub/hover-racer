@@ -1,6 +1,5 @@
 package physics.core;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.joml.Vector3f;
@@ -8,9 +7,7 @@ import org.joml.Vector3f;
 import gameEngine.entities.Entity;
 import gameEngine.models.TexturedModel;
 import physics.network.ExportedShip;
-import physics.network.ServerShipProvider;
 import physics.support.GroundProvider;
-import physics.support.InputController;
 
 /** A single ship entity. Can be controlled by an AI or the player. Handles all the physics, namely (currently):
  * -Keeping track of velocity and position
@@ -59,10 +56,7 @@ public abstract class Ship extends Entity {
 	private Vector3 rotationalVelocity;
 	private float mass = 1;
 	private float size = 1;
-	private InputController controller;
 	private Collection<Ship> otherShips;
-	private ServerShipProvider server;
-	private ExportedShip fromServer;
 	private GroundProvider ground;
 
 	private byte id;
@@ -70,7 +64,7 @@ public abstract class Ship extends Entity {
 	long lastPrint = 0;
 	double deltaSum = 0;
 
-	protected Ship(byte id, TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground) {
+	protected Ship(byte id, TexturedModel model, Vector3f startingPosition, GroundProvider ground) {
 		super(model, startingPosition, new Vector3(0, 0, 0), 1);
 		this.id = id;
 		this.position = new Vector3(startingPosition);
@@ -78,8 +72,14 @@ public abstract class Ship extends Entity {
 		this.velocity = new Vector3(0, 0, 0);
 		this.rotation = new Vector3(0, 0, 0);
 		this.rotationalVelocity = new Vector3(0, 0, 0);
-		this.otherShips = otherShips != null ? otherShips : new ArrayList<Ship>(); // If null set to an empty ArrayList
 		this.ground = ground;
+	}
+
+	public void addOtherShips(Collection<Ship> ships) {
+		ships.forEach(this::addOtherShip);
+	}
+	public void addOtherShip(Ship ship) {
+		if (ship.getId() != id) otherShips.add(ship);
 	}
 
 	/** Accelerate in any direction within the 2d horizontal plane. The acceleration is instant; it's basically just changing velocities.

@@ -1,7 +1,5 @@
 package physics.ships;
 
-import java.util.Collection;
-
 import org.joml.Vector3f;
 
 import gameEngine.models.TexturedModel;
@@ -13,8 +11,8 @@ import physics.support.GroundProvider;
  * @author Maciej Bogacki */
 public class DummyShip extends Ship {
 
-	public DummyShip(byte id, TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground) {
-		super(id, model, startingPosition, otherShips, ground);
+	public DummyShip(byte id, TexturedModel model, Vector3f startingPosition, GroundProvider ground) {
+		super(id, model, startingPosition, ground);
 	}
 
 	@Override
