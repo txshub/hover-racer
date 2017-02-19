@@ -254,4 +254,8 @@ public abstract class Ship extends Entity {
 			+ rotationalVelocity;
 	}
 
+	public byte getId() {
+		return id;
+	}
+
 }

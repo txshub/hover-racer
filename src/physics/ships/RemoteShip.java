@@ -23,7 +23,7 @@ public class RemoteShip extends Ship {
 
 	@Override
 	public void update(float delta) {
-		Optional<byte[]> newShip = remote.getShip(); // Grab a packet if available
+		Optional<byte[]> newShip = remote.getShip(super.getId()); // Grab a packet if available
 		if (newShip.isPresent()) { // If received update Ships's parameters
 			super.updateFromPacket(newShip.get());
 		} else { // Otherwise interpolate

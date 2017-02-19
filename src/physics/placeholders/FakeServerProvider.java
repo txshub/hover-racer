@@ -17,7 +17,7 @@ public class FakeServerProvider implements ServerShipProvider {
 	}
 
 	@Override
-	public Optional<byte[]> getShip() {
+	public Optional<byte[]> getShip(byte id) {
 		return Optional.empty();
 	}
 
