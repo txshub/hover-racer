@@ -29,7 +29,6 @@ import gameEngine.textures.ModelTexture;
 import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
-import physics.core.Ship;
 import physics.placeholders.FlatGroundProvider;
 import physics.ships.PlayerShip;
 import physics.support.Action;
@@ -43,12 +42,13 @@ public class Game {
 
 	// Set this to print debug messages
 	public static boolean debug = true;
+	public static boolean runServer = false;
 	private Loader loader;
 	private ArrayList<Entity> entities;
 	private ArrayList<Entity> normalEntities;
 	private Terrain[][] terrains;
 	private ArrayList<Light> lights;
-	private Ship player;
+	private PlayerShip player;
 	private Camera camera;
 	private MousePicker picker;
 	private MasterRenderer renderer;
@@ -77,8 +77,11 @@ public class Game {
 		System.out.println("Before client");
 
 		// Communication stuff
-		client = new Client("Client", 4444, "localHost");
-		client.start();
+		if (runServer) {
+			client = new Client("Client", 4444, "localHost");
+			client.start();
+		}
+
 
 		System.out.println("After client");
 
@@ -120,7 +123,7 @@ public class Game {
 
 		// Player Ship
 		TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader), new ModelTexture(loader.loadTexture("newShipTexture")));
-		player = new PlayerShip(playerTModel, new Vector3f(50, 20, 50), null, new FlatGroundProvider(10f), input);
+		player = new PlayerShip((byte) 1, playerTModel, new Vector3f(50, 20, 50), null, new FlatGroundProvider(10f), input);
 		entities.add(player);
 
 		// Player following camera
@@ -283,7 +286,7 @@ public class Game {
 		try {
 			String message = "p: " + player.getPosition() + " v: " + player.getVelocity();
 			if (client.DEBUG) System.out.println("Sending '" + message + "' to server");
-			client.sendByteMessage(message.getBytes(), Server.statusTag);
+			if (runServer) client.sendByteMessage(message.getBytes(), Server.statusTag);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -306,7 +309,7 @@ public class Game {
 		guiRender.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
-		client.cleanup();
+		if (runServer) client.cleanup();
 		InputController.close = true;
 		// AudioMaster.cleanUp();
 		DisplayManager.closeDisplay();
