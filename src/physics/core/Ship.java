@@ -19,10 +19,8 @@ import physics.support.GroundProvider;
  * Can also export itself to an array of floats and update itself with such an array received from server (used for ships controlled by
  * other players/server's AIs)
  * TODO:
- * - Integrate with track system to detect and react to track collisions
  * - Test and polish collisions with other ships
  * - Upgrade air cushion to work with curved terrain
- * - Smarter reaction if the ship ends up underground for some reason (super rare but still should be addressed)
  * - Panning physics (matching ground below/reacting to accelerations)
  * 
  * @author Maciej Bogacki */
@@ -236,6 +234,10 @@ public abstract class Ship extends Entity {
 	public float getMass() {
 		return mass;
 	}
+	/** @return The Ship's unique id */
+	public byte getId() {
+		return id;
+	}
 	/** @return Approximated max speed. This is the point where air resistance and acceleration would average out. Actual speed might be
 	 *         more due to other factors. Currently only used by the sound engine. */
 	public float getMaxSpeed() {
@@ -253,9 +255,19 @@ public abstract class Ship extends Entity {
 		return "Ship No " + id + " at " + position + " facing " + rotation + "\nLinear velocity is " + velocity + " and angular velocity is"
 			+ rotationalVelocity;
 	}
-
-	public byte getId() {
+	@Override
+	public int hashCode() {
 		return id;
 	}
+	@Override
+	public boolean equals(Object obj) {
+		try {
+			Ship casted = (Ship) obj;
+			return casted.getId() == this.id;
+		} catch (ClassCastException e) {
+			return false;
+		}
+	}
+
 
 }
