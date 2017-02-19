@@ -11,28 +11,20 @@ import org.lwjgl.util.vector.Matrix4f;
 import gameEngine.models.RawModel;
 import gameEngine.renderEngine.Loader;
 import gameEngine.toolbox.Maths;
-import gameEngine.toolbox.VecCon;
 
-/**
- * @author rtm592
- *
- */
 public class GuiRenderer {
 
-	private RawModel quad;
-	private GuiShader guiShader;
-
-	public GuiRenderer(Loader loader) {
-
-		float[] positions = { -1, 1, -1, -1, 1, 1, 1, -1 };
-		quad = loader.loadToVAO(positions,2);
-		guiShader = new GuiShader();
-
+	private final RawModel quad;
+	private GuiShader shader;
+	
+	public GuiRenderer(Loader loader){
+		float[] positions = {-1, 1, -1, -1, 1, 1, 1, -1};
+		quad = loader.loadToVAO(positions, 2);
+		shader = new GuiShader();
 	}
-
+	
 	public void render(List<GuiTexture> guis){
-		
-		guiShader.start();
+		shader.start();
 		GL30.glBindVertexArray(quad.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
 		GL11.glEnable(GL11.GL_BLEND);
@@ -41,19 +33,18 @@ public class GuiRenderer {
 		for(GuiTexture gui: guis){
 			GL13.glActiveTexture(GL13.GL_TEXTURE0);
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, gui.getTexture());
-			Matrix4f matrix = Maths.createTransformationMatrix(VecCon.toLWJGL(gui.getPosition()), VecCon.toLWJGL(gui.getScale()));
-			guiShader.loadTransformation(matrix);
+			Matrix4f matrix = Maths.createTransformationMatrix(gui.getPosition(), gui.getScale());
+			shader.loadTransformation(matrix);
 			GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
 		}
-		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glDisable(GL11.GL_BLEND);
 		GL20.glDisableVertexAttribArray(0);
 		GL30.glBindVertexArray(0);
-		guiShader.stop();
-		
-	}
-	public void cleanUp(){
-		guiShader.cleanUp();
+		shader.stop();
 	}
 	
+	public void cleanUp(){
+		shader.cleanUp();
+	}
 }

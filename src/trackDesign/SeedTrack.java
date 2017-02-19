@@ -2,12 +2,15 @@ package trackDesign;
 
 import java.util.ArrayList;
 
+import org.joml.Vector3f;
+
 /**
  * Track to hold a seed for a random object and the track that resulted
  * @author simon
  *
  */
 public class SeedTrack {
+	
 	private final long seed;
 	private final ArrayList<TrackPoint> track;
 	
@@ -35,5 +38,9 @@ public class SeedTrack {
 	 */
 	public ArrayList<TrackPoint> getTrack() {
 		return track;
+	}
+	
+	public Vector3f getStart(){
+		return new Vector3f(track.get(1).x,0f,track.get(1).y);
 	}
 }

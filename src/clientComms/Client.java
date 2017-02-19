@@ -90,6 +90,6 @@ public class Client extends Thread {
 		toServer.writeInt(out.length);
 		toServer.write(out);
 		toServer.flush();
-		if(DEBUG) System.out.println("Sent message " + new String(message, charset) + " with tag " + type);
+		if(Server.DEBUG) System.out.println("Sent message " + new String(message, charset) + " with tag " + Byte.toString(type));
 	}
 }
