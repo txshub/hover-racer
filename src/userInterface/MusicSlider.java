@@ -11,6 +11,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/**
+ * 
+ * @author Andreea Gheorghe
+ *
+ */
 public class MusicSlider extends HBox {
 		
 		private Slider musicSlider;
