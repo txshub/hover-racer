@@ -24,7 +24,7 @@ public class PlayerShip extends Ship {
 		InputController input) {
 		super(id, model, startingPosition, otherShips, ground);
 		this.input = input; // Deal with input
-		this.sound = new ShipSounds(this, otherShips == null ? otherShips : new ArrayList<Ship>()); // Create ShipSounds
+		this.sound = new ShipSounds(this, otherShips != null ? otherShips : new ArrayList<Ship>()); // Create ShipSounds
 	}
 
 	@Override
