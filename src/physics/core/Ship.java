@@ -46,20 +46,19 @@ public abstract class Ship extends Entity {
 	// 15, 100, 2, 30: magnet-like
 	// 15, 50, 0.8, 30: nicely cushiony
 
-	private static final float DEFAULT_MASS = 1;
-	private static final float DEFAULT_SIZE = 1;
 	private static final float LEVELLING_SPEED = 0.2f;
 	private static final float SPEED_OF_ROTATION_WHILE_TURNING = 1.25f;
 
 	private static final float MAX_SPEED = ACCELERATION * ACCELERATION / AIR_RESISTANCE; // Used for the sound engine
+
 
 	private static boolean ACTUALLY_BREAK = true; // Whether the ship actually breaks when braking (and not accelerates backwards)
 	private Vector3 position;
 	private Vector3 rotation;
 	private Vector3 velocity;
 	private Vector3 rotationalVelocity;
-	private float mass;
-	private float size;
+	private float mass = 1;
+	private float size = 1;
 	private InputController controller;
 	private Collection<Ship> otherShips;
 	private ServerShipProvider server;
@@ -79,8 +78,6 @@ public abstract class Ship extends Entity {
 		this.velocity = new Vector3(0, 0, 0);
 		this.rotation = new Vector3(0, 0, 0);
 		this.rotationalVelocity = new Vector3(0, 0, 0);
-		this.mass = DEFAULT_MASS;
-		this.size = DEFAULT_SIZE;
 		this.otherShips = otherShips != null ? otherShips : new ArrayList<Ship>(); // If null set to an empty ArrayList
 		this.ground = ground;
 	}
@@ -111,8 +108,11 @@ public abstract class Ship extends Entity {
 	/** Apply the forces of the air cushion (also bounce off ground if it ever happens) */
 	private void airCushion(float delta) {
 		float distance = ground.distanceToGround(position, rotation) / VERTICAL_SCALE;
-		if (distance <= 0 && velocity.getY() < 0) velocity.changeY(y -> -.3 * y); // If hit the ground do this
-		else if (distance > 0) velocity.changeY(y -> y + delta * AIR_CUSHION * VERTICAL_SCALE / Math.pow(distance, CUSHION_SCALE));
+		if (distance <= 0 && velocity.getY() < 0) {
+			position.changeY(y -> y - distance + 1); // Get above ground
+			velocity.changeY(y -> -.3 * y); // Change velocity to upward
+		} else if (distance > 0)
+			velocity.changeY(y -> y + delta * AIR_CUSHION * VERTICAL_SCALE / Math.pow(Math.max(distance, 1), CUSHION_SCALE));
 	}
 
 	/** Changes the position by given velocity
