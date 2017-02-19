@@ -46,7 +46,12 @@ public class ShipSounds {
 		}
 	}
 
+	/** Updates all sources with positions, velocities, pitch, volume etc. Called on each update of physics.
+	 * 
+	 * @param delta Time since last call of this method (may or may not be helpful) */
 	public void update(float delta) {
+		engineSource.setPitch(Math.max(2, center.getVelocity().length() / center.getMaxSpeed()) + 1f); // Updates palyer's Ship
+		// Updates all other ships
 		for (Entry<Ship, Source> entry : this.otherShips.entrySet()) {
 			Ship ship = entry.getKey();
 			Source source = entry.getValue();
@@ -62,12 +67,17 @@ public class ShipSounds {
 		}
 	}
 
+	/** Called whenever there if a collision between two ships - produces the sound of this collision (WIP)
+	 * 
+	 * @param first First ship involved
+	 * @param second Second ship involved */
 	public void collision(Ship first, Ship second) {
 		Vector3f position = first.getPosition().sub(center.getPosition()).div(2); // Position relative to player
 		float force = first.getVelocity().sub(second.getVelocity()).length(); // Force of the collision (relative speeds)
 		// TODO Make a collision sound happen
 	}
 
+	/** Cleans up sound Sources */
 	public void cleanUp() {
 		engineSource.delete();
 		otherShips.values().forEach(s -> s.delete());
