@@ -14,7 +14,7 @@ import physics.support.ShipSounds;
 
 /** Represents a Ship controlled with inputs from the Player
  * 
- * @author mxb551 */
+ * @author Maciej Bogacki */
 public class PlayerShip extends Ship {
 
 	InputController input;

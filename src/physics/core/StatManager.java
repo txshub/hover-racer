@@ -10,6 +10,9 @@ public class StatManager {
 	Map<Stat, Float> stats;
 	public static final float SCALE = 3;
 
+	/** A class that stores stats for one Ship, created with a ShipTemplate.
+	 * 
+	 * @param template Template to initialise the stats with */
 	public StatManager(ShipTemplate template) {
 		super();
 		this.stats = template.getStats();

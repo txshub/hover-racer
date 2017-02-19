@@ -14,6 +14,9 @@ import physics.network.ServerShipProvider;
 import physics.support.GroundProvider;
 import physics.support.InputController;
 
+/** A class that manages ship on client side while in multiplayer mode. Handles creating them, updating and communicating with the server.
+ * 
+ * @author Maciej Bogacki */
 public class MultiplayerShipManager implements ServerShipProvider {
 
 	private Ship player;

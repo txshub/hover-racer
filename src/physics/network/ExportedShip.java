@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import physics.core.Vector3;
 
 /** An object representing a Ship entity, exported for transmission over the network. It serves as an intermediate step between a Ship
- * object and a float array. This will likely be upgraded to a byte array later
+ * object and a byte array and does all the conversion necessary.
  * 
  * @author Maciej Bogacki */
 public class ExportedShip {

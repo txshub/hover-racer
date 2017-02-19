@@ -10,6 +10,9 @@ import physics.placeholders.ControllerInt;
 import physics.support.Action;
 import physics.support.GroundProvider;
 
+/** An old player-controlled ship still used for 2d testing. Do not use in the actual game.
+ * 
+ * @author Maciej Bogacki */
 public class LegacyShip extends Ship {
 
 	private ControllerInt input;
