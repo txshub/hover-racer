@@ -20,10 +20,6 @@ import gameEngine.textures.ModelTexture;
 import gameEngine.toolbox.Maths;
 import gameEngine.toolbox.VecCon;
 
-/**
- * @author rtm592
- *
- */
 public class NormalMappingRenderer {
 
 	private NormalMappingShader shader;
@@ -63,15 +59,15 @@ public class NormalMappingRenderer {
 		GL20.glEnableVertexAttribArray(2);
 		GL20.glEnableVertexAttribArray(3);
 		ModelTexture texture = model.getTexture();
-		shader.loadNumberOfRows(texture.getNumOfRows());
-		if (texture.hasTransparency()) {
+		shader.loadNumberOfRows(texture.getNumberOfRows());
+		if (texture.isHasTransparency()) {
 			MasterRenderer.disableCulling();
 		}
 		shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getID());
 		GL13.glActiveTexture(GL13.GL_TEXTURE1);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getNormalMapID());
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getNormalMap());
 	}
 
 	private void unbindTexturedModel() {
@@ -85,7 +81,7 @@ public class NormalMappingRenderer {
 
 	private void prepareInstance(Entity entity) {
 		Matrix4f transformationMatrix = Maths.createTransformationMatrix(VecCon.toLWJGL(entity.getPosition()), entity.getRotation().x,
-				entity.getRotation().y, entity.getRotation().y, entity.getScale());
+				entity.getRotation().y, entity.getRotation().z, entity.getScale());
 		shader.loadTransformationMatrix(transformationMatrix);
 		shader.loadOffset(entity.getTextureXOffset(), entity.getTextureYOffset());
 	}
@@ -93,7 +89,7 @@ public class NormalMappingRenderer {
 	private void prepare(Vector4f clipPlane, List<Light> lights, Camera camera) {
 		shader.loadClipPlane(clipPlane);
 		//need to be public variables in MasterRenderer
-		shader.loadSkyColour(MasterRenderer.R, MasterRenderer.G, MasterRenderer.B);
+		shader.loadSkyColour(MasterRenderer.RED, MasterRenderer.GREEN, MasterRenderer.BLUE);
 		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
 		
 		shader.loadLights(lights, viewMatrix);

@@ -11,9 +11,11 @@ public class MainGameLoop {
 	public void main() {
 		Game game = new Game();
 
+
 		// Set the FPS and UPS caps
 		int frameCap = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getRefreshRate();
 		int updateCap = 60;
+
 
 		long lastTime = System.nanoTime();
 		long curTime = lastTime;
@@ -59,7 +61,8 @@ public class MainGameLoop {
 
 			// Log the ups and fps to the window title every 1000ms
 			if (System.currentTimeMillis() > timer + 1000) {
-				// System.out.println("Hover Racer - ups: " + ups + " | fps: " + fps);
+				// System.out.println("Hover Racer - ups: " + ups + " | fps: " +
+				// fps);
 				timer += 1000;
 				fps = 0;
 				ups = 0;
@@ -70,6 +73,11 @@ public class MainGameLoop {
 		}
 
 		game.cleanUp();
+	}
+
+	public static void main(String[] args) {
+		MainGameLoop main = new MainGameLoop();
+		main.main();
 	}
 
 }

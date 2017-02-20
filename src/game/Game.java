@@ -1,6 +1,5 @@
 package game;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,14 +11,12 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
 import audioEngine.AudioMaster;
-import clientComms.Client;
 import gameEngine.entities.Camera;
 import gameEngine.entities.Entity;
 import gameEngine.entities.Light;
 import gameEngine.guis.GuiRenderer;
 import gameEngine.models.RawModel;
 import gameEngine.models.TexturedModel;
-import gameEngine.objConverter.ModelData;
 import gameEngine.objConverter.OBJFileLoader;
 import gameEngine.renderEngine.DisplayManager;
 import gameEngine.renderEngine.Loader;
@@ -29,11 +26,11 @@ import gameEngine.textures.ModelTexture;
 import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
+import physics.core.Ship;
 import physics.placeholders.FlatGroundProvider;
 import physics.ships.PlayerShip;
 import physics.support.Action;
 import physics.support.InputController;
-import serverComms.Server;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
@@ -42,13 +39,14 @@ public class Game {
 
 	// Set this to print debug messages
 	public static boolean debug = true;
-	public static boolean runServer = false;
+
+
 	private Loader loader;
 	private ArrayList<Entity> entities;
 	private ArrayList<Entity> normalEntities;
-	private Terrain[][] terrains;
+	private ArrayList<Terrain> terrains;
 	private ArrayList<Light> lights;
-	private PlayerShip player;
+	private Ship player;
 	private Camera camera;
 	private MousePicker picker;
 	private MasterRenderer renderer;
@@ -56,7 +54,6 @@ public class Game {
 	private long trackSeed;
 	private ArrayList<TrackPoint> trackPoints;
 	public static InputController input;
-	private Client client;
 
 	private boolean running;
 
@@ -74,17 +71,6 @@ public class Game {
 		entities = new ArrayList<Entity>();
 		normalEntities = new ArrayList<Entity>();
 
-		System.out.println("Before client");
-
-		// Communication stuff
-		if (runServer) {
-			client = new Client("Client", 4444, "localHost");
-			client.start();
-		}
-
-
-		System.out.println("After client");
-
 		// Terrain
 		TerrainTexture background = new TerrainTexture(loader.loadTexture("new/GridTexture"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("new/GridTexture"));
@@ -92,19 +78,13 @@ public class Game {
 		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("new/GridTexture"));
 		TerrainTexturePack texturePack = new TerrainTexturePack(background, rTexture, gTexture, bTexture);
 
-		// TerrainTexture blendMap = new
-		// TerrainTexture(loader.loadTexture("blendMap"));
+		// TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
 
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("new/GridTexture"));
 
 		int size = 1;
-		terrains = new Terrain[size][size];
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				terrains[i][j] =
-					new Terrain((int) (Terrain.SIZE) * i, (int) (Terrain.SIZE) * j, loader, texturePack, blendMap, "new/FlatHeightMap");
-			}
-		}
+		terrains = new ArrayList<Terrain>();
+		terrains.add(new Terrain((int) (Terrain.SIZE), (int) (Terrain.SIZE), loader, texturePack, blendMap, "new/FlatHeightMap"));
 
 		// Track
 		SeedTrack st = TrackMaker.makeTrack(10, 20, 30, 1, 40, 40, 4);
@@ -112,18 +92,17 @@ public class Game {
 		trackSeed = st.getSeed();
 
 		TexturedModel trackModel = createTrackModel(trackSeed);
-		Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 2f);
+		Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 3f);
 		entities.add(track);
 
 		// Lighting
 		lights = new ArrayList<Light>();
-
 		Light sun = new Light(new Vector3f(256, 1000, 256), new Vector3f(1f, 1f, 1f));
 		lights.add(sun);
 
 		// Player Ship
 		TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader), new ModelTexture(loader.loadTexture("newShipTexture")));
-		player = new PlayerShip((byte) 1, playerTModel, new Vector3f(50, 20, 50), null, new FlatGroundProvider(10f), input);
+		player = new PlayerShip((byte) 0, playerTModel, new Vector3f(50, 20, 50), null, new FlatGroundProvider(0), input);
 		entities.add(player);
 
 		// Player following camera
@@ -134,10 +113,56 @@ public class Game {
 		guiRender = new GuiRenderer(loader);
 
 		// Camera rotation with right click
-		picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrains);
+		// picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrains);
 
 		// Tudor
 		AudioMaster.playInGameMusic();
+	}
+
+	public void update(double delta) {
+		input.run();
+
+		// Check if the escape key was pressed to exit the game
+		if (input.checkAction(Action.EXIT)) running = false;
+
+		// Check for audio controls
+		/** @author Tudor */
+		if (input.checkAction(Action.MUSIC_UP)) AudioMaster.increaseMusicVolume();
+		if (input.checkAction(Action.MUSIC_DOWN)) AudioMaster.decreaseMusicVolume();
+		if (input.checkAction(Action.MUSIC_SKIP)) AudioMaster.skipInGameMusic();
+		if (input.checkAction(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
+		if (input.checkAction(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
+
+		player.update((float) delta);
+		camera.move();
+		// picker.update();
+	}
+
+	public void render() {
+		GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
+		renderer.renderScene(entities, normalEntities, terrains, lights, camera, new Vector4f());
+		GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
+		DisplayManager.updateDisplay();
+		sortLights(lights, player.getPosition());
+	}
+
+	public void cleanUp() {
+		guiRender.cleanUp();
+		renderer.cleanUp();
+		loader.cleanUp();
+		InputController.close = true;
+		AudioMaster.cleanUp();
+		DisplayManager.closeDisplay();
+	}
+
+	public boolean shouldClose() {
+		return Display.isCloseRequested() || !running;
+	}
+
+	private static RawModel getModel(String fileName, Loader loader) {
+		RawModel data = OBJFileLoader.loadOBJ(fileName, loader);
+
+		return data;
 	}
 
 	private TexturedModel createTrackModel(long seed) {
@@ -189,6 +214,9 @@ public class Game {
 				// If we are at the last point the next is the first point
 				p = (i + 1) >= trackPoints.size() ? 0 : i + 1;
 				TrackPoint nextPoint = trackPoints.get(p);
+
+				// System.out.println("Cur: " + curPoint + " Next: " + nextPoint
+				// + " " + (nextPoint.getX() - curPoint.getX()));
 
 				Vector2f dirFromPrev = new Vector2f(curPoint.getX() - prevPoint.getX(), curPoint.getY() - prevPoint.getY());
 
@@ -259,71 +287,10 @@ public class Game {
 				indices[(i - 1) * 12 + 11] = 0 + 1;
 			}
 		}
-		return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
-			new ModelTexture(loader.loadTexture("new/TrackTexture")));
+		return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices), new ModelTexture(loader.loadTexture("mud")));
 
 	}
 
-	public void update(double delta) {
-		input.run();
-
-		// Check if the escape key was pressed to exit the game
-		if (input.checkAction(Action.EXIT)) running = false;
-
-		// Check for audio controls
-		/** @author Tudor */
-		if (input.checkAction(Action.MUSIC_UP)) AudioMaster.increaseMusicVolume();
-		if (input.checkAction(Action.MUSIC_DOWN)) AudioMaster.decreaseMusicVolume();
-		if (input.checkAction(Action.MUSIC_SKIP)) AudioMaster.skipInGameMusic();
-		if (input.checkAction(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
-		if (input.checkAction(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
-
-		player.update((float) delta);
-		camera.move();
-		picker.update();
-
-		// Send our position to the server
-		try {
-			String message = "p: " + player.getPosition() + " v: " + player.getVelocity();
-			if (client.DEBUG) System.out.println("Sending '" + message + "' to server");
-			if (runServer) client.sendByteMessage(message.getBytes(), Server.statusTag);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.exit(1);
-		}
-		// TODO Clean this up
-		player.cleanUp();
-
-	}
-
-	public void render() {
-		GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
-		renderer.renderScene(entities, normalEntities, terrains, lights, camera, new Vector4f());
-		GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
-		DisplayManager.updateDisplay();
-		sortLights(lights, player.getPosition());
-	}
-
-	public void cleanUp() {
-		guiRender.cleanUp();
-		renderer.cleanUp();
-		loader.cleanUp();
-		if (runServer) client.cleanup();
-		InputController.close = true;
-		// AudioMaster.cleanUp();
-		DisplayManager.closeDisplay();
-	}
-
-	public boolean shouldClose() {
-		return Display.isCloseRequested() || !running;
-	}
-
-	private static RawModel getModel(String fileName, Loader loader) {
-		ModelData data = OBJFileLoader.loadOBJ(fileName);
-
-		return loader.loadToVAO(data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices());
-	}
 
 	private static void sortLights(List<Light> lights, Vector3f currentPosition) {
 		float[] distance = new float[lights.size() - 1];

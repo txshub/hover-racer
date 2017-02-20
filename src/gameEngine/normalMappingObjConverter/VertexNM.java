@@ -5,10 +5,6 @@ import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
 
-/**
- * @author rtm592
- *
- */
 public class VertexNM {
 	
 	private static final int NO_INDEX = -1;
@@ -22,24 +18,17 @@ public class VertexNM {
 	private List<Vector3f> tangents = new ArrayList<Vector3f>();
 	private Vector3f averagedTangent = new Vector3f(0, 0, 0);
 	
-	protected VertexNM(int index, Vector3f position){
+	public VertexNM(int index,Vector3f position){
 		this.index = index;
 		this.position = position;
 		this.length = position.length();
 	}
 	
-	protected void addTangent(Vector3f tangent){
+	public void addTangent(Vector3f tangent){
 		tangents.add(tangent);
 	}
 	
-	//NEW
-	protected VertexNM duplicate(int newIndex){
-		VertexNM vertex = new VertexNM(newIndex, position);
-		vertex.tangents = this.tangents;
-		return vertex;
-	}
-	
-	protected void averageTangents(){
+	public void averageTangents(){
 		if(tangents.isEmpty()){
 			return;
 		}
@@ -49,51 +38,51 @@ public class VertexNM {
 		averagedTangent.normalise();
 	}
 	
-	protected Vector3f getAverageTangent(){
+	public Vector3f getAverageTangent(){
 		return averagedTangent;
 	}
 	
-	protected int getIndex(){
+	public int getIndex(){
 		return index;
 	}
 	
-	protected float getLength(){
+	public float getLength(){
 		return length;
 	}
 	
-	protected boolean isSet(){
+	public boolean isSet(){
 		return textureIndex!=NO_INDEX && normalIndex!=NO_INDEX;
 	}
 	
-	protected boolean hasSameTextureAndNormal(int textureIndexOther,int normalIndexOther){
+	public boolean hasSameTextureAndNormal(int textureIndexOther,int normalIndexOther){
 		return textureIndexOther==textureIndex && normalIndexOther==normalIndex;
 	}
 	
-	protected void setTextureIndex(int textureIndex){
+	public void setTextureIndex(int textureIndex){
 		this.textureIndex = textureIndex;
 	}
 	
-	protected void setNormalIndex(int normalIndex){
+	public void setNormalIndex(int normalIndex){
 		this.normalIndex = normalIndex;
 	}
 
-	protected Vector3f getPosition() {
+	public Vector3f getPosition() {
 		return position;
 	}
 
-	protected int getTextureIndex() {
+	public int getTextureIndex() {
 		return textureIndex;
 	}
 
-	protected int getNormalIndex() {
+	public int getNormalIndex() {
 		return normalIndex;
 	}
 
-	protected VertexNM getDuplicateVertex() {
+	public VertexNM getDuplicateVertex() {
 		return duplicateVertex;
 	}
 
-	protected void setDuplicateVertex(VertexNM duplicateVertex) {
+	public void setDuplicateVertex(VertexNM duplicateVertex) {
 		this.duplicateVertex = duplicateVertex;
 	}
 

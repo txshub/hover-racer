@@ -10,14 +10,10 @@ import org.lwjgl.util.vector.Vector4f;
 import gameEngine.entities.Camera;
 import gameEngine.terrains.Terrain;
 
-/**
- * @author rtm592
- *
- */
 public class MousePicker {
 
 	private static final int RECURSION_COUNT = 200;
-	private static final float RAY_RANGE = 500;
+	private static final float RAY_RANGE = 600;
 
 	private Vector3f currentRay = new Vector3f();
 
@@ -25,14 +21,14 @@ public class MousePicker {
 	private Matrix4f viewMatrix;
 	private Camera camera;
 	
-	private Terrain[][] terrains;
+	private Terrain terrain;
 	private Vector3f currentTerrainPoint;
 
-	public MousePicker(Camera cam, Matrix4f projection, Terrain[][] terrains) {
+	public MousePicker(Camera cam, Matrix4f projection, Terrain terrain) {
 		camera = cam;
 		projectionMatrix = projection;
 		viewMatrix = Maths.createViewMatrix(camera);
-		this.terrains = terrains;
+		this.terrain = terrain;
 	}
 	
 	public Vector3f getCurrentTerrainPoint() {
@@ -134,9 +130,7 @@ public class MousePicker {
 	}
 
 	private Terrain getTerrain(float worldX, float worldZ) {
-	  // !! Using 'terrains.length' assumes that the array is square and all columns the same length !!
-		return terrains[(int) Math.max(0, Math.min(terrains.length - 1, (worldX / Terrain.SIZE)))][(int) Math.max(0,
-				Math.min(terrains.length - 1, (worldZ / Terrain.SIZE)))];
+		return terrain;
 	}
 
 }
