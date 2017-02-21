@@ -17,6 +17,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/**
+ * 
+ * @author Andreea Gheorghe
+ *
+ */
 public class MenuButton extends StackPane {
 	
 	private Text buttonText;
@@ -30,6 +35,7 @@ public class MenuButton extends StackPane {
 	 * @param name The name of the button.
 	 */
 	public MenuButton (String name) {
+		
 		buttonText = new Text(name);
 		
 		// Tudor - initialize source
@@ -63,8 +69,8 @@ public class MenuButton extends StackPane {
 		
 		//hover over button
 		this.setOnMouseEntered(event -> {
-			bg.setTranslateX(15);
-			buttonText.setTranslateX(15);
+			bg.setTranslateX(6);
+			buttonText.setTranslateX(6);
 			bg.setFill(Color.DIMGRAY);
 			buttonText.setFill(Color.WHITE);
 			
@@ -100,4 +106,3 @@ public class MenuButton extends StackPane {
 	}
 	
 }
-

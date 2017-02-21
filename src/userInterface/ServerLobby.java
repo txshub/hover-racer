@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import clientComms.Client;
 import javafx.animation.TranslateTransition;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -16,33 +19,72 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
-public class ServerLobby extends HBox{
+/**
+ * 
+ * @author Andreea Gheorghe
+ *
+ */
+public class ServerLobby extends VBox{
 	
 	
 	public ServerLobby(){
 		
+		this.setAlignment(Pos.CENTER);
 		
-		Text input = new Text("Please input your username");
-		try {
-			Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), 20);
-			input.setFont(f);
-			input.setFill(Color.WHITE);
+		VBox box1 = new VBox(10);
+		box1.setPadding(new Insets(0, 0, 8, 0));
+		
+		VBox box2 = new VBox(10);
+		box2.setPadding(new Insets(0, 0, 8, 0));
+		
+		VBox box3 = new VBox(10);
+		box3.setPadding(new Insets(0, 0, 8, 0));
+		
+		VBox box4 = new VBox(10);
+		box4.setPadding(new Insets(0, 0, 8, 0));
+		
+		TextStyle username = new TextStyle("USERNAME", 20);
+		Text usernameText = username.getTextStyled();
+		
+		TextField usernameInput = new TextField();
+		
+		TextStyle port = new TextStyle("PORT", 20);
+		Text portText = port.getTextStyled();
+		
+		TextField portInput = new TextField();
+		
+		TextStyle machine = new TextStyle("MACHINE NAME", 20);
+		Text machineText = machine.getTextStyled();
+		
+		TextField machineInput = new TextField();
+		
+		MenuButton connect = new MenuButton("CONNECT TO THE LOBBY");
+		connect.setOnMouseClicked(event->{
 			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		input.setTextAlignment(TextAlignment.CENTER);
+			String usr = usernameInput.getText();
+			int portNo = Integer.valueOf(portInput.getText());
+			String machineName = machineInput.getText();
+			
+			Client client = new Client(usr, portNo, machineName);
+			client.start();
+			
+			//getChildren().removeAll(box1, box2, box3, box4);
+			
+		});
 		
-		TextField userInput = new TextField();
-//		userInput.setLayoutX(100);
-//		userInput.setLayoutY(160);
-//		
+		box1.setAlignment(Pos.CENTER);
+		box1.getChildren().addAll(usernameText, usernameInput);
 		
-		//Rectangle bg2 = new Rectangle(550,412);
-		//bg2.setFill(Color.GREY);
-		//bg2.setOpacity(0.4);
+		box2.setAlignment(Pos.CENTER);
+		box2.getChildren().addAll(portText, portInput);
 		
-		getChildren().addAll(input, userInput);
+		box3.setAlignment(Pos.CENTER);
+		box3.getChildren().addAll(machineText, machineInput);
+		
+		box4.setAlignment(Pos.CENTER);
+		box4.getChildren().add(connect);
+		
+		getChildren().addAll(box1, box2, box3, box4);
 	}
 	
 }

@@ -12,6 +12,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * @author Andreea Gheorghe
+ *
+ */
 public class MainMenu extends Application {
 
 	private GameMenu gameMenu;
