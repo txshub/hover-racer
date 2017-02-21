@@ -11,6 +11,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 
+/**
+ * 
+ * @author Andreea Gheorghe
+ *
+ */
 public class ToggleButton extends HBox {
 	
 	

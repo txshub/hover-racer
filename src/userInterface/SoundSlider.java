@@ -13,6 +13,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * 
+ * @author Andreea Gheorghe
+ *
+ */
 public class SoundSlider extends HBox {
 	
 	private Slider soundSlider;

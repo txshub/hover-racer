@@ -1,5 +1,10 @@
 package userInterface;
 
+/**
+ * 
+ * @author Andreea Gheorghe
+ *
+ */
 public class PlayerData {
 	
 	private int position;
