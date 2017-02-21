@@ -1,10 +1,12 @@
-package placeholders;
+package physics.placeholders;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
 import org.lwjgl.input.Keyboard;
+
+import physics.support.Action;
 
 public class LwjglController implements ControllerInt {
 

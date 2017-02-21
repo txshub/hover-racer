@@ -1,6 +1,8 @@
-package placeholders;
+package physics.placeholders;
 
 import java.util.Collection;
+
+import physics.support.Action;
 
 /** Interface for an object that provides input from the player
  * 

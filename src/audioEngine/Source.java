@@ -52,7 +52,7 @@ public class Source {
 	 */
 	public void delete() {
 		stop();
-		AudioMaster.deleteSource(this);
+//		AudioMaster.deleteSource(this);
 		AL10.alDeleteSources(sourceId);
 	}
 	

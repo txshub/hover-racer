@@ -1,4 +1,4 @@
-package placeholders;
+package physics.support;
 
 import org.joml.Vector3f;
 

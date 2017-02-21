@@ -1,4 +1,4 @@
-package physics;
+package physics.core;
 
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
@@ -9,16 +9,16 @@ import org.joml.Vector3f;
 /** Utility class representing a 3-dimensional vector. Custom built for the Ship class - use {@link as3f} to convert to Vector3f
  * 
  * @author Maciej Bogacki */
-public class Vector3 extends Vector3f{
+public class Vector3 extends Vector3f {
 
-	//float x, y, z;
+	// float x, y, z;
 
 
 	public Vector3(float x, float y, float z) {
-		super(x,y,z);
+		super(x, y, z);
 	}
 	public Vector3(float[] values) {
-		super(values[0],values[1],values[2]);
+		super(values[0], values[1], values[2]);
 	}
 	public Vector3(Vector3f v) {
 		super(v);
@@ -44,11 +44,11 @@ public class Vector3 extends Vector3f{
 		changeZ(f);
 		return this;
 	}
-	public Vector3 forEach(Vector3f v, DoubleBinaryOperator f) { 		
-		changeX(x -> f.applyAsDouble(x, v.x)); 		
-		changeY(y -> f.applyAsDouble(y, v.y)); 		
-		changeZ(z -> f.applyAsDouble(z, v.z)); 		
-		return this; 	
+	public Vector3 forEach(Vector3f v, DoubleBinaryOperator f) {
+		changeX(x -> f.applyAsDouble(x, v.x));
+		changeY(y -> f.applyAsDouble(y, v.y));
+		changeZ(z -> f.applyAsDouble(z, v.z));
+		return this;
 	}
 	public float distanceTo(Vector3f v) {
 		return (float) (Math.sqrt(Math.pow(x - v.x, 2) + Math.pow(y - v.y, 2) + Math.pow(z - v.z, 2)));
@@ -121,7 +121,7 @@ public class Vector3 extends Vector3f{
 	}
 	@Override
 	public String toString() {
-		return "Vector [" + x + ", " + y + ", " + z + "]";
+		return "[" + x + ", " + y + ", " + z + "]";
 	}
 
 }

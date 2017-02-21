@@ -4,24 +4,20 @@ import java.awt.GraphicsEnvironment;
 
 import org.lwjgl.input.Keyboard;
 
-import placeholders.InputController;
-
-/**
- * 
- * @author Reece Bennett
- *
- */
+/** @author Reece Bennett */
 public class MainGameLoop {
+
 
 	public void main() {
 		Game game = new Game();
 		
 		boolean debug = false;
 
+
 		// Set the FPS and UPS caps
-		int frameCap = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode()
-				.getRefreshRate();
+		int frameCap = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getRefreshRate();
 		int updateCap = 60;
+
 
 		long lastTime = System.nanoTime();
 		long curTime = lastTime;
@@ -30,15 +26,13 @@ public class MainGameLoop {
 		// updateDur is the minimum time between updates
 		// deltaUPS is the time since the last update
 		double updateDur = 1000000000 / updateCap;
-		if (updateCap == -1)
-			updateDur = 0;
+		if (updateCap == -1) updateDur = 0;
 		double deltaUPS = 0.0;
 
 		// renderDur is the minimum time between renders
 		// deltaFPS is the time since the last render
 		double renderDur = 1000000000 / frameCap;
-		if (frameCap == -1)
-			renderDur = 0;
+		if (frameCap == -1) renderDur = 0;
 		double deltaFPS = 0.0;
 
 		// FPS and UPS reporting variables

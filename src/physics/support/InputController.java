@@ -1,18 +1,14 @@
-package placeholders;
+package physics.support;
 
 import java.util.HashMap;
 
-import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
-public class InputController{
+public class InputController {
 
 	public static boolean close = false;
 
-	public enum Action {
-		FORWARD, BREAK, STRAFE_LEFT, STRAFE_RIGHT, TURN_LEFT, TURN_RIGHT, JUMP, EXIT, MUSIC_UP, MUSIC_DOWN, MUSIC_SKIP, SFX_UP, SFX_DOWN;
-	}
+
 
 	private HashMap<Integer, Action> mapping; // Maps key codes to actions (can
 												// be
