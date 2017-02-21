@@ -28,6 +28,7 @@ import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
 import physics.core.Ship;
 import physics.placeholders.FlatGroundProvider;
+import physics.ships.AIShip;
 import physics.ships.PlayerShip;
 import physics.support.Action;
 import physics.support.InputController;
@@ -47,6 +48,7 @@ public class Game {
 	private ArrayList<Terrain> terrains;
 	private ArrayList<Light> lights;
 	private Ship player;
+	private AIShip ai;
 	private Camera camera;
 	private MousePicker picker;
 	private MasterRenderer renderer;
@@ -92,21 +94,25 @@ public class Game {
 		trackSeed = st.getSeed();
 
 		TexturedModel trackModel = createTrackModel(trackSeed);
-		Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 3f);
+		Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 1f);
 		entities.add(track);
 
 		// Lighting
 		lights = new ArrayList<Light>();
-		Light sun = new Light(new Vector3f(256, 1000, 256), new Vector3f(1f, 1f, 1f));
+		Light sun = new Light(new Vector3f(2000, 10000, 2000), new Vector3f(1f, 1f, 1f));
 		lights.add(sun);
 
 		// Player Ship
 		TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader), new ModelTexture(loader.loadTexture("newShipTexture")));
 		player = new PlayerShip((byte) 0, playerTModel, new Vector3f(50, 20, 50), null, new FlatGroundProvider(0), input);
-		entities.add(player);
+		//entities.add(player);
+		
+		// AI Ship
+		ai = new AIShip((byte) 1, playerTModel, new Vector3f(trackPoints.get(0).getX(), 0, trackPoints.get(0).getY()), null, new FlatGroundProvider(0), trackPoints, input);
+		entities.add(ai);
 
 		// Player following camera
-		camera = new Camera(player);
+		camera = new Camera(ai);
 
 		// Renderers
 		renderer = new MasterRenderer(loader);
@@ -133,7 +139,8 @@ public class Game {
 		if (input.checkAction(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
 		if (input.checkAction(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
 
-		player.update((float) delta);
+		//player.update((float) delta);
+		ai.update((float) delta);
 		camera.move();
 		// picker.update();
 	}
@@ -166,7 +173,7 @@ public class Game {
 	}
 
 	private TexturedModel createTrackModel(long seed) {
-		float trackWidth = 50;
+		float trackWidth = 100;
 		float trackHeight = 0;
 
 		float[] vertices = new float[trackPoints.size() * 3 * 3];
@@ -198,7 +205,7 @@ public class Game {
 
 		// Scale up the track
 		for (TrackPoint p : trackPoints) {
-			p.mul(5);
+			p.mul(10);
 		}
 
 		for (int i = 0; i <= trackPoints.size(); i++) {

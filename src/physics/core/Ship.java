@@ -36,7 +36,7 @@ public abstract class Ship extends Entity {
 	private static final float ROTATIONAL_RESISTANCE = 5; // How fast does rotating slow down
 
 	private static final float GRAVITY = 15 * SCALE; // The force of gravity affecting the ship
-	private static final float AIR_CUSHION = 50 * SCALE; // The base force of the ait cushion keeping the hovercraft in the air
+	private static final float AIR_CUSHION = 16 * SCALE; // The base force of the ait cushion keeping the hovercraft in the air
 	private static final double CUSHION_SCALE = 0.8f;
 	private static final float JUMP_POWER = 30 * SCALE; // Jumping, for science! (testing vertical stuff)
 	// 15, 100, 2, 30: magnet-like
