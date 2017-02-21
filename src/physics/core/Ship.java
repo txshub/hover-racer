@@ -74,6 +74,7 @@ public abstract class Ship extends Entity {
 	}
 
 	public void addOtherShips(Collection<Ship> ships) {
+		if (ships == null) return;
 		ships.forEach(this::addOtherShip);
 	}
 	public void addOtherShip(Ship ship) {
