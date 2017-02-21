@@ -10,6 +10,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
+/**
+ * 
+ * @author Andreea Gheorghe
+ *
+ */
+
 public class GameMenu extends Parent {
 
 	VBox menu0, menu1, menu2, menu3, menu4;
@@ -25,7 +31,7 @@ public class GameMenu extends Parent {
 		menu1 = new VBox(10);
 		menu2 = new VBox(10);
 		menu3 = new VBox(10);
-		menu4 = new VBox(10);
+		menu4 = new VBox(20);
 
 		menu0.setTranslateX(100);
 		menu0.setTranslateY(160);
@@ -40,19 +46,18 @@ public class GameMenu extends Parent {
 		menu3.setTranslateY(160);
 
 		menu4.setTranslateX(700);
-		menu4.setTranslateY(160);
+		menu4.setTranslateY(70);
 		
 		btnPlayGame = new MenuButton("PLAY AGAINST RACERS");
 		btnPlayGame.setOnMouseClicked(event -> {
 			// enter the server lobby in the actual game
-			AudioMaster.stopMusic();
-			//new MainGameLoop().main();
+			
 			getChildren().add(menu4);
 			
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu0);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu0);
 			trans.setToX(menu0.getTranslateX() - OFFSET);
 
-			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.5), menu4);
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu4);
 			trans1.setToX(menu4.getTranslateX() - OFFSET);
 
 			trans.play();
@@ -76,10 +81,10 @@ public class GameMenu extends Parent {
 		btnOptions.setOnMouseClicked(event -> {
 			getChildren().add(menu1);
 
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu0);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu0);
 			trans.setToX(menu0.getTranslateX() - OFFSET);
 
-			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.5), menu1);
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu1);
 			trans1.setToX(menu1.getTranslateX() - OFFSET);
 
 			trans.play();
@@ -96,8 +101,8 @@ public class GameMenu extends Parent {
 
 			// Tudor - Close the audio engine
 			AudioMaster.stopMusic();
-			AudioMaster.cleanUp();
-
+			//AudioMaster.cleanUp();
+			
 			System.exit(0);
 		});
 
@@ -105,10 +110,10 @@ public class GameMenu extends Parent {
 		btnBack.setOnMouseClicked(event -> {
 			getChildren().add(menu0);
 
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu1);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu1);
 			trans.setToX(menu1.getTranslateX() + OFFSET);
 
-			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.5), menu0);
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu0);
 			trans1.setToX(menu1.getTranslateX());
 
 			trans.play();
@@ -123,10 +128,10 @@ public class GameMenu extends Parent {
 		btnBack2.setOnMouseClicked(event -> {
 			getChildren().add(menu1);
 
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu2);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu2);
 			trans.setToX(menu2.getTranslateX() + OFFSET);
 
-			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.5), menu1);
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu1);
 			trans1.setToX(menu2.getTranslateX());
 
 			trans.play();
@@ -141,10 +146,10 @@ public class GameMenu extends Parent {
 		btnBack3.setOnMouseClicked(event -> {
 			getChildren().add(menu1);
 
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu3);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu3);
 			trans.setToX(menu3.getTranslateX() + OFFSET);
 
-			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.5), menu1);
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu1);
 			trans1.setToX(menu3.getTranslateX());
 
 			trans.play();
@@ -159,10 +164,10 @@ public class GameMenu extends Parent {
 		btnBack4.setOnMouseClicked(event -> {
 			getChildren().add(menu0);
 
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu4);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu4);
 			trans.setToX(menu4.getTranslateX() + OFFSET);
 
-			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.5), menu0);
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu0);
 			trans1.setToX(menu4.getTranslateX());
 
 			trans.play();
@@ -177,10 +182,10 @@ public class GameMenu extends Parent {
 		btnSound.setOnMouseClicked(event -> {
 			getChildren().add(menu2);
 
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu1);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu1);
 			trans.setToX(menu1.getTranslateX() - OFFSET);
 
-			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.5), menu2);
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu2);
 			trans1.setToX(menu2.getTranslateX() - OFFSET);
 
 			trans.play();
@@ -196,10 +201,10 @@ public class GameMenu extends Parent {
 		btnMusic.setOnMouseClicked(event -> {
 			getChildren().add(menu3);
 
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu1);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu1);
 			trans.setToX(menu1.getTranslateX() - OFFSET);
 
-			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.5), menu3);
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu3);
 			trans1.setToX(menu3.getTranslateX() - OFFSET);
 
 			trans.play();
@@ -213,6 +218,8 @@ public class GameMenu extends Parent {
 
 		soundSlider = new SoundSlider();
 		musicSlider = new MusicSlider();
+		
+		serverLobby = new ServerLobby();
 
 		// main menu
 		menu0.getChildren().addAll(btnPlayGame, btnPlayAI, btnOptions, btnExit);
@@ -224,6 +231,7 @@ public class GameMenu extends Parent {
 		menu3.getChildren().addAll(musicSlider, btnBack3);
 		//server lobby window 1
 		menu4.getChildren().addAll(serverLobby,btnBack4);
+		
 		// game menu background
 		Rectangle bg2 = new Rectangle(550, 412);
 		bg2.setFill(Color.GREY);
