@@ -1,5 +1,6 @@
 package physics.core;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.joml.Vector3f;
@@ -71,6 +72,7 @@ public abstract class Ship extends Entity {
 		this.rotation = new Vector3(0, 0, 0);
 		this.rotationalVelocity = new Vector3(0, 0, 0);
 		this.ground = ground;
+		this.otherShips = new ArrayList<Ship>();
 	}
 
 	public void addOtherShips(Collection<Ship> ships) {
