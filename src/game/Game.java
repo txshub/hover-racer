@@ -84,7 +84,7 @@ public class Game {
 
 		int size = 1;
 		terrains = new ArrayList<Terrain>();
-		terrains.add(new Terrain((int) (Terrain.SIZE), (int) (Terrain.SIZE), loader, texturePack, blendMap, "new/FlatHeightMap"));
+		terrains.add(new Terrain(0, 0, loader, texturePack, blendMap, "new/FlatHeightMap"));
 
 		// Track
 		SeedTrack st = TrackMaker.makeTrack(10, 20, 30, 1, 40, 40, 4);
@@ -287,7 +287,7 @@ public class Game {
 				indices[(i - 1) * 12 + 11] = 0 + 1;
 			}
 		}
-		return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices), new ModelTexture(loader.loadTexture("mud")));
+		return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices), new ModelTexture(loader.loadTexture("new/TrackTexture")));
 
 	}
 
