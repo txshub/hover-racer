@@ -199,9 +199,9 @@ public class AudioMaster {
 		}
 	}
 	
-	public static void deleteSource(Source s) {
-		sources.remove(s);
-		sfx.remove(s);
-		music.remove(s);
-	}
+//	public static void deleteSource(Source s) {
+//		sources.remove(s);
+//		sfx.remove(s);
+//		music.remove(s);
+//	}
 }
