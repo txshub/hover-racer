@@ -1,9 +1,8 @@
-package physics;
+package physics.support;
 
 import org.joml.Vector3f;
 
 import gameEngine.terrains.Terrain;
-import placeholders.GroundProvider;
 
 public class TerrainProvider implements GroundProvider{
 

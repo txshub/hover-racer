@@ -101,7 +101,7 @@ public class GameMenu extends Parent {
 
 			// Tudor - Close the audio engine
 			AudioMaster.stopMusic();
-			//AudioMaster.cleanUp();
+			AudioMaster.cleanUp();
 			
 			System.exit(0);
 		});
