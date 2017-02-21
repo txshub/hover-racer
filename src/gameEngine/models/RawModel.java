@@ -1,19 +1,13 @@
 package gameEngine.models;
 
-/**
- * @author rtm592
- *
- */
 public class RawModel {
-
+	
 	private int vaoID;
 	private int vertexCount;
 	
 	public RawModel(int vaoID, int vertexCount){
-		
 		this.vaoID = vaoID;
 		this.vertexCount = vertexCount;
-		
 	}
 
 	public int getVaoID() {
@@ -24,4 +18,6 @@ public class RawModel {
 		return vertexCount;
 	}
 	
+	
+
 }

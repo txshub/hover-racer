@@ -2,20 +2,15 @@ package gameEngine.models;
 
 import gameEngine.textures.ModelTexture;
 
-/**
- * @author rtm592
- *
- */
 public class TexturedModel {
 	
 	private RawModel rawModel;
 	private ModelTexture texture;
+
 	
-	public TexturedModel(RawModel rawModel, ModelTexture texture) {
-		
-		this.rawModel = rawModel;
+	public TexturedModel(RawModel model, ModelTexture texture){
+		this.rawModel = model;
 		this.texture = texture;
-		
 	}
 
 	public RawModel getRawModel() {

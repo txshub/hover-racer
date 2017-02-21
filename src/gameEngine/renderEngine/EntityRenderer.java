@@ -17,98 +17,60 @@ import gameEngine.textures.ModelTexture;
 import gameEngine.toolbox.Maths;
 import gameEngine.toolbox.VecCon;
 
-/**
- * @author rtm592
- *
- */
 public class EntityRenderer {
-	
+
 	private StaticShader shader;
-	
-	public EntityRenderer(StaticShader shader, Matrix4f projectionMatrix) {
+
+	public EntityRenderer(StaticShader shader,Matrix4f projectionMatrix) {
 		this.shader = shader;
 		shader.start();
 		shader.loadProjectionMatrix(projectionMatrix);
 		shader.stop();
 	}
-	
-	public void render(Map<TexturedModel, List<Entity>> entities){
-		
-		for(TexturedModel model:entities.keySet()){
+
+	public void render(Map<TexturedModel, List<Entity>> entities) {
+		for (TexturedModel model : entities.keySet()) {
 			prepareTexturedModel(model);
 			List<Entity> batch = entities.get(model);
-			for (Entity entity:batch) {
+			for (Entity entity : batch) {
 				prepareInstance(entity);
-				GL11.glDrawElements(GL11.GL_TRIANGLES, model.getRawModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+				GL11.glDrawElements(GL11.GL_TRIANGLES, model.getRawModel().getVertexCount(),
+						GL11.GL_UNSIGNED_INT, 0);
 			}
 			unbindTexturedModel();
 		}
-		
 	}
-	
-	private void prepareTexturedModel(TexturedModel texturedModel){
-		RawModel model = texturedModel.getRawModel();
-		GL30.glBindVertexArray(model.getVaoID());
+
+	private void prepareTexturedModel(TexturedModel model) {
+		RawModel rawModel = model.getRawModel();
+		GL30.glBindVertexArray(rawModel.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
 		GL20.glEnableVertexAttribArray(1);
 		GL20.glEnableVertexAttribArray(2);
-		ModelTexture texture = texturedModel.getTexture();
-		shader.loadNumberOfRow(texture.getNumOfRows());
-		if(texture.hasTransparency()){
+		ModelTexture texture = model.getTexture();
+		shader.loadNumberOfRows(texture.getNumberOfRows());
+		if(texture.isHasTransparency()){
 			MasterRenderer.disableCulling();
 		}
-		shader.loadFakeLighting(texture.useFakeLighting());
-		shader.loadshineVariables(texture.getShineDamper(), texture.getReflectivity());
+		shader.loadFakeLightingVariable(texture.isUseFakeLighting());
+		shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturedModel.getTexture().getID());
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getID());
 	}
-	private void unbindTexturedModel(){
 
+	private void unbindTexturedModel() {
 		MasterRenderer.enableCulling();
 		GL20.glDisableVertexAttribArray(0);
 		GL20.glDisableVertexAttribArray(1);
-		GL20.glDisableVertexAttribArray(1);
+		GL20.glDisableVertexAttribArray(2);
 		GL30.glBindVertexArray(0);
 	}
-	private void prepareInstance(Entity entity){
-		Matrix4f transformationMatrix = Maths.createTransformationMatrix(VecCon.toLWJGL(entity.getPosition()),entity.getRotation().x,
-		    entity.getRotation().y,entity.getRotation().z,entity.getScale());
+
+	private void prepareInstance(Entity entity) {
+		Matrix4f transformationMatrix = Maths.createTransformationMatrix(VecCon.toLWJGL(entity.getPosition()), entity.getRotation().x,
+				entity.getRotation().y, entity.getRotation().z, entity.getScale());
 		shader.loadTransformationMatrix(transformationMatrix);
-		shader.loadOffset(entity.getTextureXOffset(),entity.getTextureYOffset());
+		shader.loadOffset(entity.getTextureXOffset(), entity.getTextureYOffset());
 	}
-	
-	
-	
-	
-	// depricated
-//	public void render(Entity entity, StaticShader shader){
-//		TexturedModel texturedModel = entity.getModel();
-//		RawModel model = texturedModel.getRawModel();
-//		GL30.glBindVertexArray(model.getVaoID());
-//		GL20.glEnableVertexAttribArray(0);
-//		GL20.glEnableVertexAttribArray(1);
-//		GL20.glEnableVertexAttribArray(2);
-//		Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(),entity.getRotx()
-//				,entity.getRoty(),entity.getRotz(),entity.getScale());
-//		shader.loadTransformationMatrix(transformationMatrix);
-//		ModelTexture texture = texturedModel.getTexture();
-//		shader.loadshineVariables(texture.getShineDamper(), texture.getReflectivity());
-//		GL13.glActiveTexture(GL13.GL_TEXTURE0);
-//		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturedModel.getTexture().getID());
-//		GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-//		GL20.glDisableVertexAttribArray(0);
-//		GL20.glDisableVertexAttribArray(1);
-//		GL20.glDisableVertexAttribArray(1);
-//		GL30.glBindVertexArray(0);
-//		
-//	}
-	
+
 }
-
-
-
-
-
-
-
-
