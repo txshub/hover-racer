@@ -72,7 +72,9 @@ public class DisplayManager {
 		return Sys.getTime()*1000/Sys.getTimerResolution();
 	}
 	
-	
+	public static void changeTitle(String title) {
+	  Display.setTitle(title);
+	}
 	
 
 }
