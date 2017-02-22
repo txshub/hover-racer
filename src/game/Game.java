@@ -36,6 +36,10 @@ import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
 
+/**
+ * @author Reece Bennett and rtm592
+ *
+ */
 public class Game {
 
 	// Set this to print debug messages
@@ -48,7 +52,7 @@ public class Game {
 	private ArrayList<Light> lights;
 	private Ship player;
 	private Camera camera;
-//	private MousePicker picker;
+	// private MousePicker picker;
 	private MasterRenderer renderer;
 	private GuiRenderer guiRender;
 	private long trackSeed;
@@ -104,8 +108,9 @@ public class Game {
 		// Player Ship
 		TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
 				new ModelTexture(loader.loadTexture("newShipTexture")));
-		player = new PlayerShip((byte) 0, playerTModel, new Vector3f(50, 20, 50), null, new FlatGroundProvider(0),
-				input);
+		player = new PlayerShip((byte) 0, playerTModel,
+				new Vector3f(st.getTrack().get(0).x * track.getScale(), 10, st.getTrack().get(0).y * track.getScale()),
+				null, new FlatGroundProvider(0), input);
 		entities.add(player);
 
 		// Player following camera

@@ -31,6 +31,8 @@ public class GameLogic {
 	
 	public void update(){
 		// calculate distance here
+		
+		// get rankings from the server
 	}
 	
 	public void setRankings(HashMap<Integer,Integer> ranking){
