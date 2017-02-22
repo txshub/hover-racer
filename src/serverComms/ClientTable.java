@@ -43,4 +43,8 @@ public class ClientTable {
 		return queueTable.get(name);
 	}
 
+	public Map<String, CommQueue> getQueues() {
+		return queueTable;
+	}
+
 }
