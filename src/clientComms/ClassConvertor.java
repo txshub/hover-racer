@@ -6,7 +6,7 @@ import java.util.HashMap;
 /**
  * @author rtm592 converts classes into compact bytes messages and back this
  *         method allows for 256 different message types to be sent along the
- *         network
+ *         network. first byte is the messageId
  */
 public class ClassConvertor {
 
@@ -23,7 +23,7 @@ public class ClassConvertor {
 	}
 
 	/**
-	 * converts a byte[] to a float messageid = 0
+	 * converts a byte[] to a float. messageid = 0
 	 * 
 	 * @param bytes
 	 *            the sent message
@@ -34,7 +34,7 @@ public class ClassConvertor {
 	}
 
 	/**
-	 * converts sent byte message into a hashmap leaderboard messageID = 1
+	 * converts sent byte message into a hashmap leaderboard. messageID = 1
 	 * 
 	 * @param bytes
 	 *            the sent message in the form of ship ID, place, ship ID, place
@@ -82,10 +82,10 @@ public class ClassConvertor {
 		return message;
 
 	}
-/**
- * for testing the class
- * need J-units
- */
+
+	/**
+	 * for testing the class need J-units
+	 */
 	public static void main(String[] args) {
 		HashMap<Integer, Integer> map = new HashMap<>();
 		map.put(0, 7);
@@ -100,7 +100,7 @@ public class ClassConvertor {
 		}
 
 		float out = getDistancefloat(getDistanceMessage(10f));
-		System.out.println("should be 10.0: "+out);
+		System.out.println("should be 10.0: " + out);
 	}
 
 }
