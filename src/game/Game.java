@@ -21,6 +21,7 @@ import gameEngine.objConverter.OBJFileLoader;
 import gameEngine.renderEngine.DisplayManager;
 import gameEngine.renderEngine.Loader;
 import gameEngine.renderEngine.MasterRenderer;
+import gameEngine.skybox.SkyboxRenderer;
 import gameEngine.terrains.Terrain;
 import gameEngine.textures.ModelTexture;
 import gameEngine.textures.TerrainTexture;
@@ -39,7 +40,6 @@ public class Game {
 
 	// Set this to print debug messages
 	public static boolean debug = true;
-
 
 	private Loader loader;
 	private ArrayList<Entity> entities;
@@ -78,13 +78,15 @@ public class Game {
 		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("new/GridTexture"));
 		TerrainTexturePack texturePack = new TerrainTexturePack(background, rTexture, gTexture, bTexture);
 
-		// TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
+		// TerrainTexture blendMap = new
+		// TerrainTexture(loader.loadTexture("blendMap"));
 
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("new/GridTexture"));
 
 		int size = 1;
 		terrains = new ArrayList<Terrain>();
-		terrains.add(new Terrain(0, 0, loader, texturePack, blendMap, "new/FlatHeightMap"));
+		terrains.add(new Terrain((int) (-SkyboxRenderer.SIZE * 1.5f), (int) (-SkyboxRenderer.SIZE * 1.5f), loader,
+				texturePack, blendMap, "new/FlatHeightMap"));
 
 		// Track
 		SeedTrack st = TrackMaker.makeTrack(10, 20, 30, 1, 40, 40, 4);
@@ -101,8 +103,10 @@ public class Game {
 		lights.add(sun);
 
 		// Player Ship
-		TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader), new ModelTexture(loader.loadTexture("newShipTexture")));
-		player = new PlayerShip((byte) 0, playerTModel, new Vector3f(50, 20, 50), null, new FlatGroundProvider(0), input);
+		TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
+				new ModelTexture(loader.loadTexture("newShipTexture")));
+		player = new PlayerShip((byte) 0, playerTModel, new Vector3f(50, 20, 50), null, new FlatGroundProvider(0),
+				input);
 		entities.add(player);
 
 		// Player following camera
@@ -113,7 +117,8 @@ public class Game {
 		guiRender = new GuiRenderer(loader);
 
 		// Camera rotation with right click
-		// picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrains);
+		// picker = new MousePicker(camera, renderer.getProjectionMatrix(),
+		// terrains);
 
 		// Tudor
 		AudioMaster.playInGameMusic();
@@ -123,18 +128,37 @@ public class Game {
 		input.run();
 
 		// Check if the escape key was pressed to exit the game
-		if (input.checkAction(Action.EXIT)) running = false;
+		if (input.checkAction(Action.EXIT))
+			running = false;
 
 		// Check for audio controls
 		/** @author Tudor */
-		if (input.checkAction(Action.MUSIC_UP)) AudioMaster.increaseMusicVolume();
-		if (input.checkAction(Action.MUSIC_DOWN)) AudioMaster.decreaseMusicVolume();
-		if (input.checkAction(Action.MUSIC_SKIP)) AudioMaster.skipInGameMusic();
-		if (input.checkAction(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
-		if (input.checkAction(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
+		if (input.checkAction(Action.MUSIC_UP))
+			AudioMaster.increaseMusicVolume();
+		if (input.checkAction(Action.MUSIC_DOWN))
+			AudioMaster.decreaseMusicVolume();
+		if (input.checkAction(Action.MUSIC_SKIP))
+			AudioMaster.skipInGameMusic();
+		if (input.checkAction(Action.SFX_UP))
+			AudioMaster.increaseSFXVolume();
+		if (input.checkAction(Action.SFX_DOWN))
+			AudioMaster.decreaseSFXVolume();
 
 		player.update((float) delta);
 		camera.move();
+
+		// move terrain based on player location so terrain seems infinite
+		if (player.getPosition().x > terrains.get(0).getX() + Terrain.SIZE * 4 / 6) {
+			terrains.get(0).moveX(Terrain.SIZE / 6);
+		} else if (player.getPosition().x < terrains.get(0).getX() + Terrain.SIZE * 2 / 6) {
+			terrains.get(0).moveX(-Terrain.SIZE / 6);
+		}
+
+		if (player.getPosition().z > terrains.get(0).getZ() + Terrain.SIZE * 4 / 6) {
+			terrains.get(0).moveZ(Terrain.SIZE / 6);
+		} else if (player.getPosition().z < terrains.get(0).getZ() + Terrain.SIZE * 2 / 6) {
+			terrains.get(0).moveZ(-Terrain.SIZE / 6);
+		}
 		// picker.update();
 	}
 
@@ -218,9 +242,11 @@ public class Game {
 				// System.out.println("Cur: " + curPoint + " Next: " + nextPoint
 				// + " " + (nextPoint.getX() - curPoint.getX()));
 
-				Vector2f dirFromPrev = new Vector2f(curPoint.getX() - prevPoint.getX(), curPoint.getY() - prevPoint.getY());
+				Vector2f dirFromPrev = new Vector2f(curPoint.getX() - prevPoint.getX(),
+						curPoint.getY() - prevPoint.getY());
 
-				Vector2f dirToNext = new Vector2f(nextPoint.getX() - curPoint.getX(), nextPoint.getY() - curPoint.getY());
+				Vector2f dirToNext = new Vector2f(nextPoint.getX() - curPoint.getX(),
+						nextPoint.getY() - curPoint.getY());
 
 				Vector2f dirVec = dirFromPrev.add(dirToNext).normalize();
 
@@ -287,10 +313,10 @@ public class Game {
 				indices[(i - 1) * 12 + 11] = 0 + 1;
 			}
 		}
-		return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices), new ModelTexture(loader.loadTexture("new/TrackTexture")));
+		return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
+				new ModelTexture(loader.loadTexture("new/TrackTexture")));
 
 	}
-
 
 	private static void sortLights(List<Light> lights, Vector3f currentPosition) {
 		float[] distance = new float[lights.size() - 1];
