@@ -30,7 +30,7 @@ public class GameLogic {
 	}
 	
 	public void update(){
-		
+		// calculate distance here
 	}
 	
 	public void setRankings(HashMap<Integer,Integer> ranking){

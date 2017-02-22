@@ -48,7 +48,7 @@ public class Game {
 	private ArrayList<Light> lights;
 	private Ship player;
 	private Camera camera;
-	private MousePicker picker;
+//	private MousePicker picker;
 	private MasterRenderer renderer;
 	private GuiRenderer guiRender;
 	private long trackSeed;
@@ -83,7 +83,6 @@ public class Game {
 
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("new/GridTexture"));
 
-		int size = 1;
 		terrains = new ArrayList<Terrain>();
 		terrains.add(new Terrain((int) (-SkyboxRenderer.SIZE * 1.5f), (int) (-SkyboxRenderer.SIZE * 1.5f), loader,
 				texturePack, blendMap, "new/FlatHeightMap"));
