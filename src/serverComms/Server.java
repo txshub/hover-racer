@@ -4,7 +4,12 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Map;
+
+import physics.core.Ship;
+
+
 
 /**
  * The server to handle a game
@@ -12,6 +17,7 @@ import java.util.Map;
  *
  */
 public class Server extends Thread {
+	public ArrayList<Ship> allUsers = new ArrayList<Ship>();
 	public final static Charset charset = StandardCharsets.UTF_8;
 	private String status;
 	private int portNumber;
