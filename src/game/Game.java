@@ -88,7 +88,7 @@ public class Game {
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("new/GridTexture"));
 
 		terrains = new ArrayList<Terrain>();
-		terrains.add(new Terrain((int) (-SkyboxRenderer.SIZE * 1.5f), (int) (-SkyboxRenderer.SIZE * 1.5f), loader,
+		terrains.add(new Terrain((int) (-SkyboxRenderer.SIZE * 2f), (int) (-SkyboxRenderer.SIZE * 2f), loader,
 				texturePack, blendMap, "new/FlatHeightMap"));
 
 		// Track
@@ -152,16 +152,16 @@ public class Game {
 		camera.move();
 
 		// move terrain based on player location so terrain seems infinite
-		if (player.getPosition().x > terrains.get(0).getX() + Terrain.SIZE * 4 / 6) {
-			terrains.get(0).moveX(Terrain.SIZE / 6);
-		} else if (player.getPosition().x < terrains.get(0).getX() + Terrain.SIZE * 2 / 6) {
-			terrains.get(0).moveX(-Terrain.SIZE / 6);
+		if (player.getPosition().x > terrains.get(0).getX() + Terrain.SIZE * 5 / 8) {
+			terrains.get(0).moveX(Terrain.SIZE / 8);
+		} else if (player.getPosition().x < terrains.get(0).getX() + Terrain.SIZE * 3 / 8) {
+			terrains.get(0).moveX(-Terrain.SIZE / 8);
 		}
 
-		if (player.getPosition().z > terrains.get(0).getZ() + Terrain.SIZE * 4 / 6) {
-			terrains.get(0).moveZ(Terrain.SIZE / 6);
-		} else if (player.getPosition().z < terrains.get(0).getZ() + Terrain.SIZE * 2 / 6) {
-			terrains.get(0).moveZ(-Terrain.SIZE / 6);
+		if (player.getPosition().z > terrains.get(0).getZ() + Terrain.SIZE * 5 / 8) {
+			terrains.get(0).moveZ(Terrain.SIZE / 8);
+		} else if (player.getPosition().z < terrains.get(0).getZ() + Terrain.SIZE * 3 / 8) {
+			terrains.get(0).moveZ(-Terrain.SIZE / 8);
 		}
 		// picker.update();
 	}
