@@ -97,7 +97,7 @@ public class Game {
 		trackSeed = st.getSeed();
 
 		TexturedModel trackModel = createTrackModel(trackSeed);
-		Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 3f);
+		Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 4f);
 		entities.add(track);
 
 		// Lighting
@@ -139,8 +139,8 @@ public class Game {
 		/** @author Tudor */
 		if (input.checkAction(Action.MUSIC_UP))
 			AudioMaster.increaseMusicVolume();
-		if (input.checkAction(Action.MUSIC_DOWN))
-			AudioMaster.decreaseMusicVolume();
+		// if (input.checkAction(Action.MUSIC_DOWN))
+		AudioMaster.decreaseMusicVolume();
 		if (input.checkAction(Action.MUSIC_SKIP))
 			AudioMaster.skipInGameMusic();
 		if (input.checkAction(Action.SFX_UP))
@@ -152,16 +152,16 @@ public class Game {
 		camera.move();
 
 		// move terrain based on player location so terrain seems infinite
-		if (player.getPosition().x > terrains.get(0).getX() + Terrain.SIZE * 5 / 8) {
-			terrains.get(0).moveX(Terrain.SIZE / 8);
-		} else if (player.getPosition().x < terrains.get(0).getX() + Terrain.SIZE * 3 / 8) {
-			terrains.get(0).moveX(-Terrain.SIZE / 8);
+		if (player.getPosition().x > terrains.get(0).getX() + Terrain.SIZE * 3 / 4) {
+			terrains.get(0).moveX(Terrain.SIZE / 4);
+		} else if (player.getPosition().x < terrains.get(0).getX() + Terrain.SIZE * 1 / 4) {
+			terrains.get(0).moveX(-Terrain.SIZE / 4);
 		}
 
-		if (player.getPosition().z > terrains.get(0).getZ() + Terrain.SIZE * 5 / 8) {
-			terrains.get(0).moveZ(Terrain.SIZE / 8);
-		} else if (player.getPosition().z < terrains.get(0).getZ() + Terrain.SIZE * 3 / 8) {
-			terrains.get(0).moveZ(-Terrain.SIZE / 8);
+		if (player.getPosition().z > terrains.get(0).getZ() + Terrain.SIZE * 3 / 4) {
+			terrains.get(0).moveZ(Terrain.SIZE / 4);
+		} else if (player.getPosition().z < terrains.get(0).getZ() + Terrain.SIZE * 1 / 4) {
+			terrains.get(0).moveZ(-Terrain.SIZE / 4);
 		}
 		// picker.update();
 	}
@@ -194,11 +194,11 @@ public class Game {
 	}
 
 	private TexturedModel createTrackModel(long seed) {
-		float trackWidth = 50;
-		float trackHeight = 0;
+		float trackWidth = 100;
+		float trackHeight = 5;
 
-		float[] vertices = new float[trackPoints.size() * 3 * 3];
-		int[] indices = new int[trackPoints.size() * 3 * 4];
+		float[] vertices = new float[trackPoints.size() * 5 * 3];
+		int[] indices = new int[trackPoints.size() * 5 * 8];
 		float[] texCoords = new float[indices.length];
 		float[] normals = new float[vertices.length];
 
@@ -226,7 +226,7 @@ public class Game {
 
 		// Scale up the track
 		for (TrackPoint p : trackPoints) {
-			p.mul(5);
+			p.mul(10);
 		}
 
 		for (int i = 0; i <= trackPoints.size(); i++) {
@@ -260,17 +260,25 @@ public class Game {
 				// System.out.println("Dir: " + dirVec + " Left: " +
 				// left.length() + " Right: " + right.length());
 
-				vertices[i * 9] = curPoint.getX() + left.x;
-				vertices[i * 9 + 1] = trackHeight;
-				vertices[i * 9 + 2] = curPoint.getY() + left.y;
+				vertices[i * 15] = curPoint.getX() + left.x;
+				vertices[i * 15 + 1] = trackHeight;
+				vertices[i * 15 + 2] = curPoint.getY() + left.y;
 
-				vertices[i * 9 + 3] = curPoint.getX();
-				vertices[i * 9 + 4] = trackHeight;
-				vertices[i * 9 + 5] = curPoint.getY();
+				vertices[i * 15 + 3] = curPoint.getX() + left.x;
+				vertices[i * 15 + 4] = trackHeight - 5;
+				vertices[i * 15 + 5] = curPoint.getY() + left.y;
 
-				vertices[i * 9 + 6] = curPoint.getX() + right.x;
-				vertices[i * 9 + 7] = trackHeight;
-				vertices[i * 9 + 8] = curPoint.getY() + right.y;
+				vertices[i * 15 + 6] = curPoint.getX();
+				vertices[i * 15 + 7] = trackHeight;
+				vertices[i * 15 + 8] = curPoint.getY();
+
+				vertices[i * 15 + 9] = curPoint.getX() + right.x;
+				vertices[i * 15 + 10] = trackHeight;
+				vertices[i * 15 + 11] = curPoint.getY() + right.y;
+
+				vertices[i * 15 + 12] = curPoint.getX() + right.x;
+				vertices[i * 15 + 13] = trackHeight - 5;
+				vertices[i * 15 + 14] = curPoint.getY() + right.y;
 
 				// System.out.println("Left: " + vertices[i*9] + " " +
 				// vertices[i*9+1] + " " + vertices[i*9+2]
@@ -280,41 +288,73 @@ public class Game {
 				// + vertices[i*9+8]);
 			}
 
-			int k = i * 3;
+			int k = i * 5;
 			if (i > 0 && i < trackPoints.size()) {
 
-				indices[(i - 1) * 12 + 0] = k - 3;
-				indices[(i - 1) * 12 + 1] = k - 2;
-				indices[(i - 1) * 12 + 2] = k + 1;
+				indices[(i - 1) * 24 + 0] = k - 4;
+				indices[(i - 1) * 24 + 1] = k;
+				indices[(i - 1) * 24 + 2] = k + 1;
 
-				indices[(i - 1) * 12 + 3] = k - 3;
-				indices[(i - 1) * 12 + 4] = k + 1;
-				indices[(i - 1) * 12 + 5] = k;
+				indices[(i - 1) * 24 + 3] = k - 5;
+				indices[(i - 1) * 24 + 4] = k;
+				indices[(i - 1) * 24 + 5] = k - 4;
 
-				indices[(i - 1) * 12 + 6] = k - 2;
-				indices[(i - 1) * 12 + 7] = k - 1;
-				indices[(i - 1) * 12 + 8] = k + 1;
+				indices[(i - 1) * 24 + 6] = k + 2;
+				indices[(i - 1) * 24 + 7] = k;
+				indices[(i - 1) * 24 + 8] = k - 5;
 
-				indices[(i - 1) * 12 + 9] = k - 1;
-				indices[(i - 1) * 12 + 10] = k + 2;
-				indices[(i - 1) * 12 + 11] = k + 1;
+				indices[(i - 1) * 24 + 9] = k - 3;
+				indices[(i - 1) * 24 + 10] = k + 2;
+				indices[(i - 1) * 24 + 11] = k - 5;
+
+				indices[(i - 1) * 24 + 12] = k - 3;
+				indices[(i - 1) * 24 + 13] = k - 2;
+				indices[(i - 1) * 24 + 14] = k + 2;
+
+				indices[(i - 1) * 24 + 15] = k - 2;
+				indices[(i - 1) * 24 + 16] = k + 3;
+				indices[(i - 1) * 24 + 17] = k + 2;
+
+				indices[(i - 1) * 24 + 18] = k - 1;
+				indices[(i - 1) * 24 + 19] = k + 3;
+				indices[(i - 1) * 24 + 20] = k - 2;
+
+				indices[(i - 1) * 24 + 21] = k - 1;
+				indices[(i - 1) * 24 + 22] = k + 4;
+				indices[(i - 1) * 24 + 23] = k + 3;
 			} else if (i > 0) {
 
-				indices[(i - 1) * 12 + 0] = k - 3;
-				indices[(i - 1) * 12 + 1] = k - 2;
-				indices[(i - 1) * 12 + 2] = 0 + 1;
+				indices[(i - 1) * 24 + 0] = k - 4;
+				indices[(i - 1) * 24 + 1] = 0;
+				indices[(i - 1) * 24 + 2] = 0 + 1;
 
-				indices[(i - 1) * 12 + 3] = k - 3;
-				indices[(i - 1) * 12 + 4] = 0 + 1;
-				indices[(i - 1) * 12 + 5] = 0;
+				indices[(i - 1) * 24 + 3] = k - 5;
+				indices[(i - 1) * 24 + 4] = 0;
+				indices[(i - 1) * 24 + 5] = k - 4;
 
-				indices[(i - 1) * 12 + 6] = k - 2;
-				indices[(i - 1) * 12 + 7] = k - 1;
-				indices[(i - 1) * 12 + 8] = 0 + 1;
+				indices[(i - 1) * 24 + 6] = 0 + 2;
+				indices[(i - 1) * 24 + 7] = 0;
+				indices[(i - 1) * 24 + 8] = k - 5;
 
-				indices[(i - 1) * 12 + 9] = k - 1;
-				indices[(i - 1) * 12 + 10] = 0 + 2;
-				indices[(i - 1) * 12 + 11] = 0 + 1;
+				indices[(i - 1) * 24 + 9] = k - 3;
+				indices[(i - 1) * 24 + 10] = 0 + 2;
+				indices[(i - 1) * 24 + 11] = k - 5;
+
+				indices[(i - 1) * 24 + 12] = k - 3;
+				indices[(i - 1) * 24 + 13] = k - 2;
+				indices[(i - 1) * 24 + 14] = 0 + 2;
+
+				indices[(i - 1) * 24 + 15] = k - 2;
+				indices[(i - 1) * 24 + 16] = 0 + 3;
+				indices[(i - 1) * 24 + 17] = 0 + 2;
+
+				indices[(i - 1) * 24 + 18] = k - 1;
+				indices[(i - 1) * 24 + 19] = 0 + 3;
+				indices[(i - 1) * 24 + 20] = k - 2;
+
+				indices[(i - 1) * 24 + 21] = k - 1;
+				indices[(i - 1) * 24 + 22] = 0 + 4;
+				indices[(i - 1) * 24 + 23] = 0 + 3;
 			}
 		}
 		return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
