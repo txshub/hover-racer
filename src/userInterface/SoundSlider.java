@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import audioEngine.AudioMaster;
+import javafx.geometry.Insets;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -39,7 +40,7 @@ public class SoundSlider extends HBox {
 		}
 		
 		soundSlider.setBlockIncrement(1);
-		soundSlider.setPrefWidth(200);
+		soundSlider.setPrefWidth(250);
 		
 		soundSlider.valueProperty().addListener(
 			(observable, oldValue, newValue) -> {	
@@ -54,6 +55,7 @@ public class SoundSlider extends HBox {
 		
 		getChildren().addAll(value,soundSlider);
 		setWidth(300);
+		setPadding(new Insets(0,5,0,0));
 	}
 
 }
