@@ -22,12 +22,15 @@ import trackDesign.TrackPoint;
  */
 public class AIShip extends Ship {
 
-  ShipSounds sound;
-  ArrayList<TrackPoint> track;
-  int nextPointIndex;
-  InputController input;
+  private ShipSounds sound;
+  private ArrayList<TrackPoint> track;
+  private int nextPointIndex;
+  private InputController input;
   
   private boolean debug = true;
+  
+  private final float twoOverPi = (float) (2 / Math.PI); 
+  private final float piOverEight = (float) (Math.PI / 8);
   
   public AIShip(byte id, TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground, ArrayList<TrackPoint> track, InputController input) {
     this(id, model, startingPosition, otherShips, ground, track);
@@ -41,6 +44,24 @@ public class AIShip extends Ship {
     this.sound = new ShipSounds(this, otherShips != null ? otherShips : new ArrayList<Ship>());
     this.track = track;
     nextPointIndex = 1;
+    
+    for (int i = 0; i < track.size(); i++) {
+      TrackPoint nextPoint = track.get(i);
+      TrackPoint nextNextPoint = i+1 >= track.size() ? track.get(0) : track.get(i+1);
+      TrackPoint prevPoint = i == 0 ? track.get(track.size()-1) : track.get(i-1);
+      
+      Vector2f currTrackVec = new Vector2f(nextPoint).sub(prevPoint);
+      Vector2f nextTrackVec = new Vector2f(nextNextPoint).sub(nextPoint);
+      float segAngle = Math.abs(currTrackVec.angle(nextTrackVec));
+      
+      float speed = 0;
+      if (segAngle <= piOverEight) speed = (float) (-(4/Math.PI) * segAngle + 1);
+      if (segAngle > piOverEight) speed = (float) (-(4/(3*Math.PI)) * segAngle + 2/3);
+      
+      speed = (float) Math.max(0.1, speed);
+      
+      System.out.println(segAngle + " - " + speed);
+    }
   }
 
   @Override
@@ -58,13 +79,27 @@ public class AIShip extends Ship {
     float angle = dirVec.angle(dirToPoint); 
     float dist = dirToPoint.length();
     
-    float marginOfError = 0.1f;
+    float marginOfError = 0.01f;
+    
+    // Speed stuff
+    TrackPoint nextNextPoint = nextPointIndex+1 >= track.size() ? track.get(0) : track.get(nextPointIndex+1);
+    TrackPoint prevPoint = nextPointIndex == 0 ? track.get(track.size()-1) : track.get(nextPointIndex-1);
+    
+    Vector2f currTrackVec = new Vector2f(nextPoint).sub(prevPoint);
+    Vector2f nextTrackVec = new Vector2f(nextNextPoint).sub(nextPoint);
+    float segAngle = Math.abs(currTrackVec.angle(nextTrackVec));
+    
+    System.out.print("Seg: " + segAngle + " ");
     
     if (Keyboard.isKeyDown(Keyboard.KEY_I) || input == null) {
       if (angle > marginOfError) turn += 1f;
       if (angle < -marginOfError) turn -= 1f;
       
-      thrust = 0.5f;
+      if (segAngle <= piOverEight) thrust = (float) (-(4/Math.PI) * segAngle + 1);
+      if (segAngle > piOverEight) thrust = (float) (-(4/(3*Math.PI)) * segAngle + 2/3);
+      
+      System.out.println(thrust);
+      thrust = (float) Math.min(1, Math.max(0.1, thrust));
     
     } else {
       if (input.checkAction(Action.FORWARD)) thrust++;
@@ -78,7 +113,7 @@ public class AIShip extends Ship {
     
     if (debug)
       System.out.println("Point: " + nextPointIndex + " - " + nextPoint + " Angle: " + angle
-          + " Dist: " + dist /*+ " Pos: " + pos + " TPoint: " + dirToPoint + " dir: " + dirVec*/);
+          + " Dist: " + dist + " Thrust: " + thrust /*+ " Pos: " + pos + " TPoint: " + dirToPoint + " dir: " + dirVec*/);
 
     // Steer and update ship
     super.steer(thrust, turn, strafe, jump, delta);
