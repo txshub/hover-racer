@@ -102,7 +102,7 @@ public class Game {
 
 		// Lighting
 		lights = new ArrayList<Light>();
-		Light sun = new Light(new Vector3f(256, 1000, 256), new Vector3f(1f, 1f, 1f));
+		Light sun = new Light(new Vector3f(256, 2000, 256), new Vector3f(1f, 1f, 1f));
 		lights.add(sun);
 
 		// Player Ship
