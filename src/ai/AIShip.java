@@ -60,7 +60,7 @@ public class AIShip extends Ship {
     //System.out.println("Angle: " + Math.toDegrees(nextEdges.get(0).angle(nextEdges.get(1))) + " Edge1: " + nextEdges.get(0) + " Edge2: " + nextEdges.get(1));
     float x = nextEdges.get(0).x;
     float y = nextEdges.get(0).y;
-    System.out.println(Math.toDegrees(nextEdges.get(0).angle(nextEdges.get(1))));
+//    System.out.println("AIShip, "+Math.toDegrees(nextEdges.get(0).angle(nextEdges.get(1))));
     
     float maxAccel = 0.1f;
     float minAccel = 0.01f;

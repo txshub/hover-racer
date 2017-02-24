@@ -4,6 +4,12 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Map;
+
+import physics.core.Ship;
+
+
 
 /**
  * The server to handle a game
@@ -11,6 +17,7 @@ import java.nio.charset.StandardCharsets;
  *
  */
 public class Server extends Thread {
+	public ArrayList<Ship> allUsers = new ArrayList<Ship>();
 	public final static Charset charset = StandardCharsets.UTF_8;
 	private String status;
 	private int portNumber;
@@ -24,6 +31,7 @@ public class Server extends Thread {
 	public final static byte clientDisconnect = Byte.parseByte("5");
 	public final static byte dontDisconnect   = Byte.parseByte("6");
 	public final static byte positionUpdate   = Byte.parseByte("7");
+	public final static byte sendAllUsers     = Byte.parseByte("8");
 	
 	/**
 	 * Creates a Server object
@@ -73,6 +81,14 @@ public class Server extends Thread {
 						clientTable.getQueue(name).offer(new ByteArrayByte(("Valid").getBytes(charset),acceptedUserTag));
 						if(DEBUG) System.out.println("Sent Accepted User to client");
 						(new ServerReceiver(socket, name, fromClient, clientTable, sender)).start();
+						for(Map.Entry<String, CommQueue> entry : clientTable.getQueues().entrySet()) {
+							String allUsers = "";
+							for(Map.Entry<String, CommQueue> toSend : clientTable.getQueues().entrySet()) {
+								allUsers += " " + toSend.getKey();
+							}
+							allUsers = allUsers.substring(1);
+							entry.getValue().offer(new ByteArrayByte(allUsers.getBytes(), sendAllUsers));
+						}
 					}
 				}
 			}

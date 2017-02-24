@@ -42,7 +42,7 @@ public class MenuButton extends StackPane {
 		audioSource = AudioMaster.createSFXSource();
 		
 		try {
-			Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), 20);
+			Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), 27);
 			buttonText.setFont(f);
 			
 		} catch (IOException e) {
@@ -50,7 +50,7 @@ public class MenuButton extends StackPane {
 		}
 		
 		//create button
-		Rectangle bg = new Rectangle (200,40);
+		Rectangle bg = new Rectangle (250, 50);
 		bg.setOpacity(0.7);
 		bg.setFill(Color.BLACK);
 		//blur the button colour

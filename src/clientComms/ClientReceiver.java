@@ -44,6 +44,9 @@ public class ClientReceiver extends Thread {
 					System.out.println("Username valid. Now connected to the server");
 				} else if(fullMsg.getType()==Server.badPacket) {
 					System.out.println("Need To Reconnect");
+				} else if(fullMsg.getType()==Server.sendAllUsers) {
+					String[] allUsers = (new String(fullMsg.getMsg(), Client.charset)).split(" ");
+					//Where to send this to?
 				}
 			}
 		} catch (IOException e) {
