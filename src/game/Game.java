@@ -15,6 +15,7 @@ import gameEngine.entities.Camera;
 import gameEngine.entities.Entity;
 import gameEngine.entities.Light;
 import gameEngine.guis.GuiRenderer;
+import gameEngine.guis.GuiTexture;
 import gameEngine.models.RawModel;
 import gameEngine.models.TexturedModel;
 import gameEngine.objConverter.OBJFileLoader;
@@ -26,7 +27,6 @@ import gameEngine.terrains.Terrain;
 import gameEngine.textures.ModelTexture;
 import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
-import gameEngine.toolbox.MousePicker;
 import physics.core.Ship;
 import physics.placeholders.FlatGroundProvider;
 import physics.ships.PlayerShip;
@@ -50,6 +50,7 @@ public class Game {
 	private ArrayList<Entity> normalEntities;
 	private ArrayList<Terrain> terrains;
 	private ArrayList<Light> lights;
+	private ArrayList<GuiTexture> guis;
 	private Ship player;
 	private Camera camera;
 	// private MousePicker picker;
@@ -115,6 +116,11 @@ public class Game {
 
 		// Player following camera
 		camera = new Camera(player);
+		
+		// GUIs
+		guis = new ArrayList<>();
+		GuiTexture logo = new GuiTexture(loader.loadTexture("path"), new Vector2f(0f, 0f), new Vector2f(0.5f, 0.5f));
+		guis.add(logo);
 
 		// Renderers
 		renderer = new MasterRenderer(loader);
@@ -169,6 +175,7 @@ public class Game {
 	public void render() {
 		GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 		renderer.renderScene(entities, normalEntities, terrains, lights, camera, new Vector4f());
+		guiRender.render(guis);
 		GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
 		DisplayManager.updateDisplay();
 		sortLights(lights, player.getPosition());

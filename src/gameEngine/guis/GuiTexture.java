@@ -1,6 +1,6 @@
 package gameEngine.guis;
 
-import org.lwjgl.util.vector.Vector2f;
+import org.joml.Vector2f;
 
 public class GuiTexture {
 	
@@ -22,10 +22,11 @@ public class GuiTexture {
 		return position;
 	}
 
-	public Vector2f getScale() {
+	public Vector2f getScreenScale() {
 		return scale;
 	}
 	
-	
-
+	public Vector2f getScale() {
+	  return scale;
+	}
 }
