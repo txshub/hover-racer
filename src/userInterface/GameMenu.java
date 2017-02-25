@@ -2,12 +2,9 @@ package userInterface;
 
 import audioEngine.AudioMaster;
 import clientComms.Client;
-import game.MainGameLoop;
-import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -78,7 +75,7 @@ public class GameMenu extends Parent {
 			// enter the server lobby in the actual game
 			getChildren().add(menu4);
 			
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu0);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu0);
 			trans.setToX(menu0.getTranslateX() - OFFSET);
 
 			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu4);
@@ -99,7 +96,7 @@ public class GameMenu extends Parent {
 			
 			getChildren().add(menu5);
 			
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu0);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu0);
 			trans.setToX(menu0.getTranslateX() - OFFSET);
 			
 			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu5);
@@ -122,7 +119,7 @@ public class GameMenu extends Parent {
 		btnOptions.setOnMouseClicked(event -> {
 			getChildren().add(menu1);
 
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu0);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu0);
 			trans.setToX(menu0.getTranslateX() - OFFSET);
 
 			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu1);
@@ -151,7 +148,7 @@ public class GameMenu extends Parent {
 		btnBack.setOnMouseClicked(event -> {
 			getChildren().add(menu0);
 
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu1);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu1);
 			trans.setToX(menu1.getTranslateX() + OFFSET);
 
 			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu0);
@@ -169,7 +166,7 @@ public class GameMenu extends Parent {
 		btnBack2.setOnMouseClicked(event -> {
 			getChildren().add(menu1);
 
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu2);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu2);
 			trans.setToX(menu2.getTranslateX() + OFFSET);
 
 			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu1);
@@ -187,7 +184,7 @@ public class GameMenu extends Parent {
 		btnBack3.setOnMouseClicked(event -> {
 			getChildren().add(menu1);
 
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu3);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu3);
 			trans.setToX(menu3.getTranslateX() + OFFSET);
 
 			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu1);
@@ -205,7 +202,7 @@ public class GameMenu extends Parent {
 		btnBack4.setOnMouseClicked(event -> {
 			getChildren().add(menu0);
 
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu4);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu4);
 			trans.setToX(menu4.getTranslateX() + OFFSET);
 
 			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu0);
@@ -223,7 +220,7 @@ public class GameMenu extends Parent {
 		btnBack5.setOnMouseClicked(event -> {
 			getChildren().add(menu0);
 
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu5);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu5);
 			trans.setToX(menu5.getTranslateX() + OFFSET);
 
 			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu0);
@@ -241,7 +238,7 @@ public class GameMenu extends Parent {
 		btnSound.setOnMouseClicked(event -> {
 			getChildren().add(menu2);
 
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu1);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu1);
 			trans.setToX(menu1.getTranslateX() - OFFSET);
 
 			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu2);
@@ -260,7 +257,7 @@ public class GameMenu extends Parent {
 		btnMusic.setOnMouseClicked(event -> {
 			getChildren().add(menu3);
 
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu1);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu1);
 			trans.setToX(menu1.getTranslateX() - OFFSET);
 
 			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu3);
@@ -281,23 +278,23 @@ public class GameMenu extends Parent {
 		menu4.setAlignment(Pos.CENTER);
 		menu5.setAlignment(Pos.CENTER);
 		
-		VBox box1 = new VBox(10);
-		box1.setPadding(new Insets(0, 0, 5, 0));
+		VBox box1Multi = new VBox(10);
+		box1Multi.setPadding(new Insets(0, 0, 5, 0));
 		
-		VBox box2 = new VBox(10);
-		box2.setPadding(new Insets(0, 0, 5, 0));
+		VBox box2Multi = new VBox(10);
+		box2Multi.setPadding(new Insets(0, 0, 5, 0));
 		
-		VBox box3 = new VBox(10);
-		box3.setPadding(new Insets(0, 0, 5, 0));
+		VBox box3Multi = new VBox(10);
+		box3Multi.setPadding(new Insets(0, 0, 5, 0));
 		
-		VBox box1a = new VBox(10);
-		box1.setPadding(new Insets(0, 0, 5, 0));
+		VBox box1Single = new VBox(10);
+		box1Single.setPadding(new Insets(0, 0, 5, 0));
 		
-		VBox box2a = new VBox(10);
-		box2.setPadding(new Insets(0, 0, 5, 0));
+		VBox box2Single = new VBox(10);
+		box2Single.setPadding(new Insets(0, 0, 5, 0));
 		
-		VBox box3a = new VBox(10);
-		box3.setPadding(new Insets(0, 0, 5, 0));
+		VBox box3Single = new VBox(10);
+		box3Single.setPadding(new Insets(0, 0, 5, 0));
 		
 		VBox box4Multi = new VBox(10);
 		box4Multi.setPadding(new Insets(0, 0, 5, 0));
@@ -305,27 +302,39 @@ public class GameMenu extends Parent {
 		VBox box4Single = new VBox(10);
 		box4Single.setPadding(new Insets(0, 0, 5, 0));
 		
-		TextStyle username = new TextStyle("USERNAME", 20);
-		Text usernameText = username.getTextStyled();
+		TextStyle usernameM = new TextStyle("USERNAME", 20);
+		Text usernameTextM = usernameM.getTextStyled();
 		
-		TextField usernameInput = new TextField();
+		TextStyle usernameS = new TextStyle("USERNAME", 20);
+		Text usernameTextS = usernameS.getTextStyled();
 		
-		TextStyle port = new TextStyle("PORT", 20);
-		Text portText = port.getTextStyled();
+		TextField usernameInputSingle = new TextField();
+		TextField usernameInputMulti = new TextField();
 		
-		TextField portInput = new TextField();
+		TextStyle portM = new TextStyle("PORT", 20);
+		Text portTextM = portM.getTextStyled();
 		
-		TextStyle machine = new TextStyle("MACHINE NAME", 20);
-		Text machineText = machine.getTextStyled();
+		TextStyle portS = new TextStyle("PORT", 20);
+		Text portTextS = portS.getTextStyled();
 		
-		TextField machineInput = new TextField();
+		TextField portInputSingle = new TextField();
+		TextField portInputMulti = new TextField();
+		
+		TextStyle machineM = new TextStyle("MACHINE NAME", 20);
+		Text machineTextM = machineM.getTextStyled();
+		
+		TextStyle machineS = new TextStyle("MACHINE NAME", 20);
+		Text machineTextS = machineS.getTextStyled();
+		
+		TextField machineInputSingle = new TextField();
+		TextField machineInputMulti = new TextField();
 		
 		MenuButton connectSingle = new MenuButton("CONNECT TO THE LOBBY");
 		connectSingle.setOnMouseClicked(event->{
 			
-			String usr = usernameInput.getText();
-			int portNo = Integer.valueOf(portInput.getText());
-			String machineName = machineInput.getText();
+			String usr = usernameInputSingle.getText();
+			int portNo = Integer.valueOf(portInputSingle.getText());
+			String machineName = machineInputSingle.getText();
 			
 			Client client = new Client(usr, portNo, machineName);
 			client.start();
@@ -335,16 +344,16 @@ public class GameMenu extends Parent {
 		MenuButton connectMulti = new MenuButton("CONNECT TO THE LOBBY");
 		connectMulti.setOnMouseClicked(event->{
 			
-			String usr = usernameInput.getText();
-			int portNo = Integer.valueOf(portInput.getText());
-			String machineName = machineInput.getText();
+			String usr =  usernameInputMulti.getText();
+			int portNo = Integer.valueOf(portInputMulti.getText());
+			String machineName = machineInputMulti.getText();
 			
 			Client client = new Client(usr, portNo, machineName);
 			client.start();
 		
 			getChildren().add(menu6);
 
-			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.15), menu4);
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu4);
 			trans.setToX(menu4.getTranslateX() - OFFSET);
 
 			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu6);
@@ -359,29 +368,30 @@ public class GameMenu extends Parent {
 	
 		});
 		
-		box1.setAlignment(Pos.CENTER);
-		box1.getChildren().addAll(usernameText, usernameInput);
+		box1Multi.setAlignment(Pos.CENTER);
+		box1Multi.getChildren().addAll(usernameTextM, usernameInputMulti);
 		
-		box2.setAlignment(Pos.CENTER);
-		box2.getChildren().addAll(portText, portInput);
+		box2Multi.setAlignment(Pos.CENTER);
+		box2Multi.getChildren().addAll(portTextM, portInputMulti);
 		
-		box3.setAlignment(Pos.CENTER);
-		box3.getChildren().addAll(machineText, machineInput);
+		box3Multi.setAlignment(Pos.CENTER);
+		box3Multi.getChildren().addAll(machineTextM, machineInputMulti);
 		
-		box1a.setAlignment(Pos.CENTER);
-		box1a.getChildren().addAll(usernameText, usernameInput);
+		box1Single.setAlignment(Pos.CENTER);
+		box1Single.getChildren().addAll(usernameTextS, usernameInputSingle);
 		
-		box2a.setAlignment(Pos.CENTER);
-		box2a.getChildren().addAll(portText, portInput);
+		box2Single.setAlignment(Pos.CENTER);
+		box2Single.getChildren().addAll(portTextS, portInputSingle);
 		
-		box3a.setAlignment(Pos.CENTER);
-		box3a.getChildren().addAll(machineText, machineInput);
+		box3Single.setAlignment(Pos.CENTER);
+		box3Single.getChildren().addAll(machineTextS, machineInputSingle);
 		
 		box4Single.setAlignment(Pos.CENTER);
 		box4Single.getChildren().add(connectSingle);
 		
 		box4Multi.setAlignment(Pos.CENTER);
 		box4Multi.getChildren().add(connectMulti);
+		
 		
 		//connecting multiplayer options
 		MenuButton joinGameRoom = new MenuButton("JOIN A GAME ROOM");
@@ -396,9 +406,9 @@ public class GameMenu extends Parent {
 		// background music
 		menu3.getChildren().addAll(musicSlider, btnBack3);
 		//connect multiplayer
-		menu4.getChildren().addAll(box1a, box2a, box3a, box4Multi, btnBack4);
+		menu4.getChildren().addAll(box1Multi, box2Multi, box3Multi, box4Multi, btnBack4);
 		//connect single player
-		menu5.getChildren().addAll(box1, box2, box3, box4Single,btnBack5);
+		menu5.getChildren().addAll(box1Single, box2Single, box3Single, box4Single, btnBack5);
 		//connect multiplayer options
 		menu6.getChildren().addAll(joinGameRoom, hostGameRoom);
 		
