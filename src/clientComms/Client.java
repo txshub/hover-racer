@@ -4,6 +4,7 @@ import java.net.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+import serverComms.GameSettings;
 import serverComms.ServerComm;
 
 /**
@@ -50,7 +51,7 @@ public class Client extends Thread {
 		ClientReceiver receiver = new ClientReceiver(fromServer, this);
 		receiver.start();
 		try {
-			sendByteMessage(name.getBytes(ServerComm.charset), ServerComm.userSendingTag);
+			sendByteMessage(name.getBytes(ServerComm.charset), ServerComm.USERSENDING);
 			serverStop = new StopDisconnect(this);
 			serverStop.start();
 			receiver.join();
@@ -69,10 +70,19 @@ public class Client extends Thread {
 	public void cleanup() {
 		serverStop.interrupt();
 		try {
-			sendByteMessage(new byte[0],ServerComm.clientDisconnect);
+			sendByteMessage(new byte[0],ServerComm.CLIENTDISCONNECT);
 		} catch (IOException e) {
 			//Closing anyway so oh well
 		}
+	}
+	
+	public void createGame(long seed, int maxPlayers, int numAI, int lapCount, String name) throws IOException {
+		GameSettings thisGame = new GameSettings(seed, maxPlayers, numAI, lapCount, name);
+		sendByteMessage(thisGame.toByteArray(), ServerComm.MAKEGAME);
+	}
+	
+	public void joinGame(int id) throws IOException {
+		sendByteMessage(String.valueOf(id).getBytes(ServerComm.charset), ServerComm.JOINGAME);
 	}
 	
 	/**

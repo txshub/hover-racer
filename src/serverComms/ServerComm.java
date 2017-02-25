@@ -23,15 +23,19 @@ public class ServerComm extends Thread {
 	private Lobby lobby;
 	public final static boolean DEBUG = true;
 	public volatile boolean runThread = true;
-	public final static byte badPacket        = Byte.parseByte("0");
-	public final static byte userSendingTag   = Byte.parseByte("1");
-	public final static byte badUserTag       = Byte.parseByte("2");
-	public final static byte statusTag        = Byte.parseByte("3");
-	public final static byte acceptedUserTag  = Byte.parseByte("4");
-	public final static byte clientDisconnect = Byte.parseByte("5");
-	public final static byte dontDisconnect   = Byte.parseByte("6");
-	public final static byte positionUpdate   = Byte.parseByte("7");
-	public final static byte sendAllGames     = Byte.parseByte("8");
+	public static final byte BADPACKET        = Byte.parseByte("0" );
+	public static final byte USERSENDING      = Byte.parseByte("1" );
+	public static final byte BADUSER          = Byte.parseByte("2" );
+	public static final byte STATUS           = Byte.parseByte("3" );
+	public static final byte ACCEPTEDUSER     = Byte.parseByte("4" );
+	public static final byte CLIENTDISCONNECT = Byte.parseByte("5" );
+	public static final byte DONTDISCONNECT   = Byte.parseByte("6" );
+	public static final byte POSITIONUPDATE   = Byte.parseByte("7" );
+	public static final byte SENDALLGAMES     = Byte.parseByte("8" );
+	public static final byte MAKEGAME         = Byte.parseByte("9" );
+	public static final byte JOINGAME         = Byte.parseByte("10");
+	public static final byte VALIDGAME        = Byte.parseByte("11");
+	public static final byte INVALIDGAME      = Byte.parseByte("12");
 	
 	/**
 	 * Creates a Server object
@@ -72,9 +76,9 @@ public class ServerComm extends Thread {
 				if(DEBUG) System.out.println("Request to server: " + new String(msg.getMsg(),charset));
 				
 				//Get the status of this server if requested
-				if(msg.getType()==statusTag) { //Server status requested
+				if(msg.getType()==STATUS) { //Server status requested
 					DataOutputStream toClient = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-					writeByteMessage((status).getBytes(charset), statusTag, toClient);
+					writeByteMessage((status).getBytes(charset), STATUS, toClient);
 					if(DEBUG) System.out.println("Sent status to client");
 					
 				//Requesting to join - The message is the client's username
@@ -83,21 +87,25 @@ public class ServerComm extends Thread {
 					String name = new String(msg.getMsg(), charset);
 					if(lobby.clientTable.userExists(name)) { //Can't have that username
 						DataOutputStream toClient = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-						writeByteMessage(("Bad Username").getBytes(charset), badUserTag, toClient);
+						writeByteMessage(("Bad Username").getBytes(charset), BADUSER, toClient);
 						if(DEBUG) System.out.println("Sent Bad Username to client");
 					} else { //Valid Username
 						lobby.clientTable.add(name);
 						DataOutputStream toClient = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 						ServerSender sender = new ServerSender(lobby.clientTable.getQueue(name), toClient);
 						sender.start();
-						lobby.clientTable.getQueue(name).offer(new ByteArrayByte(("Valid").getBytes(charset),acceptedUserTag));
+						lobby.clientTable.getQueue(name).offer(new ByteArrayByte(("Valid").getBytes(charset),ACCEPTEDUSER));
 						if(DEBUG) System.out.println("Sent Accepted User to client");
-						(new ServerReceiver(socket, name, fromClient, lobby.clientTable, sender, lobby)).start();
-						String toSend = "";
+						(new ServerReceiver(socket, name, fromClient, lobby)).start();
+						ArrayList<GameNameNumber> rooms = new ArrayList<GameNameNumber>();
 						for(GameRoom room : lobby.games) {
-							toSend += room.getName() + "~";
+							rooms.add(new GameNameNumber(room.name, room.id));
 						}
-						lobby.clientTable.getQueue(name).offer(new ByteArrayByte(toSend.getBytes(charset),sendAllGames));
+						String out = "";
+						for(GameNameNumber g : rooms) {
+							out += g.toString() + System.lineSeparator();
+						}
+						lobby.clientTable.getQueue(name).offer(new ByteArrayByte(out.getBytes(charset),SENDALLGAMES));
 						
 					}
 				}
