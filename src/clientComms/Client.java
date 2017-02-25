@@ -4,7 +4,7 @@ import java.net.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-import serverComms.Server;
+import serverComms.ServerComm;
 
 /**
  * Main client class for client/server communications
@@ -12,7 +12,6 @@ import serverComms.Server;
  *
  */
 public class Client extends Thread {
-	public final static Charset charset = StandardCharsets.UTF_8;
 	public static final boolean DEBUG = false;
 	private DataOutputStream toServer;
 	String name;
@@ -51,7 +50,7 @@ public class Client extends Thread {
 		ClientReceiver receiver = new ClientReceiver(fromServer, this);
 		receiver.start();
 		try {
-			sendByteMessage(name.getBytes(charset), Server.userSendingTag);
+			sendByteMessage(name.getBytes(ServerComm.charset), ServerComm.userSendingTag);
 			serverStop = new StopDisconnect(this);
 			serverStop.start();
 			receiver.join();
@@ -70,7 +69,7 @@ public class Client extends Thread {
 	public void cleanup() {
 		serverStop.interrupt();
 		try {
-			sendByteMessage(new byte[0],Server.clientDisconnect);
+			sendByteMessage(new byte[0],ServerComm.clientDisconnect);
 		} catch (IOException e) {
 			//Closing anyway so oh well
 		}
@@ -90,6 +89,6 @@ public class Client extends Thread {
 		toServer.writeInt(out.length);
 		toServer.write(out);
 		toServer.flush();
-		if(Server.DEBUG) System.out.println("Sent message " + new String(message, charset) + " with tag " + Byte.toString(type));
+		if(ServerComm.DEBUG) System.out.println("Sent message " + new String(message, ServerComm.charset) + " with tag " + Byte.toString(type));
 	}
 }

@@ -8,6 +8,8 @@ import java.util.*;
 public class ClientTable {
 
 	private Map<String,CommQueue> queueTable = new TreeMap<String,CommQueue>();
+	private Map<String,Lobby> games = new TreeMap<String,Lobby>();
+	private Map<Integer,Lobby> allLobbies = new TreeMap<Integer,Lobby>(); 
 	
 	/**
 	 * Checks if the user exists already
@@ -32,6 +34,8 @@ public class ClientTable {
 	
 	public void remove(String name) {
 		queueTable.remove(name);
+		int game = getGame(name);
+		if(game!=-1) allLobbies.get(games).remove(name);
 	}
 
 	/**
@@ -45,6 +49,13 @@ public class ClientTable {
 
 	public Map<String, CommQueue> getQueues() {
 		return queueTable;
+	}
+
+	public int getGame(String clientName) {
+		for(Map.Entry<String, Lobby> g : games.entrySet()) {
+			if(g.getKey()==clientName) return g.getValue().getID();
+		}
+		return -1;
 	}
 
 }

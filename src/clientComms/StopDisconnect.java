@@ -2,7 +2,7 @@ package clientComms;
 
 import java.io.IOException;
 
-import serverComms.Server;
+import serverComms.ServerComm;
 
 public class StopDisconnect extends Thread {
 
@@ -15,7 +15,7 @@ public class StopDisconnect extends Thread {
 	public void run() {
 		try {
 			while(true) {
-				client.sendByteMessage(new byte[0], Server.dontDisconnect);
+				client.sendByteMessage(new byte[0], ServerComm.dontDisconnect);
 				Thread.sleep(1000);
 			}
 		} catch (IOException e) {
