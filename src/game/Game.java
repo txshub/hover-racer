@@ -128,8 +128,23 @@ public class Game {
 		
 		// GUIs
 		guis = new ArrayList<>();
-		GuiTexture menuBackground = new GuiTexture(loader.loadTexture("ui/BuildPath"), new Vector2f(0f, 0f), new Vector2f(0.25f, 0.5f));
+		
+		GuiTexture menuBackground = new GuiTexture(loader.loadTexture("ui/MenuBackground"), new Vector2f(0f, 0f), new Vector2f(0.375f, 0.6666f));
 		guis.add(menuBackground);
+		
+		Vector2f buttonScale = new Vector2f(0.2078f, 0.3694f);
+		
+		GuiTexture resumeButton = new GuiTexture(loader.loadTexture("ui/ResumeButton"), new Vector2f(0f, 0.3999f), buttonScale);
+		guis.add(resumeButton);
+    
+    GuiTexture optionsButton = new GuiTexture(loader.loadTexture("ui/OptionsButton"), new Vector2f(0f, 0.1333f), buttonScale);
+    guis.add(optionsButton);
+    
+    GuiTexture lobbyButton = new GuiTexture(loader.loadTexture("ui/LobbyButton"), new Vector2f(0f, -0.1333f), buttonScale);
+    guis.add(lobbyButton);
+    
+    GuiTexture menuButton = new GuiTexture(loader.loadTexture("ui/MenuButton"), new Vector2f(0f, -0.3999f), buttonScale);
+    guis.add(menuButton);
 
 		// Renderers
 		renderer = new MasterRenderer(loader);
