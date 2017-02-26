@@ -14,7 +14,7 @@ import upgrades.ShipTemplate;
  * @author Maciej Bogacki */
 public class RaceSetupData {
 
-	public long yourId;
+	public byte yourId;
 	public Map<Byte, ShipSetupData> shipData;
 	public Map<Byte, Vector3f> startingPositions;
 	public Vector3f startingOrientation;
@@ -62,7 +62,7 @@ public class RaceSetupData {
 	}
 
 
-	public long getYourId() {
+	public byte getYourId() {
 		return yourId;
 	}
 	public Vector3f getStartingOrientation() {
