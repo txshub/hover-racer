@@ -181,7 +181,7 @@ public abstract class Ship extends Entity {
 
 	/** Changes the velocity to account for a collision with a different ship */
 	private void collideWith(Ship ship) {
-		System.err.println("COLLISION! " + ship + " vs " + this);
+		System.out.println("COLLISION! " + ship + " vs " + this);
 		Vector3 pos = ship.getInternalPosition().copy();
 		float expectedDistance = ship.getSize() + this.getSize();
 		// Apply momentum
