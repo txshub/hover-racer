@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 
 import serverComms.GameSettings;
 import serverComms.ServerComm;
+import userInterface.GameMenu;
 
 /**
  * Main client class for client/server communications
@@ -19,17 +20,20 @@ public class Client extends Thread {
 	int portNumber;
 	String machineName;
 	StopDisconnect serverStop;
+	private GameMenu gameMenu;
 	
 	/**
 	 * Creates a client object and connects to a given server on a given port automagically
 	 * @param name The client's nickname to pass to the server first
 	 * @param portNumber The port to send the request on
 	 * @param machineName The machinename of the server host (for testing purposes use localhost)
+	 * @param gameMenu 
 	 */
-	public Client(String name, int portNumber, String machineName) {
+	public Client(String name, int portNumber, String machineName, GameMenu gameMenu) {
 		this.name = name;
 		this.portNumber = portNumber;
 		this.machineName = machineName;
+		this.gameMenu = gameMenu;
 	}
 	
 	@Override
@@ -44,8 +48,7 @@ public class Client extends Thread {
 			System.err.println("Unknown host: " + machineName);
 			//What to do here?
 		} catch (IOException e) {
-			System.err.println("Server doesn't seem to be running " + e.getMessage());
-			//What to do here
+			GameMenu.serverOff();
 		}
 		
 		ClientReceiver receiver = new ClientReceiver(fromServer, this);
