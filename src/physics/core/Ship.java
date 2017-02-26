@@ -1,5 +1,6 @@
 package physics.core;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.joml.Vector3f;
@@ -53,12 +54,11 @@ public abstract class Ship extends Entity {
 	private Vector3 velocity;
 	private Vector3 rotationalVelocity;
 	private float mass = 1;
-	private float size = 1;
+	private float size = 5;
 	private Collection<Ship> otherShips;
 	private GroundProvider ground;
 
 	private byte id;
-	private boolean started;
 
 	long lastPrint = 0;
 	double deltaSum = 0;
@@ -72,10 +72,11 @@ public abstract class Ship extends Entity {
 		this.rotation = new Vector3(0, 0, 0);
 		this.rotationalVelocity = new Vector3(0, 0, 0);
 		this.ground = ground;
-		this.started = false;
+		this.otherShips = new ArrayList<Ship>();
 	}
 
 	public void addOtherShips(Collection<Ship> ships) {
+		if (ships == null) return;
 		ships.forEach(this::addOtherShip);
 	}
 	public void addOtherShip(Ship ship) {
@@ -146,7 +147,6 @@ public abstract class Ship extends Entity {
 		steer(thrust, turn, strafe, 0f, brokenDelta);
 	}
 	protected void steer(float thrust, float turn, float strafe, float jump, float brokenDelta) {
-		if (!started) return;
 		float delta = (float) 1 / 60; // TODO fix deltas
 		// Checking parameters - TODO probably remove this for production code
 		if (Math.abs(thrust) > 1 || Math.abs(turn) > 1 || Math.abs(strafe) > 1 || Math.abs(jump) > 1) {
@@ -168,11 +168,6 @@ public abstract class Ship extends Entity {
 		if (jump != 0) velocity.changeY(y -> y + delta * jump * JUMP_POWER * VERTICAL_SCALE);
 	}
 
-	/** Starts the race, i.e. allows the player to control the ship */
-	public void start() {
-		this.started = true;
-	}
-
 	private void doCollisions() {
 		otherShips.stream().filter(ship -> ship.getInternalPosition().distanceTo(this.position) <= ship.getSize() + this.size)
 			.forEach(s -> collideWith(s));
@@ -184,7 +179,13 @@ public abstract class Ship extends Entity {
 
 	/** Changes the velocity to account for a collision with a different ship */
 	private void collideWith(Ship ship) {
-		velocity.add(ship.getVelocity().sub(this.velocity).mul(ship.getMass()).mul(1 / this.getMass()).mul(0.5f));
+		System.err.println("COLLISION! " + ship + " vs " + this);
+		Vector3 pos = ship.getInternalPosition().copy();
+		float expectedDistance = ship.getSize() + this.getSize();
+		// Apply momentum
+		velocity.add(ship.getVelocity().sub(this.velocity).mul(ship.getMass()).mul(1 / this.getMass()).mul(1.5f));
+		// Get out of collision zone
+		position.add(this.position.copy().sub(pos).mul((expectedDistance - position.distance(pos)) / expectedDistance));
 	}
 
 	/** Corrects an angle to fit between 0 and 2pi (e.g. 7.13pi->1.13pi, -0.13pi->1.87pi) */
@@ -207,6 +208,8 @@ public abstract class Ship extends Entity {
 	public void updatePhysics(float preDelta) {
 		float delta = (float) 1 / 60; // TODO fix deltas
 
+		System.out.println();
+		System.out.println(this);
 		// Do physics
 		airResistance(delta);
 		doCollisions();
@@ -214,6 +217,8 @@ public abstract class Ship extends Entity {
 		airCushion(delta);
 		updateRotation(delta);
 		updatePosition(delta);
+
+		System.out.println(this); // TODO temporary debug
 
 		// Update parent
 		super.setRotation(rotation.copy().forEach(r -> Math.toDegrees(r)));
