@@ -418,6 +418,5 @@ public class GameMenu extends Parent {
 		getChildren().addAll(bg2, menu0);
 
 	}
-	}
 
 }
