@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,6 +130,13 @@ public class Game {
 		guis = new ArrayList<>();
 		GuiTexture logo = new GuiTexture(loader.loadTexture("newShipTexture"), new Vector2f(0f, 0f), new Vector2f(0.5f, 0.5f));
 		button = new Button(logo);
+		button.addListener(new ActionListener() {
+      
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        System.out.println("Button: " + e.getActionCommand());
+      }
+    });
 		guis.add(logo);
 
 		// Renderers

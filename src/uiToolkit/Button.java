@@ -1,6 +1,7 @@
 package uiToolkit;
 
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
@@ -38,11 +39,16 @@ public class Button {
   }
   
   public void update() {
-    System.out.print(Mouse.getX() + " " + Mouse.getY() + " - " + bounds.x + " " + bounds.y);
-    if (bounds.contains(Mouse.getX(), Mouse.getY())) {
-      System.out.println(" hovering");
-    } else {
-      System.out.println(" No-hover");
+    if (bounds.contains(Mouse.getX(), Mouse.getY()) && Mouse.isButtonDown(0) && !pressed) {
+      pressed = true;
+      for (ActionListener a : listeners) {
+        a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "pressed"));
+      }
+    } else if (!Mouse.isButtonDown(0) && pressed) {
+      pressed = false;
+      for (ActionListener a : listeners) {
+        a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "released"));
+      }
     }
   }
   
