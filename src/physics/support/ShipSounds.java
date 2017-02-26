@@ -56,8 +56,8 @@ public class ShipSounds {
 		for (Entry<Ship, Source> entry : this.otherShips.entrySet()) {
 			Ship ship = entry.getKey();
 			Source source = entry.getValue();
-			Vector3f position = ship.getPosition().sub(player.getPosition()); // TODO change to camera's position instead
-			Vector3f velocity = ship.getVelocity().sub(player.getVelocity());
+			Vector3f position = new Vector3f(ship.getPosition()).sub(player.getPosition()); // TODO change to camera's position instead
+			Vector3f velocity = new Vector3f(ship.getVelocity()).sub(player.getVelocity());
 
 			source.setPosition(position.x, position.y, position.z); // Set relative position
 			source.setVelocity(velocity.x, velocity.y, velocity.z); // Set relative velocity
@@ -73,8 +73,8 @@ public class ShipSounds {
 	 * @param first First ship involved
 	 * @param second Second ship involved */
 	public void collision(Ship first, Ship second) {
-		Vector3f position = first.getPosition().sub(player.getPosition()).div(2); // Position relative to player
-		float force = first.getVelocity().sub(second.getVelocity()).length(); // Force of the collision (relative speeds)
+		Vector3f position = new Vector3f(first.getPosition()).sub(player.getPosition()).div(2); // Position relative to player
+		float force = new Vector3f(first.getVelocity()).sub(second.getVelocity()).length(); // Force of the collision (relative speeds)
 		// TODO Make a collision sound happen
 	}
 
