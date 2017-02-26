@@ -6,6 +6,7 @@ import java.util.List;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -35,6 +36,7 @@ import physics.support.InputController;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
+import uiToolkit.Button;
 
 /**
  * @author Reece Bennett and rtm592
@@ -61,6 +63,9 @@ public class Game {
 	public static InputController input;
 
 	private boolean running;
+	
+	// TODO temporary
+	private Button button;
 
 	public Game() {
 		init();
@@ -75,6 +80,8 @@ public class Game {
 		AudioMaster.init();
 		entities = new ArrayList<Entity>();
 		normalEntities = new ArrayList<Entity>();
+    
+    System.out.println("Screen size: " + Display.getWidth() + " x " + Display.getHeight());
 
 		// Terrain
 		TerrainTexture background = new TerrainTexture(loader.loadTexture("new/GridTexture"));
@@ -119,7 +126,8 @@ public class Game {
 		
 		// GUIs
 		guis = new ArrayList<>();
-		GuiTexture logo = new GuiTexture(loader.loadTexture("path"), new Vector2f(0f, 0f), new Vector2f(0.5f, 0.5f));
+		GuiTexture logo = new GuiTexture(loader.loadTexture("newShipTexture"), new Vector2f(0f, 0f), new Vector2f(0.5f, 0.5f));
+		button = new Button(logo);
 		guis.add(logo);
 
 		// Renderers
@@ -156,6 +164,8 @@ public class Game {
 
 		player.update((float) delta);
 		camera.move();
+		
+		button.update();
 
 		// move terrain based on player location so terrain seems infinite
 		if (player.getPosition().x > terrains.get(0).getX() + Terrain.SIZE * 3 / 4) {
