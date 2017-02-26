@@ -66,13 +66,14 @@ public class ClientTable {
 	
 
 	public void addGame(GameSettings gameSettings) {
-		allGames.put(nextInt, new GameRoom(nextInt, gameSettings.name, gameSettings.seed, gameSettings.maxPlayers, gameSettings.numAI));
+		allGames.put(nextInt, new GameRoom(nextInt, gameSettings.lobbyName, gameSettings.seed, gameSettings.maxPlayers, gameSettings.numAI, gameSettings.hostName));
 		nextInt++;
 	}
 
 	public boolean joinGame(String clientName, int gameNum) {
 		if(allGames.get(gameNum)==null) return false; //Show that no game exists
 		games.put(clientName, gameNum);
+		allGames.get(gameNum).addPlayer(clientName);
 		return true;
 		
 	}

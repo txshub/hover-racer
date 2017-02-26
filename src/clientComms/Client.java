@@ -1,12 +1,9 @@
 package clientComms;
 import java.io.*;
 import java.net.*;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 import serverComms.GameSettings;
 import serverComms.ServerComm;
-import userInterface.GameMenu;
 
 /**
  * Main client class for client/server communications
@@ -17,20 +14,20 @@ public class Client extends Thread {
 	public static final boolean DEBUG = false;
 	public boolean serverOn = true;
 	private DataOutputStream toServer;
-	String name;
+	String clientName;
 	int portNumber;
 	String machineName;
 	StopDisconnect serverStop;
 	
 	/**
 	 * Creates a client object and connects to a given server on a given port automagically
-	 * @param name The client's nickname to pass to the server first
+	 * @param clientName The client's nickname to pass to the server first
 	 * @param portNumber The port to send the request on
 	 * @param machineName The machinename of the server host (for testing purposes use localhost)
 	 * @param gameMenu 
 	 */
-	public Client(String name, int portNumber, String machineName) {
-		this.name = name;
+	public Client(String clientName, int portNumber, String machineName) {
+		this.clientName = clientName;
 		this.portNumber = portNumber;
 		this.machineName = machineName;
 	}
@@ -53,7 +50,7 @@ public class Client extends Thread {
 		ClientReceiver receiver = new ClientReceiver(fromServer, this);
 		receiver.start();
 		try {
-			sendByteMessage(name.getBytes(ServerComm.charset), ServerComm.USERSENDING);
+			sendByteMessage(clientName.getBytes(ServerComm.charset), ServerComm.USERSENDING);
 			serverStop = new StopDisconnect(this);
 			serverStop.start();
 			receiver.join();
@@ -78,8 +75,8 @@ public class Client extends Thread {
 		}
 	}
 	
-	public void createGame(long seed, int maxPlayers, int numAI, int lapCount, String name) throws IOException {
-		GameSettings thisGame = new GameSettings(seed, maxPlayers, numAI, lapCount, name);
+	public void createGame(long seed, int maxPlayers, int numAI, int lapCount, String lobbyName) throws IOException {
+		GameSettings thisGame = new GameSettings(seed, maxPlayers, numAI, lapCount, lobbyName, clientName);
 		sendByteMessage(thisGame.toByteArray(), ServerComm.MAKEGAME);
 	}
 	

@@ -1,6 +1,7 @@
 package serverComms;
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ServerReceiver extends Thread {
@@ -49,7 +50,8 @@ public class ServerReceiver extends Thread {
 						lobby.clientTable.getQueue(clientName).offer(new ByteArrayByte(("").getBytes(ServerComm.charset), ServerComm.INVALIDGAME));
 					} else {
 						long gameSeed = lobby.clientTable.getGame(Integer.valueOf(new String(fullMsg.getMsg(), ServerComm.charset))).getSeed();
-						lobby.clientTable.getQueue(clientName).offer(new ByteArrayByte(String.valueOf(gameSeed).getBytes(ServerComm.charset), ServerComm.VALIDGAME));
+						ArrayList<String> players = lobby.clientTable.getGame(Integer.valueOf(new String(fullMsg.getMsg(), ServerComm.charset))).getPlayers();
+						lobby.clientTable.getQueue(clientName).offer(new ByteArrayByte(new SeedPlayers(gameSeed, players).toByteArray(), ServerComm.VALIDGAME));
 					}
 				} else {
 					System.out.println("Unknown Message Type: " + fullMsg.getType());
