@@ -128,16 +128,8 @@ public class Game {
 		
 		// GUIs
 		guis = new ArrayList<>();
-		GuiTexture logo = new GuiTexture(loader.loadTexture("newShipTexture"), new Vector2f(0f, 0f), new Vector2f(0.5f, 0.5f));
-		button = new Button(logo);
-		button.addListener(new ActionListener() {
-      
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        System.out.println("Button: " + e.getActionCommand());
-      }
-    });
-		guis.add(logo);
+		GuiTexture menuBackground = new GuiTexture(loader.loadTexture("ui/BuildPath"), new Vector2f(0f, 0f), new Vector2f(0.25f, 0.5f));
+		guis.add(menuBackground);
 
 		// Renderers
 		renderer = new MasterRenderer(loader);
@@ -173,8 +165,6 @@ public class Game {
 
 		player.update((float) delta);
 		camera.move();
-		
-		button.update();
 
 		// move terrain based on player location so terrain seems infinite
 		if (player.getPosition().x > terrains.get(0).getX() + Terrain.SIZE * 3 / 4) {

@@ -21,10 +21,6 @@ public class GuiTexture {
 	public Vector2f getPosition() {
 		return position;
 	}
-
-	public Vector2f getScreenScale() {
-		return scale;
-	}
 	
 	public Vector2f getScale() {
 	  return scale;
