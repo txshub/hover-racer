@@ -59,6 +59,7 @@ public abstract class Ship extends Entity {
 	private GroundProvider ground;
 
 	private byte id;
+	private boolean started;
 
 	long lastPrint = 0;
 	double deltaSum = 0;
@@ -73,6 +74,7 @@ public abstract class Ship extends Entity {
 		this.rotationalVelocity = new Vector3(0, 0, 0);
 		this.ground = ground;
 		this.otherShips = new ArrayList<Ship>();
+		this.started = false;
 	}
 
 	public void addOtherShips(Collection<Ship> ships) {
@@ -208,8 +210,6 @@ public abstract class Ship extends Entity {
 	public void updatePhysics(float preDelta) {
 		float delta = (float) 1 / 60; // TODO fix deltas
 
-		System.out.println();
-		System.out.println(this);
 		// Do physics
 		airResistance(delta);
 		doCollisions();
@@ -218,10 +218,14 @@ public abstract class Ship extends Entity {
 		updateRotation(delta);
 		updatePosition(delta);
 
-		System.out.println(this); // TODO temporary debug
 
 		// Update parent
 		super.setRotation(rotation.copy().forEach(r -> Math.toDegrees(r)));
+	}
+
+	/** Allows the player to control the ship from now on. Call when the race starts. */
+	public void start() {
+		this.started = true;
 	}
 
 	public void updateFromPacket(byte[] bytes) {
