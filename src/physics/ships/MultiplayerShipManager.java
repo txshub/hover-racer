@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import org.joml.Vector3f;
 
+import gameEngine.entities.Camera;
+import gameEngine.entities.Entity;
 import gameEngine.models.TexturedModel;
 import physics.core.Ship;
 import physics.network.ServerShipProvider;
@@ -32,19 +34,28 @@ public class MultiplayerShipManager implements ServerShipProvider {
 		this.remotes = new ArrayList<Ship>();
 		byte id = 0;
 		for (TexturedModel texturedModel : otherTextures) {
-			if (id == player.getId()) id++; // Don't give them player's id
+			if (id == playerId) id++; // Don't give them player's id
 			remotes.add(new RemoteShip(id, texturedModel, startingPositions.get(id), ground, this));
 		}
 		// Tell ships about each other
 		remotes.forEach(r -> r.addOtherShips(remotes));
-		remotes.forEach(r -> r.addOtherShip(player));
 		// Finally create the player
 		this.player = new PlayerShip(playerId, playerTexture, startingPositions.get(playerId), remotes, ground, input);
+		remotes.forEach(r -> r.addOtherShip(player));
 	}
 
 	public void updateShips(float delta) {
 		player.update(delta);
 		remotes.forEach(r -> r.update(delta));
+	}
+
+	public void addShipsTo(Collection<Entity> entities) {
+		entities.addAll(remotes);
+		entities.add(player);
+	}
+
+	public Camera getCamera() {
+		return new Camera(player);
 	}
 
 	public void addPacket(byte[] packet) {

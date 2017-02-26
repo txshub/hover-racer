@@ -27,8 +27,10 @@ import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
 import physics.core.Ship;
+import physics.core.Vector3;
 import physics.placeholders.FlatGroundProvider;
-import physics.ships.PlayerShip;
+import physics.ships.DummyShip;
+import physics.ships.MultiplayerShipManager;
 import physics.support.Action;
 import physics.support.InputController;
 import trackDesign.SeedTrack;
@@ -54,6 +56,9 @@ public class Game {
 	private long trackSeed;
 	private ArrayList<TrackPoint> trackPoints;
 	public static InputController input;
+
+	// Mac's additions
+	private MultiplayerShipManager ships;
 
 	private boolean running;
 
@@ -100,13 +105,24 @@ public class Game {
 		Light sun = new Light(new Vector3f(256, 1000, 256), new Vector3f(1f, 1f, 1f));
 		lights.add(sun);
 
-		// Player Ship
+		// Creating ships
 		TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader), new ModelTexture(loader.loadTexture("newShipTexture")));
-		player = new PlayerShip((byte) 0, playerTModel, new Vector3f(50, 20, 50), null, new FlatGroundProvider(0), input);
-		entities.add(player);
+		ArrayList<TexturedModel> shipTextures = new ArrayList<TexturedModel>();
+		shipTextures.add(playerTModel);
+		ArrayList<Vector3f> startingPositions = new ArrayList<Vector3f>();
+		startingPositions.add(new Vector3f(40, 40, 40));
+		startingPositions.add(new Vector3f(20, 20, 20));
+
+		// player = new PlayerShip((byte) 0, playerTModel, new Vector3f(50, 20, 50), null, new FlatGroundProvider(0), input);
+		player = new DummyShip((byte) 3, playerTModel, new Vector3(10, 10, 10), new FlatGroundProvider(0)); // TODO temporary thing
+		ships = new MultiplayerShipManager((byte) 0, input, playerTModel, shipTextures, startingPositions, new FlatGroundProvider(0));
+		// entities.add(player);
+		ships.addShipsTo(entities);
+
 
 		// Player following camera
-		camera = new Camera(player);
+		// camera = new Camera(player);
+		camera = ships.getCamera();
 
 		// Renderers
 		renderer = new MasterRenderer(loader);
@@ -133,7 +149,8 @@ public class Game {
 		if (input.checkAction(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
 		if (input.checkAction(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
 
-		player.update((float) delta);
+		// player.update((float) delta);
+		ships.updateShips((float) delta);
 		camera.move();
 		// picker.update();
 	}
