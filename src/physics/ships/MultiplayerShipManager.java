@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import org.joml.Vector3f;
 
-import gameEngine.entities.Camera;
 import gameEngine.entities.Entity;
 import gameEngine.models.TexturedModel;
 import physics.core.Ship;
@@ -54,8 +53,8 @@ public class MultiplayerShipManager implements ServerShipProvider {
 		entities.add(player);
 	}
 
-	public Camera getCamera() {
-		return new Camera(player);
+	public Ship getPlayerShip() {
+		return player;
 	}
 
 	public void addPacket(byte[] packet) {

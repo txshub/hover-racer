@@ -27,9 +27,7 @@ import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
 import physics.core.Ship;
-import physics.core.Vector3;
 import physics.placeholders.FlatGroundProvider;
-import physics.ships.DummyShip;
 import physics.ships.MultiplayerShipManager;
 import physics.support.Action;
 import physics.support.InputController;
@@ -113,16 +111,12 @@ public class Game {
 		startingPositions.add(new Vector3f(40, 40, 40));
 		startingPositions.add(new Vector3f(20, 20, 20));
 
-		// player = new PlayerShip((byte) 0, playerTModel, new Vector3f(50, 20, 50), null, new FlatGroundProvider(0), input);
-		player = new DummyShip((byte) 3, playerTModel, new Vector3(10, 10, 10), new FlatGroundProvider(0)); // TODO temporary thing
+		// Create ships
 		ships = new MultiplayerShipManager((byte) 0, input, playerTModel, shipTextures, startingPositions, new FlatGroundProvider(0));
-		// entities.add(player);
 		ships.addShipsTo(entities);
 
-
 		// Player following camera
-		// camera = new Camera(player);
-		camera = ships.getCamera();
+		camera = new Camera(ships.getPlayerShip());
 
 		// Renderers
 		renderer = new MasterRenderer(loader);
@@ -149,7 +143,6 @@ public class Game {
 		if (input.checkAction(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
 		if (input.checkAction(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
 
-		// player.update((float) delta);
 		ships.updateShips((float) delta);
 		camera.move();
 		// picker.update();
@@ -160,7 +153,7 @@ public class Game {
 		renderer.renderScene(entities, normalEntities, terrains, lights, camera, new Vector4f());
 		GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
 		DisplayManager.updateDisplay();
-		sortLights(lights, player.getPosition());
+		sortLights(lights, ships.getPlayerShip().getPosition());
 	}
 
 	public void cleanUp() {
