@@ -33,7 +33,7 @@ public class PlayerShip extends Ship {
 		float thrust = 0, turn = 0, strafe = 0, jump = 0;
 		// Handle inputs
 		if (input.checkAction(Action.FORWARD)) thrust++;
-		if (input.checkAction(Action.BREAK)) thrust--;
+		if (input.checkAction(Action.BREAK)) thrust = -1;
 		if (input.checkAction(Action.TURN_RIGHT)) turn++;
 		if (input.checkAction(Action.TURN_LEFT)) turn--;
 		if (input.checkAction(Action.STRAFE_RIGHT)) strafe++;
