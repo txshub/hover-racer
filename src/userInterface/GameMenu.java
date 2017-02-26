@@ -336,8 +336,12 @@ public class GameMenu extends Parent {
 			int portNo = Integer.valueOf(portInputSingle.getText());
 			String machineName = machineInputSingle.getText();
 			
-			Client client = new Client(usr, portNo, machineName, this);
-			client.start();
+			Client client = new Client(usr, portNo, machineName);
+			if(client.serverOn) {
+				client.start();
+			} else {
+				//?
+			}
 			
 		});
 		
@@ -348,8 +352,12 @@ public class GameMenu extends Parent {
 			int portNo = Integer.valueOf(portInputMulti.getText());
 			String machineName = machineInputMulti.getText();
 			
-			Client client = new Client(usr, portNo, machineName, this);
-			client.start();
+			Client client = new Client(usr, portNo, machineName);
+			if(client.serverOn) {
+				client.start();
+			} else {
+				//?
+			}
 		
 			getChildren().add(menu6);
 
@@ -420,10 +428,6 @@ public class GameMenu extends Parent {
 		getChildren().addAll(bg2, menu0);
 
 	}
-
-	public static void serverOff() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

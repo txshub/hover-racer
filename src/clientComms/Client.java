@@ -15,12 +15,12 @@ import userInterface.GameMenu;
  */
 public class Client extends Thread {
 	public static final boolean DEBUG = false;
+	public boolean serverOn = true;
 	private DataOutputStream toServer;
 	String name;
 	int portNumber;
 	String machineName;
 	StopDisconnect serverStop;
-	private GameMenu gameMenu;
 	
 	/**
 	 * Creates a client object and connects to a given server on a given port automagically
@@ -29,11 +29,10 @@ public class Client extends Thread {
 	 * @param machineName The machinename of the server host (for testing purposes use localhost)
 	 * @param gameMenu 
 	 */
-	public Client(String name, int portNumber, String machineName, GameMenu gameMenu) {
+	public Client(String name, int portNumber, String machineName) {
 		this.name = name;
 		this.portNumber = portNumber;
 		this.machineName = machineName;
-		this.gameMenu = gameMenu;
 	}
 	
 	@Override
@@ -46,9 +45,9 @@ public class Client extends Thread {
 			fromServer = new DataInputStream(new BufferedInputStream(server.getInputStream()));
 		} catch (UnknownHostException e) {
 			System.err.println("Unknown host: " + machineName);
-			//What to do here?
+			serverOn = false;
 		} catch (IOException e) {
-			GameMenu.serverOff();
+			serverOn = false;
 		}
 		
 		ClientReceiver receiver = new ClientReceiver(fromServer, this);
