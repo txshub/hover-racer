@@ -58,6 +58,7 @@ public abstract class Ship extends Entity {
 	private GroundProvider ground;
 
 	private byte id;
+	private boolean started;
 
 	long lastPrint = 0;
 	double deltaSum = 0;
@@ -71,6 +72,7 @@ public abstract class Ship extends Entity {
 		this.rotation = new Vector3(0, 0, 0);
 		this.rotationalVelocity = new Vector3(0, 0, 0);
 		this.ground = ground;
+		this.started = false;
 	}
 
 	public void addOtherShips(Collection<Ship> ships) {
@@ -144,6 +146,7 @@ public abstract class Ship extends Entity {
 		steer(thrust, turn, strafe, 0f, brokenDelta);
 	}
 	protected void steer(float thrust, float turn, float strafe, float jump, float brokenDelta) {
+		if (!started) return;
 		float delta = (float) 1 / 60; // TODO fix deltas
 		// Checking parameters - TODO probably remove this for production code
 		if (Math.abs(thrust) > 1 || Math.abs(turn) > 1 || Math.abs(strafe) > 1 || Math.abs(jump) > 1) {
@@ -163,6 +166,11 @@ public abstract class Ship extends Entity {
 		if (strafe != 0) accelerate2d(delta * strafe * ACCELERATION, (float) Math.PI); // TODO change strafing to an instant boost
 		// Jumping
 		if (jump != 0) velocity.changeY(y -> y + delta * jump * JUMP_POWER * VERTICAL_SCALE);
+	}
+
+	/** Starts the race, i.e. allows the player to control the ship */
+	public void start() {
+		this.started = true;
 	}
 
 	private void doCollisions() {
