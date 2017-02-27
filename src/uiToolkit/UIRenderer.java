@@ -3,21 +3,20 @@ package uiToolkit;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
 
-import gameEngine.models.RawModel;
 import gameEngine.renderEngine.Loader;
 
+/**
+ * 
+ * @author Reece Bennett
+ *
+ */
 public class UIRenderer {
 
-  private RawModel quad;
   private UIShader shader;
-  private Loader loader;
   
   public UIRenderer(Loader loader) {
     shader = new UIShader();
-    this.loader = loader;
   }
   
   public void render(List<Container> containers) {

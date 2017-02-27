@@ -27,7 +27,6 @@ public class Container {
   private ArrayList<Button> buttons;
 
   private Vector2f position;
-  private Vector2f size;
 
   private Loader loader;
 
@@ -83,7 +82,7 @@ public class Container {
 
     // Render all children of this container
     for (Button b : buttons) {
-      b.render(position, size);
+      b.render(position, new Vector2f(texture.getImageWidth(), texture.getImageHeight()));
     }
   }
 
