@@ -19,7 +19,6 @@ public class Button {
   private ArrayList<ActionListener> listeners;
   private boolean pressed;
   
-  
   public Button(GuiTexture guiTexture) {
     this.guiTexture = guiTexture;
     bounds = new Rectangle();
@@ -52,8 +51,8 @@ public class Button {
     }
   }
   
-  public void render() {
-    
+  public void render(Vector2f containerPos, Vector2f containerSize) {
+    // TODO Put button rendering code here, account for container position
   }
 
 }

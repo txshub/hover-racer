@@ -1,14 +1,11 @@
 package game;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -39,6 +36,8 @@ import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
 import uiToolkit.Button;
+import uiToolkit.Container;
+import uiToolkit.UIRenderer;
 
 /**
  * @author Reece Bennett and rtm592
@@ -68,6 +67,8 @@ public class Game {
 	
 	// TODO temporary
 	private Button button;
+  private UIRenderer uiRenderer;
+  private ArrayList<Container> containers;
 
 	public Game() {
 		init();
@@ -128,6 +129,7 @@ public class Game {
 		
 		// GUIs
 		guis = new ArrayList<>();
+		containers = new ArrayList<>();
 		
 		GuiTexture menuBackground = new GuiTexture(loader.loadTexture("ui/MenuBackground"), new Vector2f(0f, 0f), new Vector2f(0.375f, 0.6666f));
 		guis.add(menuBackground);
@@ -145,10 +147,14 @@ public class Game {
     
     GuiTexture menuButton = new GuiTexture(loader.loadTexture("ui/MenuButton"), new Vector2f(0f, -0.3999f), buttonScale);
     guis.add(menuButton);
+    
+    Container menu = new Container(loader, "ui/MenuButtonTrim", new Vector2f(0, 0));
+    containers.add(menu);
 
 		// Renderers
 		renderer = new MasterRenderer(loader);
 		guiRender = new GuiRenderer(loader);
+		uiRenderer = new UIRenderer(loader);
 
 		// Camera rotation with right click
 		// picker = new MousePicker(camera, renderer.getProjectionMatrix(),
@@ -199,7 +205,8 @@ public class Game {
 	public void render() {
 		GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 		renderer.renderScene(entities, normalEntities, terrains, lights, camera, new Vector4f());
-		guiRender.render(guis);
+		//guiRender.render(guis);
+		uiRenderer.render(containers);
 		GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
 		DisplayManager.updateDisplay();
 		sortLights(lights, player.getPosition());
