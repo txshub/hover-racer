@@ -12,7 +12,7 @@ public class TestClient {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Test");
-		Client client = new Client("Bob", 4444, "localhost", null);
+		Client client = new Client("Bob", 4444, "localhost");
 		client.start();
 	}
 }

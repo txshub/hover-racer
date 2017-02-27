@@ -7,7 +7,12 @@ import java.io.IOException;
 import audioEngine.AudioMaster;
 import audioEngine.Sounds;
 import audioEngine.Source;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ObjectPropertyBase;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
@@ -16,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import serverComms.Lobby;
 
 /**
  * 
@@ -104,5 +110,34 @@ public class MenuButton extends StackPane {
 		});
 		
 	}
+	
+	public void setButtonText(String text){
+		
+		Text newText = new Text(text);
+		this.buttonText = newText;
+		
+	}
+
+	public final ObjectProperty<EventHandler<ActionEvent>> onActionProperty() { return onAction; }
+	
+    public final void setOnAction(EventHandler<ActionEvent> value) { onActionProperty().set(value); }
+    
+    public final EventHandler<ActionEvent> getOnAction() { return onActionProperty().get(); }
+    
+    private ObjectPropertyBase<EventHandler<ActionEvent>> onAction = new ObjectPropertyBase<EventHandler<ActionEvent>>() {
+        protected void invalidated() {
+            setEventHandler(ActionEvent.ACTION, get());
+        }
+
+       
+        public Object getBean() {
+            return this;
+        }
+
+        @Override
+        public String getName() {
+            return "onAction";
+        }
+    };
 	
 }

@@ -6,8 +6,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -22,53 +28,43 @@ import trackDesign.TrackPoint;
  * @author Andreea Gheorghe
  *
  */
-public class Map extends Application{
+public class Map extends Canvas {
 
 	private ArrayList<TrackPoint> track;
-	Pane root;
+	private long seed;
 	
-	public void start(Stage primaryStage) throws Exception {
+//	private Canvas canvas;
+	
+	public Map(long seed){
 		
-		root = new Pane();
-		root.setPrefSize(400, 300);
+		this.seed= seed ;
 		
-		Text text = new Text("hello");
-		try {
-			Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), 20);
-			text.setFont(f);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.setWidth(200);
+		this.setHeight(200);
 		
-		root.getChildren().add(text);
+		GraphicsContext gc = this.getGraphicsContext2D();
+        drawShapes(gc);
+        
 		
-		long seed= 10 ;
+	}
+	
+	public void drawShapes(GraphicsContext gc) {
+		
 		SeedTrack st = TrackMaker.makeTrack(seed, 20, 30, 1, 70, 40, 4, 4);
 		track = st.getTrack();
 		
 		for(int i=0; i< track.size(); i++){
 			
-			Line line = new Line ();
-			line.setStartX((((int)track.get(i).getX()*2)/2)+ seed);
-			line.setStartY((((int)track.get(i).getY()*2)/2)+ seed);
-			line.setEndX((((int)track.get((i+1)%track.size()).getX()*2)/2) + seed);
-			line.setEndY((((int)track.get((i+1)%track.size()).getY()*2)/2) + seed);
+			double x1 = (((track.get(i).getX()*2)/4));
+			double y1 =(((track.get(i).getY()*2)/4));
+			double x2 = (((track.get((i+1)%track.size()).getX()*2)/4));
+			double y2 = (((track.get((i+1)%track.size()).getY()*2)/4));
 			
-			root.getChildren().add(line);
+			gc.setStroke(Color.WHITE);
+			gc.strokeLine(x1,y1,x2,y2);
 		}
 		
-		Scene scene = new Scene(root);
-		primaryStage.setScene(scene);
-		primaryStage.show();	
-		
-		
-	}
 	
-	public static void main(String[] args) {
-
-		launch(args);
-
 	}
 
 }
