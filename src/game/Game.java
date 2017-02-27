@@ -148,7 +148,7 @@ public class Game {
     GuiTexture menuButton = new GuiTexture(loader.loadTexture("ui/MenuButton"), new Vector2f(0f, -0.3999f), buttonScale);
     guis.add(menuButton);
     
-    Container menu = new Container(loader, "ui/MenuButtonTrim", new Vector2f(0, 0));
+    Container menu = new Container(loader, "ui/MenuBackground", new Vector2f(448, 120));
     containers.add(menu);
 
 		// Renderers
