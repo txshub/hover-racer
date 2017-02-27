@@ -2,9 +2,12 @@ package userInterface;
 
 import audioEngine.AudioMaster;
 import clientComms.Client;
+import serverComms.ServerComm;
+import serverComms.Lobby;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -21,7 +24,7 @@ import javafx.util.Duration;
 
 public class GameMenu extends Parent {
 
-	VBox menu0, menu1, menu2, menu3, menu4, menu5, menu6;
+	VBox menu0, menu1, menu2, menu3, menu4, menu5, menu6, menu7, menu8;
 	MenuButton btnPlayGame, btnPlayAI, btnOptions, btnSound, btnMusic, btnExit, btnBack, btnBack2, btnBack3, btnBack4, btnBack5, btnBack6;
 	SoundSlider soundSlider;
 	MusicSlider musicSlider;
@@ -36,6 +39,8 @@ public class GameMenu extends Parent {
 		menu4 = new VBox(20);
 		menu5 = new VBox(20);
 		menu6 = new VBox(10);
+		menu7 = new VBox(20);
+		menu8 = new VBox(20);
 
 		//initial window
 		menu0.setTranslateX(100);
@@ -68,6 +73,14 @@ public class GameMenu extends Parent {
 		//connect multiplayer options
 		menu6.setTranslateX(700);
 		menu6.setTranslateY(200);
+		
+		//host a game room
+		menu7.setTranslateX(700);
+		menu7.setTranslateY(80);
+		
+		//create a game room to play with AI
+		menu8.setTranslateX(700);
+		menu8.setTranslateY(80);
 		
 		
 		btnPlayGame = new MenuButton("MULTIPLAYER");
@@ -275,6 +288,9 @@ public class GameMenu extends Parent {
 		soundSlider = new SoundSlider();
 		musicSlider = new MusicSlider();
 		
+		HostGameRoom hostGR = new HostGameRoom();
+		CreateGameRoom createGR = new CreateGameRoom();
+		
 		menu4.setAlignment(Pos.CENTER);
 		menu5.setAlignment(Pos.CENTER);
 		
@@ -337,7 +353,43 @@ public class GameMenu extends Parent {
 			String machineName = machineInputSingle.getText();
 			
 			Client client = new Client(usr, portNo, machineName);
-			client.start();
+			
+			if(client.serverOn) {
+				client.start();
+			} else {
+			
+				connectSingle.setOnMouseClicked(evt -> {
+					
+					if (box4Single.getChildren().size() > 0) {
+						
+							box4Single.getChildren().remove(0);
+					}
+				
+					MenuButton startServer = new MenuButton("START A SERVER");
+					box4Single.getChildren().add(startServer);
+					
+				});
+				
+				Lobby serverLobby = new Lobby (4444);
+				ServerComm server = new ServerComm(4444, serverLobby);
+				server.start();
+				client.start();
+			}
+			
+			getChildren().add(menu8);
+
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu5);
+			trans.setToX(menu5.getTranslateX() - OFFSET);
+
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu8);
+			trans1.setToX(menu8.getTranslateX() - OFFSET);
+
+			trans.play();
+			trans1.play();
+
+			trans.setOnFinished(evt -> {
+				getChildren().remove(menu5);
+			});
 			
 		});
 		
@@ -349,7 +401,29 @@ public class GameMenu extends Parent {
 			String machineName = machineInputMulti.getText();
 			
 			Client client = new Client(usr, portNo, machineName);
-			client.start();
+			
+			if(client.serverOn) {
+				client.start();
+			} else {
+			
+				connectSingle.setOnMouseClicked(evt -> {
+					
+					if (box4Single.getChildren().size() > 0) {
+						
+							box4Single.getChildren().remove(0);
+					}
+				
+					MenuButton startServer = new MenuButton("START A SERVER");
+					box4Single.getChildren().add(startServer);
+					
+				});
+				
+				Lobby serverLobby = new Lobby (4444);
+				ServerComm server = new ServerComm(4444, serverLobby);
+				server.start();
+				client.start();
+			}
+			
 		
 			getChildren().add(menu6);
 
@@ -395,7 +469,26 @@ public class GameMenu extends Parent {
 		
 		//connecting multiplayer options
 		MenuButton joinGameRoom = new MenuButton("JOIN A GAME ROOM");
+		
 		MenuButton hostGameRoom = new MenuButton("HOST A GAME ROOM");
+		hostGameRoom.setOnMouseClicked(eventHost -> {
+			
+			getChildren().add(menu7);
+
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu6);
+			trans.setToX(menu6.getTranslateX() - OFFSET);
+
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu7);
+			trans1.setToX(menu7.getTranslateX() - OFFSET);
+
+			trans.play();
+			trans1.play();
+
+			trans.setOnFinished(evt -> {
+				getChildren().remove(menu6);
+			});
+			
+		});
 		
 		// main menu
 		menu0.getChildren().addAll(btnPlayGame, btnPlayAI, btnOptions, btnExit);
@@ -411,14 +504,16 @@ public class GameMenu extends Parent {
 		menu5.getChildren().addAll(box1Single, box2Single, box3Single, box4Single, btnBack5);
 		//connect multiplayer options
 		menu6.getChildren().addAll(joinGameRoom, hostGameRoom);
-		
-		// game menu background
-		Rectangle bg2 = new Rectangle(800, 500);
-		bg2.setFill(Color.BLACK);
-		bg2.setOpacity(0.2);
+		//host a game room by multiplayer
+		menu7.getChildren().add(hostGR);
+		//host a game room by single player
+		menu8.getChildren().add(createGR);
 
-		getChildren().addAll(bg2, menu0);
+		getChildren().addAll(menu0);
 
+		//trying to improve the speed of TranslateTransition
+		this.setCache(true);
+		this.setCacheHint(CacheHint.SPEED);
 	}
 
 }

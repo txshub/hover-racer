@@ -170,27 +170,27 @@ public class Game {
 	}
 
 	public void update(double delta) {
-		input.run();
+		input.update();
 
 		// Check if the escape key was pressed to exit the game
-		if (input.checkAction(Action.EXIT))
+		if (input.isDown(Action.EXIT))
 			running = false;
 		
 		// Check for menu
-		if (input.checkAction(Action.MENU))
+		if (input.wasPressed(Action.MENU))
 		  menu.setVisibility(!menu.isVisible());
 
 		// Check for audio controls
 		/** @author Tudor */
-		if (input.checkAction(Action.MUSIC_UP))
+		if (input.wasPressed(Action.MUSIC_UP))
 			AudioMaster.increaseMusicVolume();
-		// if (input.checkAction(Action.MUSIC_DOWN))
-		AudioMaster.decreaseMusicVolume();
-		if (input.checkAction(Action.MUSIC_SKIP))
+		if (input.wasPressed(Action.MUSIC_DOWN))
+		  AudioMaster.decreaseMusicVolume();
+		if (input.wasPressed(Action.MUSIC_SKIP))
 			AudioMaster.skipInGameMusic();
-		if (input.checkAction(Action.SFX_UP))
+		if (input.wasPressed(Action.SFX_UP))
 			AudioMaster.increaseSFXVolume();
-		if (input.checkAction(Action.SFX_DOWN))
+		if (input.wasPressed(Action.SFX_DOWN))
 			AudioMaster.decreaseSFXVolume();
 		
 		for (Container c : containers) {
@@ -229,7 +229,6 @@ public class Game {
 		guiRender.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
-		InputController.close = true;
 		AudioMaster.cleanUp();
 		DisplayManager.closeDisplay();
 	}
@@ -362,61 +361,61 @@ public class Game {
 				indices[(i - 1) * 24 + 13] = k - 2;
 				indices[(i - 1) * 24 + 14] = k + 2;
 
-				indices[(i - 1) * 24 + 15] = k - 2;
-				indices[(i - 1) * 24 + 16] = k + 3;
-				indices[(i - 1) * 24 + 17] = k + 2;
+        indices[(i - 1) * 24 + 15] = k - 2;
+        indices[(i - 1) * 24 + 16] = k + 3;
+        indices[(i - 1) * 24 + 17] = k + 2;
 
-				indices[(i - 1) * 24 + 18] = k - 1;
-				indices[(i - 1) * 24 + 19] = k + 3;
-				indices[(i - 1) * 24 + 20] = k - 2;
+        indices[(i - 1) * 24 + 18] = k - 1;
+        indices[(i - 1) * 24 + 19] = k + 3;
+        indices[(i - 1) * 24 + 20] = k - 2;
 
-				indices[(i - 1) * 24 + 21] = k - 1;
-				indices[(i - 1) * 24 + 22] = k + 4;
-				indices[(i - 1) * 24 + 23] = k + 3;
-			} else if (i > 0) {
+        indices[(i - 1) * 24 + 21] = k - 1;
+        indices[(i - 1) * 24 + 22] = k + 4;
+        indices[(i - 1) * 24 + 23] = k + 3;
+      } else if (i > 0) {
 
-				indices[(i - 1) * 24 + 0] = k - 4;
-				indices[(i - 1) * 24 + 1] = 0;
-				indices[(i - 1) * 24 + 2] = 0 + 1;
+        indices[(i - 1) * 24 + 0] = k - 4;
+        indices[(i - 1) * 24 + 1] = 0;
+        indices[(i - 1) * 24 + 2] = 0 + 1;
 
-				indices[(i - 1) * 24 + 3] = k - 5;
-				indices[(i - 1) * 24 + 4] = 0;
-				indices[(i - 1) * 24 + 5] = k - 4;
+        indices[(i - 1) * 24 + 3] = k - 5;
+        indices[(i - 1) * 24 + 4] = 0;
+        indices[(i - 1) * 24 + 5] = k - 4;
 
-				indices[(i - 1) * 24 + 6] = 0 + 2;
-				indices[(i - 1) * 24 + 7] = 0;
-				indices[(i - 1) * 24 + 8] = k - 5;
+        indices[(i - 1) * 24 + 6] = 0 + 2;
+        indices[(i - 1) * 24 + 7] = 0;
+        indices[(i - 1) * 24 + 8] = k - 5;
 
-				indices[(i - 1) * 24 + 9] = k - 3;
-				indices[(i - 1) * 24 + 10] = 0 + 2;
-				indices[(i - 1) * 24 + 11] = k - 5;
+        indices[(i - 1) * 24 + 9] = k - 3;
+        indices[(i - 1) * 24 + 10] = 0 + 2;
+        indices[(i - 1) * 24 + 11] = k - 5;
 
-				indices[(i - 1) * 24 + 12] = k - 3;
-				indices[(i - 1) * 24 + 13] = k - 2;
-				indices[(i - 1) * 24 + 14] = 0 + 2;
+        indices[(i - 1) * 24 + 12] = k - 3;
+        indices[(i - 1) * 24 + 13] = k - 2;
+        indices[(i - 1) * 24 + 14] = 0 + 2;
 
-				indices[(i - 1) * 24 + 15] = k - 2;
-				indices[(i - 1) * 24 + 16] = 0 + 3;
-				indices[(i - 1) * 24 + 17] = 0 + 2;
+        indices[(i - 1) * 24 + 15] = k - 2;
+        indices[(i - 1) * 24 + 16] = 0 + 3;
+        indices[(i - 1) * 24 + 17] = 0 + 2;
 
-				indices[(i - 1) * 24 + 18] = k - 1;
-				indices[(i - 1) * 24 + 19] = 0 + 3;
-				indices[(i - 1) * 24 + 20] = k - 2;
+        indices[(i - 1) * 24 + 18] = k - 1;
+        indices[(i - 1) * 24 + 19] = 0 + 3;
+        indices[(i - 1) * 24 + 20] = k - 2;
 
-				indices[(i - 1) * 24 + 21] = k - 1;
-				indices[(i - 1) * 24 + 22] = 0 + 4;
-				indices[(i - 1) * 24 + 23] = 0 + 3;
-			}
-		}
-		return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
-				new ModelTexture(loader.loadTexture("new/TrackTexture")));
+        indices[(i - 1) * 24 + 21] = k - 1;
+        indices[(i - 1) * 24 + 22] = 0 + 4;
+        indices[(i - 1) * 24 + 23] = 0 + 3;
+      }
+    }
+    return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
+        new ModelTexture(loader.loadTexture("new/TrackTexture")));
 
-	}
+  }
 
-	private static void sortLights(List<Light> lights, Vector3f currentPosition) {
-		float[] distance = new float[lights.size() - 1];
-		for (int i = 1; i < lights.size(); i++) {
-			distance[i - 1] = lights.get(i).getdistance(currentPosition);
-		}
-	}
+  private static void sortLights(List<Light> lights, Vector3f currentPosition) {
+    float[] distance = new float[lights.size() - 1];
+    for (int i = 1; i < lights.size(); i++) {
+      distance[i - 1] = lights.get(i).getdistance(currentPosition);
+    }
+  }
 }
