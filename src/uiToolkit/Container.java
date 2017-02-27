@@ -24,8 +24,16 @@ public class Container extends UIElement {
     children = new ArrayList<>();
   }
 
-  public void add(UIElement child) {
+  protected void add(UIElement child) {
     children.add(child);
+  }
+  
+  @Override
+  public void setVisibility(boolean visible) {
+    super.setVisibility(visible);
+    for (UIElement e : children) {
+      e.setVisibility(visible);
+    }
   }
 
   @Override
@@ -37,16 +45,11 @@ public class Container extends UIElement {
 
   @Override
   public void render() {
-    render(new Vector2f(), new Vector2f());
-  }
-
-  @Override
-  public void render(Vector2f containerPos, Vector2f containerSize) {
-    super.render(containerPos, containerSize);
+    super.render();
 
     // Render all children of this container
     for (UIElement e : children) {
-      e.render(position, new Vector2f(texture.getImageWidth(), texture.getImageHeight()));
+      e.render();
     }
   }
 

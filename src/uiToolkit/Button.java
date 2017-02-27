@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.joml.Vector2f;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 
 import gameEngine.renderEngine.Loader;
 
@@ -29,10 +30,7 @@ public class Button extends UIElement {
     super(loader, fileName, position);
 
     bounds = new Rectangle();
-    bounds.x = (int) position.x;
-    bounds.y = (int) position.y;
-    bounds.width = texture.getImageWidth();
-    bounds.height = texture.getImageHeight();
+    updateBounds();
 
     listeners = new ArrayList<>();
     pressed = false;
@@ -40,6 +38,13 @@ public class Button extends UIElement {
 
   public void addListener(ActionListener listener) {
     listeners.add(listener);
+  }
+  
+  @Override
+  public void setParent(UIElement parent) {
+    super.setParent(parent);
+    
+    updateBounds();
   }
 
   @Override
@@ -55,6 +60,13 @@ public class Button extends UIElement {
         a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "released"));
       }
     }
+  }
+  
+  private void updateBounds() {
+    bounds.width = texture.getImageWidth();
+    bounds.height = texture.getImageHeight();
+    bounds.x = (int) position.x;
+    bounds.y = Display.getHeight() - bounds.height - (int) position.y;
   }
 
 }

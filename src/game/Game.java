@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +68,7 @@ public class Game {
 	private boolean running;
 	
 	// TODO temporary
-	private Button button;
+	private Container menu;
   private UIRenderer uiRenderer;
   private ArrayList<Container> containers;
 
@@ -131,20 +133,28 @@ public class Game {
 		guis = new ArrayList<>();
 		containers = new ArrayList<>();
     
-    Container menu = new Container(loader, "ui/MenuBackground", new Vector2f(448, 120));
+    menu = new Container(loader, "ui/MenuBackground", new Vector2f(448, 120));
     containers.add(menu);
     
     Button resumeButton = new Button(loader, "ui/ResumeButton", new Vector2f(58, 64));
-    menu.add(resumeButton);
+    resumeButton.setParent(menu);
+    resumeButton.addListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        System.out.println(e.getActionCommand());
+        if (e.getActionCommand().equals("pressed")) {
+          menu.setVisibility(false);
+        }
+      }
+    });
     
     Button optionsButton = new Button(loader, "ui/optionsButton", new Vector2f(58, 160));
-    menu.add(optionsButton);
+    optionsButton.setParent(menu);
     
     Button lobbyButton = new Button(loader, "ui/lobbyButton", new Vector2f(58, 256));
-    menu.add(lobbyButton);
+    lobbyButton.setParent(menu);
     
     Button menuButton = new Button(loader, "ui/menuButton", new Vector2f(58, 352));
-    menu.add(menuButton);
+    menuButton.setParent(menu);
 
 		// Renderers
 		renderer = new MasterRenderer(loader);
@@ -165,6 +175,10 @@ public class Game {
 		// Check if the escape key was pressed to exit the game
 		if (input.checkAction(Action.EXIT))
 			running = false;
+		
+		// Check for menu
+		if (input.checkAction(Action.MENU))
+		  menu.setVisibility(!menu.isVisible());
 
 		// Check for audio controls
 		/** @author Tudor */
@@ -178,6 +192,10 @@ public class Game {
 			AudioMaster.increaseSFXVolume();
 		if (input.checkAction(Action.SFX_DOWN))
 			AudioMaster.decreaseSFXVolume();
+		
+		for (Container c : containers) {
+		  c.update();
+		}
 
 		player.update((float) delta);
 		camera.move();
