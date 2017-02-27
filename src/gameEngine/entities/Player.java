@@ -20,12 +20,12 @@ public class Player extends Ship {
 	public void update(float dt) {
 		// Check inputs
 		thrust = 0;
-		if (input.checkAction(Action.FORWARD)) thrust += 1;
-		if (input.checkAction(Action.BREAK)) thrust -= 1;
+		if (input.isDown(Action.FORWARD)) thrust += 1;
+		if (input.isDown(Action.BREAK)) thrust -= 1;
 
 		rotThrust = 0;
-		if (input.checkAction(Action.TURN_LEFT)) rotThrust += 1;
-		if (input.checkAction(Action.TURN_RIGHT)) rotThrust -= 1;
+		if (input.isDown(Action.TURN_LEFT)) rotThrust += 1;
+		if (input.isDown(Action.TURN_RIGHT)) rotThrust -= 1;
 
 		super.update(1f / 60f);
 	}

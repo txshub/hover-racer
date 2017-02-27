@@ -129,23 +129,23 @@ public class Game {
 	}
 
 	public void update(double delta) {
-		input.run();
+		input.update();
 
 		// Check if the escape key was pressed to exit the game
-		if (input.checkAction(Action.EXIT))
+		if (input.isDown(Action.EXIT))
 			running = false;
 
 		// Check for audio controls
 		/** @author Tudor */
-		if (input.checkAction(Action.MUSIC_UP))
+		if (input.wasPressed(Action.MUSIC_UP))
 			AudioMaster.increaseMusicVolume();
-		// if (input.checkAction(Action.MUSIC_DOWN))
+		if (input.wasPressed(Action.MUSIC_DOWN))
 		AudioMaster.decreaseMusicVolume();
-		if (input.checkAction(Action.MUSIC_SKIP))
+		if (input.wasPressed(Action.MUSIC_SKIP))
 			AudioMaster.skipInGameMusic();
-		if (input.checkAction(Action.SFX_UP))
+		if (input.wasPressed(Action.SFX_UP))
 			AudioMaster.increaseSFXVolume();
-		if (input.checkAction(Action.SFX_DOWN))
+		if (input.wasPressed(Action.SFX_DOWN))
 			AudioMaster.decreaseSFXVolume();
 
 		player.update((float) delta);
@@ -178,7 +178,6 @@ public class Game {
 		guiRender.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
-		InputController.close = true;
 		AudioMaster.cleanUp();
 		DisplayManager.closeDisplay();
 	}

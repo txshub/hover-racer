@@ -32,13 +32,13 @@ public class PlayerShip extends Ship {
 	public void update(float delta) {
 		float thrust = 0, turn = 0, strafe = 0, jump = 0;
 		// Handle inputs
-		if (input.checkAction(Action.FORWARD)) thrust++;
-		if (input.checkAction(Action.BREAK)) thrust--;
-		if (input.checkAction(Action.TURN_RIGHT)) turn++;
-		if (input.checkAction(Action.TURN_LEFT)) turn--;
-		if (input.checkAction(Action.STRAFE_RIGHT)) strafe++;
-		if (input.checkAction(Action.STRAFE_LEFT)) strafe--;
-		if (input.checkAction(Action.JUMP)) jump++;
+		if (input.isDown(Action.FORWARD)) thrust++;
+		if (input.isDown(Action.BREAK)) thrust--;
+		if (input.isDown(Action.TURN_RIGHT)) turn++;
+		if (input.isDown(Action.TURN_LEFT)) turn--;
+		if (input.isDown(Action.STRAFE_RIGHT)) strafe++;
+		if (input.isDown(Action.STRAFE_LEFT)) strafe--;
+		if (input.isDown(Action.JUMP)) jump++;
 		// Steer and update ship
 		super.steer(thrust, turn, strafe, jump, delta);
 		super.updatePhysics(delta);
