@@ -37,6 +37,11 @@ public class InputController {
 	}
 
 	public void changeKey(int key, Action action) {
+		for(int keyv : mapping.keySet()){
+			if(mapping.get(keyv).equals(action)){
+				mapping.remove(keyv);
+			}
+		}
 		mapping.put(key, action);
 	}
 
