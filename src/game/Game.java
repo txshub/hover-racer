@@ -115,6 +115,7 @@ public class Game {
 		// Create ships
 		ships = new MultiplayerShipManager((byte) 0, input, playerTModel, shipTextures, startingPositions, new FlatGroundProvider(0));
 		ships.addShipsTo(entities);
+		player = ships.getPlayerShip();
 
 
 		// Player following camera
