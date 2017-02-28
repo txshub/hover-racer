@@ -48,7 +48,7 @@ public class ClientReceiver extends Thread {
 					String[] allGames = (new String(fullMsg.getMsg(), ServerComm.charset)).split(System.lineSeparator());
 					ArrayList<GameNameNumber> gameList = new ArrayList<GameNameNumber>();
 					for(String s : allGames) {
-						gameList.add(new GameNameNumber(s));
+						if(!s.equals("")) gameList.add(new GameNameNumber(s));
 					}
 					//What to do with arraylist of games/number?
 				} else if(fullMsg.getType()==ServerComm.INVALIDGAME) {

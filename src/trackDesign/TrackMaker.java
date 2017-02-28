@@ -13,6 +13,14 @@ import trackDesign.catmullrom.SplineUtils;
  */
 public class TrackMaker {
 	
+	public SeedTrack makeTrack() {
+		return makeTrack(10, 20, 30, 1,30, 40, 4);
+	}
+	
+	public SeedTrack makeTrack(long seed) {
+		return makeTrack(seed, 10, 20, 30, 1,30, 40, 4);
+	}
+	
 	public static SeedTrack makeStraightTrack(float length) {
 		ArrayList<TrackPoint> out = new ArrayList<TrackPoint>();
 		out.add(new TrackPoint(0,0));
