@@ -4,26 +4,28 @@ import org.joml.Vector3f;
 
 import physics.support.GroundProvider;
 
-
-/** GroundProvider the provides a flat ground at y=0 and assumes all vehicles are horizontal.
+/**
+ * GroundProvider the provides a flat ground at y=0 and assumes all vehicles are
+ * horizontal.
  * 
- * @author Maciej Bogacki */
+ * @author Maciej Bogacki
+ */
 public class FlatGroundProvider implements GroundProvider {
 
-	float height;
+  float height;
 
-	public FlatGroundProvider(float height) {
-		this.height = height;
-	}
+  public FlatGroundProvider(float height) {
+    this.height = height;
+  }
 
-	@Override
-	public float distanceToGround(Vector3f position, Vector3f direction) {
-		return position.y - height;
-	}
+  @Override
+  public float distanceToGround(Vector3f position, Vector3f direction) {
+    return position.y - height;
+  }
 
-	@Override
-	public Vector3f normalToGround(Vector3f point) {
-		return new Vector3f(0, 1, 0);
-	}
+  @Override
+  public Vector3f normalToGround(Vector3f point) {
+    return new Vector3f(0, 1, 0);
+  }
 
 }

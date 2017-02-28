@@ -15,24 +15,24 @@ import javafx.scene.text.Text;
  */
 public class TextStyle {
 
-	private Text text; 
-	
-	public TextStyle(String textInput, int fontSize){
-		
-		text = new Text(textInput);
-		
-		try {
-			Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), fontSize);
-			text.setFont(f);
-			text.setFill(Color.WHITE);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public Text getTextStyled(){
-		return this.text;
-	}
+  private Text text;
+
+  public TextStyle(String textInput, int fontSize) {
+
+    text = new Text(textInput);
+
+    try {
+      Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), fontSize);
+      text.setFont(f);
+      text.setFill(Color.WHITE);
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+  }
+
+  public Text getTextStyled() {
+    return this.text;
+  }
 }

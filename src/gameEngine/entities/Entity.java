@@ -10,43 +10,43 @@ import gameEngine.models.TexturedModel;
  */
 public class Entity {
 
-	private TexturedModel model;
-	protected Vector3f position;
-	protected Vector3f rotation;
-	protected float scale;
+  private TexturedModel model;
+  protected Vector3f position;
+  protected Vector3f rotation;
+  protected float scale;
 
-	private int textureIndex = 0;
+  private int textureIndex = 0;
 
-	public Entity(TexturedModel model, Vector3f position, Vector3f rotation, float scale) {
-	  this(model, 0, position, rotation, scale);
-	}
+  public Entity(TexturedModel model, Vector3f position, Vector3f rotation, float scale) {
+    this(model, 0, position, rotation, scale);
+  }
 
-	public Entity(TexturedModel model, int textureIndex, Vector3f position, Vector3f rotation,
-			float scale) {
+  public Entity(TexturedModel model, int textureIndex, Vector3f position, Vector3f rotation,
+      float scale) {
     this.model = model;
-		this.textureIndex = textureIndex;
-		this.position = position;
+    this.textureIndex = textureIndex;
+    this.position = position;
     this.rotation = rotation;
-		this.scale = scale;
-	}
-	
-	public float getTextureXOffset(){
-		int column = textureIndex % model.getTexture().getNumberOfRows();
-		return (float) column / (float) model.getTexture().getNumberOfRows();
-	}
-	
-	public float getTextureYOffset(){
-		int row = textureIndex / model.getTexture().getNumberOfRows();
-		return (float) row / (float) model.getTexture().getNumberOfRows();
-	}
+    this.scale = scale;
+  }
 
-	public TexturedModel getModel() {
-		return model;
-	}
+  public float getTextureXOffset() {
+    int column = textureIndex % model.getTexture().getNumberOfRows();
+    return (float) column / (float) model.getTexture().getNumberOfRows();
+  }
 
-	public void setModel(TexturedModel model) {
-		this.model = model;
-	}
+  public float getTextureYOffset() {
+    int row = textureIndex / model.getTexture().getNumberOfRows();
+    return (float) row / (float) model.getTexture().getNumberOfRows();
+  }
+
+  public TexturedModel getModel() {
+    return model;
+  }
+
+  public void setModel(TexturedModel model) {
+    this.model = model;
+  }
 
   public Vector3f getPosition() {
     return position;
@@ -55,7 +55,7 @@ public class Entity {
   public void setPosition(Vector3f position) {
     this.position = position;
   }
-  
+
   public void changePosition(Vector3f dPosition) {
     position.add(dPosition);
   }
@@ -67,7 +67,7 @@ public class Entity {
   public void setRotation(Vector3f rotation) {
     this.rotation = rotation;
   }
-  
+
   public void changeRotation(Vector3f dRotation) {
     rotation.add(dRotation);
   }
