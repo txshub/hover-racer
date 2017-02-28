@@ -39,6 +39,7 @@ import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
 import uiToolkit.Button;
 import uiToolkit.Container;
+import uiToolkit.Label;
 import uiToolkit.UIRenderer;
 
 /**
@@ -155,6 +156,9 @@ public class Game {
     
     Button menuButton = new Button(loader, "ui/menuButton", new Vector2f(58, 352));
     menuButton.setParent(menu);
+    
+//    Label label = new Label(loader, new Vector2f(0, 0));
+//    label.setParent(menu);
 
 		// Renderers
 		renderer = new MasterRenderer(loader);

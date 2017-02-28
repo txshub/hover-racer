@@ -8,13 +8,13 @@ import gameEngine.renderEngine.Loader;
 
 /**
  * 
- * A UIElement that can contain other UIElement such as buttons and other
+ * A TexturedUIElement that can contain other UIElement such as buttons and other
  * containers.
  * 
  * @author Reece Bennett
  *
  */
-public class Container extends UIElement {
+public class Container extends TexturedUIElement {
 
   private ArrayList<UIElement> children;
 
