@@ -12,14 +12,16 @@ public class GameRoom {
 	private int maxPlayers;
 	private int numAI;
 	private String hostName;
+	private ClientTable table;
 	
-	public GameRoom(int id, String name, long seed, int maxPlayers, int numAI, String hostName) {
+	public GameRoom(int id, String name, long seed, int maxPlayers, int numAI, String hostName, ClientTable table) {
 		this.id = id;
 		this.name = name;
 		this.seed = seed;
 		this.maxPlayers = maxPlayers;
 		this.numAI = numAI;
 		this.hostName = hostName;
+		this.table = table;
 		
 	}
 	
@@ -42,8 +44,7 @@ public class GameRoom {
 	}
 
 	public void addPlayer(String clientName) {
-		players.add(clientName);
-		
+		players.add(clientName);		
 	}
 
 	public ArrayList<String> getPlayers() {
@@ -52,7 +53,9 @@ public class GameRoom {
 	
 	public void startGame(String clientName) {
 		if(clientName == hostName) {
-			//Start
+			for(int i = 0; i < players.size(); i++) {
+				table.getReceiver(players.get(i)).setGame(this, i);
+			}
 		}
 	}
 	

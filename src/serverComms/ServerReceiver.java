@@ -10,6 +10,8 @@ public class ServerReceiver extends Thread {
 	private DataInputStream client;
 	private ClientTable table;
 	private Lobby lobby;
+	private GameRoom gameRoom = null;
+	private int gameNum = -1;
 	
 	public ServerReceiver(Socket socket, String clientName, DataInputStream client, Lobby lobby) {
 		this.clientName = clientName;
@@ -62,6 +64,12 @@ public class ServerReceiver extends Thread {
 		} catch (IOException e) {
 			//What to do?
 		}
+	}
+
+	public void setGame(GameRoom gameRoom, int gameNum) {
+		this.gameRoom = gameRoom;
+		this.gameNum = gameNum;
+		
 	}
 	
 }
