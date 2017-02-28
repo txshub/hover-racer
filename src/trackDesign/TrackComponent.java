@@ -15,6 +15,7 @@ import javax.swing.JComponent;
  */
 public class TrackComponent extends JComponent {
 
+  private static final long serialVersionUID = 1L;
   private ArrayList<TrackPoint> track; // The arraylist of points that make up
                                        // the track
   private ArrayList<TrackPoint> track2;

@@ -89,17 +89,8 @@ public class TrackMaker {
     Random random = new Random(seed); // Make the random object
     ArrayList<TrackPoint> points = new ArrayList<TrackPoint>();
     ArrayList<TrackPoint> hullPoints = new ArrayList<TrackPoint>();
-    int trackPointCount = random.nextInt(maxTrackPoints - minTrackPoints) + minTrackPoints; // Decide
-                                                                                            // the
-                                                                                            // number
-                                                                                            // of
-                                                                                            // points
-                                                                                            // between
-                                                                                            // the
-                                                                                            // minimum
-                                                                                            // and
-                                                                                            // maximum
-                                                                                            // number
+    // Decide the number of points between the minimum and maximum number
+    int trackPointCount = random.nextInt(maxTrackPoints - minTrackPoints) + minTrackPoints;
     for (int i = 0; i < trackPointCount; i++) { // Create an array of random
                                                 // TrackPoints
       int x = random.nextInt(250); // Pick a random x coordinate
@@ -315,7 +306,7 @@ public class TrackMaker {
                                                                    // equal to
                                                                    // 100
                                                                    // degrees
-          float length = currentPoint.dist(nextPoint); // Calculate the next
+          float length = currentPoint.distance(nextPoint); // Calculate the next
                                                        // point's new location
                                                        // so it's at the same
                                                        // distance from this
@@ -335,7 +326,7 @@ public class TrackMaker {
               - Math.atan2(aboveCentre.getY() - currentPoint.getY(),
                   aboveCentre.getX() - currentPoint.getX()));
           float angleNeeded = angle100 - angleToPositiveY;
-          float length = currentPoint.dist(nextPoint);
+          float length = currentPoint.distance(nextPoint);
           float newY = (float) Math.cos(angleNeeded) * length;
           float nexX = (float) Math.sin(angleNeeded) * length;
           nextPoint.setX(currentPoint.getX() + nexX);
@@ -391,7 +382,7 @@ public class TrackMaker {
   public static void seperatePoints(ArrayList<TrackPoint> points, float minDist) {
     for (int i = 0; i < points.size(); i++) { // For each point
       for (int j = i + 1; j < points.size(); j++) { // For each remaining point
-        if (points.get(i).dist(points.get(j)) < minDist) { // If the distance is
+        if (points.get(i).distance(points.get(j)) < minDist) { // If the distance is
                                                            // less than the
                                                            // minimum distance
           float dx = points.get(i).getX() - points.get(j).getX();

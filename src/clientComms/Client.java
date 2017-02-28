@@ -45,6 +45,7 @@ public class Client extends Thread {
     this.machineName = machineName;
     try {
       Socket testConn = new Socket(machineName, portNumber);
+      testConn.close();
     } catch (UnknownHostException e) {
       serverOn = false;
     } catch (IOException e) {

@@ -50,6 +50,7 @@ public class UpgradeCreator {
     if (ans.equals("") || ans.equals("y") || ans.equals("yes") || ans.equals("ok")
         || ans.equals("go"))
       main(null);
+    in.close();
   }
 
   public static void save(String name, String content) {
