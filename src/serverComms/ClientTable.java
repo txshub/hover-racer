@@ -29,10 +29,12 @@ public class ClientTable {
 	 * Adds a user to the table
 	 * @param name The user to add
 	 */
-	public void add(String name, ServerReceiver receiver) {
-		queueTable.put(name, new CommQueue());
+	public void add(String name) {
+		queueTable.put(name, new CommQueue());	
+	}
+	
+	public void addReceiver(String name, ServerReceiver receiver) {
 		receivers.put(name, receiver);
-		
 	}
 	
 	public void remove(String name) {

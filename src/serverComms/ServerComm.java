@@ -35,7 +35,7 @@ public class ServerComm extends Thread {
 	public static final byte MAKEGAME         = Byte.parseByte("9" );
 	public static final byte JOINGAME         = Byte.parseByte("10");
 	public static final byte VALIDGAME        = Byte.parseByte("11");
-	public static final byte INVALIDGAME      = Byte.parseByte("12");
+	public static final byte INVALIDGAME      = Byte.parseByte("12"); 
 	
 	/**
 	 * Creates a Server object
@@ -90,13 +90,14 @@ public class ServerComm extends Thread {
 						writeByteMessage(("Bad Username").getBytes(charset), BADUSER, toClient);
 						if(DEBUG) System.out.println("Sent Bad Username to client");
 					} else { //Valid Username
+						lobby.clientTable.add(name);
 						DataOutputStream toClient = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 						ServerSender sender = new ServerSender(lobby.clientTable.getQueue(name), toClient);
 						sender.start();
 						lobby.clientTable.getQueue(name).offer(new ByteArrayByte(("Valid").getBytes(charset),ACCEPTEDUSER));
 						if(DEBUG) System.out.println("Sent Accepted User to client");
 						ServerReceiver receiver = new ServerReceiver(socket, name, fromClient, lobby);
-						lobby.clientTable.add(name, receiver);
+						lobby.clientTable.addReceiver(name, receiver);
 						receiver.start();
 						ArrayList<GameNameNumber> rooms = new ArrayList<GameNameNumber>();
 						for(GameRoom room : lobby.games) {

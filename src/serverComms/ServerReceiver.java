@@ -8,7 +8,6 @@ public class ServerReceiver extends Thread {
 	private DetectTimeout detect;
 	private String clientName;
 	private DataInputStream client;
-	private ClientTable table;
 	private Lobby lobby;
 	private GameRoom gameRoom = null;
 	private int gameNum = -1;
@@ -21,7 +20,7 @@ public class ServerReceiver extends Thread {
 	
 	public void run() {
 		try {
-			detect = new DetectTimeout(table, clientName);
+			detect = new DetectTimeout(lobby.clientTable, clientName);
 			while(true) {
 				int in = client.readInt();
 				byte[] messageIn = new byte[in];
@@ -36,7 +35,7 @@ public class ServerReceiver extends Thread {
 				if (fullMsg.getType()==ServerComm.BADPACKET) {
 					System.out.println("Got Bad Packet, ignoring it");
 					System.out.println(in + messageIn.toString());
-					table.getQueue(clientName).offer(new ByteArrayByte(("Socket Closed").getBytes(), ServerComm.BADPACKET));
+					lobby.clientTable.getQueue(clientName).offer(new ByteArrayByte(("Socket Closed").getBytes(), ServerComm.BADPACKET));
 				} else if(fullMsg.getType()==ServerComm.CLIENTDISCONNECT) {
 					lobby.remove(clientName);
 				} else if(fullMsg.getType()==ServerComm.USERSENDING) {
@@ -58,7 +57,7 @@ public class ServerReceiver extends Thread {
 				} else {
 					System.out.println("Unknown Message Type: " + fullMsg.getType());
 				}
-				detect = new DetectTimeout(table, clientName);
+				detect = new DetectTimeout(lobby.clientTable, clientName);
 				detect.start();
 			}
 		} catch (IOException e) {
