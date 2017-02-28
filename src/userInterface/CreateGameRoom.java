@@ -60,9 +60,9 @@ public class CreateGameRoom extends GridPane {
 			
 		});
 		
-		MenuButton hostGameRoom = new MenuButton("START GAME");
+		MenuButton createGameRoom = new MenuButton("START GAME");
 		
-		hostGameRoom.setOnMouseClicked(event -> {
+		createGameRoom.setOnMouseClicked(event -> {
 			
 			//create a game room
 			MainGameLoop.main(null);
@@ -85,14 +85,14 @@ public class CreateGameRoom extends GridPane {
 		add(box6, 0, 5);
 		
 		add(generateTrack, 1, 5);
-		add(hostGameRoom, 1, 6);
+		add(createGameRoom, 1, 6);
 		
 		GridPane.setMargin(nameText, new Insets(0,0,10,0));
 		GridPane.setMargin(seedText, new Insets(0,0,10,0));
 		GridPane.setMargin(noAIsText, new Insets(0,0,10,0));
 		GridPane.setMargin(noLapsText, new Insets(0,0,10,0));
 		GridPane.setMargin(generateTrack, new Insets(0,0,10,0));
-		GridPane.setMargin(hostGameRoom, new Insets(0,0,10,0));
+		GridPane.setMargin(createGameRoom, new Insets(0,0,10,0));
 		
 	}
 
