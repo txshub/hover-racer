@@ -4,12 +4,16 @@ import java.awt.GraphicsEnvironment;
 
 import org.lwjgl.input.Keyboard;
 
+import gameEngine.renderEngine.DisplayManager;
+
 /** @author Reece Bennett */
 public class MainGameLoop {
 
 
 	public void main() {
 		Game game = new Game();
+		
+		boolean debug = true;
 
 
 		// Set the FPS and UPS caps
@@ -61,12 +65,13 @@ public class MainGameLoop {
 
 			// Log the ups and fps to the window title every 1000ms
 			if (System.currentTimeMillis() > timer + 1000) {
-				// System.out.println("Hover Racer - ups: " + ups + " | fps: " +
-				// fps);
+				// if (debug) System.out.println("Hover Racer - ups: " + ups + " | fps: " + fps);
+			  if (debug) DisplayManager.changeTitle("Hover Racer - ups: " + ups + " | fps: " + fps);
 				timer += 1000;
 				fps = 0;
 				ups = 0;
 			}
+			
 			if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 				break;
 			}

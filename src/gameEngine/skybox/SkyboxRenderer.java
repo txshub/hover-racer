@@ -10,6 +10,7 @@ import gameEngine.entities.Camera;
 import gameEngine.models.RawModel;
 import gameEngine.renderEngine.DisplayManager;
 import gameEngine.renderEngine.Loader;
+import gameEngine.renderEngine.MasterRenderer;
 
 /**
  * @author rtm592
@@ -17,7 +18,7 @@ import gameEngine.renderEngine.Loader;
  */
 public class SkyboxRenderer {
 
-	private static final float SIZE = 3000f;
+	public static final float SIZE = 6000f;
 
 	private static final float[] VERTICES = { -SIZE, SIZE, -SIZE, -SIZE, -SIZE, -SIZE, SIZE, -SIZE, -SIZE, SIZE, -SIZE,
 			-SIZE, SIZE, SIZE, -SIZE, -SIZE, SIZE, -SIZE,
@@ -41,8 +42,8 @@ public class SkyboxRenderer {
 	private static String[] TEXTURE_FILES = { head + "_rt", head + "_lf", head + "_up", head + "_dn", head + "_bk",
 			head + "_ft" };
 	private static String head1 = "night";
-	private static String[] NIGHT_TEXTURE_FILES = { head1 + "_rt", head1 + "_lf", head1 + "_up", head1 + "_dn", head1 + "_bk",
-			head1 + "_ft" };
+	private static String[] NIGHT_TEXTURE_FILES = { head1 + "_rt", head1 + "_lf", head1 + "_up", head1 + "_dn",
+			head1 + "_bk", head1 + "_ft" };
 
 	private RawModel cube;
 	private int texture;
@@ -75,32 +76,43 @@ public class SkyboxRenderer {
 		GL30.glBindVertexArray(0);
 		shader.stop();
 	}
-	
-	private void bindTextures(){
+
+	private void bindTextures() {
 		time = DisplayManager.getMilliSecondTimer() % 24000;
 		int texture1;
 		int texture2;
-		float blendFactor;		
+		float blendFactor;
 		int time1 = 5000;
 		int time2 = 8000;
 		int time3 = 21000;
 		int time4 = 24000;
-		if(time >= 0 && time < time1){
+		MasterRenderer.RED = 0f;
+		float greenDiff = 204f / 255f, blueDiff = 1f - 153f / 255f;
+
+		if (time >= 0 && time < time1) {
 			texture1 = nightTexture;
 			texture2 = nightTexture;
-			blendFactor = (time - 0)/(time1 - 0);
-		}else if(time >= time1 && time < time2){
+			blendFactor = (time - 0) / (time1 - 0);
+			MasterRenderer.GREEN = 0f;
+			MasterRenderer.BLUE = 153f / 255f;
+		} else if (time >= time1 && time < time2) {
 			texture1 = nightTexture;
 			texture2 = texture;
-			blendFactor = (time - time1)/(time2 - time1);
-		}else if(time >= time2 && time < time3){
+			blendFactor = (time - time1) / (time2 - time1);
+			MasterRenderer.GREEN = 0 + greenDiff * blendFactor;
+			MasterRenderer.BLUE = 153f / 255f + blueDiff * blendFactor;
+		} else if (time >= time2 && time < time3) {
 			texture1 = texture;
 			texture2 = texture;
-			blendFactor = (time - time2)/(time3 - time2);
-		}else{
+			MasterRenderer.GREEN = 0 + greenDiff;
+			MasterRenderer.BLUE = 153f / 255f + blueDiff;
+			blendFactor = (time - time2) / (time3 - time2);
+		} else {
 			texture1 = texture;
 			texture2 = nightTexture;
-			blendFactor = (time - time3)/(time4 - time3);
+			blendFactor = (time - time3) / (time4 - time3);
+			MasterRenderer.GREEN = greenDiff - greenDiff * blendFactor;
+			MasterRenderer.BLUE = 1f - blueDiff * blendFactor;
 		}
 
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
@@ -111,23 +123,3 @@ public class SkyboxRenderer {
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

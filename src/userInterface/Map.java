@@ -17,6 +17,11 @@ import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
 
+/**
+ * 
+ * @author Andreea Gheorghe
+ *
+ */
 public class Map extends Application{
 
 	private ArrayList<TrackPoint> track;

@@ -11,13 +11,14 @@ import org.lwjgl.util.vector.Vector3f;
 
 import gameEngine.models.RawModel;
 import gameEngine.renderEngine.Loader;
+import gameEngine.skybox.SkyboxRenderer;
 import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.Maths;
 
 public class Terrain {
 
-	public static final float SIZE = 4092f;
+	public static final float SIZE = 3*SkyboxRenderer.SIZE;
 	private static final float MAX_HEIGHT = 40;
 	private static final float MAX_PIXEL_COLOUR = 256 * 256 * 256;
 
@@ -33,8 +34,8 @@ public class Terrain {
 			TerrainTexture blendMap, String heightMap) {
 		this.texturePack = texturePack;
 		this.blendMap = blendMap;
-		this.x = gridX * SIZE;
-		this.z = gridZ * SIZE;
+		this.x = gridX;
+		this.z = gridZ;
 		this.model = generateTerrain(loader, heightMap);
 	}
 
@@ -44,6 +45,22 @@ public class Terrain {
 
 	public float getZ() {
 		return z;
+	}
+
+	public void setX(float x) {
+		this.x = x;
+	}
+
+	public void setZ(float z) {
+		this.z = z;
+	}
+
+	public void moveX(float x) {
+		this.x += x;
+	}
+
+	public void moveZ(float z) {
+		this.z += z;
 	}
 
 	public RawModel getModel() {

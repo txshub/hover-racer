@@ -13,6 +13,13 @@ import trackDesign.catmullrom.SplineUtils;
  */
 public class TrackMaker {
 	
+	public static SeedTrack makeStraightTrack(float length) {
+		ArrayList<TrackPoint> out = new ArrayList<TrackPoint>();
+		out.add(new TrackPoint(0,0));
+		out.add(new TrackPoint(0,length));
+		return new SeedTrack(0, out);
+	}
+	
 	/**
 	 * Makes the track
 	 * @param minTrackPoints Minimum number of points for the initial point generation
@@ -42,6 +49,7 @@ public class TrackMaker {
 	 * @return A track in the form of an arraylist of points
 	 */
 	public static SeedTrack makeTrack(long seed, int minTrackPoints, int maxTrackPoints, float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs) {
+		if(seed==0) return makeStraightTrack(250);
 		Random random = new Random(seed); //Make the random object
 		ArrayList<TrackPoint> points = new ArrayList<TrackPoint>();
 		ArrayList<TrackPoint> hullPoints = new ArrayList<TrackPoint>();

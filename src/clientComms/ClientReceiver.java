@@ -1,8 +1,10 @@
 package clientComms;
 import java.io.*;
+import java.util.ArrayList;
 
 import serverComms.ByteArrayByte;
-import serverComms.Server;
+import serverComms.GameNameNumber;
+import serverComms.ServerComm;
 
 /**
  * Thread to receive any messages passed from the server
@@ -37,13 +39,25 @@ public class ClientReceiver extends Thread {
 					throw new IOException("Got null from the server");
 				}
 				ByteArrayByte fullMsg = new ByteArrayByte(msg);
-				if(fullMsg.getType()==Server.badUserTag) {
+				if(fullMsg.getType()==ServerComm.BADUSER) {
 					System.out.println("Username not valid, please pick another");
 					System.exit(1);
-				} else if(fullMsg.getType()==Server.acceptedUserTag) {
+				} else if(fullMsg.getType()==ServerComm.ACCEPTEDUSER) {
 					System.out.println("Username valid. Now connected to the server");
-				} else if(fullMsg.getType()==Server.badPacket) {
+				} else if(fullMsg.getType()==ServerComm.BADPACKET) {
 					System.out.println("Need To Reconnect");
+				} else if(fullMsg.getType()==ServerComm.SENDALLGAMES) {
+					String[] allGames = (new String(fullMsg.getMsg(), ServerComm.charset)).split(System.lineSeparator());
+					ArrayList<GameNameNumber> gameList = new ArrayList<GameNameNumber>();
+					for(String s : allGames) {
+						gameList.add(new GameNameNumber(s));
+					}
+					//What to do with arraylist of games/number?
+				} else if(fullMsg.getType()==ServerComm.INVALIDGAME) {
+					//What to do if game doesn't exist?
+				} else if(fullMsg.getType()==ServerComm.VALIDGAME) {
+					long seed = Long.valueOf(new String(fullMsg.getMsg(), ServerComm.charset));
+					//What to do with seed?
 				}
 			}
 		} catch (IOException e) {

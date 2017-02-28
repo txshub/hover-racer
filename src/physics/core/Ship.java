@@ -74,7 +74,9 @@ public abstract class Ship extends Entity {
 		this.rotationalVelocity = new Vector3(0, 0, 0);
 		this.ground = ground;
 		this.otherShips = new ArrayList<Ship>();
+
 		this.started = false;
+
 	}
 
 	public void addOtherShips(Collection<Ship> ships) {

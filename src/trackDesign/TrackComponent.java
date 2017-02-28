@@ -32,9 +32,10 @@ public class TrackComponent extends JComponent {
 	 */
 	public TrackComponent() {
 		super();
-		SeedTrack st = TrackMaker.makeTrack(10, 20, 30, 1,30, 40, 10); // Generate a random track
+		SeedTrack st = TrackMaker.makeTrack(100, 1000, 10, 50, 0, 50, 10); // Generate a random track
 		track = st.getTrack();
 		seed = st.getSeed();
+		System.out.println("TrackComponent.TrackComponent(), "+ seed);
 		track2 = TrackMaker.makeTrack(seed, 10, 20, 30, 1,30, 40, 1).getTrack();
 	}
 	
