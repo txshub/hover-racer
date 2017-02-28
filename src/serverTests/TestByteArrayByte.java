@@ -2,6 +2,8 @@ package serverTests;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+
 import org.junit.Test;
 
 import serverComms.ByteArrayByte;
@@ -14,7 +16,7 @@ public class TestByteArrayByte {
 		byte type = ServerComm.STATUS;
 		byte[] msg = ("JUnit Test").getBytes(ServerComm.charset);
 		ByteArrayByte test = new ByteArrayByte(msg, type);
-		if(test.getMsg() != msg) fail("Messages don't match");
+		if(!Arrays.equals(msg, test.getMsg())) fail("Messages don't match");
 		if(test.getType() != type) fail("Types don't match");
 	}
 
@@ -28,7 +30,7 @@ public class TestByteArrayByte {
 			out[i+1] = msg[i];
 		}
 		ByteArrayByte test = new ByteArrayByte(out);
-		if(test.getMsg() != msg) fail("Messages don't match");
+		if(!Arrays.equals(msg, test.getMsg())) fail("Messages don't match");
 		if(test.getType() != type) fail("Types don't match"); 
 	}
 
@@ -37,7 +39,7 @@ public class TestByteArrayByte {
 		byte type = ServerComm.BADPACKET;
 		byte[] msg = ("JUnit Test").getBytes(ServerComm.charset);
 		ByteArrayByte test = new ByteArrayByte(msg, type);
-		if(test.getMsg() != msg) fail("Messages don't match");
+		if(!Arrays.equals(msg, test.getMsg())) fail("Messages don't match");
 	}
 
 	@Test

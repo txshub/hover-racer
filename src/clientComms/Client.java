@@ -30,6 +30,13 @@ public class Client extends Thread {
 		this.clientName = clientName;
 		this.portNumber = portNumber;
 		this.machineName = machineName;
+		try {
+			Socket testConn = new Socket(machineName, portNumber);
+		} catch (UnknownHostException e) {
+			serverOn = false;
+		} catch (IOException e) {
+			serverOn = false;
+		}
 	}
 	
 	@Override
