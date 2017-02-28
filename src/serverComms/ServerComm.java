@@ -90,13 +90,14 @@ public class ServerComm extends Thread {
 						writeByteMessage(("Bad Username").getBytes(charset), BADUSER, toClient);
 						if(DEBUG) System.out.println("Sent Bad Username to client");
 					} else { //Valid Username
-						lobby.clientTable.add(name);
 						DataOutputStream toClient = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 						ServerSender sender = new ServerSender(lobby.clientTable.getQueue(name), toClient);
 						sender.start();
 						lobby.clientTable.getQueue(name).offer(new ByteArrayByte(("Valid").getBytes(charset),ACCEPTEDUSER));
 						if(DEBUG) System.out.println("Sent Accepted User to client");
-						(new ServerReceiver(socket, name, fromClient, lobby)).start();
+						ServerReceiver receiver = new ServerReceiver(socket, name, fromClient, lobby);
+						lobby.clientTable.add(name, receiver);
+						receiver.start();
 						ArrayList<GameNameNumber> rooms = new ArrayList<GameNameNumber>();
 						for(GameRoom room : lobby.games) {
 							rooms.add(new GameNameNumber(room.name, room.id));

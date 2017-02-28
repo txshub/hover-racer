@@ -14,5 +14,6 @@ public class TestClient {
 		System.out.println("Test");
 		Client client = new Client("Bob", 4444, "localhost");
 		client.start();
+		
 	}
 }
