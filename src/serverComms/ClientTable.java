@@ -8,6 +8,7 @@ import java.util.*;
 public class ClientTable {
 
 	private Map<String,CommQueue> queueTable = new TreeMap<String,CommQueue>(); //The CommQueue for each user
+	private Map<String,ServerReceiver> receivers = new TreeMap<String,ServerReceiver>(); //The relevant receiver on the server
 	private Map<String,Integer> games = new TreeMap<String,Integer>(); //Users connected to which lobbies
 	private Map<Integer,GameRoom> allGames = new TreeMap<Integer,GameRoom>(); //GameRooms and their respective IDs
 	private int nextInt = 0;
@@ -28,8 +29,9 @@ public class ClientTable {
 	 * Adds a user to the table
 	 * @param name The user to add
 	 */
-	public void add(String name) {
+	public void add(String name, ServerReceiver receiver) {
 		queueTable.put(name, new CommQueue());
+		receivers.put(name, receiver);
 		
 	}
 	
@@ -46,6 +48,10 @@ public class ClientTable {
 	 */
 	public CommQueue getQueue(String name) {
 		return queueTable.get(name);
+	}
+	
+	public ServerReceiver getReceiver(String name) {
+		return receivers.get(name);
 	}
 
 	public Map<String, CommQueue> getQueues() {
@@ -66,13 +72,14 @@ public class ClientTable {
 	
 
 	public void addGame(GameSettings gameSettings) {
-		allGames.put(nextInt, new GameRoom(nextInt, gameSettings.name, gameSettings.seed, gameSettings.maxPlayers, gameSettings.numAI));
+		allGames.put(nextInt, new GameRoom(nextInt, gameSettings.lobbyName, gameSettings.seed, gameSettings.maxPlayers, gameSettings.numAI, gameSettings.hostName, this));
 		nextInt++;
 	}
 
 	public boolean joinGame(String clientName, int gameNum) {
 		if(allGames.get(gameNum)==null) return false; //Show that no game exists
 		games.put(clientName, gameNum);
+		allGames.get(gameNum).addPlayer(clientName);
 		return true;
 		
 	}

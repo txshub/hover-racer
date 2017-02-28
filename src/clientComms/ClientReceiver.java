@@ -2,9 +2,7 @@ package clientComms;
 import java.io.*;
 import java.util.ArrayList;
 
-import serverComms.ByteArrayByte;
-import serverComms.GameNameNumber;
-import serverComms.ServerComm;
+import serverComms.*;
 
 /**
  * Thread to receive any messages passed from the server
@@ -56,8 +54,8 @@ public class ClientReceiver extends Thread {
 				} else if(fullMsg.getType()==ServerComm.INVALIDGAME) {
 					//What to do if game doesn't exist?
 				} else if(fullMsg.getType()==ServerComm.VALIDGAME) {
-					long seed = Long.valueOf(new String(fullMsg.getMsg(), ServerComm.charset));
-					//What to do with seed?
+					SeedPlayers sp = new SeedPlayers(new String(fullMsg.getMsg(), ServerComm.charset));
+					//What to do with seed & players?
 				}
 			}
 		} catch (IOException e) {

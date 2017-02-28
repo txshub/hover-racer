@@ -17,20 +17,18 @@ public class InputController {
 	public static final String SETTINGS_PATH = "src/data/settings/" + "keySettings" + ".json";
 
 
-
-	private HashMap<Integer, Action> mapping; // Maps key codes to actions (can
-												// be
-												// changed via changeKey)
-	private transient HashMap<Action, Boolean> keyStatus;
+	private HashMap<Integer, Action> mapping;
+	private HashMap<Action, Boolean> keyStatus;
+	private HashMap<Action, Boolean> prevStatus;
 
 	public InputController() {
 		mapping = getDefaultSettings();
-		// load();
 		keyStatus = new HashMap<Action, Boolean>();
+		prevStatus = new HashMap<Action, Boolean>();
 	}
 
 	private HashMap<Integer, Action> getDefaultSettings() {
-		HashMap<Integer, Action> res = new HashMap<Integer, Action>();
+		HashMap<Integer, Action> res = new HashMap<>();
 		res.put(Keyboard.KEY_W, Action.FORWARD); // w
 		res.put(Keyboard.KEY_S, Action.BREAK); // s
 		res.put(Keyboard.KEY_A, Action.STRAFE_LEFT); // a
@@ -55,9 +53,6 @@ public class InputController {
 		save();
 	}
 
-	public void run() {
-		mapping.keySet().forEach(key -> keyStatus.put(mapping.get(key), Keyboard.isKeyDown(key)));
-	}
 
 	private void load() {
 		try {
@@ -84,19 +79,40 @@ public class InputController {
 			System.err.println("Failed to write to file");
 		}
 	}
-
-	public boolean checkAction(Action action) {
-		if (action == null) {
-			return false;
-		}
-		if (keyStatus.containsKey(action)) {
-			boolean check = keyStatus.get(action);
-			if (check) {
-				keyStatus.put(action, false);
+	/** Updates the keyStatus and prevStatus maps with new key information. */
+	public void update() {
+		// mapping.keySet().forEach(key -> keyStatus.put(mapping.get(key), Keyboard.isKeyDown(key)));
+		for (Integer key : mapping.keySet()) {
+			prevStatus.put(mapping.get(key), keyStatus.get(mapping.get(key)));
+			if (Keyboard.isKeyDown(key)) {
+				keyStatus.put(mapping.get(key), true);
+			} else {
+				keyStatus.put(mapping.get(key), false);
 			}
-			return check;
 		}
+	}
 
+	/** Checks whether the key for an action is currently being held.
+	 * 
+	 * @param action the action to check for
+	 * @return True or False
+	 * @author Reece Bennett */
+	public boolean isDown(Action action) {
+		if (action != null && keyStatus.containsKey(action)) {
+			return keyStatus.get(action);
+		}
+		return false;
+	}
+
+	/** Checks whether the key for an action was pressed this frame.
+	 * 
+	 * @param action what action to check for
+	 * @return True or False
+	 * @author Reece Bennett */
+	public boolean wasPressed(Action action) {
+		if (action != null && keyStatus.containsKey(action)) {
+			return keyStatus.get(action) && !prevStatus.get(action);
+		}
 		return false;
 	}
 

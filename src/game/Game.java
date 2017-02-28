@@ -58,6 +58,7 @@ public class Game {
 	// Mac's additions
 	private MultiplayerShipManager ships;
 
+
 	private boolean running;
 
 	public Game() {
@@ -85,6 +86,7 @@ public class Game {
 		// TerrainTexture(loader.loadTexture("blendMap"));
 
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("new/GridTexture"));
+
 
 		terrains = new ArrayList<Terrain>();
 		terrains.add(new Terrain((int) (-SkyboxRenderer.SIZE * 2f), (int) (-SkyboxRenderer.SIZE * 2f), loader, texturePack, blendMap,
@@ -116,10 +118,11 @@ public class Game {
 		ships = new MultiplayerShipManager((byte) 0, input, playerTModel, shipTextures, startingPositions, new FlatGroundProvider(0));
 		ships.addShipsTo(entities);
 		player = ships.getPlayerShip();
+		// new Vector3f(st.getTrack().get(0).x * track.getScale(), 10,st.getTrack().get(0).y * track.getScale()
 
 
 		// Player following camera
-		camera = new Camera(ships.getPlayerShip());
+		camera = new Camera(player);
 
 		// Renderers
 		renderer = new MasterRenderer(loader);
@@ -134,19 +137,21 @@ public class Game {
 	}
 
 	public void update(double delta) {
-		input.run();
+		input.update();
+
 
 		// Check if the escape key was pressed to exit the game
-		if (input.checkAction(Action.EXIT)) running = false;
+		if (input.isDown(Action.EXIT)) running = false;
+
 
 		// Check for audio controls
 		/** @author Tudor */
-		if (input.checkAction(Action.MUSIC_UP)) AudioMaster.increaseMusicVolume();
-		// if (input.checkAction(Action.MUSIC_DOWN))
-		AudioMaster.decreaseMusicVolume();
-		if (input.checkAction(Action.MUSIC_SKIP)) AudioMaster.skipInGameMusic();
-		if (input.checkAction(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
-		if (input.checkAction(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
+		if (input.wasPressed(Action.MUSIC_UP)) AudioMaster.increaseMusicVolume();
+		if (input.wasPressed(Action.MUSIC_DOWN)) AudioMaster.decreaseMusicVolume();
+		if (input.wasPressed(Action.MUSIC_SKIP)) AudioMaster.skipInGameMusic();
+		if (input.wasPressed(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
+		if (input.wasPressed(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
+
 
 		ships.updateShips((float) delta);
 		camera.move();
@@ -166,19 +171,19 @@ public class Game {
 		// picker.update();
 	}
 
+
 	public void render() {
 		GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 		renderer.renderScene(entities, normalEntities, terrains, lights, camera, new Vector4f());
 		GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
 		DisplayManager.updateDisplay();
-		sortLights(lights, ships.getPlayerShip().getPosition());
+		sortLights(lights, player.getPosition());
 	}
 
 	public void cleanUp() {
 		guiRender.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
-		InputController.close = true;
 		AudioMaster.cleanUp();
 		DisplayManager.closeDisplay();
 	}
@@ -245,6 +250,7 @@ public class Game {
 
 				// System.out.println("Cur: " + curPoint + " Next: " + nextPoint
 				// + " " + (nextPoint.getX() - curPoint.getX()));
+
 
 				Vector2f dirFromPrev = new Vector2f(curPoint.getX() - prevPoint.getX(), curPoint.getY() - prevPoint.getY());
 
@@ -349,6 +355,7 @@ public class Game {
 				indices[(i - 1) * 24 + 18] = k - 1;
 				indices[(i - 1) * 24 + 19] = 0 + 3;
 				indices[(i - 1) * 24 + 20] = k - 2;
+
 
 				indices[(i - 1) * 24 + 21] = k - 1;
 				indices[(i - 1) * 24 + 22] = 0 + 4;

@@ -122,18 +122,18 @@ public class MultiplayerGame {
 	}
 
 	public void update(double delta) {
-		input.run();
+		input.update();
 
 		// Check if the escape key was pressed to exit the game
-		if (input.checkAction(Action.EXIT)) running = false;
+		if (input.isDown(Action.EXIT)) running = false;
 
 		// Check for audio controls
 		/** @author Tudor */
-		if (input.checkAction(Action.MUSIC_UP)) AudioMaster.increaseMusicVolume();
-		if (input.checkAction(Action.MUSIC_DOWN)) AudioMaster.decreaseMusicVolume();
-		if (input.checkAction(Action.MUSIC_SKIP)) AudioMaster.skipInGameMusic();
-		if (input.checkAction(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
-		if (input.checkAction(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
+		if (input.wasPressed(Action.MUSIC_UP)) AudioMaster.increaseMusicVolume();
+		if (input.wasPressed(Action.MUSIC_DOWN)) AudioMaster.decreaseMusicVolume();
+		if (input.wasPressed(Action.MUSIC_SKIP)) AudioMaster.skipInGameMusic();
+		if (input.wasPressed(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
+		if (input.wasPressed(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
 
 		if (System.nanoTime() > startsAt) ships.getPlayerShip().start();
 		ships.updateShips((float) delta);

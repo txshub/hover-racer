@@ -6,15 +6,17 @@ public class GameSettings {
 	final int maxPlayers;
 	final int numAI;
 	final int lapCount;
-	final String name;
+	final String lobbyName;
+	final String hostName;
 	
-	public GameSettings(long seed, int maxPlayers, int numAI, int lapCount, String name) throws IllegalArgumentException {
+	public GameSettings(long seed, int maxPlayers, int numAI, int lapCount, String lobbyName, String hostName) throws IllegalArgumentException {
 		this.seed = seed;
 		this.maxPlayers = maxPlayers;
 		this.numAI = numAI;
-		this.name = name;
+		this.lobbyName = lobbyName;
 		this.lapCount = lapCount;
-		if(name.contains(System.lineSeparator())) throw new IllegalArgumentException("Name shouldn't contain new line symbol");
+		this.hostName = hostName;
+		if(lobbyName.contains(System.lineSeparator())) throw new IllegalArgumentException("Name shouldn't contain new line symbol");
 	}
 	
 	public GameSettings(String in) {
@@ -45,11 +47,18 @@ public class GameSettings {
 			in = in.substring(1);
 		}
 		lapCount = Integer.valueOf(collected);
-		name = in.substring(1);
+		in = in.substring(1);
+		collected = "";
+		while(in.charAt(0)!='|') {
+			collected += in.charAt(0);
+			in = in.substring(1);
+		}
+		lobbyName = collected;
+		hostName = in.substring(1);
 	}
 	
 	public String toString() {
-		return seed + "|" + maxPlayers + "|" + numAI + "|" + lapCount + "|" + name;
+		return seed + "|" + maxPlayers + "|" + numAI + "|" + lapCount + "|" + lobbyName + "|" + hostName;
 	}
 	
 	public byte[] toByteArray() {
