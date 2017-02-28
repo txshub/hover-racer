@@ -111,14 +111,14 @@ public class Game {
 		ArrayList<TexturedModel> shipTextures = new ArrayList<TexturedModel>();
 		shipTextures.add(playerTModel);
 		ArrayList<Vector3f> startingPositions = new ArrayList<Vector3f>();
-		startingPositions.add(new Vector3f(40, 40, 40));
-		startingPositions.add(new Vector3f(20, 20, 20));
+		startingPositions.add(new Vector3f(st.getTrack().get(0).x * track.getScale(), 10, st.getTrack().get(0).y * track.getScale()));
+		startingPositions.add(new Vector3f(st.getTrack().get(0).x * track.getScale() + 20, 10, st.getTrack().get(0).y * track.getScale()));
 
 		// Create ships
 		ships = new MultiplayerShipManager((byte) 0, input, playerTModel, shipTextures, startingPositions, new FlatGroundProvider(0));
 		ships.addShipsTo(entities);
 		player = ships.getPlayerShip();
-		// new Vector3f(st.getTrack().get(0).x * track.getScale(), 10,st.getTrack().get(0).y * track.getScale()
+		//
 
 
 		// Player following camera
