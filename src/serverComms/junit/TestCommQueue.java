@@ -14,7 +14,7 @@ public class TestCommQueue {
 	public void testQueue() {
 		CommQueue queue = new CommQueue();
 		byte[] message = ("Test").getBytes(ServerComm.charset);
-		ByteArrayByte msg = new ByteArrayByte(message, ServerComm.STATUS);
+		ByteArrayByte msg = new ByteArrayByte(message, ServerComm.TESTCONN);
 		queue.offer(msg);
 		ByteArrayByte out = queue.take();
 		if(out!=msg) fail("Message wasn't the same one put in");
