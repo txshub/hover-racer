@@ -20,26 +20,27 @@ public class CreateGameRoom extends GridPane {
 	public CreateGameRoom(){
 		
 		this.setAlignment(Pos.CENTER);
-        this.setHgap(10);
-        this.setVgap(10);
-     //   this.setPadding(new Insets(30, 10, 10, 10));
+        this.setHgap(30);
+        this.setVgap(3);
+        this.setPadding(new Insets(20, 10, 0, 10));
 		
 		VBox box6 = new VBox(10);
-		GridPane.setRowSpan(box6, 3);
+		GridPane.setRowSpan(box6, 2);
+		box6.setAlignment(Pos.CENTER);
 		
-		TextStyle username = new TextStyle ("CHOOSE A USERNAME", 20);
+		TextStyle username = new TextStyle ("CHOOSE A USERNAME", 25);
 		Text usernameText = username.getTextStyled();
 		
-		TextStyle name = new TextStyle ("CHOOSE A GAME NAME", 20);
+		TextStyle name = new TextStyle ("CHOOSE A GAME NAME", 25);
 		Text nameText = name.getTextStyled();
 		
-		TextStyle seed = new TextStyle("CHOOSE A SEED", 20);
+		TextStyle seed = new TextStyle("CHOOSE A SEED", 25);
 		Text seedText = seed.getTextStyled();
 		
-		TextStyle noAIs = new TextStyle("CHOOSE THE NUMBER OF AI'S", 20);
+		TextStyle noAIs = new TextStyle("CHOOSE THE NUMBER OF AI'S", 25);
 		Text noAIsText = noAIs.getTextStyled();
 		
-		TextStyle noLaps = new TextStyle("CHOOSE THE NUMBER OF LAPS", 20);
+		TextStyle noLaps = new TextStyle("CHOOSE THE NUMBER OF LAPS", 25);
 		Text noLapsText = noLaps.getTextStyled();
 		
 		TextField usernameInput = new TextField();
@@ -49,7 +50,7 @@ public class CreateGameRoom extends GridPane {
 		TextField noLapsInput = new TextField();
 			
 		
-		MenuButton generateTrack = new MenuButton("GENERATE THIS TRACK");
+		MenuButton generateTrack = new MenuButton("PREVIEW THIS TRACK");
 		
 		generateTrack.setOnMouseClicked(event -> {
 		
@@ -75,32 +76,31 @@ public class CreateGameRoom extends GridPane {
 		});
 		
 		add(usernameText,0,1);
-		add(usernameInput,1,1);
+		add(usernameInput,0,2);
 		
-		add(nameText,0,2);
+		add(nameText,1,1);
 		add(nameInput,1,2);
 		
 		add(seedText,0,3);
-		add(seedInput,1,3);
+		add(seedInput,0,4);
 		
-		add(noAIsText, 0, 4);
+		add(noAIsText, 1, 3);
 		add(noAIsInput,1, 4);
 		
 		add(noLapsText, 0, 5);
-		add(noLapsInput,1, 5);
+		add(noLapsInput,0, 6);
 		
-		add(box6, 0, 6);
+		add(box6, 1, 6);
 		
-		add(generateTrack, 1, 6);
-		add(createGameRoom, 1, 7);
+		add(generateTrack, 0, 8);
+		add(createGameRoom, 1, 8);
 		
-		GridPane.setMargin(usernameText, new Insets(0,0,10,0));
-		GridPane.setMargin(nameText, new Insets(0,0,10,0));
-		GridPane.setMargin(seedText, new Insets(0,0,10,0));
-		GridPane.setMargin(noAIsText, new Insets(0,0,10,0));
-		GridPane.setMargin(noLapsText, new Insets(0,0,10,0));
-		GridPane.setMargin(generateTrack, new Insets(0,0,10,0));
-		GridPane.setMargin(createGameRoom, new Insets(0,0,10,0));
+		GridPane.setMargin(usernameInput, new Insets(0,0,20,0));
+		GridPane.setMargin(nameInput, new Insets(0,0,20,0));
+		GridPane.setMargin(seedInput, new Insets(0,0,20,0));
+		GridPane.setMargin(noAIsInput, new Insets(0,0,20,0));
+		GridPane.setMargin(generateTrack, new Insets(0,0,20,0));
+		GridPane.setMargin(createGameRoom, new Insets(0,0,20,0));
 		
 	}
 

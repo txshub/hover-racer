@@ -39,8 +39,8 @@ public class Map extends Canvas {
 		
 		this.seed= seed ;
 		
-		this.setWidth(200);
-		this.setHeight(200);
+		this.setWidth(150);
+		this.setHeight(150);
 		
 		GraphicsContext gc = this.getGraphicsContext2D();
         drawShapes(gc);

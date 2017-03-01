@@ -1,8 +1,4 @@
 package userInterface;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import audioEngine.AudioMaster;
@@ -11,6 +7,7 @@ import serverComms.ServerComm;
 import serverComms.GameNameNumber;
 import serverComms.Lobby;
 import javafx.animation.TranslateTransition;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
@@ -27,8 +24,8 @@ import javafx.util.Duration;
  */
 public class GameMenu extends Parent {
 	
-	GridPane initialWindow, settingsWindow; 
-	VBox soundWindow, connectMultiWindow, multiOptionsWindow, hostGameRoomWindow, singleGameWindow;
+	GridPane initialWindow, settingsWindow, connectMultiWindow; 
+	VBox  multiOptionsWindow, hostGameRoomWindow, singleGameWindow;
 	MenuButton btnPlayGame, btnPlayAI, btnOptions, btnSound, btnMusic, btnExit, btnBackSettings, btnBackMulti, btnBackSingle, btnBack4, btnBack5, btnBack6;
 	SoundSlider soundSlider;
 	MusicSlider musicSlider;
@@ -41,10 +38,10 @@ public class GameMenu extends Parent {
 		
 		initialWindow = new GridPane();
 		settingsWindow = new GridPane();
-		connectMultiWindow = new VBox(10);
+		connectMultiWindow = new GridPane();
 		multiOptionsWindow = new VBox(20);
 		hostGameRoomWindow = new VBox(10);
-		singleGameWindow = new VBox(20);
+		singleGameWindow = new VBox(5);
 		
 		//initial window
 		initialWindow.setTranslateX(100);
@@ -78,8 +75,12 @@ public class GameMenu extends Parent {
 		
 		//connect multiplayer
 		connectMultiWindow.setTranslateX(700);
-		connectMultiWindow.setTranslateY(80);
-		
+		connectMultiWindow.setTranslateY(120);
+		connectMultiWindow.setAlignment(Pos.CENTER);
+        connectMultiWindow.setHgap(10);
+        connectMultiWindow.setVgap(10);
+        connectMultiWindow.setPadding(new Insets(0,30,0,30));
+       
 		//connect multiplayer options
 		multiOptionsWindow.setTranslateX(700);
 		multiOptionsWindow.setTranslateY(200);
@@ -228,38 +229,21 @@ public class GameMenu extends Parent {
 		hostGameRoom = new HostGameRoom();
 		createGameRoom = new CreateGameRoom();
 				
-		VBox box1Multi = new VBox(10);
-		box1Multi.setPadding(new Insets(0, 0, 5, 0));
 		
-		VBox box2Multi = new VBox(10);
-		box2Multi.setPadding(new Insets(0, 0, 5, 0));
-		
-		VBox box3Multi = new VBox(10);
-		box3Multi.setPadding(new Insets(0, 0, 5, 0));
-		
-		TextStyle usernameM = new TextStyle("USERNAME", 20);
+		TextStyle usernameM = new TextStyle("USERNAME", 30);
 		Text usernameTextM = usernameM.getTextStyled();
 		
 		TextField usernameInputMulti = new TextField();
 		
-		TextStyle portM = new TextStyle("PORT", 20);
+		TextStyle portM = new TextStyle("PORT", 30);
 		Text portTextM = portM.getTextStyled();
 		
 		TextField portInputMulti = new TextField();
 		
-		TextStyle machineM = new TextStyle("MACHINE NAME", 20);
+		TextStyle machineM = new TextStyle("MACHINE NAME", 30);
 		Text machineTextM = machineM.getTextStyled();
 		
 		TextField machineInputMulti = new TextField();
-
-		box1Multi.setAlignment(Pos.CENTER);
-		box1Multi.getChildren().addAll(usernameTextM, usernameInputMulti);
-		
-		box2Multi.setAlignment(Pos.CENTER);
-		box2Multi.getChildren().addAll(portTextM, portInputMulti);
-		
-		box3Multi.setAlignment(Pos.CENTER);
-		box3Multi.getChildren().addAll(machineTextM, machineInputMulti);
 		
 		VBox box4Multi = new VBox(10);
 		box4Multi.setPadding(new Insets(0, 0, 5, 0));
@@ -371,7 +355,24 @@ public class GameMenu extends Parent {
 		settingsWindow.add(btnBackSettings,0,3);	
 		
 		//connect multiplayer
-		connectMultiWindow.getChildren().addAll(box1Multi, box2Multi, box3Multi, box4Multi, btnBackMulti);
+		connectMultiWindow.add(usernameTextM, 0, 1);
+		connectMultiWindow.add(usernameInputMulti, 0, 2);
+		GridPane.setMargin(usernameInputMulti, new Insets(0,0,10,0));
+		
+		connectMultiWindow.add(portTextM, 0, 3);
+		connectMultiWindow.add(portInputMulti, 0, 4);
+		GridPane.setMargin(portInputMulti, new Insets(0,0,10,0));
+		
+		connectMultiWindow.add(machineTextM, 0, 5);
+		connectMultiWindow.add(machineInputMulti, 0, 6);
+		GridPane.setMargin(machineInputMulti, new Insets(0,0,10,0));
+		
+		connectMultiWindow.add(box4Multi, 0, 7);
+		connectMultiWindow.add(btnBackMulti, 0, 8);
+		
+		GridPane.setHalignment(usernameTextM, HPos.CENTER);
+		GridPane.setHalignment(portTextM, HPos.CENTER);
+		GridPane.setHalignment(machineTextM, HPos.CENTER);
 		
 		//connect multiplayer options
 		multiOptionsWindow.getChildren().addAll(joinGameRoom, hostGR);
