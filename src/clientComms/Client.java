@@ -1,10 +1,9 @@
 package clientComms;
 import java.io.*;
 import java.net.*;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
-import serverComms.Server;
+import serverComms.GameSettings;
+import serverComms.ServerComm;
 
 /**
  * Main client class for client/server communications
@@ -12,24 +11,35 @@ import serverComms.Server;
  *
  */
 public class Client extends Thread {
-	public final static Charset charset = StandardCharsets.UTF_8;
 	public static final boolean DEBUG = false;
+	public boolean serverOn = true;
 	private DataOutputStream toServer;
-	String name;
+	String clientName;
 	int portNumber;
 	String machineName;
 	StopDisconnect serverStop;
 	
 	/**
 	 * Creates a client object and connects to a given server on a given port automagically
-	 * @param name The client's nickname to pass to the server first
+	 * @param clientName The client's nickname to pass to the server first
 	 * @param portNumber The port to send the request on
 	 * @param machineName The machinename of the server host (for testing purposes use localhost)
+	 * @param gameMenu 
 	 */
-	public Client(String name, int portNumber, String machineName) {
-		this.name = name;
+	public Client(String clientName, int portNumber, String machineName) {
+		this.clientName = clientName;
 		this.portNumber = portNumber;
 		this.machineName = machineName;
+		try {
+			Socket testConn = new Socket(machineName, portNumber);
+			toServer = new DataOutputStream(new BufferedOutputStream(testConn.getOutputStream()));
+			sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.TESTCONN);
+			testConn.close();
+		} catch (UnknownHostException e) {
+			serverOn = false;
+		} catch (IOException e) {
+			serverOn = false;
+		}
 	}
 	
 	@Override
@@ -42,16 +52,15 @@ public class Client extends Thread {
 			fromServer = new DataInputStream(new BufferedInputStream(server.getInputStream()));
 		} catch (UnknownHostException e) {
 			System.err.println("Unknown host: " + machineName);
-			//What to do here?
+			serverOn = false;
 		} catch (IOException e) {
-			System.err.println("Server doesn't seem to be running " + e.getMessage());
-			//What to do here
+			serverOn = false;
 		}
 		
 		ClientReceiver receiver = new ClientReceiver(fromServer, this);
 		receiver.start();
 		try {
-			sendByteMessage(name.getBytes(charset), Server.userSendingTag);
+			sendByteMessage(clientName.getBytes(ServerComm.charset), ServerComm.USERSENDING);
 			serverStop = new StopDisconnect(this);
 			serverStop.start();
 			receiver.join();
@@ -70,10 +79,19 @@ public class Client extends Thread {
 	public void cleanup() {
 		serverStop.interrupt();
 		try {
-			sendByteMessage(new byte[0],Server.clientDisconnect);
+			sendByteMessage(new byte[0],ServerComm.CLIENTDISCONNECT);
 		} catch (IOException e) {
 			//Closing anyway so oh well
 		}
+	}
+	
+	public void createGame(long seed, int maxPlayers, int numAI, int lapCount, String lobbyName) throws IOException {
+		GameSettings thisGame = new GameSettings(seed, maxPlayers, numAI, lapCount, lobbyName, clientName);
+		sendByteMessage(thisGame.toByteArray(), ServerComm.MAKEGAME);
+	}
+	
+	public void joinGame(int id) throws IOException {
+		sendByteMessage(String.valueOf(id).getBytes(ServerComm.charset), ServerComm.JOINGAME);
 	}
 	
 	/**
@@ -90,6 +108,6 @@ public class Client extends Thread {
 		toServer.writeInt(out.length);
 		toServer.write(out);
 		toServer.flush();
-		if(Server.DEBUG) System.out.println("Sent message " + new String(message, charset) + " with tag " + Byte.toString(type));
+		if(ServerComm.DEBUG) System.out.println("Sent message " + new String(message, ServerComm.charset) + " with tag " + Byte.toString(type));
 	}
 }

@@ -7,7 +7,11 @@ import java.util.*;
  */
 public class ClientTable {
 
-	private Map<String,CommQueue> queueTable = new TreeMap<String,CommQueue>();
+	private Map<String,CommQueue> queueTable = new TreeMap<String,CommQueue>(); //The CommQueue for each user
+	private Map<String,ServerReceiver> receivers = new TreeMap<String,ServerReceiver>(); //The relevant receiver on the server
+	private Map<String,Integer> games = new TreeMap<String,Integer>(); //Users connected to which lobbies
+	private Map<Integer,GameRoom> allGames = new TreeMap<Integer,GameRoom>(); //GameRooms and their respective IDs
+	private int nextInt = 0;
 	
 	/**
 	 * Checks if the user exists already
@@ -26,12 +30,19 @@ public class ClientTable {
 	 * @param name The user to add
 	 */
 	public void add(String name) {
-		queueTable.put(name, new CommQueue());
-		
+		queueTable.put(name, new CommQueue());	
+	}
+	
+	public void addReceiver(String name, ServerReceiver receiver) {
+		receivers.put(name, receiver);
 	}
 	
 	public void remove(String name) {
 		queueTable.remove(name);
+		receivers.remove(name);
+		int gameId = getGameID(name);
+		if(gameId !=-1) allGames.get(gameId).remove(name);
+		games.remove(name);
 	}
 
 	/**
@@ -42,9 +53,38 @@ public class ClientTable {
 	public CommQueue getQueue(String name) {
 		return queueTable.get(name);
 	}
+	
+	public ServerReceiver getReceiver(String name) {
+		return receivers.get(name);
+	}
 
 	public Map<String, CommQueue> getQueues() {
 		return queueTable;
 	}
 
+	public int getGameID(String clientName) {
+		for(Map.Entry<String, Integer> g : games.entrySet()) {
+			if(g.getKey()==clientName) return g.getValue();
+		}
+		return -1;
+	}
+
+	public GameRoom getGame(int gameID) {
+		return allGames.get(gameID);
+	}
+	
+	
+
+	public void addGame(GameSettings gameSettings) {
+		allGames.put(nextInt, new GameRoom(nextInt, gameSettings.lobbyName, gameSettings.seed, gameSettings.maxPlayers, gameSettings.numAI, gameSettings.hostName, this));
+		nextInt++;
+	}
+
+	public boolean joinGame(String clientName, int gameNum) {
+		if(allGames.get(gameNum)==null) return false; //Show that no game exists
+		games.put(clientName, gameNum);
+		allGames.get(gameNum).addPlayer(clientName);
+		return true;
+		
+	}
 }

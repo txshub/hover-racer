@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.joml.Intersectionf;
-import org.joml.Vector2d;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import gameEngine.entities.Player;
-import gameEngine.toolbox.Maths;
 import physics.core.Ship;
 import trackDesign.SeedTrack;
 import trackDesign.TrackPoint;
