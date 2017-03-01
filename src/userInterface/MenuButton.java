@@ -42,13 +42,13 @@ public class MenuButton extends StackPane {
    */
   public MenuButton(String name) {
 
-    buttonText = new Text(name);
+    buttonText = new Text (name);
 
     // Tudor - initialize source
     audioSource = AudioMaster.createSFXSource();
 
     try {
-      Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), 27);
+      Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), 30);
       buttonText.setFont(f);
 
     } catch (IOException e) {
@@ -56,7 +56,7 @@ public class MenuButton extends StackPane {
     }
 
     // create button
-    Rectangle bg = new Rectangle(250, 50);
+    Rectangle bg = new Rectangle(350, 70);
     bg.setOpacity(0.7);
     bg.setFill(Color.BLACK);
     // blur the button colour
@@ -66,7 +66,7 @@ public class MenuButton extends StackPane {
     buttonText.setFill(Color.WHITE);
 
     // customise position
-    this.setAlignment(Pos.CENTER);
+    StackPane.setAlignment(buttonText,Pos.CENTER);
     // setRotate(-0.8);
 
     // add button to stack with text over the background

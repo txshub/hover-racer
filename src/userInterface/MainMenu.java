@@ -32,7 +32,7 @@ public class MainMenu extends Application {
 		AudioMaster.init();
 		
 		Pane root = new Pane();
-		root.setPrefSize(800, 500);
+		root.setPrefSize(1000, 600);
 
 		// get file from path
 		InputStream is = Files.newInputStream(Paths.get("res/img/hover-racer.jpg"));
@@ -40,8 +40,8 @@ public class MainMenu extends Application {
 		is.close();
 
 		ImageView imgView = new ImageView(background);
-		imgView.setFitWidth(800);
-		imgView.setFitHeight(500);
+		imgView.setFitWidth(1000);
+		imgView.setFitHeight(600);
 
 		gameMenu = new GameMenu();
 		gameMenu.setVisible(true);
