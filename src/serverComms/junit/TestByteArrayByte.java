@@ -13,7 +13,7 @@ public class TestByteArrayByte {
 	
 	@Test
 	public void testByteArrayByteByteArrayByte() {
-		byte type = ServerComm.STATUS;
+		byte type = ServerComm.SENDALLGAMES;
 		byte[] msg = ("JUnit Test").getBytes(ServerComm.charset);
 		ByteArrayByte test = new ByteArrayByte(msg, type);
 		if(!Arrays.equals(msg, test.getMsg())) fail("Messages don't match");

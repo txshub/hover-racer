@@ -11,6 +11,7 @@ public class GameRoom {
 	private long seed;
 	private int maxPlayers;
 	private int numAI;
+	private boolean inGame = false;
 	private String hostName;
 	private ClientTable table;
 	
@@ -22,7 +23,10 @@ public class GameRoom {
 		this.numAI = numAI;
 		this.hostName = hostName;
 		this.table = table;
-		
+	}
+	
+	public boolean isBusy() {
+		return(players.size()>=maxPlayers || inGame);
 	}
 	
 	public String getName() {
@@ -55,8 +59,18 @@ public class GameRoom {
 		if(clientName == hostName) {
 			for(int i = 0; i < players.size(); i++) {
 				table.getReceiver(players.get(i)).setGame(this, i);
+				table.getQueue(players.get(i)).offer(new ByteArrayByte(String.valueOf(i).getBytes(ServerComm.charset), ServerComm.STARTGAME));
 			}
 		}
+	}
+	
+	public void endGame() {
+		inGame = false;
+	}
+
+	public void updateUser(int gameNum, byte[] msg) {
+		// TODO What to do here?
+		
 	}
 	
 }
