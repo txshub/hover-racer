@@ -29,11 +29,10 @@ public class TestGameSettings {
 	public void testToStringWithString() {
 		long seed = 12432;
 		int maxPlayers = 3;
-		int numAI = 4;
 		int lapCount = 7;
 		String lobbyName = "Testing";
 		String hostName = "Tester";
-		String expected = seed + "|" + maxPlayers + "|" + numAI + "|" + lapCount + "|" + lobbyName + "|" + hostName;
+		String expected = seed + "|" + maxPlayers + "|" + lapCount + "|" + lobbyName + "|" + hostName;
 		GameSettings gs = new GameSettings(expected);
 		if(!gs.toString().equals(expected)) fail("String with string wasn't as expected");
 	}
@@ -46,7 +45,7 @@ public class TestGameSettings {
 		int lapCount = 7;
 		String lobbyName = "Testing";
 		String hostName = "Tester";
-		byte[] expected = (seed + "|" + maxPlayers + "|" + numAI + "|" + lapCount + "|" + lobbyName + "|" + hostName).getBytes(ServerComm.charset);
+		byte[] expected = (seed + "|" + maxPlayers + "|" + lapCount + "|" + lobbyName + "|" + hostName).getBytes(ServerComm.charset);
 		GameSettings gs = new GameSettings(seed, maxPlayers, lapCount, lobbyName, hostName);
 		if(!Arrays.equals(gs.toByteArray(), expected)) fail("Byte Array with params wasn't as expected");
 	}
@@ -59,10 +58,9 @@ public class TestGameSettings {
 		int lapCount = 7;
 		String lobbyName = "Testing";
 		String hostName = "Tester";
-		String expected = seed + "|" + maxPlayers + "|" + numAI + "|" + lapCount + "|" + lobbyName + "|" + hostName;
+		String expected = seed + "|" + maxPlayers + "|" + lapCount + "|" + lobbyName + "|" + hostName;
 		GameSettings gs = new GameSettings(expected);
 		if(!Arrays.equals(gs.toByteArray(), expected.getBytes(ServerComm.charset))) fail("Byte Array with params wasn't as expected");
 	}
 
 }
-
