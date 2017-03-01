@@ -50,7 +50,7 @@ public class ClientReceiver extends Thread {
 					for(String s : allGames) {
 						if(!s.equals("")) gameList.add(new GameNameNumber(s));
 					}
-					//What to do with arraylist of games/number?
+					client.gameMenu.passRooms(gameList);
 				} else if(fullMsg.getType()==ServerComm.INVALIDGAME) {
 					//What to do if game doesn't exist?
 				} else if(fullMsg.getType()==ServerComm.VALIDGAME) {

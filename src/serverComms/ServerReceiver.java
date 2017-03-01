@@ -45,6 +45,17 @@ public class ServerReceiver extends Thread {
 					
 				} else if(fullMsg.getType()==ServerComm.DONTDISCONNECT) {
 					//Do Nothing - It's just making sure we don't disconnect
+					
+				} else if(fullMsg.getType()==ServerComm.SENDALLGAMES) {
+					ArrayList<GameNameNumber> rooms = new ArrayList<GameNameNumber>();
+					for(GameRoom room : lobby.games) {
+						if(!room.isBusy()) rooms.add(new GameNameNumber(room.name, room.id));
+					}
+					String out = "";
+					for(GameNameNumber g : rooms) {
+						out += g.toString() + System.lineSeparator();
+					}
+					lobby.clientTable.getQueue(clientName).offer(new ByteArrayByte(out.getBytes(ServerComm.charset),ServerComm.SENDALLGAMES));
 									
 				} else if(fullMsg.getType()==ServerComm.MAKEGAME) {
 					lobby.clientTable.addGame(new GameSettings(new String(fullMsg.getMsg(), ServerComm.charset)));

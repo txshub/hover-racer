@@ -4,6 +4,7 @@ import java.net.*;
 
 import serverComms.GameSettings;
 import serverComms.ServerComm;
+import userInterface.GameMenu;
 
 /**
  * Main client class for client/server communications
@@ -18,6 +19,7 @@ public class Client extends Thread {
 	int portNumber;
 	String machineName;
 	StopDisconnect serverStop;
+	GameMenu gameMenu;
 	
 	/**
 	 * Creates a client object and connects to a given server on a given port automagically
@@ -25,11 +27,13 @@ public class Client extends Thread {
 	 * @param portNumber The port to send the request on
 	 * @param machineName The machinename of the server host (for testing purposes use localhost)
 	 * @param gameMenu 
+	 * @param gameMenu 
 	 */
-	public Client(String clientName, int portNumber, String machineName) {
+	public Client(String clientName, int portNumber, String machineName, GameMenu gameMenu) {
 		this.clientName = clientName;
 		this.portNumber = portNumber;
 		this.machineName = machineName;
+		this.gameMenu = gameMenu;
 		try {
 			Socket testConn = new Socket(machineName, portNumber);
 			toServer = new DataOutputStream(new BufferedOutputStream(testConn.getOutputStream()));
@@ -84,13 +88,17 @@ public class Client extends Thread {
 		}
 	}
 	
-	public void createGame(long seed, int maxPlayers, int numAI, int lapCount, String lobbyName) throws IOException {
-		GameSettings thisGame = new GameSettings(seed, maxPlayers, numAI, lapCount, lobbyName, clientName);
+	public void createGame(long seed, int maxPlayers, int lapCount, String lobbyName) throws IOException {
+		GameSettings thisGame = new GameSettings(seed, maxPlayers, lapCount, lobbyName, clientName);
 		sendByteMessage(thisGame.toByteArray(), ServerComm.MAKEGAME);
 	}
 	
 	public void joinGame(int id) throws IOException {
 		sendByteMessage(String.valueOf(id).getBytes(ServerComm.charset), ServerComm.JOINGAME);
+	}
+	
+	public void requestAllGames() throws IOException {
+		sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.SENDALLGAMES);
 	}
 	
 	/**

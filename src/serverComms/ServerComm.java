@@ -34,6 +34,7 @@ public class ServerComm extends Thread {
 	public static final byte CLIENTDISCONNECT   = Byte.parseByte("5" );
 	//Client->Server Ping every second to prevent detecting a client timeout
 	public static final byte DONTDISCONNECT     = Byte.parseByte("6" );	
+	//Client->Server Request all games be sent to the client
 	//Server->Client Send the name of all gamerooms currently open
 	public static final byte SENDALLGAMES       = Byte.parseByte("7" );
 	//Client->Server Make a new GameRoom with a GameSettings object passed

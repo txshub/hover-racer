@@ -1,5 +1,7 @@
 package userInterface;
 
+import java.util.ArrayList;
+
 import audioEngine.AudioMaster;
 import clientComms.Client;
 import game.MainGameLoop;
@@ -15,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import serverComms.GameNameNumber;
 
 /**
  * 
@@ -327,7 +330,7 @@ public class GameMenu extends Parent {
 			int portNo = Integer.valueOf(portInput.getText());
 			String machineName = machineInput.getText();
 			
-			Client client = new Client(usr, portNo, machineName);
+			Client client = new Client(usr, portNo, machineName, this);
 			if(client.serverOn) {
 				client.start();
 			} else {
@@ -343,7 +346,7 @@ public class GameMenu extends Parent {
 			int portNo = Integer.valueOf(portInput.getText());
 			String machineName = machineInput.getText();
 			
-			Client client = new Client(usr, portNo, machineName);
+			Client client = new Client(usr, portNo, machineName, this);
 			if(client.serverOn) {
 				client.start();
 			} else {
@@ -417,6 +420,10 @@ public class GameMenu extends Parent {
 
 		getChildren().addAll(bg2, menu0);
 
+	}
+
+	public void passRooms(ArrayList<GameNameNumber> gameList) {
+		// TODO Auto-generated method stub
 	}
 
 }
