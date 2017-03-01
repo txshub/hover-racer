@@ -60,6 +60,8 @@ public class MainMenu extends Application {
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			
 	          public void handle(WindowEvent we) {
+	        	 AudioMaster.stopMusic();
+	        	 AudioMaster.cleanUp();
 	             System.exit(0);
 	          }
 		});

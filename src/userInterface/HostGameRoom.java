@@ -81,7 +81,7 @@ public class HostGameRoom extends GridPane {
 		add(box6, 0, 5);
 		
 		add(generateTrack, 1, 5);
-		add(hostGameRoom, 1, 5);
+		add(hostGameRoom, 1, 6);
 		
 		GridPane.setMargin(nameText, new Insets(0,0,10,0));
 		GridPane.setMargin(seedText, new Insets(0,0,10,0));

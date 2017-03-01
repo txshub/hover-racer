@@ -30,6 +30,16 @@ public class Client extends Thread {
 		this.clientName = clientName;
 		this.portNumber = portNumber;
 		this.machineName = machineName;
+		try {
+			Socket testConn = new Socket(machineName, portNumber);
+			toServer = new DataOutputStream(new BufferedOutputStream(testConn.getOutputStream()));
+			sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.TESTCONN);
+			testConn.close();
+		} catch (UnknownHostException e) {
+			serverOn = false;
+		} catch (IOException e) {
+			serverOn = false;
+		}
 	}
 	
 	@Override

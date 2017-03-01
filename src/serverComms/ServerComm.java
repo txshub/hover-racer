@@ -1,41 +1,59 @@
 package serverComms;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Map;
-
-import physics.core.Ship;
-
-
 
 /**
  * The server to handle a game
+ * 
  * @author simon
  *
  */
 public class ServerComm extends Thread {
 	public final static Charset charset = StandardCharsets.UTF_8;
-	private String status;
 	private int portNumber;
 	private Lobby lobby;
 	public final static boolean DEBUG = true;
 	public volatile boolean runThread = true;
-	public static final byte BADPACKET        = Byte.parseByte("0" );
-	public static final byte USERSENDING      = Byte.parseByte("1" );
-	public static final byte BADUSER          = Byte.parseByte("2" );
-	public static final byte STATUS           = Byte.parseByte("3" );
-	public static final byte ACCEPTEDUSER     = Byte.parseByte("4" );
-	public static final byte CLIENTDISCONNECT = Byte.parseByte("5" );
-	public static final byte DONTDISCONNECT   = Byte.parseByte("6" );
-	public static final byte POSITIONUPDATE   = Byte.parseByte("7" );
-	public static final byte SENDALLGAMES     = Byte.parseByte("8" );
-	public static final byte MAKEGAME         = Byte.parseByte("9" );
-	public static final byte JOINGAME         = Byte.parseByte("10");
-	public static final byte VALIDGAME        = Byte.parseByte("11");
-	public static final byte INVALIDGAME      = Byte.parseByte("12");
+	//BADPACKET: Error while sending, to be ignored
+	public static final byte BADPACKET          = Byte.parseByte("0" );
+	//Client->Server Connecting for the first time and sending their username 
+	public static final byte USERSENDING        = Byte.parseByte("1" );
+	//Server->Client Username isn't allowed
+	public static final byte BADUSER            = Byte.parseByte("2" );
+	//Server->Client Username is valid
+	public static final byte ACCEPTEDUSER       = Byte.parseByte("4" );
+	//Client->Server Username should be removed as client has closed the game
+	public static final byte CLIENTDISCONNECT   = Byte.parseByte("5" );
+	//Client->Server Ping every second to prevent detecting a client timeout
+	public static final byte DONTDISCONNECT     = Byte.parseByte("6" );	
+	//Server->Client Send the name of all gamerooms currently open
+	public static final byte SENDALLGAMES       = Byte.parseByte("7" );
+	//Client->Server Make a new GameRoom with a GameSettings object passed
+	public static final byte MAKEGAME           = Byte.parseByte("8" );
+	//Client->Server Join an existing GameRoom with the id passed
+	public static final byte JOINGAME           = Byte.parseByte("9" );
+	//Server->Client Lobby connecting to is valid, gets passed the seed & player names
+	public static final byte VALIDGAME          = Byte.parseByte("10");
+	//Server->Client Lobby they're connecting to doesn't exist
+	public static final byte INVALIDGAME        = Byte.parseByte("11");
+	//Client->Server Send ship data during the race
+	public static final byte SENDPLAYERDATA     = Byte.parseByte("12");
+	//Client->Server NOT YET IMPLEMENTED Host sends their name and starts the game
+	//Server->Client NOT YET IMPLEMENTED Tells clients that they're starting
+	public static final byte STARTGAME          = Byte.parseByte("13");
+	//Server->Client NOT YET IMPLEMENTED Sends position of all ships to clients
+	public static final byte FULLPOSITIONUPDATE = Byte.parseByte("14");
+	//Client->Server Establish connection to see if server is running
+	public static final byte TESTCONN           = Byte.parseByte("15");
 	
 	/**
 	 * Creates a Server object
@@ -74,12 +92,9 @@ public class ServerComm extends Thread {
 				//Create a new ByteArrayByte with this data
 				ByteArrayByte msg = new ByteArrayByte(data);
 				if(DEBUG) System.out.println("Request to server: " + new String(msg.getMsg(),charset));
-				
-				//Get the status of this server if requested
-				if(msg.getType()==STATUS) { //Server status requested
-					DataOutputStream toClient = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-					writeByteMessage((status).getBytes(charset), STATUS, toClient);
-					if(DEBUG) System.out.println("Sent status to client");
+					
+				if(msg.getType()==TESTCONN) {
+					socket.close();
 					
 				//Requesting to join - The message is the client's username
 				} else {
@@ -90,17 +105,18 @@ public class ServerComm extends Thread {
 						writeByteMessage(("Bad Username").getBytes(charset), BADUSER, toClient);
 						if(DEBUG) System.out.println("Sent Bad Username to client");
 					} else { //Valid Username
+						lobby.clientTable.add(name);
 						DataOutputStream toClient = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 						ServerSender sender = new ServerSender(lobby.clientTable.getQueue(name), toClient);
 						sender.start();
 						lobby.clientTable.getQueue(name).offer(new ByteArrayByte(("Valid").getBytes(charset),ACCEPTEDUSER));
 						if(DEBUG) System.out.println("Sent Accepted User to client");
 						ServerReceiver receiver = new ServerReceiver(socket, name, fromClient, lobby);
-						lobby.clientTable.add(name, receiver);
+						lobby.clientTable.addReceiver(name, receiver);
 						receiver.start();
 						ArrayList<GameNameNumber> rooms = new ArrayList<GameNameNumber>();
 						for(GameRoom room : lobby.games) {
-							rooms.add(new GameNameNumber(room.name, room.id));
+							if(!room.isBusy()) rooms.add(new GameNameNumber(room.name, room.id));
 						}
 						String out = "";
 						for(GameNameNumber g : rooms) {

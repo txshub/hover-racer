@@ -26,6 +26,7 @@ public class GameMenu extends Parent {
 	MenuButton btnPlayGame, btnPlayAI, btnOptions, btnSound, btnMusic, btnExit, btnBack, btnBack2, btnBack3, btnBack4, btnBack5, btnBack6;
 	SoundSlider soundSlider;
 	MusicSlider musicSlider;
+	static String usr;
 	final int OFFSET = 600;
 
 	public GameMenu() {
@@ -120,10 +121,6 @@ public class GameMenu extends Parent {
 				getChildren().remove(menu0);
 			});
 
-			
-			//AudioMaster.stopMusic();
-			//new MainGameLoop().main();
-			//((Node) event.getSource()).getScene().getWindow().hide();
 		});
 
 		btnOptions = new MenuButton("SETTINGS");
@@ -343,6 +340,9 @@ public class GameMenu extends Parent {
 		TextField machineInputSingle = new TextField();
 		TextField machineInputMulti = new TextField();
 		
+		MenuButton startServerSingle = new MenuButton("START A SERVER");
+		MenuButton startServerMulti = new MenuButton("START A SERVER");
+		
 		MenuButton connectSingle = new MenuButton("CONNECT TO THE LOBBY");
 		connectSingle.setOnMouseClicked(event->{
 			
@@ -354,25 +354,46 @@ public class GameMenu extends Parent {
 			
 			if(client.serverOn) {
 				client.start();
-			} else {
-			
-				connectSingle.setOnMouseClicked(evt -> {
-					
-					if (box4Single.getChildren().size() > 0) {
-						
-							box4Single.getChildren().remove(0);
-					}
 				
-					MenuButton startServer = new MenuButton("START A SERVER");
-					box4Single.getChildren().add(startServer);
-					
+				getChildren().add(menu8);
+
+				TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu5);
+				trans.setToX(menu5.getTranslateX() - OFFSET);
+
+				TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu8);
+				trans1.setToX(menu8.getTranslateX() - OFFSET);
+
+				trans.play();
+				trans1.play();
+
+				trans.setOnFinished(evt -> {
+					getChildren().remove(menu5);
 				});
 				
-				Lobby serverLobby = new Lobby (4444);
-				ServerComm server = new ServerComm(4444, serverLobby);
-				server.start();
-				client.start();
+			} else {
+			
+				if (box4Single.getChildren().size() > 0) {
+						
+					box4Single.getChildren().remove(0);
+				}
+					
+				box4Single.getChildren().add(startServerSingle);
+				
 			}
+		});
+			
+		startServerSingle.setOnMouseClicked(event-> {
+			
+			Lobby serverLobby = new Lobby (4444);
+			ServerComm server = new ServerComm(4444, serverLobby);
+			server.start();
+			
+			String usr = usernameInputSingle.getText();
+			int portNo = Integer.valueOf(portInputSingle.getText());
+			String machineName = machineInputSingle.getText();
+			
+			Client client = new Client(usr, portNo, machineName);
+			client.start();
 			
 			getChildren().add(menu8);
 
@@ -391,38 +412,59 @@ public class GameMenu extends Parent {
 			
 		});
 		
+		
 		MenuButton connectMulti = new MenuButton("CONNECT TO THE LOBBY");
 		connectMulti.setOnMouseClicked(event->{
 			
-			String usr =  usernameInputMulti.getText();
+			usr =  usernameInputMulti.getText();
 			int portNo = Integer.valueOf(portInputMulti.getText());
 			String machineName = machineInputMulti.getText();
 			
 			Client client = new Client(usr, portNo, machineName);
 			
 			if(client.serverOn) {
-				client.start();
-			} else {
-			
-				connectSingle.setOnMouseClicked(evt -> {
-					
-					if (box4Single.getChildren().size() > 0) {
-						
-							box4Single.getChildren().remove(0);
-					}
 				
-					MenuButton startServer = new MenuButton("START A SERVER");
-					box4Single.getChildren().add(startServer);
-					
+				client.start();
+				
+				getChildren().add(menu6);
+
+				TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu4);
+				trans.setToX(menu4.getTranslateX() - OFFSET);
+
+				TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), menu6);
+				trans1.setToX(menu6.getTranslateX() - OFFSET);
+
+				trans.play();
+				trans1.play();
+
+				trans.setOnFinished(evt -> {
+					getChildren().remove(menu4);
 				});
 				
-				Lobby serverLobby = new Lobby (4444);
-				ServerComm server = new ServerComm(4444, serverLobby);
-				server.start();
-				client.start();
-			}
+			} else {
 			
-		
+				if (box4Multi.getChildren().size() > 0) {
+						
+						box4Multi.getChildren().remove(0);
+				}		
+			
+				box4Multi.getChildren().add(startServerMulti);
+			}
+		});
+			
+		startServerMulti.setOnMouseClicked(event-> {
+			
+			Lobby serverLobby = new Lobby (4444);
+			ServerComm server = new ServerComm(4444, serverLobby);
+			server.start();
+			
+			String usr = usernameInputMulti.getText();
+			int portNo = Integer.valueOf(portInputMulti.getText());
+			String machineName = machineInputMulti.getText();
+			
+			Client client = new Client(usr, portNo, machineName);
+			client.start();
+			
 			getChildren().add(menu6);
 
 			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), menu4);
@@ -437,7 +479,7 @@ public class GameMenu extends Parent {
 			trans.setOnFinished(evt -> {
 				getChildren().remove(menu4);
 			});
-	
+			
 		});
 		
 		box1Multi.setAlignment(Pos.CENTER);

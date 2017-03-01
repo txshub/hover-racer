@@ -50,7 +50,7 @@ public class Map extends Canvas {
 	
 	public void drawShapes(GraphicsContext gc) {
 		
-		SeedTrack st = TrackMaker.makeTrack(seed, 20, 30, 1, 70, 40, 4, 4);
+		SeedTrack st = TrackMaker.makeTrack(seed);
 		track = st.getTrack();
 		
 		for(int i=0; i< track.size(); i++){
@@ -61,10 +61,9 @@ public class Map extends Canvas {
 			double y2 = (((track.get((i+1)%track.size()).getY()*2)/4));
 			
 			gc.setStroke(Color.WHITE);
+			gc.setLineWidth(1.5);
 			gc.strokeLine(x1,y1,x2,y2);
 		}
 		
-	
 	}
-
 }

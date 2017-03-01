@@ -29,16 +29,20 @@ public class ClientTable {
 	 * Adds a user to the table
 	 * @param name The user to add
 	 */
-	public void add(String name, ServerReceiver receiver) {
-		queueTable.put(name, new CommQueue());
+	public void add(String name) {
+		queueTable.put(name, new CommQueue());	
+	}
+	
+	public void addReceiver(String name, ServerReceiver receiver) {
 		receivers.put(name, receiver);
-		
 	}
 	
 	public void remove(String name) {
 		queueTable.remove(name);
+		receivers.remove(name);
 		int gameId = getGameID(name);
 		if(gameId !=-1) allGames.get(gameId).remove(name);
+		games.remove(name);
 	}
 
 	/**
@@ -83,5 +87,4 @@ public class ClientTable {
 		return true;
 		
 	}
-
 }

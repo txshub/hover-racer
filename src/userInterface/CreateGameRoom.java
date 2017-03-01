@@ -8,6 +8,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import serverComms.ClientTable;
+import serverComms.GameRoom;
 
 /**
  * 
@@ -65,8 +67,9 @@ public class CreateGameRoom extends GridPane {
 		createGameRoom.setOnMouseClicked(event -> {
 			
 			//create a game room
-			MainGameLoop.main(null);
-			((Node) event.getSource()).getScene().getWindow().hide();
+			GameRoom gameRoom = new GameRoom(0, GameMenu.usr, Integer.valueOf(seedInput.getText()), (Integer.valueOf(noAIsInput.getText()) + 1) , "", new ClientTable());
+			gameRoom.startGame(GameMenu.usr);
+			//((Node) event.getSource()).getScene().getWindow().hide();
 			
 		});
 		
