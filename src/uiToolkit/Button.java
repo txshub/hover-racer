@@ -13,8 +13,8 @@ import gameEngine.renderEngine.Loader;
 
 /**
  * 
- * A TexturedUIElement that can perform an action when clicked. This is set by adding
- * ActionListener to the button.
+ * A TexturedUIElement that can perform an action when clicked. This is set by
+ * adding ActionListener to the button.
  * 
  * @author Reece Bennett
  *
@@ -39,11 +39,11 @@ public class Button extends TexturedUIElement {
   public void addListener(ActionListener listener) {
     listeners.add(listener);
   }
-  
+
   @Override
   public void setParent(UIElement parent) {
     super.setParent(parent);
-    
+
     updateBounds();
   }
 
@@ -61,7 +61,7 @@ public class Button extends TexturedUIElement {
       }
     }
   }
-  
+
   private void updateBounds() {
     bounds.width = texture.getImageWidth();
     bounds.height = texture.getImageHeight();

@@ -2,6 +2,7 @@ package game;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,8 +40,10 @@ import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
 import uiToolkit.Button;
 import uiToolkit.Container;
-import uiToolkit.Label;
 import uiToolkit.UIRenderer;
+import uiToolkit.fontMeshCreator.FontType;
+import uiToolkit.fontMeshCreator.GUIText;
+import uiToolkit.fontRendering.TextMaster;
 
 /**
  * @author Reece Bennett and rtm592
@@ -86,6 +89,7 @@ public class Game {
 		AudioMaster.init();
 		entities = new ArrayList<Entity>();
 		normalEntities = new ArrayList<Entity>();
+		TextMaster.init(loader);
     
     System.out.println("Screen size: " + Display.getWidth() + " x " + Display.getHeight());
 
@@ -159,6 +163,11 @@ public class Game {
     
 //    Label label = new Label(loader, new Vector2f(0, 0));
 //    label.setParent(menu);
+    
+    // Fonts
+    FontType font = new FontType(loader.loadFontTexture("ui/calibri"), new File("src/resources/ui/calibri.fnt"));
+    GUIText text = new GUIText("Hello world!", 2f, font, new Vector2f(0.5f, 0.5f), 0.5f, true);
+    text.setColour(1f, 0f, 0f);
 
 		// Renderers
 		renderer = new MasterRenderer(loader);
@@ -224,12 +233,14 @@ public class Game {
 		renderer.renderScene(entities, normalEntities, terrains, lights, camera, new Vector4f());
 		//guiRender.render(guis);
 		uiRenderer.render(containers);
+		TextMaster.render();
 		GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
 		DisplayManager.updateDisplay();
 		sortLights(lights, player.getPosition());
 	}
 
 	public void cleanUp() {
+	  TextMaster.cleanUp();
 		guiRender.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
@@ -279,6 +290,7 @@ public class Game {
 		}
 
 		// Scale up the track
+		// TODO Scale up in the track maker not here
 		for (TrackPoint p : trackPoints) {
 			p.mul(10);
 		}

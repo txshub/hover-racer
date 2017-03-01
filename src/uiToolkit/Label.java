@@ -9,19 +9,20 @@ import org.newdawn.slick.TrueTypeFont;
 import gameEngine.renderEngine.Loader;
 
 public class Label extends UIElement {
-  
+
   private TrueTypeFont font;
 
   public Label(Loader loader, Vector2f position) {
     super(loader, position);
-    
+
     // Load a default Java font
     Font awtFont = new Font("Times New Roman", Font.BOLD, 24);
     font = new TrueTypeFont(awtFont, false);
   }
 
   @Override
-  public void update() {}
+  public void update() {
+  }
 
   @Override
   public void render() {

@@ -8,8 +8,8 @@ import gameEngine.renderEngine.Loader;
 
 /**
  * 
- * A TexturedUIElement that can contain other UIElement such as buttons and other
- * containers.
+ * A TexturedUIElement that can contain other UIElement such as buttons and
+ * other containers.
  * 
  * @author Reece Bennett
  *
@@ -27,7 +27,7 @@ public class Container extends TexturedUIElement {
   protected void add(UIElement child) {
     children.add(child);
   }
-  
+
   @Override
   public void setVisibility(boolean visible) {
     super.setVisibility(visible);
