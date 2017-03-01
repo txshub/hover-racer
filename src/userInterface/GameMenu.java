@@ -1,4 +1,8 @@
 package userInterface;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import audioEngine.AudioMaster;
@@ -44,10 +48,25 @@ public class GameMenu extends Parent {
 		
 		//initial window
 		initialWindow.setTranslateX(100);
-		initialWindow.setTranslateY(170);
+		initialWindow.setTranslateY(180);
 		initialWindow.setAlignment(Pos.CENTER);
         initialWindow.setHgap(10);
         initialWindow.setVgap(10);
+        
+        TextStyle hover = new TextStyle ("HOVER", 90);
+		Text hoverText = hover.getTextStyled();
+		hoverText.setX(650);
+		hoverText.setY(300);
+		
+		TextStyle racer = new TextStyle ("RACER", 90);
+		Text racerText = racer.getTextStyled();
+		racerText.setX(740);
+		racerText.setY(380);
+		
+		TextStyle caption = new TextStyle ("DARE TO WIN THE SPACE RACE", 29);
+		Text captionText = caption.getTextStyled();
+		captionText.setX(650);
+		captionText.setY(450);
 		
 		//settings
 		settingsWindow.setTranslateX(700);
@@ -79,6 +98,7 @@ public class GameMenu extends Parent {
 			
 			// connect to the server
 			getChildren().add(connectMultiWindow);
+			getChildren().removeAll(hoverText, racerText, captionText);
 			
 			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), initialWindow);
 			trans.setToX(initialWindow.getTranslateX() - OFFSET);
@@ -90,6 +110,7 @@ public class GameMenu extends Parent {
 			trans1.play();
 			trans.setOnFinished(evt -> {
 				getChildren().remove(initialWindow);
+				
 			});
 		});
 		
@@ -98,6 +119,7 @@ public class GameMenu extends Parent {
 			// enter the game with the computer-controlled players
 			
 			getChildren().add(singleGameWindow);
+			getChildren().removeAll(hoverText, racerText, captionText);
 			
 			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), initialWindow);
 			trans.setToX(initialWindow.getTranslateX() - OFFSET);
@@ -116,6 +138,7 @@ public class GameMenu extends Parent {
 		btnOptions.setOnMouseClicked(event -> {
 			
 			getChildren().add(settingsWindow);
+			getChildren().removeAll(hoverText, racerText, captionText);
 			
 			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), initialWindow);
 			trans.setToX(initialWindow.getTranslateX() - OFFSET);
@@ -155,6 +178,7 @@ public class GameMenu extends Parent {
 			trans1.play();
 			trans.setOnFinished(evt -> {
 				getChildren().remove(settingsWindow);
+				getChildren().addAll(hoverText, racerText, captionText);
 			});
 		});
 		
@@ -174,6 +198,7 @@ public class GameMenu extends Parent {
 			trans1.play();
 			trans.setOnFinished(evt -> {
 				getChildren().remove(connectMultiWindow);
+				getChildren().addAll(hoverText, racerText, captionText);
 			});
 		});
 		
@@ -192,6 +217,8 @@ public class GameMenu extends Parent {
 			trans1.play();
 			trans.setOnFinished(evt -> {
 				getChildren().remove(singleGameWindow);
+				getChildren().addAll(hoverText, racerText, captionText);
+				
 			});
 		});
 		
@@ -355,7 +382,7 @@ public class GameMenu extends Parent {
 		//create a game room by single player
 		singleGameWindow.getChildren().addAll(createGameRoom, btnBackSingle);
 		
-		getChildren().addAll(initialWindow);
+		getChildren().addAll(initialWindow, hoverText, racerText, captionText);
 		
 		//trying to improve the speed of TranslateTransition
 		this.setCache(true);
