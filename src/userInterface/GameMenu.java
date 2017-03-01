@@ -15,6 +15,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 /**
@@ -382,6 +384,7 @@ public class GameMenu extends Parent {
 		
 		//create a game room by single player
 		singleGameWindow.getChildren().addAll(createGameRoom, btnBackSingle);
+		
 		
 		getChildren().addAll(initialWindow, hoverText, racerText, captionText);
 		

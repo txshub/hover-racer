@@ -13,6 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -35,7 +37,7 @@ public class MainMenu extends Application {
 		root.setPrefSize(1000, 600);
 
 		// get file from path
-		InputStream is = Files.newInputStream(Paths.get("res/img/hover-racerSimple.jpg"));
+		InputStream is = Files.newInputStream(Paths.get("res/img/hover-racerNew.jpg"));
 		Image background = new Image(is);
 		is.close();
 
@@ -45,8 +47,12 @@ public class MainMenu extends Application {
 
 		gameMenu = new GameMenu();
 		gameMenu.setVisible(true);
+		
+		Rectangle bg = new Rectangle(1000,600);
+		bg.setOpacity(0.5);
+		bg.setFill(Color.BLACK);
 
-		root.getChildren().addAll(imgView, gameMenu);
+		root.getChildren().addAll(imgView, bg, gameMenu);
 
 		// create a scene
 		Scene scene = new Scene(root);
