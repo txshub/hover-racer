@@ -36,7 +36,7 @@ public class ServerComm extends Thread {
 	public static final byte JOINGAME         = Byte.parseByte("10");
 	public static final byte VALIDGAME        = Byte.parseByte("11");
 	public static final byte INVALIDGAME      = Byte.parseByte("12"); 
-	
+	public static final byte SENDPLAYERDATA   = Byte.parseByte("13");
 	/**
 	 * Creates a Server object
 	 * @param portNumber The port to listen on for incoming connections

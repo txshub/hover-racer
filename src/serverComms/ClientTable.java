@@ -39,8 +39,10 @@ public class ClientTable {
 	
 	public void remove(String name) {
 		queueTable.remove(name);
+		receivers.remove(name);
 		int gameId = getGameID(name);
 		if(gameId !=-1) allGames.get(gameId).remove(name);
+		games.remove(name);
 	}
 
 	/**
