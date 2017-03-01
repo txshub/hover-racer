@@ -86,7 +86,7 @@ public class TestClientTable {
 		table.add(name);
 		if(table.getGameID(name)!=-1) fail("Game ID didn't initialise as -1");
 		if(table.joinGame(name, 0)) fail("Game was present before being made");
-		table.addGame(new GameSettings(0, 1, 0, 0, "lobby", name));
+		table.addGame(new GameSettings(0, 1, 0, "lobby", name));
 		if(!table.joinGame(name, 0)) fail("Game wasn't present after being made");
 		if(table.getGameID(name)==-1) fail("Couldn't get Game ID after being made");
 	}
@@ -98,7 +98,7 @@ public class TestClientTable {
 		table.add(name);
 		if(table.getGameID(name)!=-1) fail("Game ID didn't initialise as -1");
 		if(table.joinGame(name, 0)) fail("Game was present before being made");
-		table.addGame(new GameSettings(0, 1, 0, 0, "lobby", name));
+		table.addGame(new GameSettings(0, 1, 0, "lobby", name));
 		if(!table.joinGame(name, 0)) fail("Game wasn't present after being made");
 		int id = table.getGameID(name);
 		if(id==-1) fail("Couldn't get Game ID after being made");
@@ -112,7 +112,7 @@ public class TestClientTable {
 		table.add(name);
 		if(table.getGameID(name)!=-1) fail("Game ID didn't initialise as -1");
 		if(table.joinGame(name, 0)) fail("Game was present before being made");
-		table.addGame(new GameSettings(0, 1, 0, 0, "lobby", name));
+		table.addGame(new GameSettings(0, 1, 0, "lobby", name));
 		if(table.getGame(0)==null) fail("Game wasn't got after being initialised");
 	}
 
@@ -123,7 +123,7 @@ public class TestClientTable {
 		table.add(name);
 		if(table.getGameID(name)!=-1) fail("Game ID didn't initialise as -1");
 		if(table.joinGame(name, 0)) fail("Game was present before being made");
-		table.addGame(new GameSettings(0, 1, 0, 0, "lobby", name));
+		table.addGame(new GameSettings(0, 1, 0, "lobby", name));
 		if(!table.joinGame(name, 0)) fail("Game wasn't present after being made");
 		if(table.getGameID(name)==-1) fail("Couldn't get Game ID after being made");
 	}

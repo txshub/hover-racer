@@ -21,7 +21,7 @@ public class TestGameSettings {
 		String lobbyName = "Testing";
 		String hostName = "Tester";
 		String expected = seed + "|" + maxPlayers + "|" + numAI + "|" + lapCount + "|" + lobbyName + "|" + hostName;
-		GameSettings gs = new GameSettings(seed, maxPlayers, numAI, lapCount, lobbyName, hostName);
+		GameSettings gs = new GameSettings(seed, maxPlayers, lapCount, lobbyName, hostName);
 		if(!gs.toString().equals(expected)) fail("String with params wasn't as expected");
 	}
 	
@@ -47,7 +47,7 @@ public class TestGameSettings {
 		String lobbyName = "Testing";
 		String hostName = "Tester";
 		byte[] expected = (seed + "|" + maxPlayers + "|" + numAI + "|" + lapCount + "|" + lobbyName + "|" + hostName).getBytes(ServerComm.charset);
-		GameSettings gs = new GameSettings(seed, maxPlayers, numAI, lapCount, lobbyName, hostName);
+		GameSettings gs = new GameSettings(seed, maxPlayers, lapCount, lobbyName, hostName);
 		if(!Arrays.equals(gs.toByteArray(), expected)) fail("Byte Array with params wasn't as expected");
 	}
 	
