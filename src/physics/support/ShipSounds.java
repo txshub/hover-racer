@@ -2,16 +2,19 @@ package physics.support;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Vector;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import audioEngine.AudioMaster;
 import audioEngine.Sounds;
 import audioEngine.Source;
 import gameEngine.entities.Camera;
+import gameEngine.toolbox.Maths;
 import physics.core.Ship;
 
 /**
@@ -80,10 +83,10 @@ public class ShipSounds {
 //			Vector3f velocity = new Vector3f(ship.getVelocity()).sub(player.getVelocity());
 //			source.setPosition(position.x, position.y, position.z); 
 //			source.setVelocity(velocity.x, velocity.y, velocity.z);
-			
-			Camera camera = new Camera(player);
-			
-			// TODO
+
+			Matrix4f tm = Maths.createTransformMatrix(new Vector3f(0f, 0f, 0f));
+			Vector3f sourcePos = player.getPosition().mulPosition(tm);
+			source.setPosition(sourcePos.x(), sourcePos.y(), sourcePos.z());
 			
 			float p = 1f + ship.getVelocity().length() / (ship.getMaxSpeed() / 3f);
 			if (pitch > 2f) pitch = 2f;
@@ -103,7 +106,6 @@ public class ShipSounds {
 	public void collision(Ship first, Ship second) {
 		Vector3f position = new Vector3f(first.getPosition()).sub(player.getPosition()).div(2);
 		float force = new Vector3f(first.getVelocity()).sub(second.getVelocity()).length();
-		// TODO Make a collision sound happen
 	}
 
 }
