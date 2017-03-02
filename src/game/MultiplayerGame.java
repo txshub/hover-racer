@@ -295,6 +295,10 @@ public class MultiplayerGame implements GameInt {
 
 	}
 
+	public MultiplayerShipManager getManager() {
+		return ships;
+	}
+
 	private static void sortLights(List<Light> lights, Vector3f currentPosition) {
 		float[] distance = new float[lights.size() - 1];
 		for (int i = 1; i < lights.size(); i++) {

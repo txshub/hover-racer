@@ -6,6 +6,7 @@ import org.lwjgl.input.Keyboard;
 
 import gameEngine.renderEngine.DisplayManager;
 import physics.network.RaceSetupData;
+import physics.ships.MultiplayerShipManager;
 
 /** @author Reece Bennett */
 public class MainGameLoop {
@@ -79,10 +80,11 @@ public class MainGameLoop {
 		game.cleanUp();
 	}
 
-	public static void startMultiplayerGame(RaceSetupData data) {
+	public static MultiplayerShipManager startMultiplayerGame(RaceSetupData data) {
 		MainGameLoop main = new MainGameLoop();
 		MultiplayerGame game = new MultiplayerGame(data);
 		main.main(game);
+		return game.getManager();
 	}
 
 	public static void main(String[] args) {
