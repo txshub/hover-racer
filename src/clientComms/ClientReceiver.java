@@ -46,16 +46,16 @@ public class ClientReceiver extends Thread {
 					System.out.println("Need To Reconnect");
 				} else if(fullMsg.getType()==ServerComm.SENDALLGAMES) {
 					String[] allGames = (new String(fullMsg.getMsg(), ServerComm.charset)).split(System.lineSeparator());
-					ArrayList<GameNameNumber> gameList = new ArrayList<GameNameNumber>();
+					ArrayList<GameRoom> gameList = new ArrayList<GameRoom>();
 					for(String s : allGames) {
-						if(!s.equals("")) gameList.add(new GameNameNumber(s));
+						if(!s.equals("")) gameList.add(new GameRoom(s));
 					}
 					client.setGameList(gameList);
 				} else if(fullMsg.getType()==ServerComm.INVALIDGAME) {
 					//What to do if game doesn't exist?
 				} else if(fullMsg.getType()==ServerComm.VALIDGAME) {
-					SeedPlayers sp = new SeedPlayers(new String(fullMsg.getMsg(), ServerComm.charset));
-					//What to do with seed & players?
+					GameRoom gr = new GameRoom(new String(fullMsg.getMsg(),ServerComm.charset));
+					//What to do with gameroom?
 				}
 			}
 		} catch (IOException e) {

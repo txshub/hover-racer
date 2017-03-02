@@ -3,8 +3,10 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
-import serverComms.GameNameNumber;
+import physics.network.ShipSetupData;
+import serverComms.GameRoom;
 import serverComms.GameSettings;
+import serverComms.IDShipData;
 import serverComms.ServerComm;
 import userInterface.GameMenu;
 
@@ -23,7 +25,7 @@ public class Client extends Thread {
 	StopDisconnect serverStop;
 	GameMenu gameMenu;
 	public volatile boolean alreadyAccessed = false;
-	private ArrayList<GameNameNumber> gameList;
+	private ArrayList<GameRoom> gameList;
 	
 	/**
 	 * Creates a client object and connects to a given server on a given port automagically
@@ -97,11 +99,12 @@ public class Client extends Thread {
 		sendByteMessage(thisGame.toByteArray(), ServerComm.MAKEGAME);
 	}
 	
-	public void joinGame(int id) throws IOException {
-		sendByteMessage(String.valueOf(id).getBytes(ServerComm.charset), ServerComm.JOINGAME);
+	public void joinGame(int id, ShipSetupData data) throws IOException {
+		IDShipData toSend = new IDShipData(id,data);
+		sendByteMessage(toSend.toByteArray(), ServerComm.JOINGAME);
 	}
 	
-	public ArrayList<GameNameNumber> requestAllGames() throws IOException {
+	public ArrayList<GameRoom> requestAllGames() throws IOException {
 		sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.SENDALLGAMES);
 		while(alreadyAccessed) {
 			try {
@@ -134,7 +137,7 @@ public class Client extends Thread {
 		if(DEBUG) System.out.println("Sent message " + new String(message, ServerComm.charset) + " with tag " + Byte.toString(type));
 	}
 
-	public void setGameList(ArrayList<GameNameNumber> gameList) {
+	public void setGameList(ArrayList<GameRoom> gameList) {
 		this.gameList = gameList;
 		alreadyAccessed = false;
 		

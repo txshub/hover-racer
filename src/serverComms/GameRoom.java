@@ -47,6 +47,55 @@ public class GameRoom {
 		SeedTrack st = TrackMaker.makeTrack(seed, 10, 20, 30, 1, 40, 40, 4);
 		trackPoints = st.getTrack();
 	}
+	
+	public GameRoom(String in) {
+		String collected = "";
+		while(in.charAt(0)!= '|') {
+			collected += in.charAt(0);
+			in = in.substring(1);
+		}
+		name = collected;
+		collected = "";
+		in = in.substring(1);
+		while(in.charAt(0)!= '|') {
+			collected += in.charAt(0);
+			in = in.substring(1);
+		}
+		id = Integer.parseInt(collected);
+		collected = "";
+		in = in.substring(1);
+		while(in.charAt(0)!= '|') {
+			collected += in.charAt(0);
+			in = in.substring(1);
+		}
+		seed = Long.parseLong(collected);
+		collected = "";
+		in = in.substring(1);
+		while(in.charAt(0)!= '|') {
+			collected += in.charAt(0);
+			in = in.substring(1);
+		}
+		maxPlayers = Integer.parseInt(collected);
+		collected = "";
+		in = in.substring(1);
+		while(in.charAt(0)!= '|') {
+			collected += in.charAt(0);
+			in = in.substring(1);
+		}
+		hostName = collected;
+		collected = "";
+		in = in.substring(1);
+		players = new ArrayList<String>();
+		while(in.length()>0) {
+			while(in.charAt(0)!= '|') {
+				collected += in.charAt(0);
+				in = in.substring(1);
+			}
+			players.add(collected);
+			collected = "";
+			in = in.substring(1);
+		}
+	}
 
 	public boolean isBusy() {
 		return (players.size() >= maxPlayers || inGame);
@@ -70,8 +119,8 @@ public class GameRoom {
 		return seed;
 	}
 
-	public void addPlayer(String clientName) {
-		players.add(clientName);
+	public void addPlayer(ShipSetupData data) {
+				
 	}
 
 	public ArrayList<String> getPlayers() {
@@ -159,6 +208,18 @@ public class GameRoom {
 	private float getTrackDirection() {
 		Vector2f relative = trackPoints.get(0).sub(trackPoints.get(1));
 		return (float) Math.atan2(relative.x, relative.y);
+	}
+	
+	public String toString() {
+		String out = name + "|" + id + "|" + seed + "|" + maxPlayers + "|" + hostName + "|";
+		for(String p : players) {
+			out += p + "|";
+		}
+		return out;
+	}
+
+	public byte[] toByteArray() {
+		return toString().getBytes(ServerComm.charset);
 	}
 
 }
