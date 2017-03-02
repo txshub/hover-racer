@@ -55,6 +55,11 @@ public class ServerComm extends Thread {
 	public static final byte FULLPOSITIONUPDATE = Byte.parseByte("14");
 	//Client->Server Establish connection to see if server is running
 	public static final byte TESTCONN           = Byte.parseByte("15");
+	//Data about client's ship sent during setup
+	public static final byte CLIENTSETUPDATA 	= Byte.parseByte("16");
+	//Race setup data sent to all clients
+	public static final byte RACESETUPDATA 		= Byte.parseByte("17");
+	
 	
 	/**
 	 * Creates a Server object
