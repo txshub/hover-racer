@@ -118,13 +118,13 @@ public class ServerComm extends Thread {
 						ServerReceiver receiver = new ServerReceiver(socket, name, fromClient, lobby);
 						lobby.clientTable.addReceiver(name, receiver);
 						receiver.start();
-						ArrayList<GameNameNumber> rooms = new ArrayList<GameNameNumber>();
+						ArrayList<GameRoom> rooms = new ArrayList<GameRoom>();
 						for(GameRoom room : lobby.games) {
-							if(!room.isBusy()) rooms.add(new GameNameNumber(room.name, room.id));
+							if(!room.isBusy()) rooms.add(room);
 						}
 						String out = "";
-						for(GameNameNumber g : rooms) {
-							out += g.toString() + System.lineSeparator();
+						for(GameRoom r : rooms) {
+							out += r.toString() + System.lineSeparator();
 						}
 						lobby.clientTable.getQueue(name).offer(new ByteArrayByte(out.getBytes(charset),SENDALLGAMES));
 						

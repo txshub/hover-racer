@@ -47,13 +47,13 @@ public class ServerReceiver extends Thread {
 					//Do Nothing - It's just making sure we don't disconnect
 					
 				} else if(fullMsg.getType()==ServerComm.SENDALLGAMES) {
-					ArrayList<GameNameNumber> rooms = new ArrayList<GameNameNumber>();
+					ArrayList<GameRoom> rooms = new ArrayList<GameRoom>();
 					for(GameRoom room : lobby.games) {
-						if(!room.isBusy()) rooms.add(new GameNameNumber(room.name, room.id));
+						if(!room.isBusy()) rooms.add(room);
 					}
 					String out = "";
-					for(GameNameNumber g : rooms) {
-						out += g.toString() + System.lineSeparator();
+					for(GameRoom r : rooms) {
+						out += r.toString() + System.lineSeparator();
 					}
 					lobby.clientTable.getQueue(clientName).offer(new ByteArrayByte(out.getBytes(ServerComm.charset),ServerComm.SENDALLGAMES));
 									
@@ -61,7 +61,8 @@ public class ServerReceiver extends Thread {
 					lobby.clientTable.addGame(new GameSettings(new String(fullMsg.getMsg(), ServerComm.charset)));
 					
 				} else if(fullMsg.getType()==ServerComm.JOINGAME) {
-					if(!lobby.clientTable.joinGame(clientName,Integer.valueOf(new String(fullMsg.getMsg(), ServerComm.charset)))) {
+					IDShipData data = new IDShipData(new String(fullMsg.getMsg(), ServerComm.charset));
+					if(!lobby.clientTable.joinGame(clientName,data.id)) {
 						lobby.clientTable.getQueue(clientName).offer(new ByteArrayByte(("").getBytes(ServerComm.charset), ServerComm.INVALIDGAME));
 					} else {
 						long gameSeed = lobby.clientTable.getGame(Integer.valueOf(new String(fullMsg.getMsg(), ServerComm.charset))).getSeed();
