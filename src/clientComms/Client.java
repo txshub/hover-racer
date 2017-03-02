@@ -22,7 +22,7 @@ public class Client extends Thread {
 	String machineName;
 	StopDisconnect serverStop;
 	GameMenu gameMenu;
-	public boolean alreadyAccessed = false;
+	public volatile boolean alreadyAccessed = false;
 	private ArrayList<GameNameNumber> gameList;
 	
 	/**
@@ -101,8 +101,16 @@ public class Client extends Thread {
 		sendByteMessage(String.valueOf(id).getBytes(ServerComm.charset), ServerComm.JOINGAME);
 	}
 	
-	public void requestAllGames() throws IOException {
+	public ArrayList<GameNameNumber> requestAllGames() throws IOException {
 		sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.SENDALLGAMES);
+		while(alreadyAccessed) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+			}
+		}
+		alreadyAccessed = true;
+		return gameList;
 	}
 	
 	public void updateMe(byte[] data) throws IOException {
@@ -124,11 +132,6 @@ public class Client extends Thread {
 		toServer.write(out);
 		toServer.flush();
 		if(DEBUG) System.out.println("Sent message " + new String(message, ServerComm.charset) + " with tag " + Byte.toString(type));
-	}
-	
-	public ArrayList<GameNameNumber> getGameList() {
-		alreadyAccessed = true;
-		return gameList;
 	}
 
 	public void setGameList(ArrayList<GameNameNumber> gameList) {
