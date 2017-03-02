@@ -1,4 +1,4 @@
-package gameEngine.shaders;
+package gameEngine.terrains;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.lwjgl.util.vector.Vector4f;
 
 import gameEngine.entities.Camera;
 import gameEngine.entities.Light;
+import gameEngine.shaders.ShaderProgram;
 import gameEngine.toolbox.Maths;
 import gameEngine.toolbox.VecCon;
 
