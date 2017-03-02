@@ -94,9 +94,7 @@ public class ServerComm extends Thread {
 				ByteArrayByte msg = new ByteArrayByte(data);
 				if(DEBUG) System.out.println("Request to server: " + new String(msg.getMsg(),charset));
 					
-				if(msg.getType()==TESTCONN) {
-					socket.close();
-					
+				if(msg.getType()==TESTCONN) {					
 				//Requesting to join - The message is the client's username
 				} else {
 					//Get the client's name

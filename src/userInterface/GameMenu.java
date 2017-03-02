@@ -25,12 +25,13 @@ import javafx.util.Duration;
 public class GameMenu extends Parent {
 	
 	GridPane initialWindow, settingsWindow, connectMultiWindow; 
-	VBox  multiOptionsWindow, hostGameRoomWindow, singleGameWindow;
-	MenuButton btnPlayGame, btnPlayAI, btnOptions, btnSound, btnMusic, btnExit, btnBackSettings, btnBackMulti, btnBackSingle, btnBackHost, btnBackMultiOptions;
+	VBox  multiOptionsWindow, hostGameRoomWindow, singleGameWindow, joinGameRoomWindow;
+	MenuButton btnPlayGame, btnPlayAI, btnOptions, btnSound, btnMusic, btnExit, btnBackSettings, btnBackMulti, btnBackSingle, btnBackHost, btnBackMultiOptions, btnBackJoin;
 	SoundSlider soundSlider;
 	MusicSlider musicSlider;
 	CreateGameRoom createGameRoom;
 	HostGameRoom hostGameRoom;
+	JoinGameRoom joinGameRoom;
 	static String usr;
 	Client client;
 	final int OFFSET = 600;
@@ -43,6 +44,7 @@ public class GameMenu extends Parent {
 		multiOptionsWindow = new VBox(15);
 		hostGameRoomWindow = new VBox(3);
 		singleGameWindow = new VBox(3);
+		joinGameRoomWindow = new VBox(3);
 		
 		//initial window
 		initialWindow.setTranslateX(100);
@@ -93,6 +95,9 @@ public class GameMenu extends Parent {
 		//create a game room to play with AI
 		singleGameWindow.setTranslateX(700);
 		singleGameWindow.setTranslateY(50);
+		
+		joinGameRoomWindow.setTranslateX(700);
+		joinGameRoomWindow.setTranslateY(50);
 		
 		
 		btnPlayGame = new MenuButton("MULTIPLAYER");
@@ -269,12 +274,32 @@ public class GameMenu extends Parent {
 			});
 		});
 		
+		btnBackJoin = new MenuButton("BACK");
+		btnBackJoin.setOnMouseClicked(event -> {
+			
+			getChildren().add(multiOptionsWindow);
+			
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), joinGameRoomWindow);
+			trans.setToX(joinGameRoomWindow.getTranslateX() + OFFSET);
+			
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), multiOptionsWindow);
+			trans1.setToX(joinGameRoomWindow.getTranslateX());
+			
+			trans.play();
+			trans1.play();
+			
+			trans.setOnFinished(evt -> {
+				getChildren().remove(joinGameRoomWindow);
+				
+			});
+		});
+		
 		soundSlider = new SoundSlider();
 		musicSlider = new MusicSlider();
 		
 		hostGameRoom = new HostGameRoom();
 		createGameRoom = new CreateGameRoom();
-				
+		joinGameRoom = new JoinGameRoom();		
 		
 		TextStyle usernameM = new TextStyle("USERNAME", 30);
 		Text usernameTextM = usernameM.getTextStyled();
@@ -368,7 +393,24 @@ public class GameMenu extends Parent {
 		box4Multi.getChildren().add(connectMulti);
 		
 		//connecting multiplayer options
-		MenuButton joinGameRoom = new MenuButton("JOIN A GAME ROOM");
+		MenuButton joinGR = new MenuButton("JOIN A GAME ROOM");
+		joinGR.setOnMouseClicked(eventHost -> {
+			
+			getChildren().add(joinGameRoomWindow);
+			
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), multiOptionsWindow);
+			trans.setToX(multiOptionsWindow.getTranslateX() - OFFSET);
+			
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), joinGameRoomWindow);
+			trans1.setToX(joinGameRoomWindow.getTranslateX() - OFFSET);
+			
+			trans.play();
+			trans1.play();
+			trans.setOnFinished(evt -> {
+				getChildren().remove(multiOptionsWindow);
+			});
+			
+		});
 		
 		MenuButton hostGR = new MenuButton("HOST A GAME ROOM");
 		hostGR.setOnMouseClicked(eventHost -> {
@@ -421,13 +463,16 @@ public class GameMenu extends Parent {
 		GridPane.setHalignment(machineTextM, HPos.CENTER);
 		
 		//connect multiplayer options
-		multiOptionsWindow.getChildren().addAll(joinGameRoom, hostGR, btnBackMultiOptions);
+		multiOptionsWindow.getChildren().addAll(joinGR, hostGR, btnBackMultiOptions);
 		
 		//host a game room by multiplayer
 		hostGameRoomWindow.getChildren().addAll(hostGameRoom, btnBackHost);
 		
 		//create a game room by single player
 		singleGameWindow.getChildren().addAll(createGameRoom, btnBackSingle);
+		
+		//join a game room in multiplayer mode
+		joinGameRoomWindow.getChildren().addAll(joinGameRoom, btnBackJoin);
 		
 		
 		getChildren().addAll(initialWindow, hoverText, racerText, captionText);
@@ -436,8 +481,8 @@ public class GameMenu extends Parent {
 		this.setCache(true);
 		this.setCacheHint(CacheHint.SPEED);
 	}
+	
 	public void passRooms(ArrayList<GameNameNumber> gameList) {
 		// TODO Auto-generated method stub
-		
 	}
 }
