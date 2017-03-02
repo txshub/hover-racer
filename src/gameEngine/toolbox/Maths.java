@@ -48,5 +48,13 @@ public class Maths {
     Matrix4f.translate(negativeCameraPos, viewMatrix, viewMatrix);
     return viewMatrix;
   }
+  
+  public static Matrix4f createTransformMatrix(Vector3f vec) {
+	    Matrix4f viewMatrix = new Matrix4f();
+	    viewMatrix.setIdentity();
+	    Vector3f negativeCameraPos = new Vector3f(-vec.x, -vec.y, -vec.z);
+	    Matrix4f.translate(negativeCameraPos, viewMatrix, viewMatrix);
+	    return viewMatrix;
+	  }
 
 }

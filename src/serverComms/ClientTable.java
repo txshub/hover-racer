@@ -76,7 +76,7 @@ public class ClientTable {
 	
 
 	public void addGame(GameSettings gameSettings) {
-		allGames.put(nextInt, new GameRoom(nextInt, gameSettings.lobbyName, gameSettings.seed, gameSettings.maxPlayers, gameSettings.numAI, gameSettings.hostName, this));
+		allGames.put(nextInt, new GameRoom(nextInt, gameSettings.lobbyName, gameSettings.seed, gameSettings.maxPlayers, gameSettings.hostName, this));
 		nextInt++;
 	}
 
@@ -87,4 +87,5 @@ public class ClientTable {
 		return true;
 		
 	}
+
 }
