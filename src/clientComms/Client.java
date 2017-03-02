@@ -1,7 +1,9 @@
 package clientComms;
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
+import serverComms.GameNameNumber;
 import serverComms.GameSettings;
 import serverComms.ServerComm;
 import userInterface.GameMenu;
@@ -20,6 +22,8 @@ public class Client extends Thread {
 	String machineName;
 	StopDisconnect serverStop;
 	GameMenu gameMenu;
+	public boolean alreadyAccessed = false;
+	private ArrayList<GameNameNumber> gameList;
 	
 	/**
 	 * Creates a client object and connects to a given server on a given port automagically
@@ -101,6 +105,10 @@ public class Client extends Thread {
 		sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.SENDALLGAMES);
 	}
 	
+	public void updateMe(byte[] data) throws IOException {
+		sendByteMessage(data, ServerComm.SENDPLAYERDATA);
+	}
+	
 	/**
 	 * Sends a message to the server
 	 * @param message The byte message to send
@@ -116,5 +124,16 @@ public class Client extends Thread {
 		toServer.write(out);
 		toServer.flush();
 		if(DEBUG) System.out.println("Sent message " + new String(message, ServerComm.charset) + " with tag " + Byte.toString(type));
+	}
+	
+	public ArrayList<GameNameNumber> getGameList() {
+		alreadyAccessed = true;
+		return gameList;
+	}
+
+	public void setGameList(ArrayList<GameNameNumber> gameList) {
+		this.gameList = gameList;
+		alreadyAccessed = false;
+		
 	}
 }
