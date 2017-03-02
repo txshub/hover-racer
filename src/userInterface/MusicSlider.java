@@ -7,7 +7,7 @@ import java.io.IOException;
 import audioEngine.AudioMaster;
 import javafx.geometry.Insets;
 import javafx.scene.control.Slider;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -17,45 +17,53 @@ import javafx.scene.text.Text;
  * @author Andreea Gheorghe
  *
  */
-public class MusicSlider extends HBox {
-		
-		private Slider musicSlider;
-		private Text value;
-		
-		public MusicSlider(){
-			
-			musicSlider = new Slider(0,10,5);
+public class MusicSlider extends GridPane {
 
-			value = new Text(Integer.toString((int)musicSlider.getValue()));
-			
-			try {
-				Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), 30);
-				value.setFont(f);
-				value.setFill(Color.WHITE);
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			musicSlider.setBlockIncrement(1);
-			musicSlider.setPrefWidth(250);
-			
-			musicSlider.valueProperty().addListener(
-				(observable, oldValue, newValue) -> {	
-						int i = newValue.intValue();
-						value.setText(Integer.toString(i));
-						
-						//TUDOR ADD AUDIO STUFF
-						AudioMaster.setMusicVolume((float)(i / 10.0));
-					}
-					
-				);
-			
-			getChildren().addAll(value,musicSlider);
-			setWidth(300);
-			setPadding(new Insets(0,5,0,0));
-		}
+  private Slider musicSlider;
+  private Text value;
+
+  public MusicSlider() {
+	  
+	this.setPadding(new Insets(0,0,20,0));
+	
+	TextStyle musicS = new TextStyle("BACKGROUND MUSIC", 30);
+	Text musicSliderText = musicS.getTextStyled();
+	
+	GridPane.setColumnSpan(musicSliderText, 2);
+	
+    musicSlider = new Slider(0, 10, 5);
+
+    value = new Text(Integer.toString((int) musicSlider.getValue()));
+
+    try {
+      Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), 30);
+      value.setFont(f);
+      value.setFill(Color.WHITE);
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    musicSlider.setBlockIncrement(1);
+    musicSlider.setPrefWidth(350);
+
+    musicSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+      int i = newValue.intValue();
+      value.setText(Integer.toString(i));
+
+      // TUDOR ADD AUDIO STUFF
+      AudioMaster.setMusicVolume((float) (i / 10.0));
+    }
+
+    );
+
+    add(musicSliderText, 0, 1);
+    add(value, 0, 3);
+    add(musicSlider, 1, 3);
+    
+	GridPane.setMargin(musicSliderText, new Insets(0,0,30,0));
+	GridPane.setMargin(value, new Insets(0,20,0,0));
+    
+  }
 
 }
-
-

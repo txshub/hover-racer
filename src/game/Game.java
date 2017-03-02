@@ -26,11 +26,11 @@ import gameEngine.terrains.Terrain;
 import gameEngine.textures.ModelTexture;
 import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
+import input.Action;
+import input.InputController;
 import physics.core.Ship;
 import physics.placeholders.FlatGroundProvider;
 import physics.ships.MultiplayerShipManager;
-import physics.support.Action;
-import physics.support.InputController;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
@@ -101,7 +101,7 @@ public class Game {
 
 		// Lighting
 		lights = new ArrayList<Light>();
-		Light sun = new Light(new Vector3f(256, 2000, 256), new Vector3f(1f, 1f, 1f));
+		Light sun = new Light(new Vector3f(0, 100000, 0), new Vector3f(1f, 1f, 1f));
 		lights.add(sun);
 
 		// Creating ships
@@ -203,7 +203,7 @@ public class Game {
 
 	private TexturedModel createTrackModel(long seed) {
 		float trackWidth = 100;
-		float trackHeight = 5;
+		float trackHeight = 1;
 
 		float[] vertices = new float[trackPoints.size() * 5 * 3];
 		int[] indices = new int[trackPoints.size() * 5 * 8];
@@ -211,25 +211,8 @@ public class Game {
 		float[] normals = new float[vertices.length];
 
 		// TODO Actually implement textures
-		// for (int i = 0; i < texCoords.length; i += 2) {
-		// if ((i / 2) % 2 == 0) {
-		// texCoords[i] = 0;
-		// texCoords[i+1] = 0;
-		// } else {
-		// texCoords[i] = 1;
-		// texCoords[i+1] = 3;
-		// }
-		// }
-
 		for (int i = 0; i < texCoords.length; i++) {
 			texCoords[i] = 0;
-		}
-
-		// TODO Actually implement normals
-		for (int i = 0; i < normals.length; i += 3) {
-			normals[i] = 0;
-			normals[i + 1] = 1;
-			normals[i + 2] = 0;
 		}
 
 		// Scale up the track
@@ -264,29 +247,58 @@ public class Game {
 
 				Vector2f left = new Vector2f(dirVec.y, -dirVec.x).mul(trackWidth / 2);
 				Vector2f right = new Vector2f(-dirVec.y, dirVec.x).mul(trackWidth / 2);
+				Vector2f leftNorm = new Vector2f(left).normalize();
+				Vector2f rightNorm = new Vector2f(right).normalize();
 
 				// System.out.println("Dir: " + dirVec + " Left: " +
 				// left.length() + " Right: " + right.length());
 
+				Vector3f normal;
+
+				// Top Left
 				vertices[i * 15] = curPoint.getX() + left.x;
 				vertices[i * 15 + 1] = trackHeight;
 				vertices[i * 15 + 2] = curPoint.getY() + left.y;
+				normal = new Vector3f(leftNorm.x, 1, leftNorm.y).normalize();
+				normals[i * 15 + 0] = normal.x;
+				normals[i * 15 + 1] = normal.y;
+				normals[i * 15 + 2] = normal.z;
 
+				// Bottom Left
 				vertices[i * 15 + 3] = curPoint.getX() + left.x;
-				vertices[i * 15 + 4] = trackHeight - 5;
+				vertices[i * 15 + 4] = 0;
 				vertices[i * 15 + 5] = curPoint.getY() + left.y;
+				normal = new Vector3f(leftNorm.x, -1, leftNorm.y).normalize();
+				normals[i * 15 + 3] = normal.x;
+				normals[i * 15 + 4] = normal.y;
+				normals[i * 15 + 5] = normal.z;
 
+				// Top Center
 				vertices[i * 15 + 6] = curPoint.getX();
 				vertices[i * 15 + 7] = trackHeight;
 				vertices[i * 15 + 8] = curPoint.getY();
+				normal = new Vector3f(0, 1, 0).normalize();
+				normals[i * 15 + 6] = normal.x;
+				normals[i * 15 + 7] = normal.y;
+				normals[i * 15 + 8] = normal.z;
 
+				// Top Right
 				vertices[i * 15 + 9] = curPoint.getX() + right.x;
 				vertices[i * 15 + 10] = trackHeight;
 				vertices[i * 15 + 11] = curPoint.getY() + right.y;
+				normal = new Vector3f(rightNorm.x, 1, rightNorm.y).normalize();
+				normals[i * 15 + 9] = normal.x;
+				normals[i * 15 + 10] = normal.y;
+				normals[i * 15 + 11] = normal.z;
 
+				// Bottom Right
 				vertices[i * 15 + 12] = curPoint.getX() + right.x;
-				vertices[i * 15 + 13] = trackHeight - 5;
+				vertices[i * 15 + 13] = 0;
 				vertices[i * 15 + 14] = curPoint.getY() + right.y;
+				normal = new Vector3f(rightNorm.x, -1, rightNorm.y).normalize();
+				normals[i * 15 + 12] = normal.x;
+				normals[i * 15 + 13] = normal.y;
+				normals[i * 15 + 14] = normal.z;
 
 				// System.out.println("Left: " + vertices[i*9] + " " +
 				// vertices[i*9+1] + " " + vertices[i*9+2]

@@ -48,9 +48,9 @@ public class ClientReceiver extends Thread {
 					String[] allGames = (new String(fullMsg.getMsg(), ServerComm.charset)).split(System.lineSeparator());
 					ArrayList<GameNameNumber> gameList = new ArrayList<GameNameNumber>();
 					for(String s : allGames) {
-						gameList.add(new GameNameNumber(s));
+						if(!s.equals("")) gameList.add(new GameNameNumber(s));
 					}
-					//What to do with arraylist of games/number?
+					client.gameMenu.passRooms(gameList);
 				} else if(fullMsg.getType()==ServerComm.INVALIDGAME) {
 					//What to do if game doesn't exist?
 				} else if(fullMsg.getType()==ServerComm.VALIDGAME) {

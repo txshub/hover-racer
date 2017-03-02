@@ -13,6 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -32,21 +34,25 @@ public class MainMenu extends Application {
 		AudioMaster.init();
 		
 		Pane root = new Pane();
-		root.setPrefSize(800, 500);
+		root.setPrefSize(1000, 600);
 
 		// get file from path
-		InputStream is = Files.newInputStream(Paths.get("res/img/hover-racer.jpg"));
+		InputStream is = Files.newInputStream(Paths.get("res/img/hover-racerNew.jpg"));
 		Image background = new Image(is);
 		is.close();
 
 		ImageView imgView = new ImageView(background);
-		imgView.setFitWidth(800);
-		imgView.setFitHeight(500);
+		imgView.setFitWidth(1000);
+		imgView.setFitHeight(600);
 
 		gameMenu = new GameMenu();
 		gameMenu.setVisible(true);
+		
+		Rectangle bg = new Rectangle(1000,600);
+		bg.setOpacity(0.5);
+		bg.setFill(Color.BLACK);
 
-		root.getChildren().addAll(imgView, gameMenu);
+		root.getChildren().addAll(imgView, bg, gameMenu);
 
 		// create a scene
 		Scene scene = new Scene(root);
@@ -60,6 +66,8 @@ public class MainMenu extends Application {
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			
 	          public void handle(WindowEvent we) {
+	        	 AudioMaster.stopMusic();
+	        	 AudioMaster.cleanUp();
 	             System.exit(0);
 	          }
 		});

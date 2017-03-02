@@ -50,7 +50,7 @@ public class MusicPlayer extends Thread {
 	 * Close the music player
 	 */
 	public void terminate() {
-		s.delete();
+//		s.delete();
 		running = false;
 	}
 	

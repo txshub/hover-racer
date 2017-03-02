@@ -1,6 +1,5 @@
 package userInterface;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,54 +7,64 @@ import java.io.IOException;
 import audioEngine.AudioMaster;
 import javafx.geometry.Insets;
 import javafx.scene.control.Slider;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 
 /**
  * 
  * @author Andreea Gheorghe
  *
  */
-public class SoundSlider extends HBox {
-	
-	private Slider soundSlider;
-	private Text value;
-	
-	public SoundSlider(){
-		
-		soundSlider = new Slider(0,10,5);
+public class SoundSlider extends GridPane {
 
-		value = new Text(Integer.toString((int)soundSlider.getValue()));
+  private Slider soundSlider;
+  private Text value;
+
+  public SoundSlider() {
+	  
+	this.setPadding(new Insets(0,0,20,0));
 		
-		try {
-			Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), 30);
-			value.setFont(f);
-			value.setFill(Color.WHITE);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		soundSlider.setBlockIncrement(1);
-		soundSlider.setPrefWidth(250);
-		
-		soundSlider.valueProperty().addListener(
-			(observable, oldValue, newValue) -> {	
-					int i = newValue.intValue();
-					value.setText(Integer.toString(i));
-					
-					//TUDOR ADD AUDIO STUFF
-					AudioMaster.setSFXVolume((float)(i / 10.0));
-				}
-				
-			);
-		
-		getChildren().addAll(value,soundSlider);
-		setWidth(300);
-		setPadding(new Insets(0,5,0,0));
-	}
+	  
+	TextStyle soundS = new TextStyle("SOUND EFFECTS", 30);
+	Text soundSliderText = soundS.getTextStyled();
+	
+	GridPane.setColumnSpan(soundSliderText, 2);
+	
+    soundSlider = new Slider(0, 10, 5);
+
+    value = new Text(Integer.toString((int) soundSlider.getValue()));
+
+    try {
+      Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), 30);
+      value.setFont(f);
+      value.setFill(Color.WHITE);
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    soundSlider.setBlockIncrement(1);
+    soundSlider.setPrefWidth(350);
+
+    soundSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+      int i = newValue.intValue();
+      value.setText(Integer.toString(i));
+
+      // TUDOR ADD AUDIO STUFF
+      AudioMaster.setSFXVolume((float) (i / 10.0));
+    }
+
+    );
+
+    add(soundSliderText, 0, 1);
+    add(value, 0, 3);
+    add(soundSlider, 1, 3 );
+    
+	GridPane.setMargin(soundSliderText, new Insets(0,0,30,0));
+	GridPane.setMargin(value, new Insets(0,20,0,0));
+	
+  }
 
 }
