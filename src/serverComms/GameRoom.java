@@ -3,6 +3,7 @@ package serverComms;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -16,7 +17,7 @@ import trackDesign.TrackPoint;
 public class GameRoom {
 
 
-	private static final long TIME_TO_START = 3000000000L; // To to start race in nanoseconds
+	private static final long TIME_TO_START = 3000000000L; // Time to start race in nanoseconds
 	private static final int SIDE_DISTANCES = 10;
 	private static final int FORWARD_DISTANCES = 10;
 	private static final int STARTING_HEIGHT = 10;
@@ -105,6 +106,10 @@ public class GameRoom {
 		ships.set(gameNum, Converter.buildShipData(msg));
 	}
 
+	public void addSetupData(int gameNum, String msg) {
+		ships.set(gameNum, Converter.buildShipData(msg));
+	}
+
 	public RaceSetupData setupRace() {
 		HashMap<Byte, ShipSetupData> resShips = new HashMap<Byte, ShipSetupData>();
 		for (int i = 0; i < ships.size(); i++) {
@@ -134,9 +139,22 @@ public class GameRoom {
 				res.put((byte) (maxPlayers - shipsLeft), new Vector2f(firstShip).add(SIDE_DISTANCES * i * cos, SIDE_DISTANCES * i * sin))
 					.add(FORWARD_DISTANCES * currentRow * sin, FORWARD_DISTANCES * currentRow * cos);
 			}
+			currentRow++;
 		}
-		return null; // TODO
+		float extraPadding = shipsLeft % 2 == 0 ? 0.5f : 0f;
+		if (shipsLeft % 2 == 0) {
+			float padding = (width - sidePadding * 2) / shipsLeft;
+			for (int i = 0; i < shipsLeft; i++) {
+				res.put((byte) (maxPlayers - shipsLeft),
+					new Vector2f(firstShip).add(padding * (i + extraPadding) * cos, padding * (i + extraPadding) * sin))
+					.add(FORWARD_DISTANCES * currentRow * sin, FORWARD_DISTANCES * currentRow * cos);
+			}
+		}
+		return res.entrySet().stream()
+			.collect(Collectors.toMap(e -> e.getKey(), e -> new Vector3f(e.getValue().x, STARTING_HEIGHT, e.getValue().y)));
 	}
+
+
 
 	private float getTrackDirection() {
 		Vector2f relative = trackPoints.get(0).sub(trackPoints.get(1));
