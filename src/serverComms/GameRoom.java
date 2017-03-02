@@ -34,6 +34,7 @@ public class GameRoom {
 	private ArrayList<TrackPoint> trackPoints;
 
 	private ServerShipManager shipManager;
+	private UpdateAllUsers updatedUsers;
 
 	public GameRoom(int id, String name, long seed, int maxPlayers, String hostName, ClientTable table) {
 		this.id = id;
@@ -132,10 +133,14 @@ public class GameRoom {
 			inGame = true;
 			RaceSetupData setupData = setupRace();
 			shipManager = new ServerShipManager(setupData, players.size(), maxPlayers - players.size());
+			ArrayList<CommQueue> allQueues = new ArrayList<CommQueue>();
 			for (int i = 0; i < players.size(); i++) {
 				table.getReceiver(players.get(i)).setGame(this, i);
 				table.getQueue(players.get(i)).offer(new ByteArrayByte(Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA));
+				allQueues.add(table.getQueue(players.get(i)));
 			}
+			updatedUsers = new UpdateAllUsers(allQueues, this);
+			updatedUsers.start();
 		}
 	}
 
