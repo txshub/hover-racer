@@ -85,6 +85,18 @@ public class MultiplayerShipManager implements ServerShipProvider {
 		return player;
 	}
 
+	/** Adds a client-side AI to a multiplayer game, only to be used for testing. The server won't know about it, but it will collide with
+	 * things. Call before addShipsTo(entities) or it won't be rendered.
+	 * 
+	 * @param aiShip The AIShip to be added */
+	public void addAI(AIShip aiShip) {
+		remotes.forEach(r -> r.addOtherShip(aiShip));
+		player.addOtherShip(aiShip);
+		remotes.add(aiShip);
+		aiShip.addOtherShips(remotes);
+		aiShip.addOtherShip(player);
+	}
+
 	public void addPacket(byte[] packet) {
 		int j = 0;
 		while (j < packet.length) {
