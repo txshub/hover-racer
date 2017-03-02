@@ -25,15 +25,14 @@ public class GameLogic {
 	private ArrayList<TrackPoint> trackPoints;
 	private int lastTrackPoint;
 	
+	private boolean finished;
+	
 	public GameLogic(Ship player, ArrayList<Ship> opponents, SeedTrack track) {
 
 		this.player = player;
 		this.opponents = opponents;
 		
 		trackPoints = track.getTrack();
-		for (TrackPoint p : trackPoints) {
-			p.mul(4);
-		}
 		
 		playerDist = 0;
 		ranking = new HashMap<Integer, Integer>();
@@ -41,6 +40,8 @@ public class GameLogic {
 		
 		calculatePointsDist();
 		lastTrackPoint = 0;
+		
+		finished = false;
 	}
 	
 	/**
@@ -65,6 +66,9 @@ public class GameLogic {
 	 */
 	private void updateLastPoint() {
 		Vector3f playerPos = player.getPosition();
+		
+		int last = lastTrackPoint;
+		
 		for (int i = 0; i < trackPoints.size(); i++) {
 			TrackPoint tp = trackPoints.get(i);
 			float pointWidth = tp.getWidth() / 2f;
@@ -74,6 +78,15 @@ public class GameLogic {
 				lastTrackPoint = i;
 			}
 		}
+		
+		if (last == trackPoints.size() - 1 && lastTrackPoint == 0) {
+			System.err.println("CONGRATULATIONS!");
+			finished = true;
+			return;
+		}
+		if (lastTrackPoint < last) System.err.println("WRONG WAY!");
+		if (lastTrackPoint - last > 1) System.err.println("PENALTY: You left the track!");
+		
 		
 //		int next = lastTrackPoint + 1;
 //		if (next == trackPoints.size()) next = 0;
@@ -126,6 +139,10 @@ public class GameLogic {
 	
 	public HashMap<Integer, Integer> getRankings(){
 		return ranking;
+	}
+	
+	public boolean finishedRace() {
+		return finished;
 	}
 	
 }
