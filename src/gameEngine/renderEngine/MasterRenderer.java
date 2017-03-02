@@ -16,9 +16,9 @@ import gameEngine.entities.Light;
 import gameEngine.models.TexturedModel;
 import gameEngine.normalMappingRenderer.NormalMappingRenderer;
 import gameEngine.shaders.StaticShader;
-import gameEngine.shaders.TerrainShader;
 import gameEngine.skybox.SkyboxRenderer;
 import gameEngine.terrains.Terrain;
+import gameEngine.terrains.TerrainShader;
 import gameEngine.toolbox.VecCon;
 
 public class MasterRenderer {

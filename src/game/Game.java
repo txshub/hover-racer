@@ -92,11 +92,15 @@ public class Game {
 
 		// Track
 		SeedTrack st = TrackMaker.makeTrack(10, 20, 30, 1, 40, 40, 4);
+		// Scale up the track so it isn't so tiny
+		for (TrackPoint tp : st.getTrack()) {
+		  tp.mul(20);
+		}
 		trackPoints = st.getTrack();
 		trackSeed = st.getSeed();
 
 		TexturedModel trackModel = createTrackModel(trackSeed);
-		Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 4f);
+		Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 1f);
 		entities.add(track);
 
 		// Lighting
@@ -120,7 +124,6 @@ public class Game {
 				new FlatGroundProvider(0));
 		ships.addShipsTo(entities);
 		player = ships.getPlayerShip();
-		//
 
 		// Player following camera
 		camera = new Camera(player);
@@ -202,7 +205,6 @@ public class Game {
 	}
 
 	private TexturedModel createTrackModel(long seed) {
-		float trackWidth = 100;
 		float trackHeight = 1;
 
 		float[] vertices = new float[trackPoints.size() * 5 * 3];
@@ -213,11 +215,6 @@ public class Game {
 		// TODO Actually implement textures
 		for (int i = 0; i < texCoords.length; i++) {
 			texCoords[i] = 0;
-		}
-
-		// Scale up the track
-		for (TrackPoint p : trackPoints) {
-			p.mul(10);
 		}
 
 		for (int i = 0; i <= trackPoints.size(); i++) {
@@ -245,8 +242,8 @@ public class Game {
 
 				Vector2f dirVec = dirFromPrev.add(dirToNext).normalize();
 
-				Vector2f left = new Vector2f(dirVec.y, -dirVec.x).mul(trackWidth / 2);
-				Vector2f right = new Vector2f(-dirVec.y, dirVec.x).mul(trackWidth / 2);
+				Vector2f left = new Vector2f(dirVec.y, -dirVec.x).mul(curPoint.getWidth() / 2);
+				Vector2f right = new Vector2f(-dirVec.y, dirVec.x).mul(curPoint.getWidth() / 2);
 				Vector2f leftNorm = new Vector2f(left).normalize();
 				Vector2f rightNorm = new Vector2f(right).normalize();
 
