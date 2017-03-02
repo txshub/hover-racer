@@ -44,7 +44,7 @@ public class MultiplayerShipManager implements ServerShipProvider {
 		byte id = 0;
 		for (TexturedModel texturedModel : otherTextures) {
 			if (id == playerId) id++; // Don't give them player's id
-			remotes.add(new RemoteShip(id, texturedModel, startingPositions.get(id), ground, this));
+			remotes.add(new RemoteShip(id, texturedModel, startingPositions.get(id++), ground, this));
 		}
 		// Tell ships about each other
 		remotes.forEach(r -> r.addOtherShips(remotes));

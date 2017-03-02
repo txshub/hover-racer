@@ -120,7 +120,6 @@ public class Game {
 				new FlatGroundProvider(0));
 		ships.addShipsTo(entities);
 		player = ships.getPlayerShip();
-		//
 
 		// Player following camera
 		camera = new Camera(player);
