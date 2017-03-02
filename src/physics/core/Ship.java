@@ -40,7 +40,7 @@ public abstract class Ship extends Entity {
 
   private static final float GRAVITY = 15 * SCALE; // The force of gravity
                                                    // affecting the ship
-  private static final float AIR_CUSHION = 50 * SCALE; // The base force of the
+  private static final float AIR_CUSHION = 15 * SCALE; // The base force of the
                                                        // ait cushion keeping
                                                        // the hovercraft in the
                                                        // air
