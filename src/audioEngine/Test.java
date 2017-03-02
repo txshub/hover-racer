@@ -3,7 +3,8 @@ package audioEngine;
 import java.util.Scanner;
 
 /**
- * @author Tudor Suruceanu Usage example
+ * Usage example
+ * @author Tudor Suruceanu 
  */
 public class Test {
 
@@ -66,6 +67,8 @@ public class Test {
     // }
     //
     // AudioMaster.stopMusic();
+    
+    in.close();
 
     AudioMaster.cleanUp();
   }

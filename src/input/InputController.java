@@ -54,10 +54,12 @@ public class InputController {
 
   private void load() {
     try {
-      String imported = new Scanner(new File(SETTINGS_PATH)).useDelimiter("\\Z").next();
+      Scanner scanner = new Scanner(new File(SETTINGS_PATH));
+      String imported = scanner.useDelimiter("\\Z").next();
       Gson gson = new GsonBuilder().create();
       mapping = gson.fromJson(imported, new HashMap<Integer, Action>().getClass());
       printSettings();
+      scanner.close();
 
     } catch (IOException e) {
       System.err.println("IO exception");

@@ -14,11 +14,11 @@ import trackDesign.catmullrom.SplineUtils;
  */
 public class TrackMaker {
 
-  public SeedTrack makeTrack() {
+  public static SeedTrack makeTrack() {
     return makeTrack(10, 20, 30, 1, 30, 40, 4);
   }
 
-  public SeedTrack makeTrack(long seed) {
+  public static SeedTrack makeTrack(long seed) {
     return makeTrack(seed, 10, 20, 30, 1, 30, 40, 4);
   }
 
@@ -89,63 +89,40 @@ public class TrackMaker {
     Random random = new Random(seed); // Make the random object
     ArrayList<TrackPoint> points = new ArrayList<TrackPoint>();
     ArrayList<TrackPoint> hullPoints = new ArrayList<TrackPoint>();
-    int trackPointCount = random.nextInt(maxTrackPoints - minTrackPoints) + minTrackPoints; // Decide
-                                                                                            // the
-                                                                                            // number
-                                                                                            // of
-                                                                                            // points
-                                                                                            // between
-                                                                                            // the
-                                                                                            // minimum
-                                                                                            // and
-                                                                                            // maximum
-                                                                                            // number
-    for (int i = 0; i < trackPointCount; i++) { // Create an array of random
-                                                // TrackPoints
+    // Decide the number of points between the minimum and maximum number
+    int trackPointCount = random.nextInt(maxTrackPoints - minTrackPoints) + minTrackPoints;
+    // Create an array of random TrackPoints
+    for (int i = 0; i < trackPointCount; i++) {
       int x = random.nextInt(250); // Pick a random x coordinate
       int y = random.nextInt(250); // Pick a random y coordinate
       points.add(new TrackPoint(x, y)); // Add this new point
     }
-    hullPoints = convexHull(points); // Take the outer hull of these points for
-                                     // the initial track
+    // Take the outer hull of these points for the initial track
+    hullPoints = convexHull(points);
     for (int i = 0; i < seperateIterations; i++) {
-      seperatePoints(points, minDist); // Spread out the points to ensure the
-                                       // minimum distance
+      // Spread out the points to ensure the minimum distance
+      seperatePoints(points, minDist);
     }
-    ArrayList<TrackPoint> circuit = doublePoints(hullPoints, difficulty, maxDisp, random); // Double
-                                                                                           // the
-                                                                                           // number
-                                                                                           // of
-                                                                                           // points
-                                                                                           // and
-                                                                                           // offset
-                                                                                           // them
-                                                                                           // to
-                                                                                           // account
-                                                                                           // for
-                                                                                           // track
-                                                                                           // difficulty
+    // Double the number of points and offset them to account for track difficulty
+    ArrayList<TrackPoint> circuit = doublePoints(hullPoints, difficulty, maxDisp, random);
     for (int i = 0; i < 10; i++) {
-      fixAngles(circuit); // Ensure all angles are greater than 100 degrees to
-                          // prevent sudden turns
-      seperatePoints(circuit, minDist); // Seperate the points again
+      // Ensure all angles are greater than 100 degrees to prevent sudden turns
+      fixAngles(circuit);
+      seperatePoints(circuit, minDist); // Separate the points again
     }
     mergeClosePoints(circuit, minDist * 2);
     spreadAngles(circuit);
     if (circuit.size() < 5)
       return makeTrack(random.nextLong(), minTrackPoints, maxTrackPoints, minDist,
-          seperateIterations, difficulty, maxDisp, subDivs); // If the track
-                                                             // generation has
-                                                             // failed
-                                                             // spectatularly,
-                                                             // try again
+          // If the track generation has failed spectacularly then try again
+          seperateIterations, difficulty, maxDisp, subDivs);
     makeWidths(circuit, random);
-    ArrayList<TrackPoint> finalCircuit = SplineUtils.dividePoints(circuit, subDivs); // Apply
-                                                                                     // smoothing
-    centreTrack(finalCircuit); // Centre the track so it doesn't go off screen
-                               // at all
-    return new SeedTrack(seed, finalCircuit); // Return this final track after
-                                              // smoothing and centring
+    // Apply smoothing
+    ArrayList<TrackPoint> finalCircuit = SplineUtils.dividePoints(circuit, subDivs);
+    // Center the track so it doesn't go off screen at all
+    centreTrack(finalCircuit);
+    // Return this final track after smoothing and centring
+    return new SeedTrack(seed, finalCircuit);
   }
 
   private static void makeWidths(ArrayList<TrackPoint> points, Random random) {
@@ -176,18 +153,8 @@ public class TrackMaker {
         float angle = (float) (Math.atan2(points.get(i).getY() - points.get(next).getY(),
             points.get(i).getX() - points.get(next).getX())
             - Math.atan2(points.get(after).getY() - points.get(next).getY(),
-                points.get(after).getX() - points.get(next).getX())); // Find
-                                                                      // the
-                                                                      // angle
-                                                                      // between
-                                                                      // the
-                                                                      // previous
-                                                                      // and
-                                                                      // next
-                                                                      // point
-                                                                      // centred
-                                                                      // on this
-                                                                      // point
+                // Find the angle between the previous and new point centred on this point
+                points.get(after).getX() - points.get(next).getX()));
         if (angle < threshold) {
           points.remove(after);
         }
@@ -315,12 +282,12 @@ public class TrackMaker {
                                                                    // equal to
                                                                    // 100
                                                                    // degrees
-          float length = currentPoint.dist(nextPoint); // Calculate the next
-                                                       // point's new location
-                                                       // so it's at the same
-                                                       // distance from this
-                                                       // point and at 100
-                                                       // degrees
+          float length = currentPoint.distance(nextPoint); // Calculate the next
+          // point's new location
+          // so it's at the same
+          // distance from this
+          // point and at 100
+          // degrees
           float newY = (float) Math.cos(angleNeeded) * length; // Get the X&Y
                                                                // for the new
                                                                // location
@@ -335,7 +302,7 @@ public class TrackMaker {
               - Math.atan2(aboveCentre.getY() - currentPoint.getY(),
                   aboveCentre.getX() - currentPoint.getX()));
           float angleNeeded = angle100 - angleToPositiveY;
-          float length = currentPoint.dist(nextPoint);
+          float length = currentPoint.distance(nextPoint);
           float newY = (float) Math.cos(angleNeeded) * length;
           float nexX = (float) Math.sin(angleNeeded) * length;
           nextPoint.setX(currentPoint.getX() + nexX);
@@ -391,9 +358,10 @@ public class TrackMaker {
   public static void seperatePoints(ArrayList<TrackPoint> points, float minDist) {
     for (int i = 0; i < points.size(); i++) { // For each point
       for (int j = i + 1; j < points.size(); j++) { // For each remaining point
-        if (points.get(i).dist(points.get(j)) < minDist) { // If the distance is
-                                                           // less than the
-                                                           // minimum distance
+        if (points.get(i).distance(points.get(j)) < minDist) { // If the
+                                                               // distance is
+          // less than the
+          // minimum distance
           float dx = points.get(i).getX() - points.get(j).getX();
           float dy = points.get(i).getY() - points.get(j).getY();
           float len = (float) Math.sqrt((dx * dx) + (dy * dy));

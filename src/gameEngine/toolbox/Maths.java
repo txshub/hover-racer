@@ -48,5 +48,13 @@ public class Maths {
     Matrix4f.translate(negativeCameraPos, viewMatrix, viewMatrix);
     return viewMatrix;
   }
+  
+  public static org.joml.Matrix4f createTransformMatrix(org.joml.Vector3f vec) {
+	    org.joml.Matrix4f viewMatrix = new org.joml.Matrix4f();
+	    viewMatrix.identity();
+	    org.joml.Vector3f negativeCameraPos = new org.joml.Vector3f(-vec.x, -vec.y, -vec.z);
+	    viewMatrix.translate(negativeCameraPos);
+	    return viewMatrix;
+	  }
 
 }
