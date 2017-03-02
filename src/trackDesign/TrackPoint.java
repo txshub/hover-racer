@@ -13,7 +13,7 @@ import org.joml.Vector2f;
  */
 public class TrackPoint extends Vector2f implements Comparable<TrackPoint> {
 
-  float width = 5f;
+  float width = 200f;
 
   /**
    * Creates a new TrackPoint object
