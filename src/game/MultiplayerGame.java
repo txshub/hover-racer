@@ -112,6 +112,7 @@ public class MultiplayerGame implements GameInt {
 		// Create ships
 		ships = new MultiplayerShipManager(data, new FlatGroundProvider(0), input, loader);
 		ships.addShipsTo(entities);
+		client.setManager(ships); // Add the manager for the client for communication
 
 		// Player following camera
 		camera = new Camera(ships.getPlayerShip());

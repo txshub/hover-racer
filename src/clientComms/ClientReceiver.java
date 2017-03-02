@@ -61,6 +61,9 @@ public class ClientReceiver extends Thread {
 				} else if(fullMsg.getType()==ServerComm.VALIDGAME) {
 					GameRoom gr = new GameRoom(new String(fullMsg.getMsg(),ServerComm.charset));
 					//What to do with gameroom?
+				} else if(fullMsg.getType()==ServerComm.RACESETUPDATA){
+					//TODO setup game
+					manager = client.getManager();
 				} else if(fullMsg.getType()==ServerComm.FULLPOSITIONUPDATE) {
 					if(manager==null) throw new IllegalStateException("Position update received but ship manager was not added to ClientReceiver");
 					manager.addPacket(msg);
