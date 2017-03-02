@@ -118,8 +118,8 @@ public class GameRoom {
 		return seed;
 	}
 
-	public void addPlayer(String clientName) {
-		players.add(clientName);
+	public void addPlayer(ShipSetupData data) {
+				
 	}
 
 	public ArrayList<String> getPlayers() {
@@ -198,6 +198,10 @@ public class GameRoom {
 			out += p + "|";
 		}
 		return out;
+	}
+
+	public byte[] toByteArray() {
+		return toString().getBytes(ServerComm.charset);
 	}
 
 }

@@ -62,12 +62,10 @@ public class ServerReceiver extends Thread {
 					
 				} else if(fullMsg.getType()==ServerComm.JOINGAME) {
 					IDShipData data = new IDShipData(new String(fullMsg.getMsg(), ServerComm.charset));
-					if(!lobby.clientTable.joinGame(clientName,data.id)) {
-						lobby.clientTable.getQueue(clientName).offer(new ByteArrayByte(("").getBytes(ServerComm.charset), ServerComm.INVALIDGAME));
+					if(!lobby.clientTable.joinGame(data.id, data.data)) {
+						lobby.clientTable.getQueue(clientName).offer(new ByteArrayByte(new byte[0], ServerComm.INVALIDGAME));
 					} else {
-						long gameSeed = lobby.clientTable.getGame(Integer.valueOf(new String(fullMsg.getMsg(), ServerComm.charset))).getSeed();
-						ArrayList<String> players = lobby.clientTable.getGame(Integer.valueOf(new String(fullMsg.getMsg(), ServerComm.charset))).getPlayers();
-						lobby.clientTable.getQueue(clientName).offer(new ByteArrayByte(new SeedPlayers(gameSeed, players).toByteArray(), ServerComm.VALIDGAME));
+						lobby.clientTable.getQueue(clientName).offer(new ByteArrayByte(lobby.clientTable.getGame(data.id).toByteArray(), ServerComm.VALIDGAME));
 					}
 					
 				} else if(fullMsg.getType()==ServerComm.SENDPLAYERDATA) {

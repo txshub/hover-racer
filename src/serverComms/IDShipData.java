@@ -21,7 +21,7 @@ public class IDShipData {
 		}
 		id = Integer.parseInt(collected);
 		in = in.substring(1);
-		data = DataGenerator.basicShipSetup(in);
+		data = DataGenerator.fromJson(in);
 		
 	}
 	
