@@ -118,7 +118,7 @@ public class GameRoom {
 		}
 		Vector2f startDirection = trackPoints.get(0).sub(trackPoints.get(1));
 		return new RaceSetupData(resShips, generateStartingPositions(startDirection),
-			new Vector3f(startDirection.x, STARTING_HEIGHT, startDirection.y), seed, TIME_TO_START);
+			new Vector3f(0, (float) Math.atan2(startDirection.x, startDirection.y), 0), seed, TIME_TO_START);
 	}
 
 	// TODO Those are not finished
