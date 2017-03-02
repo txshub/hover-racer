@@ -298,8 +298,7 @@ public class GameMenu extends Parent {
 		musicSlider = new MusicSlider();
 		
 		hostGameRoom = new HostGameRoom();
-		createGameRoom = new CreateGameRoom();
-		joinGameRoom = new JoinGameRoom();		
+		createGameRoom = new CreateGameRoom();		
 		
 		TextStyle usernameM = new TextStyle("USERNAME", 30);
 		Text usernameTextM = usernameM.getTextStyled();
@@ -394,6 +393,9 @@ public class GameMenu extends Parent {
 		
 		//connecting multiplayer options
 		MenuButton joinGR = new MenuButton("JOIN A GAME ROOM");
+		
+		joinGameRoom = new JoinGameRoom(client);
+		
 		joinGR.setOnMouseClicked(eventHost -> {
 			
 			getChildren().add(joinGameRoomWindow);
@@ -482,7 +484,4 @@ public class GameMenu extends Parent {
 		this.setCacheHint(CacheHint.SPEED);
 	}
 	
-	public void passRooms(ArrayList<GameNameNumber> gameList) {
-		// TODO Auto-generated method stub
-	}
 }

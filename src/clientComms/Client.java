@@ -101,6 +101,7 @@ public class Client extends Thread {
 		sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.SENDALLGAMES);
 	}
 	
+	
 	/**
 	 * Sends a message to the server
 	 * @param message The byte message to send
