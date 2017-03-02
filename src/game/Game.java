@@ -105,14 +105,14 @@ public class Game {
 		// Player Ship
 		TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader), new ModelTexture(loader.loadTexture("newShipTexture")));
 		player = new PlayerShip((byte) 0, playerTModel, new Vector3f(50, 20, 50), null, new FlatGroundProvider(0), input);
-		//entities.add(player);
+		entities.add(player);
 		
 		// AI Ship
-		ai = new AIShip((byte) 1, playerTModel, new Vector3f(trackPoints.get(0).getX(), 0, trackPoints.get(0).getY()), null, new FlatGroundProvider(0), trackPoints, input);
+		ai = new AIShip((byte) 1, playerTModel, new Vector3f(trackPoints.get(0).getX(), 0, trackPoints.get(0).getY()), null, new FlatGroundProvider(0), trackPoints);
 		entities.add(ai);
 
 		// Player following camera
-		camera = new Camera(ai);
+		camera = new Camera(player);
 
 		// Renderers
 		renderer = new MasterRenderer(loader);
@@ -139,7 +139,7 @@ public class Game {
 		if (input.checkAction(Action.SFX_UP)) AudioMaster.increaseSFXVolume();
 		if (input.checkAction(Action.SFX_DOWN)) AudioMaster.decreaseSFXVolume();
 
-		//player.update((float) delta);
+		player.update((float) delta);
 		ai.update((float) delta);
 		camera.move();
 		// picker.update();
