@@ -16,11 +16,10 @@ public class TestGameSettings {
 	public void testToStringWithParams() {
 		long seed = 12432;
 		int maxPlayers = 3;
-		int numAI = 4;
 		int lapCount = 7;
 		String lobbyName = "Testing";
 		String hostName = "Tester";
-		String expected = seed + "|" + maxPlayers + "|" + numAI + "|" + lapCount + "|" + lobbyName + "|" + hostName;
+		String expected = seed + "|" + maxPlayers + "|" + lapCount + "|" + lobbyName + "|" + hostName;
 		GameSettings gs = new GameSettings(seed, maxPlayers, lapCount, lobbyName, hostName);
 		if(!gs.toString().equals(expected)) fail("String with params wasn't as expected");
 	}
