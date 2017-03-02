@@ -43,8 +43,8 @@ public class ShipSounds {
 
 		// Create player ship's Source
 		playerSource = AudioMaster.createSFXSource();
-		playerSource.setLooping(true);
-		playerSource.play(Sounds.ENGINE);
+//		playerSource.setLooping(true);
+//		playerSource.play(Sounds.ENGINE);
 		// TODO anything else you want do when creating player's source
 
 		// Create other ship's Sources
@@ -71,9 +71,9 @@ public class ShipSounds {
 	 */
 	public void update(float delta) {
 
-		float pitch = 1f + player.getVelocity().length() / (player.getMaxSpeed() / 3f);
-		if (pitch > 2f) pitch = 2f;
-		playerSource.setPitch(pitch);
+//		float pitch = 1f + player.getVelocity().length() / (player.getMaxSpeed() / 3f);
+//		if (pitch > 2f) pitch = 2f;
+//		playerSource.setPitch(pitch);
 		
 		// Updates all other ships
 		for (Entry<Ship, Source> entry : this.otherShips.entrySet()) {
@@ -85,12 +85,12 @@ public class ShipSounds {
 //			source.setVelocity(velocity.x, velocity.y, velocity.z);
 
 			Matrix4f tm = Maths.createTransformMatrix(new Vector3f(0f, 0f, 0f));
-			Vector3f sourcePos = player.getPosition().mulPosition(tm);
+			Vector3f sourcePos = player.getPosition().mulDirection(tm.transpose());
 			source.setPosition(sourcePos.x(), sourcePos.y(), sourcePos.z());
 			
 			float p = 1f + ship.getVelocity().length() / (ship.getMaxSpeed() / 3f);
-			if (pitch > 2f) pitch = 2f;
-			source.setPitch(pitch);
+			if (p > 2f) p = 2f;
+			source.setPitch(p);
 		}
 	}
 

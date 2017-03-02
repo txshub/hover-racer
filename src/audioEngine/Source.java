@@ -22,9 +22,9 @@ public class Source {
     setPosition(0, 0, 0);
     setVelocity(0, 0, 0);
 
-    // AL10.alSourcef(sourceId, AL10.AL_ROLLOFF_FACTOR, 1);
-    // AL10.alSourcef(sourceId, AL10.AL_REFERENCE_DISTANCE, 10);
-    // AL10.alSourcef(sourceId, AL10.AL_MAX_DISTANCE, 250);
+    AL10.alSourcef(sourceId, AL10.AL_ROLLOFF_FACTOR, 1);
+    AL10.alSourcef(sourceId, AL10.AL_REFERENCE_DISTANCE, 20);
+    AL10.alSourcef(sourceId, AL10.AL_MAX_DISTANCE, 300);
   }
 
   /**

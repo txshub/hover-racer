@@ -59,6 +59,9 @@ public class Game {
 	private MultiplayerShipManager ships;
 
 	private boolean running;
+	
+	// Tudor
+	GameLogic logic;
 
 	public Game() {
 		init();
@@ -134,12 +137,25 @@ public class Game {
 		// terrains);
 
 		// Tudor
+		ArrayList<Ship> opponents = new ArrayList<Ship>();
+		logic = new GameLogic(player, opponents, st);
+		
 		AudioMaster.playInGameMusic();
 	}
 
 	public void update(double delta) {
 		input.update();
 
+		// Tudor
+		logic.update();
+//		System.out.println(trackPoints.get(1).x + " " + trackPoints.get(1).y);
+//		System.err.println(player.getPosition().x + " " + player.getPosition().z);
+		
+//		System.out.println(trackPoints.get(1).distance(player.getPosition().x, player.getPosition().z));
+//		System.err.println(trackPoints.get(1).getWidth() / 2f);
+		
+		System.out.println(logic.getPlayerDist());
+		
 		// Check if the escape key was pressed to exit the game
 		if (input.isDown(Action.EXIT))
 			running = false;

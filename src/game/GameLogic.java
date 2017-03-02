@@ -32,7 +32,7 @@ public class GameLogic {
 		
 		trackPoints = track.getTrack();
 		for (TrackPoint p : trackPoints) {
-			p.mul(10);
+			p.mul(4);
 		}
 		
 		playerDist = 0;
@@ -74,6 +74,15 @@ public class GameLogic {
 				lastTrackPoint = i;
 			}
 		}
+		
+//		int next = lastTrackPoint + 1;
+//		if (next == trackPoints.size()) next = 0;
+//		TrackPoint tp = trackPoints.get(lastTrackPoint + 1);
+//		float pointWidth = 200f;
+//		float distanceToNext = tp.distance(playerPos.x, playerPos.z);
+//		if (distanceToNext <= pointWidth) {
+//			lastTrackPoint = next;
+//		}
 	}
 	
 	/**
@@ -89,8 +98,8 @@ public class GameLogic {
 			next = trackPoints.get(lastTrackPoint + 1);
 		else
 			next = trackPoints.get(0);
-		float orth = Intersectionf.distancePointLine(playerPos.x(), playerPos.y(), last.getX(), last.getY(), next.getX(), next.getY());
-		float ip = playerPos.distance(last.getX(), playerPos.y(), last.getY());
+		float orth = Intersectionf.distancePointLine(playerPos.x(), playerPos.z(), last.getX(), last.getY(), next.getX(), next.getY());
+		float ip = last.distance(playerPos.x(), playerPos.z());
 		distance += Math.sqrt(ip * ip - orth * orth);
 		return distance;
 	}
