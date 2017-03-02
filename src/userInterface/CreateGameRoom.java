@@ -87,10 +87,10 @@ public class CreateGameRoom extends GridPane {
 		add(noAIsText, 1, 3);
 		add(noAIsInput,1, 4);
 		
-		add(noLapsText, 0, 5);
-		add(noLapsInput,0, 6);
+		add(noLapsText, 1, 5);
+		add(noLapsInput, 1, 6);
 		
-		add(box6, 1, 6);
+		add(box6,0,6);
 		
 		add(generateTrack, 0, 8);
 		add(createGameRoom, 1, 8);

@@ -39,8 +39,8 @@ public class Map extends Canvas {
 		
 		this.seed= seed ;
 		
-		this.setWidth(150);
-		this.setHeight(150);
+		this.setWidth(160);
+		this.setHeight(160);
 		
 		GraphicsContext gc = this.getGraphicsContext2D();
         drawShapes(gc);
@@ -55,13 +55,13 @@ public class Map extends Canvas {
 		
 		for(int i=0; i< track.size(); i++){
 			
-			double x1 = (((track.get(i).getX()*2)/4));
-			double y1 =(((track.get(i).getY()*2)/4));
-			double x2 = (((track.get((i+1)%track.size()).getX()*2)/4));
-			double y2 = (((track.get((i+1)%track.size()).getY()*2)/4));
+			double x1 = (((track.get(i).getX()*2)/3.3));
+			double y1 =(((track.get(i).getY()*2)/3.3));
+			double x2 = (((track.get((i+1)%track.size()).getX()*2)/3.3));
+			double y2 = (((track.get((i+1)%track.size()).getY()*2)/3.3));
 			
 			gc.setStroke(Color.WHITE);
-			gc.setLineWidth(1.5);
+			gc.setLineWidth(2);
 			gc.strokeLine(x1,y1,x2,y2);
 		}
 		

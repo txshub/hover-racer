@@ -17,6 +17,7 @@ import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -29,6 +30,7 @@ import javafx.scene.text.Text;
 public class MenuButton extends StackPane {
 
   private Text buttonText;
+  private Rectangle bg;
 
   // Tudor - audio source
   private Source audioSource;
@@ -56,9 +58,10 @@ public class MenuButton extends StackPane {
     }
 
     // create button
-    Rectangle bg = new Rectangle(350, 70);
+    bg = new Rectangle(350, 70);
     bg.setOpacity(0.7);
     bg.setFill(Color.BLACK);
+    
     // blur the button colour
     GaussianBlur blur = new GaussianBlur(3.6);
     bg.setEffect(blur);
@@ -116,32 +119,5 @@ public class MenuButton extends StackPane {
     this.buttonText = newText;
 
   }
-
-  public final ObjectProperty<EventHandler<ActionEvent>> onActionProperty() {
-    return onAction;
-  }
-
-  public final void setOnAction(EventHandler<ActionEvent> value) {
-    onActionProperty().set(value);
-  }
-
-  public final EventHandler<ActionEvent> getOnAction() {
-    return onActionProperty().get();
-  }
-
-  private ObjectPropertyBase<EventHandler<ActionEvent>> onAction = new ObjectPropertyBase<EventHandler<ActionEvent>>() {
-    protected void invalidated() {
-      setEventHandler(ActionEvent.ACTION, get());
-    }
-
-    public Object getBean() {
-      return this;
-    }
-
-    @Override
-    public String getName() {
-      return "onAction";
-    }
-  };
 
 }

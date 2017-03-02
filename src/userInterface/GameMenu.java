@@ -15,8 +15,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 /**
@@ -28,12 +26,13 @@ public class GameMenu extends Parent {
 	
 	GridPane initialWindow, settingsWindow, connectMultiWindow; 
 	VBox  multiOptionsWindow, hostGameRoomWindow, singleGameWindow;
-	MenuButton btnPlayGame, btnPlayAI, btnOptions, btnSound, btnMusic, btnExit, btnBackSettings, btnBackMulti, btnBackSingle, btnBack4, btnBack5, btnBack6;
+	MenuButton btnPlayGame, btnPlayAI, btnOptions, btnSound, btnMusic, btnExit, btnBackSettings, btnBackMulti, btnBackSingle, btnBackHost, btnBackMultiOptions;
 	SoundSlider soundSlider;
 	MusicSlider musicSlider;
 	CreateGameRoom createGameRoom;
 	HostGameRoom hostGameRoom;
 	static String usr;
+	Client client;
 	final int OFFSET = 600;
 	
 	public GameMenu() {
@@ -41,9 +40,9 @@ public class GameMenu extends Parent {
 		initialWindow = new GridPane();
 		settingsWindow = new GridPane();
 		connectMultiWindow = new GridPane();
-		multiOptionsWindow = new VBox(20);
-		hostGameRoomWindow = new VBox(10);
-		singleGameWindow = new VBox(5);
+		multiOptionsWindow = new VBox(15);
+		hostGameRoomWindow = new VBox(3);
+		singleGameWindow = new VBox(3);
 		
 		//initial window
 		initialWindow.setTranslateX(100);
@@ -85,7 +84,7 @@ public class GameMenu extends Parent {
        
 		//connect multiplayer options
 		multiOptionsWindow.setTranslateX(700);
-		multiOptionsWindow.setTranslateY(200);
+		multiOptionsWindow.setTranslateY(240);
 		
 		//host a game room
 		hostGameRoomWindow.setTranslateX(700);
@@ -225,6 +224,51 @@ public class GameMenu extends Parent {
 			});
 		});
 		
+		btnBackMultiOptions = new MenuButton("BACK TO MENU");
+		btnBackMultiOptions.setOnMouseClicked(event -> {
+			
+			getChildren().add(initialWindow);
+			
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), multiOptionsWindow);
+			trans.setToX(multiOptionsWindow.getTranslateX() + OFFSET);
+			
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), initialWindow);
+			trans1.setToX(multiOptionsWindow.getTranslateX());
+			
+			trans.play();
+			trans1.play();
+			
+			trans.setOnFinished(evt -> {
+				
+				//disconnect client when you return to the main menu
+				client.cleanup();
+				
+				getChildren().remove(multiOptionsWindow);
+				getChildren().addAll(hoverText, racerText, captionText);
+				
+			});
+		});
+		
+		btnBackHost = new MenuButton("BACK");
+		btnBackHost.setOnMouseClicked(event -> {
+			
+			getChildren().add(multiOptionsWindow);
+			
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), hostGameRoomWindow);
+			trans.setToX(hostGameRoomWindow.getTranslateX() + OFFSET);
+			
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), multiOptionsWindow);
+			trans1.setToX(hostGameRoomWindow.getTranslateX());
+			
+			trans.play();
+			trans1.play();
+			
+			trans.setOnFinished(evt -> {
+				getChildren().remove(hostGameRoomWindow);
+				
+			});
+		});
+		
 		soundSlider = new SoundSlider();
 		musicSlider = new MusicSlider();
 		
@@ -259,7 +303,7 @@ public class GameMenu extends Parent {
 			int portNo = Integer.valueOf(portInputMulti.getText());
 			String machineName = machineInputMulti.getText();
 			
-			Client client = new Client(usr, portNo, machineName, this);
+			client = new Client(usr, portNo, machineName, this);
 			
 			if(client.serverOn) {
 				
@@ -300,7 +344,7 @@ public class GameMenu extends Parent {
 			int portNo = Integer.valueOf(portInputMulti.getText());
 			String machineName = machineInputMulti.getText();
 			
-			Client client = new Client(usr, portNo, machineName, this);
+			client = new Client(usr, portNo, machineName, this);
 			client.start();
 			
 			getChildren().add(multiOptionsWindow);
@@ -377,10 +421,10 @@ public class GameMenu extends Parent {
 		GridPane.setHalignment(machineTextM, HPos.CENTER);
 		
 		//connect multiplayer options
-		multiOptionsWindow.getChildren().addAll(joinGameRoom, hostGR);
+		multiOptionsWindow.getChildren().addAll(joinGameRoom, hostGR, btnBackMultiOptions);
 		
 		//host a game room by multiplayer
-		hostGameRoomWindow.getChildren().add(hostGameRoom);
+		hostGameRoomWindow.getChildren().addAll(hostGameRoom, btnBackHost);
 		
 		//create a game room by single player
 		singleGameWindow.getChildren().addAll(createGameRoom, btnBackSingle);
