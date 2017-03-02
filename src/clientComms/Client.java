@@ -1,8 +1,12 @@
 package clientComms;
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
+import physics.network.ShipSetupData;
+import serverComms.GameRoom;
 import serverComms.GameSettings;
+import serverComms.IDShipData;
 import serverComms.ServerComm;
 import userInterface.GameMenu;
 
@@ -12,14 +16,16 @@ import userInterface.GameMenu;
  *
  */
 public class Client extends Thread {
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 	public boolean serverOn = true;
-	private DataOutputStream toServer;
+	protected DataOutputStream toServer;
 	String clientName;
 	int portNumber;
 	String machineName;
 	StopDisconnect serverStop;
 	GameMenu gameMenu;
+	public volatile boolean alreadyAccessed = false;
+	private ArrayList<GameRoom> gameList;
 	
 	/**
 	 * Creates a client object and connects to a given server on a given port automagically
@@ -37,7 +43,7 @@ public class Client extends Thread {
 		try {
 			Socket testConn = new Socket(machineName, portNumber);
 			toServer = new DataOutputStream(new BufferedOutputStream(testConn.getOutputStream()));
-			sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.TESTCONN);
+			sendByteMessage(new byte[0], ServerComm.TESTCONN);
 		} catch (UnknownHostException e) {
 			serverOn = false;
 		} catch (IOException e) {
@@ -93,12 +99,25 @@ public class Client extends Thread {
 		sendByteMessage(thisGame.toByteArray(), ServerComm.MAKEGAME);
 	}
 	
-	public void joinGame(int id) throws IOException {
-		sendByteMessage(String.valueOf(id).getBytes(ServerComm.charset), ServerComm.JOINGAME);
+	public void joinGame(int id, ShipSetupData data) throws IOException {
+		IDShipData toSend = new IDShipData(id,data);
+		sendByteMessage(toSend.toByteArray(), ServerComm.JOINGAME);
 	}
 	
-	public void requestAllGames() throws IOException {
+	public ArrayList<GameRoom> requestAllGames() throws IOException {
 		sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.SENDALLGAMES);
+		while(alreadyAccessed) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+			}
+		}
+		alreadyAccessed = true;
+		return gameList;
+	}
+	
+	public void updateMe(byte[] data) throws IOException {
+		sendByteMessage(data, ServerComm.SENDPLAYERDATA);
 	}
 	
 	/**
@@ -115,6 +134,12 @@ public class Client extends Thread {
 		toServer.writeInt(out.length);
 		toServer.write(out);
 		toServer.flush();
-		if(ServerComm.DEBUG) System.out.println("Sent message " + new String(message, ServerComm.charset) + " with tag " + Byte.toString(type));
+		if(DEBUG) System.out.println("Sent message " + new String(message, ServerComm.charset) + " with tag " + Byte.toString(type));
+	}
+
+	public void setGameList(ArrayList<GameRoom> gameList) {
+		this.gameList = gameList;
+		alreadyAccessed = false;
+		
 	}
 }

@@ -129,15 +129,15 @@ public class TrackMaker {
     for (TrackPoint p : points) {
       int rand = random.nextInt(100);
       if (rand < 10) {
-        p.setWidth(3);
+        p.setWidth(120);
       } else if (rand < 30) {
-        p.setWidth(4);
+        p.setWidth(160);
       } else if (rand < 70) {
-        p.setWidth(5);
+        p.setWidth(200);
       } else if (rand < 90) {
-        p.setWidth(6);
+        p.setWidth(240);
       } else {
-        p.setWidth(7);
+        p.setWidth(280);
       }
     }
   }

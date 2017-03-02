@@ -10,8 +10,8 @@ import java.util.ArrayList;
  */
 public class Lobby {
 
-  ArrayList<GameRoom> games = new ArrayList<GameRoom>();
-  ClientTable clientTable;
+  public ArrayList<GameRoom> games = new ArrayList<GameRoom>();
+  public ClientTable clientTable;
 
   public Lobby(int port) {
     clientTable = new ClientTable();

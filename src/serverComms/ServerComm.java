@@ -55,6 +55,11 @@ public class ServerComm extends Thread {
 	public static final byte FULLPOSITIONUPDATE = Byte.parseByte("14");
 	//Client->Server Establish connection to see if server is running
 	public static final byte TESTCONN           = Byte.parseByte("15");
+	//Data about client's ship sent during setup
+	public static final byte CLIENTSETUPDATA 	= Byte.parseByte("16");
+	//Race setup data sent to all clients
+	public static final byte RACESETUPDATA 		= Byte.parseByte("17");
+	
 	
 	/**
 	 * Creates a Server object
@@ -94,9 +99,7 @@ public class ServerComm extends Thread {
 				ByteArrayByte msg = new ByteArrayByte(data);
 				if(DEBUG) System.out.println("Request to server: " + new String(msg.getMsg(),charset));
 					
-				if(msg.getType()==TESTCONN) {
-					socket.close();
-					
+				if(msg.getType()==TESTCONN) {					
 				//Requesting to join - The message is the client's username
 				} else {
 					//Get the client's name
@@ -115,13 +118,13 @@ public class ServerComm extends Thread {
 						ServerReceiver receiver = new ServerReceiver(socket, name, fromClient, lobby);
 						lobby.clientTable.addReceiver(name, receiver);
 						receiver.start();
-						ArrayList<GameNameNumber> rooms = new ArrayList<GameNameNumber>();
+						ArrayList<GameRoom> rooms = new ArrayList<GameRoom>();
 						for(GameRoom room : lobby.games) {
-							if(!room.isBusy()) rooms.add(new GameNameNumber(room.name, room.id));
+							if(!room.isBusy()) rooms.add(room);
 						}
 						String out = "";
-						for(GameNameNumber g : rooms) {
-							out += g.toString() + System.lineSeparator();
+						for(GameRoom r : rooms) {
+							out += r.toString() + System.lineSeparator();
 						}
 						lobby.clientTable.getQueue(name).offer(new ByteArrayByte(out.getBytes(charset),SENDALLGAMES));
 						
