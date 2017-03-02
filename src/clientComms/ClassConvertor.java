@@ -9,6 +9,17 @@ import java.util.HashMap;
  *         network. first byte is the messageId
  */
 public class ClassConvertor {
+	
+	public static byte[] getbytes(Byte[] bBytes){
+		
+		byte[] bytes = new byte[bBytes.length];
+		
+		for(int i = 0; i < bBytes.length; i++){
+			bytes[i] = bBytes[i].byteValue();
+		}
+		return bytes;
+		
+	}
 
 	/**
 	 * converts the player distance into a byte message ready to be sent
@@ -81,26 +92,6 @@ public class ClassConvertor {
 
 		return message;
 
-	}
-
-	/**
-	 * for testing the class need J-units
-	 */
-	public static void main(String[] args) {
-		HashMap<Integer, Integer> map = new HashMap<>();
-		map.put(0, 7);
-		map.put(1, 30);
-		map.put(2, 56);
-		map.put(3, 87);
-
-		map = getRankings(getRankingsMessage(map));
-
-		for (Integer place : map.keySet()) {
-			System.out.println(place + ", " + map.get(place));
-		}
-
-		float out = getDistancefloat(getDistanceMessage(10f));
-		System.out.println("should be 10.0: " + out);
 	}
 
 }
