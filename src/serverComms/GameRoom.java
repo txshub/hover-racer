@@ -15,12 +15,14 @@ import trackDesign.TrackPoint;
 
 public class GameRoom {
 
+
 	private static final long TIME_TO_START = 3000000000L; // To to start race in nanoseconds
 	private static final int SIDE_DISTANCES = 10;
 	private static final int FORWARD_DISTANCES = 10;
 	private static final int STARTING_HEIGHT = 10;
 	ArrayList<String> players = new ArrayList<String>();
 	ArrayList<ShipSetupData> ships;
+
 
 	String name;
 	final int id;
@@ -54,19 +56,13 @@ public class GameRoom {
 		return id;
 	}
 
+
 	public void remove(String name) {
 		players.remove(name);
 		// Add in method to replace with AI?
 
 	}
 
-	public long getSeed() {
-		return seed;
-	}
-
-	public void addPlayer(String clientName) {
-		players.add(clientName);
-	}
 
 	public ArrayList<String> getPlayers() {
 		return players;

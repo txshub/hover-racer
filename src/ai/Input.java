@@ -11,9 +11,9 @@ import java.util.TreeSet;
  *
  */
 public class Input implements KeyListener {
-  
+
   private Set<Integer> heldKeys;
-  
+
   public Input() {
     heldKeys = new TreeSet<>();
   }
@@ -29,8 +29,9 @@ public class Input implements KeyListener {
   }
 
   @Override
-  public void keyTyped(KeyEvent e) {}
-  
+  public void keyTyped(KeyEvent e) {
+  }
+
   public boolean isKeyDown(int keyCode) {
     return heldKeys.contains(keyCode);
   }
