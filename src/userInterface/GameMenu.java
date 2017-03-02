@@ -484,5 +484,5 @@ public class GameMenu extends Parent {
 	
 	public void passRooms(ArrayList<GameNameNumber> gameList) {
 		// TODO Auto-generated method stub
-	
+	}
 }
