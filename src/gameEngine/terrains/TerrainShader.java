@@ -15,8 +15,8 @@ import gameEngine.toolbox.VecCon;
 public class TerrainShader extends ShaderProgram {
 
   private static final int MAX_LIGHTS = 4;
-  private static final String VERTEX_FILE = "src/gameEngine/shaders/terrainVertexShader.txt";
-  private static final String FRAGMENT_FILE = "src/gameEngine/shaders/terrainFragmentShader.txt";
+  private static final String VERTEX_FILE = "src/gameEngine/terrains/terrainVertexShader.txt";
+  private static final String FRAGMENT_FILE = "src/gameEngine/terrains/terrainFragmentShader.txt";
 
   private int location_transformationMatrix;
   private int location_projectionMatrix;
