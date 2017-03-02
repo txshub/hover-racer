@@ -10,8 +10,8 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import gameEngine.models.RawModel;
-import gameEngine.shaders.TerrainShader;
 import gameEngine.terrains.Terrain;
+import gameEngine.terrains.TerrainShader;
 import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.Maths;
 
