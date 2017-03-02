@@ -4,6 +4,7 @@ import java.awt.GraphicsEnvironment;
 
 import org.lwjgl.input.Keyboard;
 
+import clientComms.Client;
 import gameEngine.renderEngine.DisplayManager;
 import physics.network.RaceSetupData;
 import physics.ships.MultiplayerShipManager;
@@ -80,9 +81,9 @@ public class MainGameLoop {
 		game.cleanUp();
 	}
 
-	public static MultiplayerShipManager startMultiplayerGame(RaceSetupData data) {
+	public static MultiplayerShipManager startMultiplayerGame(RaceSetupData data, Client client) {
 		MainGameLoop main = new MainGameLoop();
-		MultiplayerGame game = new MultiplayerGame(data);
+		MultiplayerGame game = new MultiplayerGame(data, client);
 		main.main(game);
 		return game.getManager();
 	}

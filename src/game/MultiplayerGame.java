@@ -1,5 +1,6 @@
 package game;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
 import audioEngine.AudioMaster;
+import clientComms.Client;
 import gameEngine.entities.Camera;
 import gameEngine.entities.Entity;
 import gameEngine.entities.Light;
@@ -31,6 +33,7 @@ import input.InputController;
 import physics.network.RaceSetupData;
 import physics.placeholders.FlatGroundProvider;
 import physics.ships.MultiplayerShipManager;
+import serverComms.ServerComm;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
@@ -54,17 +57,20 @@ public class MultiplayerGame implements GameInt {
 	public static InputController input;
 
 	private MultiplayerShipManager ships;
+	private Client client;
 
 	private long startsAt;
 	private boolean running;
 
-	public MultiplayerGame(RaceSetupData data) {
-		init(data);
+	public MultiplayerGame(RaceSetupData data, Client client) {
+		init(data, client);
 	}
 
-	private void init(RaceSetupData data) {
+	private void init(RaceSetupData data, Client client) {
 		running = true;
 		startsAt = System.nanoTime() + data.getTimeToStart();
+
+		this.client = client;
 
 		DisplayManager.createDisplay();
 		loader = new Loader();
@@ -140,6 +146,12 @@ public class MultiplayerGame implements GameInt {
 		ships.updateShips((float) delta);
 		camera.move();
 		// picker.update();
+		// Send new position to server
+		try {
+			client.sendByteMessage(ships.getShipPacket(), ServerComm.SENDPLAYERDATA);
+		} catch (IOException e) {
+			System.err.println("Failed to send movement packet to server!");
+		}
 	}
 
 	public void render() {
