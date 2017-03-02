@@ -6,7 +6,6 @@ import java.util.HashMap;
 import org.joml.Intersectionf;
 import org.joml.Vector3f;
 
-import gameEngine.entities.Player;
 import physics.core.Ship;
 import trackDesign.SeedTrack;
 import trackDesign.TrackPoint;
@@ -18,24 +17,28 @@ import trackDesign.TrackPoint;
 public class GameLogic {
 
 	private float playerDist;
-	private Player player;
+	private Ship player;
 	private ArrayList<Ship> opponents;
-	private SeedTrack track;
 	private HashMap<Integer,Integer> ranking;
 	
 	private HashMap<TrackPoint, Float> pointsDist;
 	private ArrayList<TrackPoint> trackPoints;
 	private int lastTrackPoint;
 	
-	public GameLogic(Player player, ArrayList<Ship> opponents, SeedTrack track) {
+	public GameLogic(Ship player, ArrayList<Ship> opponents, SeedTrack track) {
 
 		this.player = player;
 		this.opponents = opponents;
-		this.track = track;
+		
+		trackPoints = track.getTrack();
+		for (TrackPoint p : trackPoints) {
+			p.mul(10);
+		}
+		
 		playerDist = 0;
 		ranking = new HashMap<Integer, Integer>();
+		pointsDist = new HashMap<TrackPoint, Float>();
 		
-		trackPoints = this.track.getTrack();
 		calculatePointsDist();
 		lastTrackPoint = 0;
 	}
@@ -45,8 +48,9 @@ public class GameLogic {
 	 * @param track The list of track points
 	 */
 	private void calculatePointsDist() {
-		if (!trackPoints.isEmpty())
+		if (!trackPoints.isEmpty()) {
 			pointsDist.put(trackPoints.get(0), 0f);
+		}
 		float distance = 0f;
 		for (int i = 1; i < trackPoints.size(); i++) {
 			TrackPoint previous = trackPoints.get(i-1);
@@ -64,9 +68,11 @@ public class GameLogic {
 		for (int i = 0; i < trackPoints.size(); i++) {
 			TrackPoint tp = trackPoints.get(i);
 			float pointWidth = tp.getWidth() / 2f;
-			float distanceToNext = playerPos.distance(tp.getX(), tp.getY(), playerPos.z());
-			if (distanceToNext <= pointWidth)
+			float distanceToNext = tp.distance(playerPos.x, playerPos.z);
+			
+			if (distanceToNext <= pointWidth) {
 				lastTrackPoint = i;
+			}
 		}
 	}
 	
@@ -84,7 +90,7 @@ public class GameLogic {
 		else
 			next = trackPoints.get(0);
 		float orth = Intersectionf.distancePointLine(playerPos.x(), playerPos.y(), last.getX(), last.getY(), next.getX(), next.getY());
-		float ip = playerPos.distance(last.getX(), last.getY(), playerPos.z());
+		float ip = playerPos.distance(last.getX(), playerPos.y(), last.getY());
 		distance += Math.sqrt(ip * ip - orth * orth);
 		return distance;
 	}
@@ -103,6 +109,10 @@ public class GameLogic {
 	
 	public float getPlayerDist(){
 		return playerDist;
+	}
+	
+	public int getLastPoint() {
+		return lastTrackPoint;
 	}
 	
 	public HashMap<Integer, Integer> getRankings(){
