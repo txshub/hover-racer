@@ -12,6 +12,10 @@ public class Converter {
 		return (new Gson()).fromJson(new String(message), ShipSetupData.class);
 	}
 
+	public static ShipSetupData buildShipData(String message) {
+		return (new Gson()).fromJson(message, ShipSetupData.class);
+	}
+
 	public static byte[] sendRaceData(RaceSetupData data, int i) {
 		return (new Gson()).toJson(data.setId((byte) i)).getBytes();
 	}

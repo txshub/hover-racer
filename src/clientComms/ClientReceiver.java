@@ -54,8 +54,8 @@ public class ClientReceiver extends Thread {
 				} else if(fullMsg.getType()==ServerComm.INVALIDGAME) {
 					//What to do if game doesn't exist?
 				} else if(fullMsg.getType()==ServerComm.VALIDGAME) {
-					SeedPlayers sp = new SeedPlayers(new String(fullMsg.getMsg(), ServerComm.charset));
-					//What to do with seed & players?
+					GameRoom gr = new GameRoom(new String(fullMsg.getMsg(),ServerComm.charset));
+					//What to do with gameroom?
 				}
 			}
 		} catch (IOException e) {
