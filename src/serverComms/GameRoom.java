@@ -32,6 +32,8 @@ public class GameRoom {
 	private ClientTable table;
 	private ArrayList<TrackPoint> trackPoints;
 
+	private ServerShipManager shipManager;
+
 	public GameRoom(int id, String name, long seed, int maxPlayers, String hostName, ClientTable table) {
 		this.id = id;
 		this.name = name;
@@ -39,6 +41,7 @@ public class GameRoom {
 		this.maxPlayers = maxPlayers;
 		this.hostName = hostName;
 		this.table = table;
+		this.ships = new ArrayList<ShipSetupData>(maxPlayers);
 		// Generate the track
 		SeedTrack st = TrackMaker.makeTrack(seed, 10, 20, 30, 1, 40, 40, 4);
 		trackPoints = st.getTrack();
@@ -77,10 +80,11 @@ public class GameRoom {
 	public void startGame(String clientName) {
 		if (clientName == hostName) {
 			inGame = true;
+			RaceSetupData setupData = setupRace();
+			shipManager = new ServerShipManager(setupData, players.size(), maxPlayers - players.size());
 			for (int i = 0; i < players.size(); i++) {
 				table.getReceiver(players.get(i)).setGame(this, i);
-				table.getQueue(players.get(i))
-					.offer(new ByteArrayByte(String.valueOf(i).getBytes(ServerComm.charset), ServerComm.STARTGAME));
+				table.getQueue(players.get(i)).offer(new ByteArrayByte(Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA));
 			}
 		}
 	}
@@ -90,8 +94,15 @@ public class GameRoom {
 	}
 
 	public void updateUser(int gameNum, byte[] msg) {
-		// TODO What to do here?
+		shipManager.addPacket(msg);
+	}
 
+	public byte[] getShipPositions() {
+		return shipManager.getPositionMessage();
+	}
+
+	public void addSetupData(int gameNum, byte[] msg) {
+		ships.set(gameNum, Converter.buildShipData(msg));
 	}
 
 	public RaceSetupData setupRace() {
@@ -104,6 +115,7 @@ public class GameRoom {
 			new Vector3f(startDirection.x, STARTING_HEIGHT, startDirection.y), seed, TIME_TO_START);
 	}
 
+	// TODO Those are not finished
 	private Map<Byte, Vector3f> generateStartingPositions(Vector2f startDirection) {
 		Map<Byte, Vector2f> res = new HashMap<Byte, Vector2f>();
 		float width = trackPoints.get(0).getWidth();
