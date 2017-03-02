@@ -12,9 +12,9 @@ import userInterface.GameMenu;
  *
  */
 public class Client extends Thread {
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 	public boolean serverOn = true;
-	private DataOutputStream toServer;
+	protected DataOutputStream toServer;
 	String clientName;
 	int portNumber;
 	String machineName;
@@ -37,7 +37,7 @@ public class Client extends Thread {
 		try {
 			Socket testConn = new Socket(machineName, portNumber);
 			toServer = new DataOutputStream(new BufferedOutputStream(testConn.getOutputStream()));
-			sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.TESTCONN);
+			sendByteMessage(new byte[0], ServerComm.TESTCONN);
 		} catch (UnknownHostException e) {
 			serverOn = false;
 		} catch (IOException e) {
@@ -115,6 +115,6 @@ public class Client extends Thread {
 		toServer.writeInt(out.length);
 		toServer.write(out);
 		toServer.flush();
-		if(ServerComm.DEBUG) System.out.println("Sent message " + new String(message, ServerComm.charset) + " with tag " + Byte.toString(type));
+		if(DEBUG) System.out.println("Sent message " + new String(message, ServerComm.charset) + " with tag " + Byte.toString(type));
 	}
 }

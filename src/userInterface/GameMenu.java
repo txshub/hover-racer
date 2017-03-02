@@ -482,4 +482,7 @@ public class GameMenu extends Parent {
 		this.setCacheHint(CacheHint.SPEED);
 	}
 	
+	public void passRooms(ArrayList<GameNameNumber> gameList) {
+		// TODO Auto-generated method stub
+	
 }
