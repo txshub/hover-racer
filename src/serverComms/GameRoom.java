@@ -130,7 +130,7 @@ public class GameRoom {
 	}
 
 	public void startGame(String clientName) {
-		if (clientName == hostName) {
+		if (clientName.equals(hostName)) {
 			inGame = true;
 			RaceSetupData setupData = setupRace();
 			shipManager = new ServerShipManager(setupData, players.size(), maxPlayers - players.size());
