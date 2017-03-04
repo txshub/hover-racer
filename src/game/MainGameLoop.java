@@ -39,6 +39,7 @@ public class MainGameLoop {
 
 		// FPS and UPS reporting variables
 		int fps = 0;
+		
 		int ups = 0;
 		long timer = System.currentTimeMillis();
 

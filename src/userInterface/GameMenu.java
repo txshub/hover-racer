@@ -3,9 +3,6 @@ import java.util.ArrayList;
 
 import audioEngine.AudioMaster;
 import clientComms.Client;
-import serverComms.ServerComm;
-import serverComms.GameNameNumber;
-import serverComms.Lobby;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -17,6 +14,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import serverComms.GameNameNumber;
+import serverComms.Lobby;
+import serverComms.ServerComm;
 /**
  * 
  * @author Andreea Gheorghe
