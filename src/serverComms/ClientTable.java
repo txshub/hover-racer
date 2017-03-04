@@ -1,5 +1,7 @@
 package serverComms;
 import java.util.*;
+
+import physics.network.ShipSetupData;
 /**
  * Client table holding information on all clients connected to a single server
  * @author simon
@@ -80,10 +82,10 @@ public class ClientTable {
 		nextInt++;
 	}
 
-	public boolean joinGame(String clientName, int gameNum) {
+	public boolean joinGame(int gameNum, ShipSetupData data) {
 		if(allGames.get(gameNum)==null) return false; //Show that no game exists
-		games.put(clientName, gameNum);
-		allGames.get(gameNum).addPlayer(clientName);
+		games.put(data.nickname, gameNum);
+		allGames.get(gameNum).addPlayer(data);
 		return true;
 		
 	}

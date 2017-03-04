@@ -1,8 +1,12 @@
 package clientComms;
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
-import serverComms.*;
+import physics.ships.MultiplayerShipManager;
+import serverComms.ByteArrayByte;
+import serverComms.GameRoom;
+import serverComms.ServerComm;
 
 /**
  * Thread to receive any messages passed from the server
@@ -12,6 +16,7 @@ import serverComms.*;
 public class ClientReceiver extends Thread {
 	private DataInputStream server;
 	private Client client;
+	private MultiplayerShipManager manager;
 	
 	/**
 	 * Creates a ClientReceiver object
@@ -46,16 +51,22 @@ public class ClientReceiver extends Thread {
 					System.out.println("Need To Reconnect");
 				} else if(fullMsg.getType()==ServerComm.SENDALLGAMES) {
 					String[] allGames = (new String(fullMsg.getMsg(), ServerComm.charset)).split(System.lineSeparator());
-					ArrayList<GameNameNumber> gameList = new ArrayList<GameNameNumber>();
+					ArrayList<GameRoom> gameList = new ArrayList<GameRoom>();
 					for(String s : allGames) {
-						if(!s.equals("")) gameList.add(new GameNameNumber(s));
+						if(!s.equals("")) gameList.add(new GameRoom(s));
 					}
-					client.gameMenu.passRooms(gameList);
+					client.setGameList(gameList);
 				} else if(fullMsg.getType()==ServerComm.INVALIDGAME) {
 					//What to do if game doesn't exist?
 				} else if(fullMsg.getType()==ServerComm.VALIDGAME) {
-					SeedPlayers sp = new SeedPlayers(new String(fullMsg.getMsg(), ServerComm.charset));
-					//What to do with seed & players?
+					GameRoom gr = new GameRoom(new String(fullMsg.getMsg(),ServerComm.charset));
+					//What to do with gameroom?
+				} else if(fullMsg.getType()==ServerComm.RACESETUPDATA){
+					//TODO setup game
+					manager = client.getManager();
+				} else if(fullMsg.getType()==ServerComm.FULLPOSITIONUPDATE) {
+					if(manager==null) throw new IllegalStateException("Position update received but ship manager was not added to ClientReceiver");
+					manager.addPacket(msg);
 				}
 			}
 		} catch (IOException e) {
@@ -63,4 +74,14 @@ public class ClientReceiver extends Thread {
 			//What to do here?
 		}
 	}
+
+	
+	/** 
+	 * Adds the ShipManager, to receive the information about ships
+	 */
+	public void addManager(MultiplayerShipManager manager) {
+		this.manager = manager;
+	}
+	
+	
 }

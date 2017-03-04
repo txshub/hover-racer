@@ -3,6 +3,7 @@ package serverComms;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -16,7 +17,7 @@ import trackDesign.TrackPoint;
 public class GameRoom {
 
 
-	private static final long TIME_TO_START = 3000000000L; // To to start race in nanoseconds
+	private static final long TIME_TO_START = 3000000000L; // Time to start race in nanoseconds
 	private static final int SIDE_DISTANCES = 10;
 	private static final int FORWARD_DISTANCES = 10;
 	private static final int STARTING_HEIGHT = 10;
@@ -32,6 +33,9 @@ public class GameRoom {
 	private ClientTable table;
 	private ArrayList<TrackPoint> trackPoints;
 
+	private ServerShipManager shipManager;
+	private UpdateAllUsers updatedUsers;
+
 	public GameRoom(int id, String name, long seed, int maxPlayers, String hostName, ClientTable table) {
 		this.id = id;
 		this.name = name;
@@ -39,9 +43,59 @@ public class GameRoom {
 		this.maxPlayers = maxPlayers;
 		this.hostName = hostName;
 		this.table = table;
+		this.ships = new ArrayList<ShipSetupData>(maxPlayers);
 		// Generate the track
 		SeedTrack st = TrackMaker.makeTrack(seed, 10, 20, 30, 1, 40, 40, 4);
 		trackPoints = st.getTrack();
+	}
+
+	public GameRoom(String in) {
+		String collected = "";
+		while (in.charAt(0) != '|') {
+			collected += in.charAt(0);
+			in = in.substring(1);
+		}
+		name = collected;
+		collected = "";
+		in = in.substring(1);
+		while (in.charAt(0) != '|') {
+			collected += in.charAt(0);
+			in = in.substring(1);
+		}
+		id = Integer.parseInt(collected);
+		collected = "";
+		in = in.substring(1);
+		while (in.charAt(0) != '|') {
+			collected += in.charAt(0);
+			in = in.substring(1);
+		}
+		seed = Long.parseLong(collected);
+		collected = "";
+		in = in.substring(1);
+		while (in.charAt(0) != '|') {
+			collected += in.charAt(0);
+			in = in.substring(1);
+		}
+		maxPlayers = Integer.parseInt(collected);
+		collected = "";
+		in = in.substring(1);
+		while (in.charAt(0) != '|') {
+			collected += in.charAt(0);
+			in = in.substring(1);
+		}
+		hostName = collected;
+		collected = "";
+		in = in.substring(1);
+		players = new ArrayList<String>();
+		while (in.length() > 0) {
+			while (in.charAt(0) != '|') {
+				collected += in.charAt(0);
+				in = in.substring(1);
+			}
+			players.add(collected);
+			collected = "";
+			in = in.substring(1);
+		}
 	}
 
 	public boolean isBusy() {
@@ -66,8 +120,9 @@ public class GameRoom {
 		return seed;
 	}
 
-	public void addPlayer(String clientName) {
-		players.add(clientName);
+	public void addPlayer(ShipSetupData data) {
+		ships.add(data);
+		players.add(data.getNickname());
 	}
 
 	public ArrayList<String> getPlayers() {
@@ -75,13 +130,18 @@ public class GameRoom {
 	}
 
 	public void startGame(String clientName) {
-		if (clientName == hostName) {
+		if (clientName.equals(hostName)) {
 			inGame = true;
+			RaceSetupData setupData = setupRace();
+			shipManager = new ServerShipManager(setupData, players.size(), maxPlayers - players.size());
+			ArrayList<CommQueue> allQueues = new ArrayList<CommQueue>();
 			for (int i = 0; i < players.size(); i++) {
 				table.getReceiver(players.get(i)).setGame(this, i);
-				table.getQueue(players.get(i))
-					.offer(new ByteArrayByte(String.valueOf(i).getBytes(ServerComm.charset), ServerComm.STARTGAME));
+				table.getQueue(players.get(i)).offer(new ByteArrayByte(Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA));
+				allQueues.add(table.getQueue(players.get(i)));
 			}
+			updatedUsers = new UpdateAllUsers(allQueues, this);
+			updatedUsers.start();
 		}
 	}
 
@@ -90,18 +150,30 @@ public class GameRoom {
 	}
 
 	public void updateUser(int gameNum, byte[] msg) {
-		// TODO What to do here?
+		shipManager.addPacket(msg);
+	}
 
+	public byte[] getShipPositions() {
+		return shipManager.getPositionMessage();
+	}
+
+	public void addSetupData(int gameNum, byte[] msg) {
+		ships.set(gameNum, Converter.buildShipData(msg));
+	}
+
+	public void addSetupData(int gameNum, String msg) {
+		ships.set(gameNum, Converter.buildShipData(msg));
 	}
 
 	public RaceSetupData setupRace() {
 		HashMap<Byte, ShipSetupData> resShips = new HashMap<Byte, ShipSetupData>();
 		for (int i = 0; i < ships.size(); i++) {
-			resShips.put((byte) i, ships.get(i));
+			if (ships.get(i) != null) resShips.put((byte) i, ships.get(i)); // Players
+			else resShips.put((byte) i, AIBuilder.fakeAIData()); // AIs
 		}
 		Vector2f startDirection = trackPoints.get(0).sub(trackPoints.get(1));
 		return new RaceSetupData(resShips, generateStartingPositions(startDirection),
-			new Vector3f(startDirection.x, STARTING_HEIGHT, startDirection.y), seed, TIME_TO_START);
+			new Vector3f(0, (float) Math.atan2(startDirection.x, startDirection.y), 0), seed, TIME_TO_START);
 	}
 
 	private Map<Byte, Vector3f> generateStartingPositions(Vector2f startDirection) {
@@ -121,13 +193,38 @@ public class GameRoom {
 				res.put((byte) (maxPlayers - shipsLeft), new Vector2f(firstShip).add(SIDE_DISTANCES * i * cos, SIDE_DISTANCES * i * sin))
 					.add(FORWARD_DISTANCES * currentRow * sin, FORWARD_DISTANCES * currentRow * cos);
 			}
+			currentRow++;
 		}
-		return null; // TODO
+		float extraPadding = shipsLeft % 2 == 0 ? 0.5f : 0f;
+		if (shipsLeft % 2 == 0) {
+			float padding = (width - sidePadding * 2) / shipsLeft;
+			for (int i = 0; i < shipsLeft; i++) {
+				res.put((byte) (maxPlayers - shipsLeft),
+					new Vector2f(firstShip).add(padding * (i + extraPadding) * cos, padding * (i + extraPadding) * sin))
+					.add(FORWARD_DISTANCES * currentRow * sin, FORWARD_DISTANCES * currentRow * cos);
+			}
+		}
+		return res.entrySet().stream()
+			.collect(Collectors.toMap(e -> e.getKey(), e -> new Vector3f(e.getValue().x, STARTING_HEIGHT, e.getValue().y)));
 	}
+
 
 	private float getTrackDirection() {
 		Vector2f relative = trackPoints.get(0).sub(trackPoints.get(1));
 		return (float) Math.atan2(relative.x, relative.y);
 	}
+
+	public String toString() {
+		String out = name + "|" + id + "|" + seed + "|" + maxPlayers + "|" + hostName + "|";
+		for (String p : players) {
+			out += p + "|";
+		}
+		return out;
+	}
+
+	public byte[] toByteArray() {
+		return toString().getBytes(ServerComm.charset);
+	}
+
 
 }

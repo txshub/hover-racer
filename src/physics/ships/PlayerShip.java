@@ -7,7 +7,7 @@ import org.joml.Vector3f;
 
 import gameEngine.models.TexturedModel;
 import input.Action;
-import input.KeyboardController;
+import input.InputController;
 import physics.core.Ship;
 import physics.support.GroundProvider;
 import physics.support.ShipSounds;
@@ -19,11 +19,11 @@ import physics.support.ShipSounds;
  */
 public class PlayerShip extends Ship {
 
-  KeyboardController input;
+  InputController input;
   ShipSounds sound;
 
   public PlayerShip(byte id, TexturedModel model, Vector3f startingPosition,
-      Collection<Ship> otherShips, GroundProvider ground, KeyboardController input) {
+      Collection<Ship> otherShips, GroundProvider ground, InputController input) {
     super(id, model, startingPosition, ground);
     super.addOtherShips(otherShips);
     this.input = input; // Deal with input
