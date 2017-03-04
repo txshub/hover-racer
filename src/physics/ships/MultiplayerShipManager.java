@@ -14,7 +14,7 @@ import gameEngine.models.TexturedModel;
 import gameEngine.objConverter.OBJFileLoader;
 import gameEngine.renderEngine.Loader;
 import gameEngine.textures.ModelTexture;
-import input.InputController;
+import input.KeyboardController;
 import physics.core.Ship;
 import physics.network.RaceSetupData;
 import physics.network.ServerShipProvider;
@@ -32,13 +32,13 @@ public class MultiplayerShipManager implements ServerShipProvider {
   private Collection<Ship> remotes;
   private Map<Byte, byte[]> packets;
 
-  public MultiplayerShipManager(RaceSetupData data, GroundProvider ground, InputController input,
+  public MultiplayerShipManager(RaceSetupData data, GroundProvider ground, KeyboardController input,
       Loader loader) {
     this(data.getYourId(), input, makeModels(data.getModels(), data.getTextures(), loader),
         data.getStartingPositions(), ground);
   }
 
-  public MultiplayerShipManager(byte playerId, InputController input, TexturedModel playerTexture,
+  public MultiplayerShipManager(byte playerId, KeyboardController input, TexturedModel playerTexture,
       Collection<TexturedModel> otherTextures, ArrayList<Vector3f> startingPositions,
       GroundProvider ground) {
     this.packets = new HashMap<Byte, byte[]>();
@@ -59,7 +59,7 @@ public class MultiplayerShipManager implements ServerShipProvider {
     remotes.forEach(r -> r.addOtherShip(player));
   }
 
-  public MultiplayerShipManager(byte playerId, InputController input, List<TexturedModel> models,
+  public MultiplayerShipManager(byte playerId, KeyboardController input, List<TexturedModel> models,
       List<Vector3f> startingPositions, GroundProvider ground) {
     this.packets = new HashMap<Byte, byte[]>();
 

@@ -27,7 +27,7 @@ import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import gameEngine.toolbox.MousePicker;
 import input.Action;
-import input.InputController;
+import input.KeyboardController;
 import physics.network.RaceSetupData;
 import physics.placeholders.FlatGroundProvider;
 import physics.ships.MultiplayerShipManager;
@@ -51,7 +51,7 @@ public class MultiplayerGame {
   private GuiRenderer guiRender;
   private long trackSeed;
   private ArrayList<TrackPoint> trackPoints;
-  public static InputController input;
+  public static KeyboardController input;
 
   private MultiplayerShipManager ships;
 
@@ -68,7 +68,7 @@ public class MultiplayerGame {
 
     DisplayManager.createDisplay();
     loader = new Loader();
-    MultiplayerGame.input = new InputController();
+    MultiplayerGame.input = new KeyboardController();
     AudioMaster.init();
     entities = new ArrayList<Entity>();
     normalEntities = new ArrayList<Entity>();
@@ -128,20 +128,20 @@ public class MultiplayerGame {
     input.update();
 
     // Check if the escape key was pressed to exit the game
-    if (input.isDown(Action.EXIT))
+    if (input.isDown(Action.EXIT) > 0.5f)
       running = false;
 
     // Check for audio controls
     /** @author Tudor */
-    if (input.wasPressed(Action.MUSIC_UP))
+    if (input.wasPressed(Action.MUSIC_UP) > 0.5f)
       AudioMaster.increaseMusicVolume();
-    if (input.wasPressed(Action.MUSIC_DOWN))
+    if (input.wasPressed(Action.MUSIC_DOWN) > 0.5f)
       AudioMaster.decreaseMusicVolume();
-    if (input.wasPressed(Action.MUSIC_SKIP))
+    if (input.wasPressed(Action.MUSIC_SKIP) > 0.5f)
       AudioMaster.skipInGameMusic();
-    if (input.wasPressed(Action.SFX_UP))
+    if (input.wasPressed(Action.SFX_UP) > 0.5f)
       AudioMaster.increaseSFXVolume();
-    if (input.wasPressed(Action.SFX_DOWN))
+    if (input.wasPressed(Action.SFX_DOWN) > 0.5f)
       AudioMaster.decreaseSFXVolume();
 
     if (System.nanoTime() > startsAt)
@@ -163,7 +163,7 @@ public class MultiplayerGame {
     guiRender.cleanUp();
     renderer.cleanUp();
     loader.cleanUp();
-    InputController.close = true;
+    KeyboardController.close = true;
     AudioMaster.cleanUp();
     DisplayManager.closeDisplay();
   }
