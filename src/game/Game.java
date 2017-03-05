@@ -27,6 +27,8 @@ import gameEngine.textures.ModelTexture;
 import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import input.Action;
+import input.InputController;
+import input.JoystickController;
 import input.KeyboardController;
 import physics.core.Ship;
 import physics.placeholders.FlatGroundProvider;
@@ -53,7 +55,7 @@ public class Game implements GameInt {
 	private GuiRenderer guiRender;
 	private long trackSeed;
 	private ArrayList<TrackPoint> trackPoints;
-	public static KeyboardController input;
+	public static InputController input;
 
 	// Mac's additions
 	private MultiplayerShipManager ships;
@@ -69,7 +71,7 @@ public class Game implements GameInt {
 
 		DisplayManager.createDisplay();
 		loader = new Loader();
-		Game.input = new KeyboardController();
+		Game.input = new JoystickController();
 		AudioMaster.init();
 		entities = new ArrayList<Entity>();
 		normalEntities = new ArrayList<Entity>();
