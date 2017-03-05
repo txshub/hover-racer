@@ -144,7 +144,7 @@ public class AudioMaster {
    * Start the music player
    */
   public static void playMusic() {
-//    player.start();
+    player.start();
   }
 
   /**
@@ -165,7 +165,7 @@ public class AudioMaster {
    * Start the in-game music player
    */
   public static void playInGameMusic() {
-//    inGame.start();
+    inGame.start();
   }
 
   /**
