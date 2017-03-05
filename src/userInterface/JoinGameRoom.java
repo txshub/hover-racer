@@ -35,9 +35,8 @@ public class JoinGameRoom extends GridPane {
 			
 			this.gameRoomList = client.requestAllGames();
 			
-			
-			
 		});
+		
 		
 		
 	}
