@@ -87,15 +87,6 @@ public class GameLogic {
 		if (lastTrackPoint < last) System.err.println("WRONG WAY!");
 		if (lastTrackPoint - last > 1) System.err.println("PENALTY: You left the track!");
 		
-		
-//		int next = lastTrackPoint + 1;
-//		if (next == trackPoints.size()) next = 0;
-//		TrackPoint tp = trackPoints.get(lastTrackPoint + 1);
-//		float pointWidth = 200f;
-//		float distanceToNext = tp.distance(playerPos.x, playerPos.z);
-//		if (distanceToNext <= pointWidth) {
-//			lastTrackPoint = next;
-//		}
 	}
 	
 	/**

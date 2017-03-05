@@ -151,7 +151,6 @@ public class Game {
 
 		// Tudor
 		logic.update();
-		running = !logic.finishedRace();
 		
 		// Check if the escape key was pressed to exit the game
 		if (input.isDown(Action.EXIT))

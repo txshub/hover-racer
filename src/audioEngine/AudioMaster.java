@@ -20,6 +20,8 @@ public class AudioMaster {
 
   private static MusicPlayer player;
   private static InGamePlayer inGame;
+  
+  private static float sfxMaster;
 
   private static boolean initialised = false;
 
@@ -43,6 +45,8 @@ public class AudioMaster {
 
     player = new MusicPlayer();
     inGame = new InGamePlayer();
+    
+    sfxMaster = 0.5f;
 
     initialised = true;
   }
@@ -114,6 +118,12 @@ public class AudioMaster {
     sfx.add(s);
     sources.add(s);
     return s;
+  }
+  
+  public static Source createSFXSource(float initialVolume) {
+	Source s = createSFXSource();
+	s.setInitialVolume(initialVolume);
+	return s;
   }
 
   /**
@@ -198,12 +208,16 @@ public class AudioMaster {
     for (Source s : sfx) {
       s.setCurrentVolume(s.getCurrentVolume() + 0.1f);
     }
+    sfxMaster += 0.1f;
+    sfxMaster = Math.min(sfxMaster, 1f);
   }
 
   public static void decreaseSFXVolume() {
     for (Source s : sfx) {
       s.setCurrentVolume(s.getCurrentVolume() - 0.1f);
     }
+    sfxMaster -= 0.1f;
+    sfxMaster = Math.max(sfxMaster, 0f);
   }
 
   // public static void deleteSource(Source s) {

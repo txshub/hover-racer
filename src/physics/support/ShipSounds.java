@@ -2,19 +2,15 @@ package physics.support;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Vector;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import audioEngine.AudioMaster;
 import audioEngine.Sounds;
 import audioEngine.Source;
-import gameEngine.entities.Camera;
-import gameEngine.toolbox.Maths;
 import physics.core.Ship;
 
 /**
@@ -22,7 +18,8 @@ import physics.core.Ship;
  * of engines with sounds of collisions on the way. Constructed and updated by
  * PlayerShip.
  * 
- * @author Maciej Bogacki (TODOs left for Tudor to fill in)
+ * @author Maciej Bogacki 
+ * @author Tudor Suruceanu
  */
 public class ShipSounds {
 
@@ -43,9 +40,8 @@ public class ShipSounds {
 
 		// Create player ship's Source
 		playerSource = AudioMaster.createSFXSource();
-//		playerSource.setLooping(true);
-//		playerSource.play(Sounds.ENGINE);
-		// TODO anything else you want do when creating player's source
+		playerSource.setLooping(true);
+		playerSource.play(Sounds.ENGINE);
 
 		// Create other ship's Sources
 		this.otherShips = otherShips.stream()
@@ -53,10 +49,6 @@ public class ShipSounds {
 		for (Entry<Ship, Source> entry : this.otherShips.entrySet()) {
 			entry.getValue().setLooping(true);
 			entry.getValue().play(Sounds.ENGINE);
-			// TODO anything else you want to do when creating other ship's
-			// Sources.
-			// Use entry.getValue() for Source and entry.getKey() for
-			// corresponding Ship)
 		}
 		update(0f);
 	}
@@ -71,21 +63,16 @@ public class ShipSounds {
 	 */
 	public void update(float delta) {
 
-//		float pitch = 1f + player.getVelocity().length() / (player.getMaxSpeed() / 3f);
-//		if (pitch > 2f) pitch = 2f;
-//		playerSource.setPitch(pitch);
+		float pitch = 1f + player.getVelocity().length() / (player.getMaxSpeed() / 3f);
+		if (pitch > 2f) pitch = 2f;
+		playerSource.setPitch(pitch);
 		
 		// Updates all other ships
 		for (Entry<Ship, Source> entry : this.otherShips.entrySet()) {
 			Ship ship = entry.getKey();
 			Source source = entry.getValue();
-//			Vector3f position = new Vector3f(ship.getPosition()).sub(player.getPosition()); 
-//			Vector3f velocity = new Vector3f(ship.getVelocity()).sub(player.getVelocity());
-//			source.setPosition(position.x, position.y, position.z); 
-//			source.setVelocity(velocity.x, velocity.y, velocity.z);
 
-			Matrix4f tm = Maths.createTransformMatrix(new Vector3f(0f, 0f, 0f));
-			Vector3f sourcePos = player.getPosition().mulDirection(tm.transpose());
+			Vector3f sourcePos = getRelativePosition(ship.getPosition());
 			source.setPosition(sourcePos.x(), sourcePos.y(), sourcePos.z());
 			
 			float p = 1f + ship.getVelocity().length() / (ship.getMaxSpeed() / 3f);
@@ -106,6 +93,21 @@ public class ShipSounds {
 	public void collision(Ship first, Ship second) {
 		Vector3f position = new Vector3f(first.getPosition()).sub(player.getPosition()).div(2);
 		float force = new Vector3f(first.getVelocity()).sub(second.getVelocity()).length();
+		
+		// Set initial volume
+		Source collisionSource = AudioMaster.createSFXSource();
+		Vector3f sourcePos = getRelativePosition(position);
+		collisionSource.setPosition(sourcePos.x(), sourcePos.y(), sourcePos.z());
+		
+		collisionSource.play(Sounds.COLLISION);
 	}
 
+	private Vector3f getRelativePosition(Vector3f position) {
+		Vector3f difference = new Vector3f(player.getPosition()).sub(position);
+		double orientation = /*Math.PI * 2 - */Math.toRadians(player.getRotation().y());
+		float relativeX = difference.x() * (float)Math.cos(orientation) - difference.z() *(float) Math.sin(orientation);
+		float relativeZ = difference.x() * (float)Math.sin(orientation) + difference.z() *(float) Math.cos(orientation);
+		return new Vector3f(relativeX, difference.y(), relativeZ);
+	}
+	
 }
