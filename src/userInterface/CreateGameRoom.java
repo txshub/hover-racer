@@ -69,8 +69,9 @@ public class CreateGameRoom extends GridPane {
 		createGameRoom.setOnMouseClicked(event -> {
 			
 			//create a game room
-			GameRoom gameRoom = new GameRoom(0, usernameInput.getText(), Integer.valueOf(seedInput.getText()), (Integer.valueOf(noAIsInput.getText()) + 1) , "", new ClientTable());
-			gameRoom.startGame(usernameInput.getText());
+			//Simon?? - single player startGame method
+//			GameRoom gameRoom = new GameRoom(0, usernameInput.getText(), Integer.valueOf(seedInput.getText()), (Integer.valueOf(noAIsInput.getText()) + 1) , "", new ClientTable());
+//			gameRoom.startGame(usernameInput.getText());
 			//((Node) event.getSource()).getScene().getWindow().hide();
 			
 		});

@@ -37,7 +37,7 @@ public class MainMenu extends Application {
 		root.setPrefSize(1000, 600);
 
 		// get file from path
-		InputStream is = Files.newInputStream(Paths.get("res/img/hover-racerNew.jpg"));
+		InputStream is = Files.newInputStream(Paths.get("src/resources/img/hover-racerNew.jpg"));
 		Image background = new Image(is);
 		is.close();
 

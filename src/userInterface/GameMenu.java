@@ -1,5 +1,5 @@
 package userInterface;
-import java.util.ArrayList;
+import java.io.IOException;
 
 import audioEngine.AudioMaster;
 import clientComms.Client;
@@ -14,7 +14,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import serverComms.GameNameNumber;
 import serverComms.Lobby;
 import serverComms.ServerComm;
 /**
@@ -36,7 +35,7 @@ public class GameMenu extends Parent {
 	Client client;
 	final int OFFSET = 600;
 	
-	public GameMenu() {
+	public GameMenu() throws IOException {
 		
 		initialWindow = new GridPane();
 		settingsWindow = new GridPane();
@@ -394,10 +393,17 @@ public class GameMenu extends Parent {
 		//connecting multiplayer options
 		MenuButton joinGR = new MenuButton("JOIN A GAME ROOM");
 		
-		joinGameRoom = new JoinGameRoom(client);
+		joinGameRoom = new JoinGameRoom();
 		
 		joinGR.setOnMouseClicked(eventHost -> {
 			
+			try {
+				joinGameRoom.setClient(client);
+				joinGameRoom.refresh();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			getChildren().add(joinGameRoomWindow);
 			
 			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), multiOptionsWindow);
@@ -418,6 +424,7 @@ public class GameMenu extends Parent {
 		hostGR.setOnMouseClicked(eventHost -> {
 			
 			getChildren().add(hostGameRoomWindow);
+			hostGameRoom.setClient(client);
 			
 			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), multiOptionsWindow);
 			trans.setToX(multiOptionsWindow.getTranslateX() - OFFSET);

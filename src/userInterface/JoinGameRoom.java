@@ -5,7 +5,9 @@ import java.util.ArrayList;
 
 import clientComms.Client;
 import javafx.scene.layout.GridPane;
-import serverComms.GameNameNumber;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import serverComms.GameRoom;
 
 /**
  * 
@@ -15,31 +17,84 @@ import serverComms.GameNameNumber;
 
 public class JoinGameRoom extends GridPane {
 
-	private ArrayList<GameNameNumber> gameRoomList;
+	private ArrayList<GameRoom> gameRoomList;
 	private Client client;
 	
-	public JoinGameRoom(Client client) throws IOException {
-	
-		this.client = client;
-		this.gameRoomList = client.requestAllGames(); //this gets the actual list of game rooms
-		
-		//Display the array of game rooms
-		for(int i=0; i< gameRoomList.size(); i++){
-			
-		//	gameRoomList.get(i).
-			
-		}
+	public JoinGameRoom() {
 		
 		MenuButton refresh = new MenuButton("REFRESH");
 		refresh.setOnMouseClicked(event -> {
 			
-			this.gameRoomList = client.requestAllGames();
+			try {
+				for(int i = 0; i < this.getChildren().size(); i++) {
+					
+					if(this.getChildren().get(i) != refresh) {
+						
+						this.getChildren().remove(i);
+					}
+				}
+				this.refresh();
+			} catch (IOException e) {
+	
+				e.printStackTrace();
+			}
 			
 		});
 		
-		
+		add(refresh, 1, 7);
 		
 	}
 	
+	public void refresh() throws IOException {
+		
+		this.gameRoomList = client.requestAllGames(); //this gets the actual list of game rooms
+		
+		int column = 0;
+		int row = 1;
+		
+		VBox playerNames = new VBox(10);
+		
+		for(int i=0; i<6; i++){
+			
+			GameRoom gameRoom = gameRoomList.get(i); 
+			MenuButton btnRoom = new MenuButton(gameRoom.getName());
+			this.add(btnRoom, column, row);
+			row++;
+			
+			btnRoom.setOnMouseClicked(event->{
+				
+				ArrayList<String> players = gameRoom.getPlayers();
+				for(int k=0; k< players.size(); k++){
+					
+					TextStyle player = new TextStyle (players.get(k), 10);
+					Text playerText = player.getTextStyled();
+					
+					playerNames.getChildren().add(playerText);
+				}
+				
+				MenuButton joinGR = new MenuButton("JOIN THIS GAME ROOM");
+				joinGR.setOnMouseClicked(eventjoin-> {
+					
+					//Simon??
+					//gameRoom.addPlayer(data);
+					//client.joinGame(id, data);
+					
+					//go to the gameRoomLobby
+					
+				});
+				
+				add(playerNames,1,1);
+				GridPane.setRowSpan(playerNames, REMAINING);
+				add(joinGR, 1, 6);
+				
+			});
+		}
+		
+	}
+	
+	public void setClient(Client client){
+		
+		this.client = client;
+	}
 	
 }

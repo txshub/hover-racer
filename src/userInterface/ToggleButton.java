@@ -39,7 +39,7 @@ public class ToggleButton extends HBox {
     label.setText("OFF");
 
     try {
-      Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), 20);
+      Font f = Font.loadFont(new FileInputStream(new File("src/resources/fonts/War is Over.ttf")), 20);
       label.setFont(f);
 
     } catch (IOException e) {

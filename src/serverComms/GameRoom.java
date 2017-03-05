@@ -128,6 +128,10 @@ public class GameRoom {
 	public ArrayList<String> getPlayers() {
 		return players;
 	}
+	
+	public String getHostName(){
+		return hostName;
+	}
 
 	public void startGame(String clientName) {
 		if (clientName.equals(hostName)) {
