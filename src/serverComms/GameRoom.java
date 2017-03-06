@@ -124,6 +124,10 @@ public class GameRoom {
 		ships.add(data);
 		players.add(data.getNickname());
 	}
+	
+	public void addPlayer(String username){
+		players.add(username);
+	}
 
 	public ArrayList<String> getPlayers() {
 		return players;
