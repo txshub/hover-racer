@@ -76,6 +76,7 @@ public class JoinGameRoom extends GridPane {
 				joinGR.setOnMouseClicked(eventjoin-> {
 					
 					//Simon??
+					//shipsetupdata -> basic ship setup (nickname)
 					//gameRoom.addPlayer(data);
 					//client.joinGame(id, data);
 					
