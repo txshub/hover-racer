@@ -78,6 +78,13 @@ public class ServerReceiver extends Thread {
 					} else { //Valid Game
 						lobby.clientTable.getGame(gameID).startGame(clientName);
 					}
+				} else if(fullMsg.getType()==ServerComm.REFRESHROOM) {
+					int gameID = lobby.clientTable.getGameID(clientName);
+					if(gameID==-1) {
+						lobby.clientTable.getQueue(clientName).offer(new ByteArrayByte(new byte[0], ServerComm.INVALIDGAME));
+					} else {
+						lobby.clientTable.getQueue(clientName).offer(new ByteArrayByte(lobby.clientTable.getGame(gameID).toByteArray(), ServerComm.VALIDGAME));
+					}
 				} else {
 					System.out.println("Unknown Message Type: " + fullMsg.getType());
 				}

@@ -57,7 +57,7 @@ public class ClientReceiver extends Thread {
 					}
 					client.setGameList(gameList);
 				} else if(fullMsg.getType()==ServerComm.INVALIDGAME) {
-					//What to do if game doesn't exist?
+					client.setCurrentRoom(null);
 				} else if(fullMsg.getType()==ServerComm.VALIDGAME) {
 					GameRoom gr = new GameRoom(new String(fullMsg.getMsg(),ServerComm.charset));
 					client.setCurrentRoom(gr);

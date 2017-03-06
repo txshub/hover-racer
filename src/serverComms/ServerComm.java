@@ -59,6 +59,8 @@ public class ServerComm extends Thread {
 	public static final byte CLIENTSETUPDATA 	= Byte.parseByte("16");
 	//Race setup data sent to all clients
 	public static final byte RACESETUPDATA 		= Byte.parseByte("17");
+	//Client->Server Request an updated copy of the room
+	public static final byte REFRESHROOM        = Byte.parseByte("18");
 	
 	
 	/**

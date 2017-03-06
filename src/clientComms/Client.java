@@ -105,22 +105,29 @@ public class Client extends Thread {
 	public GameRoom createGame(long seed, int maxPlayers, int lapCount, String lobbyName) throws IOException {
 		GameSettings thisGame = new GameSettings(seed, maxPlayers, lapCount, lobbyName, clientName);
 		sendByteMessage(thisGame.toByteArray(), ServerComm.MAKEGAME);
-		while(alreadyAccessedRoom) {
-			try {
-				Thread.sleep(100);
-			} catch(InterruptedException e) {}
-		}
-		return currentRoom;
+		return waitForRoom();
 	}
 
 	public GameRoom joinGame(int id, ShipSetupData data) throws IOException {
 		IDShipData toSend = new IDShipData(id, data);
 		sendByteMessage(toSend.toByteArray(), ServerComm.JOINGAME);
+		return waitForRoom();
+	}
+	
+	public GameRoom getUpdatedRoom() throws IOException {
+		sendByteMessage(new byte[0], ServerComm.REFRESHROOM);
+		return waitForRoom();
+	}
+	
+
+	
+	public GameRoom waitForRoom() {
 		while(alreadyAccessedRoom) {
 			try {
 				Thread.sleep(100);
 			} catch(InterruptedException e) {}
 		}
+		alreadyAccessedRoom = true;
 		return currentRoom;
 	}
 
