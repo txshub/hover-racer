@@ -59,6 +59,7 @@ public class ServerReceiver extends Thread {
 									
 				} else if(fullMsg.getType()==ServerComm.MAKEGAME) {
 					lobby.clientTable.addGame(new GameSettings(new String(fullMsg.getMsg(), ServerComm.charset)));
+					lobby.clientTable.getQueue(clientName).offer(new ByteArrayByte(lobby.clientTable.getGame(lobby.clientTable.getGameID(clientName)).toByteArray(), ServerComm.VALIDGAME));
 					
 				} else if(fullMsg.getType()==ServerComm.JOINGAME) {
 					IDShipData data = new IDShipData(new String(fullMsg.getMsg(), ServerComm.charset));

@@ -60,7 +60,7 @@ public class ClientReceiver extends Thread {
 					//What to do if game doesn't exist?
 				} else if(fullMsg.getType()==ServerComm.VALIDGAME) {
 					GameRoom gr = new GameRoom(new String(fullMsg.getMsg(),ServerComm.charset));
-					//What to do with gameroom?
+					client.setCurrentRoom(gr);
 				} else if(fullMsg.getType()==ServerComm.RACESETUPDATA){
 					//TODO setup game
 					manager = client.getManager();

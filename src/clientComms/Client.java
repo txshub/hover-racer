@@ -31,8 +31,10 @@ public class Client extends Thread {
 	StopDisconnect serverStop;
 	GameMenu gameMenu;
 	MultiplayerShipManager manager;
-	public volatile boolean alreadyAccessed = false;
+	public volatile boolean alreadyAccessedList = true;
+	public volatile boolean alreadyAccessedRoom = true;
 	private ArrayList<GameRoom> gameList;
+	private GameRoom currentRoom;
 
 	/** Creates a client object and connects to a given server on a given port automagically
 	 * 
@@ -100,24 +102,36 @@ public class Client extends Thread {
 		}
 	}
 
-	public void createGame(long seed, int maxPlayers, int lapCount, String lobbyName) throws IOException {
+	public GameRoom createGame(long seed, int maxPlayers, int lapCount, String lobbyName) throws IOException {
 		GameSettings thisGame = new GameSettings(seed, maxPlayers, lapCount, lobbyName, clientName);
 		sendByteMessage(thisGame.toByteArray(), ServerComm.MAKEGAME);
+		while(alreadyAccessedRoom) {
+			try {
+				Thread.sleep(100);
+			} catch(InterruptedException e) {}
+		}
+		return currentRoom;
 	}
 
-	public void joinGame(int id, ShipSetupData data) throws IOException {
+	public GameRoom joinGame(int id, ShipSetupData data) throws IOException {
 		IDShipData toSend = new IDShipData(id, data);
 		sendByteMessage(toSend.toByteArray(), ServerComm.JOINGAME);
+		while(alreadyAccessedRoom) {
+			try {
+				Thread.sleep(100);
+			} catch(InterruptedException e) {}
+		}
+		return currentRoom;
 	}
 
 	public ArrayList<GameRoom> requestAllGames() throws IOException {
 		sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.SENDALLGAMES);
-		while (alreadyAccessed) {
+		while (alreadyAccessedList) {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {}
 		}
-		alreadyAccessed = true;
+		alreadyAccessedList = true;
 		return gameList;
 	}
 
@@ -143,10 +157,14 @@ public class Client extends Thread {
 
 	public void setGameList(ArrayList<GameRoom> gameList) {
 		this.gameList = gameList;
-		alreadyAccessed = false;
+		alreadyAccessedList = false;
 
 	}
-
+	
+	public void setCurrentRoom(GameRoom gr) {
+		this.currentRoom = gr;
+		alreadyAccessedRoom = false;
+	}
 
 	public void setManager(MultiplayerShipManager manager) {
 		this.manager = manager;
