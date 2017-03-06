@@ -1,5 +1,7 @@
 package gameEngine.renderEngine;
 
+import java.awt.Toolkit;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.ContextAttribs;
@@ -11,7 +13,7 @@ import org.lwjgl.opengl.PixelFormat;
 
 public class DisplayManager {
 
-  private static final int WIDTH = 1280;
+  private static final int WIDTH = 1024;
   private static final int HEIGHT = 720;
   private static final int FPS_CAP = 60;
 
@@ -27,13 +29,15 @@ public class DisplayManager {
     try {
       Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
       Display.create(new PixelFormat(), attribs);
+      Display.setFullscreen(true);
+      Display.setVSyncEnabled(true);
       Display.setTitle("Our First Display!");
       GL11.glEnable(GL13.GL_MULTISAMPLE);
     } catch (LWJGLException e) {
       e.printStackTrace();
     }
 
-    GL11.glViewport(0, 0, WIDTH, HEIGHT);
+    GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
     lastFrameTime = getCurrentTime();
   }
 
