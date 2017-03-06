@@ -28,6 +28,8 @@ import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import input.Action;
 import input.InputController;
+import input.JoystickController;
+import input.KeyboardController;
 import physics.core.Ship;
 import physics.placeholders.FlatGroundProvider;
 import physics.ships.MultiplayerShipManager;
@@ -36,7 +38,7 @@ import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
 
 /** @author Reece Bennett and rtm592 */
-public class Game {
+public class Game implements GameInt {
 
 	// Set this to print debug messages
 	public static boolean debug = true;
@@ -72,7 +74,7 @@ public class Game {
 
 		DisplayManager.createDisplay();
 		loader = new Loader();
-		Game.input = new InputController();
+		Game.input = new JoystickController();
 		AudioMaster.init();
 		entities = new ArrayList<Entity>();
 		normalEntities = new ArrayList<Entity>();
@@ -90,8 +92,8 @@ public class Game {
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("new/GridTexture"));
 
 		terrains = new ArrayList<Terrain>();
-		terrains.add(new Terrain((int) (-SkyboxRenderer.SIZE * 2f), (int) (-SkyboxRenderer.SIZE * 2f), loader,
-				texturePack, blendMap, "new/FlatHeightMap"));
+		terrains.add(new Terrain((int) (-SkyboxRenderer.SIZE * 2f), (int) (-SkyboxRenderer.SIZE * 2f), loader, texturePack, blendMap,
+			"new/FlatHeightMap"));
 
 		// Track
 		SeedTrack st = TrackMaker.makeTrack(10, 20, 30, 1, 40, 40, 4);
@@ -112,19 +114,15 @@ public class Game {
 		lights.add(sun);
 
 		// Creating ships
-		TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader),
-				new ModelTexture(loader.loadTexture("newShipTexture")));
+		TexturedModel playerTModel = new TexturedModel(getModel("newShip", loader), new ModelTexture(loader.loadTexture("newShipTexture")));
 		ArrayList<TexturedModel> shipTextures = new ArrayList<TexturedModel>();
 		shipTextures.add(playerTModel);
 		ArrayList<Vector3f> startingPositions = new ArrayList<Vector3f>();
-		startingPositions.add(
-				new Vector3f(st.getTrack().get(0).x * track.getScale(), 10, st.getTrack().get(0).y * track.getScale()));
-		startingPositions.add(new Vector3f(st.getTrack().get(0).x * track.getScale() + 20, 10,
-				st.getTrack().get(0).y * track.getScale()));
+		startingPositions.add(new Vector3f(st.getTrack().get(0).x * track.getScale(), 10, st.getTrack().get(0).y * track.getScale()));
+		startingPositions.add(new Vector3f(st.getTrack().get(0).x * track.getScale() + 20, 10, st.getTrack().get(0).y * track.getScale()));
 
 		// Create ships
-		ships = new MultiplayerShipManager((byte) 0, input, playerTModel, shipTextures, startingPositions,
-				new FlatGroundProvider(0));
+		ships = new MultiplayerShipManager((byte) 0, input, playerTModel, shipTextures, startingPositions, new FlatGroundProvider(0));
 		ships.addShipsTo(entities);
 		player = ships.getPlayerShip();
 
@@ -146,27 +144,27 @@ public class Game {
 		AudioMaster.playInGameMusic();
 	}
 
-	public void update(double delta) {
+	public void update(float delta) {
 		input.update();
 
 		// Tudor
 		logic.update();
 		
 		// Check if the escape key was pressed to exit the game
-		if (input.isDown(Action.EXIT))
+		if (input.isDown(Action.EXIT) > 0.5f)
 			running = false;
 
 		// Check for audio controls
 		/** @author Tudor */
-		if (input.wasPressed(Action.MUSIC_UP))
+		if (input.wasPressed(Action.MUSIC_UP) > 0.5f)
 			AudioMaster.increaseMusicVolume();
-		if (input.wasPressed(Action.MUSIC_DOWN))
+		if (input.wasPressed(Action.MUSIC_DOWN) > 0.5f)
 			AudioMaster.decreaseMusicVolume();
-		if (input.wasPressed(Action.MUSIC_SKIP))
+		if (input.wasPressed(Action.MUSIC_SKIP) > 0.5f)
 			AudioMaster.skipInGameMusic();
-		if (input.wasPressed(Action.SFX_UP))
+		if (input.wasPressed(Action.SFX_UP) > 0.5f)
 			AudioMaster.increaseSFXVolume();
-		if (input.wasPressed(Action.SFX_DOWN))
+		if (input.wasPressed(Action.SFX_DOWN) > 0.5f)
 			AudioMaster.decreaseSFXVolume();
 
 		ships.updateShips((float) delta);
@@ -243,11 +241,9 @@ public class Game {
 				// System.out.println("Cur: " + curPoint + " Next: " + nextPoint
 				// + " " + (nextPoint.getX() - curPoint.getX()));
 
-				Vector2f dirFromPrev = new Vector2f(curPoint.getX() - prevPoint.getX(),
-						curPoint.getY() - prevPoint.getY());
+				Vector2f dirFromPrev = new Vector2f(curPoint.getX() - prevPoint.getX(), curPoint.getY() - prevPoint.getY());
 
-				Vector2f dirToNext = new Vector2f(nextPoint.getX() - curPoint.getX(),
-						nextPoint.getY() - curPoint.getY());
+				Vector2f dirToNext = new Vector2f(nextPoint.getX() - curPoint.getX(), nextPoint.getY() - curPoint.getY());
 
 				Vector2f dirVec = dirFromPrev.add(dirToNext).normalize();
 
@@ -384,7 +380,7 @@ public class Game {
 			}
 		}
 		return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
-				new ModelTexture(loader.loadTexture("new/TrackTexture")));
+			new ModelTexture(loader.loadTexture("new/TrackTexture")));
 
 	}
 
@@ -394,4 +390,5 @@ public class Game {
 			distance[i - 1] = lights.get(i).getdistance(currentPosition);
 		}
 	}
+
 }
