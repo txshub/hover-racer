@@ -18,7 +18,7 @@ import physics.core.Ship;
  * of engines with sounds of collisions on the way. Constructed and updated by
  * PlayerShip.
  * 
- * @author Maciej Bogacki 
+ * @author Maciej Bogacki
  * @author Tudor Suruceanu
  */
 public class ShipSounds {
@@ -64,9 +64,10 @@ public class ShipSounds {
 	public void update(float delta) {
 
 		float pitch = 1f + player.getVelocity().length() / (player.getMaxSpeed() / 3f);
-		if (pitch > 2f) pitch = 2f;
+		if (pitch > 2f)
+			pitch = 2f;
 		playerSource.setPitch(pitch);
-		
+
 		// Updates all other ships
 		for (Entry<Ship, Source> entry : this.otherShips.entrySet()) {
 			Ship ship = entry.getKey();
@@ -74,9 +75,10 @@ public class ShipSounds {
 
 			Vector3f sourcePos = getRelativePosition(ship.getPosition());
 			source.setPosition(sourcePos.x(), sourcePos.y(), sourcePos.z());
-			
+
 			float p = 1f + ship.getVelocity().length() / (ship.getMaxSpeed() / 3f);
-			if (p > 2f) p = 2f;
+			if (p > 2f)
+				p = 2f;
 			source.setPitch(p);
 		}
 	}
@@ -93,21 +95,30 @@ public class ShipSounds {
 	public void collision(Ship first, Ship second) {
 		Vector3f position = new Vector3f(first.getPosition()).sub(player.getPosition()).div(2);
 		float force = new Vector3f(first.getVelocity()).sub(second.getVelocity()).length();
-		
+
 		// Set initial volume
 		Source collisionSource = AudioMaster.createSFXSource();
 		Vector3f sourcePos = getRelativePosition(position);
 		collisionSource.setPosition(sourcePos.x(), sourcePos.y(), sourcePos.z());
-		
+
 		collisionSource.play(Sounds.COLLISION);
 	}
 
+	/**
+	 * Calculate the position of a point relative to the player
+	 * 
+	 * @param position
+	 *            The initial position of a point
+	 * @return The relative position
+	 */
 	private Vector3f getRelativePosition(Vector3f position) {
 		Vector3f difference = new Vector3f(player.getPosition()).sub(position);
-		double orientation = /*Math.PI * 2 - */Math.toRadians(player.getRotation().y());
-		float relativeX = difference.x() * (float)Math.cos(orientation) - difference.z() *(float) Math.sin(orientation);
-		float relativeZ = difference.x() * (float)Math.sin(orientation) + difference.z() *(float) Math.cos(orientation);
+		double orientation = /* Math.PI * 2 - */Math.toRadians(player.getRotation().y());
+		float relativeX = difference.x() * (float) Math.cos(orientation)
+				- difference.z() * (float) Math.sin(orientation);
+		float relativeZ = difference.x() * (float) Math.sin(orientation)
+				+ difference.z() * (float) Math.cos(orientation);
 		return new Vector3f(relativeX, difference.y(), relativeZ);
 	}
-	
+
 }
