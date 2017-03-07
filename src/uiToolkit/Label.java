@@ -1,23 +1,28 @@
 package uiToolkit;
 
-import java.awt.Font;
-
 import org.joml.Vector2f;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.TrueTypeFont;
+import org.lwjgl.opengl.Display;
 
 import gameEngine.renderEngine.Loader;
+import uiToolkit.fontMeshCreator.FontType;
+import uiToolkit.fontMeshCreator.GUIText;
 
+/**
+ * 
+ * A text label.
+ * 
+ * @author Reece Bennett
+ *
+ */
 public class Label extends UIElement {
 
-  private TrueTypeFont font;
+  private GUIText text;
 
-  public Label(Loader loader, Vector2f position) {
+  public Label(Loader loader, String text, FontType font, float size, boolean centered,
+      Vector2f position) {
     super(loader, position);
-
-    // Load a default Java font
-    Font awtFont = new Font("Times New Roman", Font.BOLD, 24);
-    font = new TrueTypeFont(awtFont, false);
+    this.text = new GUIText(text, size, font, new Vector2f(toScreenSpace(position)), 0.5f,
+        centered);
   }
 
   @Override
@@ -26,7 +31,28 @@ public class Label extends UIElement {
 
   @Override
   public void render() {
-    font.drawString(100, 50, "THE LIGHTWEIGHT JAVA GAMES LIBRARY", Color.yellow);
+  }
+
+  @Override
+  public void setVisibility(boolean visible) {
+    super.setVisibility(visible);
+    text.setVisibility(visible);
+  }
+
+  public void setColour(float r, float g, float b) {
+    text.setColour(r, g, b);
+  }
+
+  @Override
+  public void setParent(UIElement parent) {
+    super.setParent(parent);
+    text.setPosition(toScreenSpace(position));
+  }
+
+  private Vector2f toScreenSpace(Vector2f position) {
+    int w = Display.getWidth();
+    int h = Display.getHeight();
+    return new Vector2f(position.x / (float) w, (position.y / (float) h));
   }
 
 }

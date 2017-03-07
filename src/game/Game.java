@@ -40,6 +40,7 @@ import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
 import uiToolkit.Button;
 import uiToolkit.Container;
+import uiToolkit.Label;
 import uiToolkit.UIRenderer;
 import uiToolkit.fontMeshCreator.FontType;
 import uiToolkit.fontMeshCreator.GUIText;
@@ -166,8 +167,9 @@ public class Game {
     
     // Fonts
     FontType font = new FontType(loader.loadFontTexture("ui/calibri"), new File("src/resources/ui/calibri.fnt"));
-    GUIText text = new GUIText("Hello world!", 2f, font, new Vector2f(0.5f, 0.5f), 0.5f, true);
-    text.setColour(1f, 0f, 0f);
+    Label label = new Label(loader, "Hello!", font, 3f, false, new Vector2f(50, 50));
+    label.setColour(1, 0, 0);
+    label.setParent(menu);
 
 		// Renderers
 		renderer = new MasterRenderer(loader);

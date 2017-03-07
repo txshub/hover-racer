@@ -11,6 +11,11 @@ import org.lwjgl.opengl.GL30;
 import uiToolkit.fontMeshCreator.FontType;
 import uiToolkit.fontMeshCreator.GUIText;
 
+/**
+ * 
+ * @author Reece Bennett
+ *
+ */
 public class FontRenderer {
 
   private FontShader shader;
@@ -29,7 +34,7 @@ public class FontRenderer {
       
       // Render each instance of that font
       for (GUIText text : texts.get(font)) {
-        renderText(text);
+        if (text.isVisible()) renderText(text);
       }
     }
     

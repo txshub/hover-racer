@@ -2,6 +2,11 @@ package uiToolkit;
 
 import gameEngine.shaders.ShaderProgram;
 
+/**
+ * 
+ * @author Reece Bennett
+ *
+ */
 public class UIShader extends ShaderProgram {
 
   private static final String VERTEX_FILE = "src/uiToolKit/uiVertexShader.txt";

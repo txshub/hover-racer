@@ -24,6 +24,8 @@ public class GUIText {
   private FontType font;
 
   private boolean centerText = false;
+  
+  private boolean visible = true;
 
   /**
    * Creates a new text, loads the text's quads into a VAO, and adds the text to
@@ -176,11 +178,23 @@ public class GUIText {
     return lineMaxSize;
   }
 
+  public void setPosition(Vector2f position) {
+    this.position = position;
+  }
+
   /**
    * @return The string of text.
    */
   protected String getTextString() {
     return textString;
+  }
+  
+  public boolean isVisible() {
+    return visible;
+  }
+  
+  public void setVisibility(boolean visible) {
+    this.visible = visible;
   }
 
 }
