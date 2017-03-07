@@ -19,10 +19,10 @@ public class Label extends UIElement {
   private GUIText text;
 
   public Label(Loader loader, String text, FontType font, float size, boolean centered,
-      Vector2f position) {
+      Vector2f position, float lineLength) {
     super(loader, position);
-    this.text = new GUIText(text, size, font, new Vector2f(toScreenSpace(position)), 0.5f,
-        centered);
+    this.text = new GUIText(text, size, font, new Vector2f(toScreenSpace(position)),
+        lineLength / Display.getWidth(), centered);
   }
 
   @Override

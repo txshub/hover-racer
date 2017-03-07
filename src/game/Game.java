@@ -167,7 +167,7 @@ public class Game {
     
     // Fonts
     FontType font = new FontType(loader.loadFontTexture("ui/calibri"), new File("src/resources/ui/calibri.fnt"));
-    Label label = new Label(loader, "Hello!", font, 3f, false, new Vector2f(50, 50));
+    Label label = new Label(loader, "Hello!", font, 3f, false, new Vector2f(50, 50), 300);
     label.setColour(1, 0, 0);
     label.setParent(menu);
 
