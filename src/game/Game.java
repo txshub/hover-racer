@@ -76,7 +76,7 @@ public class Game implements GameInt {
 
 		DisplayManager.createDisplay();
 		loader = new Loader();
-		Game.input = new JoystickController();
+		Game.input = new KeyboardController();
 		AudioMaster.init();
 		entities = new ArrayList<Entity>();
 		normalEntities = new ArrayList<Entity>();
