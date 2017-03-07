@@ -6,6 +6,8 @@ import java.util.List;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -136,11 +138,16 @@ public class Game implements GameInt {
 
 		// Tudor
 		AudioMaster.playInGameMusic();
+		try {
+			Keyboard.create();
+		} catch (LWJGLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void update(float delta) {
 		input.update();
-
 		// Check if the escape key was pressed to exit the game
 		if (input.isDown(Action.EXIT) > 0.5f)
 			running = false;
