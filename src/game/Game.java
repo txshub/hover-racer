@@ -63,6 +63,9 @@ public class Game implements GameInt {
 	private MultiplayerShipManager ships;
 
 	private boolean running;
+	
+	// Tudor
+	GameLogic logic;
 
 	public Game() {
 		init();
@@ -137,6 +140,9 @@ public class Game implements GameInt {
 		// terrains);
 
 		// Tudor
+		ArrayList<Ship> opponents = new ArrayList<Ship>();
+		logic = new GameLogic(player, opponents, st);
+		
 		AudioMaster.playInGameMusic();
 		try {
 			Keyboard.create();
@@ -148,6 +154,9 @@ public class Game implements GameInt {
 
 	public void update(float delta) {
 		input.update();
+
+		// Tudor
+		logic.update();
 		// Check if the escape key was pressed to exit the game
 		if (input.isDown(Action.EXIT) > 0.5f)
 			running = false;
