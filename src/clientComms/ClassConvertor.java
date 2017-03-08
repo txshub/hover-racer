@@ -9,89 +9,89 @@ import java.util.HashMap;
  *         network. first byte is the messageId
  */
 public class ClassConvertor {
-	
-	public static byte[] getbytes(Byte[] bBytes){
-		
-		byte[] bytes = new byte[bBytes.length];
-		
-		for(int i = 0; i < bBytes.length; i++){
-			bytes[i] = bBytes[i].byteValue();
-		}
-		return bytes;
-		
-	}
 
-	/**
-	 * converts the player distance into a byte message ready to be sent
-	 * messageID = 0
-	 * 
-	 * @param distance
-	 *            the distance to be converted
-	 * @return the byte array
-	 */
-	public static byte[] getDistanceMessage(float distance) {
-		return ByteBuffer.allocate(4).putFloat(distance).array();
-	}
+  public static byte[] getbytes(Byte[] bBytes) {
 
-	/**
-	 * converts a byte[] to a float. messageid = 0
-	 * 
-	 * @param bytes
-	 *            the sent message
-	 * @return the distance of the player
-	 */
-	public static float getDistancefloat(byte[] bytes) {
-		return ByteBuffer.wrap(bytes).getFloat();
-	}
+    byte[] bytes = new byte[bBytes.length];
 
-	/**
-	 * converts sent byte message into a hashmap leaderboard. messageID = 1
-	 * 
-	 * @param bytes
-	 *            the sent message in the form of ship ID, place, ship ID, place
-	 *            etc...
-	 * @return the hashmap leaderboard
-	 */
-	public static HashMap<Integer, Integer> getRankings(byte[] bytes) {
+    for (int i = 0; i < bBytes.length; i++) {
+      bytes[i] = bBytes[i].byteValue();
+    }
+    return bytes;
 
-		if (bytes.length - 1 % 2 == 1 || bytes[0] != (byte) 1) {
-			// error should not occur
-			System.err.println("error something is wrong");
-			return new HashMap<>();
-		}
-		HashMap<Integer, Integer> leaderboard = new HashMap<>();
+  }
 
-		for (int i = 0; i < bytes.length / 2; i++) {
-			int shipid = (int) bytes[i * 2 + 1];
-			int place = (int) bytes[i * 2 + 2];
-			leaderboard.put(place, shipid);
-		}
+  /**
+   * converts the player distance into a byte message ready to be sent messageID
+   * = 0
+   * 
+   * @param distance
+   *          the distance to be converted
+   * @return the byte array
+   */
+  public static byte[] getDistanceMessage(float distance) {
+    return ByteBuffer.allocate(4).putFloat(distance).array();
+  }
 
-		return leaderboard;
+  /**
+   * converts a byte[] to a float. messageid = 0
+   * 
+   * @param bytes
+   *          the sent message
+   * @return the distance of the player
+   */
+  public static float getDistancefloat(byte[] bytes) {
+    return ByteBuffer.wrap(bytes).getFloat();
+  }
 
-	}
+  /**
+   * converts sent byte message into a hashmap leaderboard. messageID = 1
+   * 
+   * @param bytes
+   *          the sent message in the form of ship ID, place, ship ID, place
+   *          etc...
+   * @return the hashmap leaderboard
+   */
+  public static HashMap<Integer, Integer> getRankings(byte[] bytes) {
 
-	/**
-	 * converts the leaderboard into a byte message messageID = 1
-	 * 
-	 * @param leaderboard
-	 *            the leaderboard
-	 * @return the message
-	 */
-	public static byte[] getRankingsMessage(HashMap<Integer, Integer> leaderboard) {
+    if (bytes.length - 1 % 2 == 1 || bytes[0] != (byte) 1) {
+      // error should not occur
+      System.err.println("error something is wrong");
+      return new HashMap<>();
+    }
+    HashMap<Integer, Integer> leaderboard = new HashMap<>();
 
-		// under the assumption that ships have incrementing ids in the game
-		// starting at 0
-		byte[] message = new byte[leaderboard.size() * 2 + 1];
-		message[0] = (byte) 1;
+    for (int i = 0; i < bytes.length / 2; i++) {
+      int shipid = (int) bytes[i * 2 + 1];
+      int place = (int) bytes[i * 2 + 2];
+      leaderboard.put(place, shipid);
+    }
 
-		for (Integer place : leaderboard.keySet()) {
-			message[place * 2 + 1] = (byte) place.intValue();
-			message[place * 2 + 2] = (byte) leaderboard.get(place).intValue();
-		}
+    return leaderboard;
 
-		return message;
+  }
 
-	}
+  /**
+   * converts the leaderboard into a byte message messageID = 1
+   * 
+   * @param leaderboard
+   *          the leaderboard
+   * @return the message
+   */
+  public static byte[] getRankingsMessage(HashMap<Integer, Integer> leaderboard) {
+
+    // under the assumption that ships have incrementing ids in the game
+    // starting at 0
+    byte[] message = new byte[leaderboard.size() * 2 + 1];
+    message[0] = (byte) 1;
+
+    for (Integer place : leaderboard.keySet()) {
+      message[place * 2 + 1] = (byte) place.intValue();
+      message[place * 2 + 2] = (byte) leaderboard.get(place).intValue();
+    }
+
+    return message;
+
+  }
 
 }

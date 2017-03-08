@@ -8,5 +8,5 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({ TestByteArrayByte.class, TestClientTable.class, TestCommQueue.class, TestDetectTimeout.class,
 		TestGameSettings.class, TestLobby.class, TestServerComm.class})
 public class ServerTests {
-	
+
 }
