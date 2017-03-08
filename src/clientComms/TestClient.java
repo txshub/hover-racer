@@ -1,5 +1,7 @@
 package clientComms;
 
+import java.io.IOException;
+
 /**
  * Test client to ensure the client/server connections are working
  * 
@@ -16,7 +18,12 @@ public class TestClient {
    */
   public static void main(String[] args) {
     System.out.println("Test");
-    Client client = new Client("Bob", 4444, "localhost", new DummyMenu());
+    Client client = null;
+    try {
+      client = new Client("Bob", 4444, "localhost", new DummyMenu());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     client.start();
 
   }
