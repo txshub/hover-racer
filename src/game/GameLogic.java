@@ -20,11 +20,11 @@ public class GameLogic {
   private Ship player;
   private ArrayList<Ship> opponents;
   private HashMap<Integer, Integer> ranking;
-
   private HashMap<TrackPoint, Float> pointsDist;
   private ArrayList<TrackPoint> trackPoints;
   private int lastTrackPoint;
-
+  private int laps;
+  private int currentLap;
   private boolean finished;
 
   /**
@@ -37,11 +37,13 @@ public class GameLogic {
    * @param track
    *          The track seed of the race
    */
-  public GameLogic(Ship player, ArrayList<Ship> opponents, SeedTrack track) {
+  public GameLogic(Ship player, ArrayList<Ship> opponents, SeedTrack track, int laps) {
 
     this.player = player;
     this.opponents = opponents;
+    this.laps = laps;
 
+    currentLap = 1;
     trackPoints = track.getTrack();
 
     playerDist = 0;
@@ -92,8 +94,17 @@ public class GameLogic {
     }
 
     if (last == trackPoints.size() - 1 && lastTrackPoint == 0) {
-      System.err.println("CONGRATULATIONS!");
-      finished = true;
+      if (currentLap == laps){
+        System.err.println("CONGRATULATIONS!");
+        finished = true;
+      } else {
+    	int left = laps - currentLap;
+    	if (left > 1)
+    		System.err.println((laps - currentLap) + " MORE LAPS!");
+    	else
+    		System.err.println("1 MORE LAP!");
+    	currentLap++;
+      }
       return;
     }
     if (lastTrackPoint < last)

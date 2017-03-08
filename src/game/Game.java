@@ -145,7 +145,7 @@ public class Game implements GameInt {
 
     // Tudor
     ArrayList<Ship> opponents = new ArrayList<Ship>();
-    logic = new GameLogic(player, opponents, st);
+    logic = new GameLogic(player, opponents, st, 4);
 
     AudioMaster.playInGameMusic();
     try {
