@@ -25,7 +25,7 @@ public class GameRoom {
   ArrayList<ShipSetupData> ships;
 
   String name;
-  final int id;
+  public final int id;
   private long seed;
   private int maxPlayers;
   private boolean inGame = false;

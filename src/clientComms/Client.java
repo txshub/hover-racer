@@ -24,10 +24,10 @@ import userInterface.GameMenu;
  */
 public class Client extends Thread {
 
-  public static final boolean DEBUG = true;
+  public static final boolean DEBUG = false;
   public boolean serverOn = true;
   protected DataOutputStream toServer;
-  String clientName;
+  public String clientName;
   int portNumber;
   String machineName;
   StopDisconnect serverStop;
@@ -112,9 +112,9 @@ public class Client extends Thread {
     }
   }
 
-  public GameRoom createGame(long seed, int maxPlayers, int lapCount, String lobbyName)
+  public GameRoom createGame(long seed, int maxPlayers, int lapCount, String lobbyName, ShipSetupData data)
       throws IOException {
-    GameSettings thisGame = new GameSettings(seed, maxPlayers, lapCount, lobbyName, clientName);
+    GameSettings thisGame = new GameSettings(seed, maxPlayers, lapCount, lobbyName, clientName, data);
     sendByteMessage(thisGame.toByteArray(), ServerComm.MAKEGAME);
     return waitForRoom();
   }

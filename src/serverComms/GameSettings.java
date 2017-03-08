@@ -1,5 +1,8 @@
 package serverComms;
 
+import physics.network.ShipSetupData;
+import physics.placeholders.DataGenerator;
+
 public class GameSettings {
 
   final long seed;
@@ -7,14 +10,16 @@ public class GameSettings {
   final int lapCount;
   final String lobbyName;
   final String hostName;
+  final ShipSetupData setupData;
 
-  public GameSettings(long seed, int maxPlayers, int lapCount, String lobbyName, String hostName)
+  public GameSettings(long seed, int maxPlayers, int lapCount, String lobbyName, String hostName, ShipSetupData setupData)
       throws IllegalArgumentException {
     this.seed = seed;
     this.maxPlayers = maxPlayers;
     this.lobbyName = lobbyName;
     this.lapCount = lapCount;
     this.hostName = hostName;
+    this.setupData = setupData;
     if (lobbyName.contains(System.lineSeparator()))
       throw new IllegalArgumentException("Name shouldn't contain new line symbol");
   }
@@ -47,11 +52,18 @@ public class GameSettings {
       in = in.substring(1);
     }
     lobbyName = collected;
-    hostName = in.substring(1);
+    in = in.substring(1);
+    collected = "";
+    while (in.charAt(0) != '|') {
+    	collected += in.charAt(0);
+    	in = in.substring(1);
+    }
+    hostName = collected;
+    setupData = DataGenerator.fromJson(in.substring(1));
   }
 
   public String toString() {
-    return seed + "|" + maxPlayers + "|" + lapCount + "|" + lobbyName + "|" + hostName;
+    return seed + "|" + maxPlayers + "|" + lapCount + "|" + lobbyName + "|" + hostName + "|" + setupData.toString();
   }
 
   public byte[] toByteArray() {

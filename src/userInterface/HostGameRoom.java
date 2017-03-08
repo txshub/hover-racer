@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import physics.placeholders.DataGenerator;
 
 /**
  * 
@@ -78,7 +79,7 @@ public class HostGameRoom extends GridPane {
 
       try {
 
-        client.createGame(gameRoomSeed, maxPlayers, lapNo, gameRoomName);
+        client.createGame(gameRoomSeed, maxPlayers, lapNo, gameRoomName, DataGenerator.basicShipSetup(client.clientName));
         // need to get the game room somehow so I can pass it to gameRoomLobby
         // Simon? createGame creates a GameSettings obj not a GameRoom
 
