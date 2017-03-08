@@ -49,7 +49,7 @@ public class Entity {
   }
 
   public Vector3f getPosition() {
-    return position;
+    return new Vector3f(position);
   }
 
   public void setPosition(Vector3f position) {
@@ -61,7 +61,7 @@ public class Entity {
   }
 
   public Vector3f getRotation() {
-    return rotation;
+    return new Vector3f(rotation);
   }
 
   public void setRotation(Vector3f rotation) {
