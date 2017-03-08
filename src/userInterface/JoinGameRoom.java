@@ -19,6 +19,9 @@ public class JoinGameRoom extends GridPane {
 
 	private ArrayList<GameRoom> gameRoomList;
 	private Client client;
+	private GameRoomLobby gameRoomLobby; 
+	private GameRoom gameRoom;
+	
 	
 	public JoinGameRoom() {
 		
@@ -72,15 +75,11 @@ public class JoinGameRoom extends GridPane {
 					playerNames.getChildren().add(playerText);
 				}
 				
+				
 				MenuButton joinGR = new MenuButton("JOIN THIS GAME ROOM");
 				joinGR.setOnMouseClicked(eventjoin-> {
 					
-					//Simon??
-					//shipsetupdata -> basic ship setup (nickname)
-					//gameRoom.addPlayer(data);
-					//client.joinGame(id, data);
-					
-					//go to the gameRoomLobby
+					// TODO - finish this
 					
 				});
 				

@@ -3,12 +3,15 @@ package userInterface;
 import java.io.IOException;
 
 import clientComms.Client;
+import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
+import serverComms.GameRoom;
 
 /**
  * 
@@ -23,6 +26,8 @@ public class HostGameRoom extends GridPane {
 	private int maxPlayers;
 	private int lapNo;
 	private String gameRoomName;
+	private GameRoom gameRoom;
+	private GameRoomLobby gameRoomLobby;
 	
 	public HostGameRoom(){
 		
@@ -80,16 +85,19 @@ public class HostGameRoom extends GridPane {
 			
 			try {
 				
-				client.createGame(gameRoomSeed, maxPlayers, lapNo, gameRoomName);
-				//need to get the game room somehow so I can pass it to gameRoomLobby
-				//Simon? createGame creates a GameSettings obj not a GameRoom
+				gameRoom = client.createGame(gameRoomSeed, maxPlayers, lapNo, gameRoomName);
+//				gameRoomLobby = new GameRoomLobby(gameRoom);
 				
-			} catch (IOException e) {
+			//	getChildren().add(gameRoomLobby);
+				
+				getChildren().removeAll(nameInput, nameText, seedText, seedInput, noPlayersText, noPlayersInput, noLapsText,
+						noLapsInput, generateTrack, hostGameRoom, box6 );
+				
+			} catch (Exception e) {
 				
 				e.printStackTrace();
 			}
-			
-			
+				
 			
 		});
 		
