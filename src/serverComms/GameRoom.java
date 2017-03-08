@@ -35,9 +35,10 @@ public class GameRoom {
 
   private ServerShipManager shipManager;
   private UpdateAllUsers updatedUsers;
+  private boolean isSinglePlayer;
 
   public GameRoom(int id, String name, long seed, int maxPlayers, String hostName,
-      ClientTable table) {
+      ClientTable table, boolean isSinglePlayer) {
     this.id = id;
     this.name = name;
     this.seed = seed;
@@ -45,6 +46,7 @@ public class GameRoom {
     this.hostName = hostName;
     this.table = table;
     this.ships = new ArrayList<ShipSetupData>(maxPlayers);
+    this.isSinglePlayer = isSinglePlayer;
     // Generate the track
     SeedTrack st = TrackMaker.makeTrack(seed, 10, 20, 30, 1, 40, 40, 4);
     trackPoints = st.getTrack();
@@ -126,8 +128,16 @@ public class GameRoom {
     players.add(data.getNickname());
   }
 
+  public void addPlayer(String username) {
+    players.add(username);
+  }
+
   public ArrayList<String> getPlayers() {
     return players;
+  }
+
+  public String getHostName() {
+    return hostName;
   }
 
   public void startGame(String clientName) {

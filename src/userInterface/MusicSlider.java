@@ -36,7 +36,8 @@ public class MusicSlider extends GridPane {
     value = new Text(Integer.toString((int) musicSlider.getValue()));
 
     try {
-      Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), 30);
+      Font f = Font.loadFont(new FileInputStream(new File("src/resources/fonts/War is Over.ttf")),
+          30);
       value.setFont(f);
       value.setFill(Color.WHITE);
 

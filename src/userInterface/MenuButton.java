@@ -45,7 +45,8 @@ public class MenuButton extends StackPane {
     audioSource = AudioMaster.createSFXSource();
 
     try {
-      Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), 30);
+      Font f = Font.loadFont(new FileInputStream(new File("src/resources/fonts/War is Over.ttf")),
+          30);
       buttonText.setFont(f);
 
     } catch (IOException e) {

@@ -64,7 +64,7 @@ public class Game implements GameInt {
   private boolean running;
 
   // Tudor
-  GameLogic logic;
+  private GameLogic logic;
 
   public Game() {
     init();

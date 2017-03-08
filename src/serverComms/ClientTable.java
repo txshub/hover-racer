@@ -107,7 +107,7 @@ public class ClientTable {
 
   public void addGame(GameSettings gameSettings) {
     allGames.put(nextInt, new GameRoom(nextInt, gameSettings.lobbyName, gameSettings.seed,
-        gameSettings.maxPlayers, gameSettings.hostName, this));
+        gameSettings.maxPlayers, gameSettings.hostName, this, false));
     nextInt++;
   }
 
