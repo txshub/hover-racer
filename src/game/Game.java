@@ -140,11 +140,15 @@ public class Game {
     // GUIs
     guis = new ArrayList<>();
     containers = new ArrayList<>();
+    
+    Vector3f colour = new Vector3f(0.0275f, 0.6510f, 0.9412f);
+    FontType font = new FontType(loader.loadFontTexture("ui/calibri"),
+        new File("src/resources/ui/calibri.fnt"));
 
     menu = new Container(loader, "ui/MenuBackground", new Vector2f(448, 120));
     containers.add(menu);
 
-    Button resumeButton = new Button(loader, "ui/ResumeButton", new Vector2f(58, 64));
+    Button resumeButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 64));
     resumeButton.setParent(menu);
     resumeButton.addListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -154,22 +158,29 @@ public class Game {
         }
       }
     });
+    Label resumeText = new Label(loader, "RESUME", font, 2.5f, true, new Vector2f(0, 8), 266);
+    resumeText.setParent(resumeButton);
+    resumeText.setColor(colour);
 
-    Button optionsButton = new Button(loader, "ui/optionsButton", new Vector2f(58, 160));
+    Button optionsButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 160));
     optionsButton.setParent(menu);
+    Label optionsText = new Label(loader, "OPTIONS", font, 2.5f, true, new Vector2f(0, 8), 266);
+    optionsText.setParent(optionsButton);
+    optionsText.setColor(colour);
 
-    Button lobbyButton = new Button(loader, "ui/lobbyButton", new Vector2f(58, 256));
+    Button lobbyButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 256));
     lobbyButton.setParent(menu);
+    Label lobbyText = new Label(loader, "LOBBY", font, 2.5f, true, new Vector2f(0, 8), 266);
+    lobbyText.setParent(lobbyButton);
+    lobbyText.setColor(colour);
 
-    Button menuButton = new Button(loader, "ui/menuButton", new Vector2f(58, 352));
+    Button menuButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 352));
     menuButton.setParent(menu);
+    Label menuText = new Label(loader, "MENU", font, 2.5f, true, new Vector2f(0, 8), 266);
+    menuText.setParent(menuButton);
+    menuText.setColor(colour);
 
-    // Fonts
-    FontType font = new FontType(loader.loadFontTexture("ui/calibri"),
-        new File("src/resources/ui/calibri.fnt"));
-    Label label = new Label(loader, "Hello!", font, 3f, false, new Vector2f(50, 50), 300);
-    label.setColour(1, 0, 0);
-    label.setParent(menu);
+    menu.setVisibility(true);
 
     // Renderers
     renderer = new MasterRenderer(loader);

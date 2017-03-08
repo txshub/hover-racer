@@ -1,6 +1,7 @@
 package uiToolkit;
 
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.Display;
 
 import gameEngine.renderEngine.Loader;
@@ -41,6 +42,10 @@ public class Label extends UIElement {
 
   public void setColour(float r, float g, float b) {
     text.setColour(r, g, b);
+  }
+  
+  public void setColor(Vector3f colour) {
+    text.setColour(colour.x, colour.y, colour.z);
   }
 
   @Override

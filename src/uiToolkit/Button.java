@@ -19,7 +19,7 @@ import gameEngine.renderEngine.Loader;
  * @author Reece Bennett
  *
  */
-public class Button extends TexturedUIElement {
+public class Button extends Container {
 
   private Rectangle bounds;
 
@@ -49,6 +49,8 @@ public class Button extends TexturedUIElement {
 
   @Override
   public void update() {
+    super.update();
+    
     if (bounds.contains(Mouse.getX(), Mouse.getY()) && Mouse.isButtonDown(0) && !pressed) {
       pressed = true;
       for (ActionListener a : listeners) {
