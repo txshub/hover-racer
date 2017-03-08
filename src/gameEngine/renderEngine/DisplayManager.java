@@ -24,7 +24,7 @@ public class DisplayManager {
         .withProfileCore(true);
 
     try {
-//      Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
+      // Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
       Display.create(new PixelFormat(), attribs);
       Display.setFullscreen(true);
       Display.setVSyncEnabled(true);

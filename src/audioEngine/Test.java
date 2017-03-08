@@ -4,7 +4,8 @@ import java.util.Scanner;
 
 /**
  * Usage example
- * @author Tudor Suruceanu 
+ * 
+ * @author Tudor Suruceanu
  */
 public class Test {
 
@@ -17,18 +18,18 @@ public class Test {
     Source s = new Source();
     s.setLooping(true);
     s.play(Sounds.BUTTON_CLICK);
-    
+
     float xPos = 8;
     s.setPosition(xPos, 0, 0);
-    
+
     while (c != "q") {
-    	xPos -= 0.03f;
-    	s.setPosition(xPos, 0, 0);
-    	Thread.sleep(3);
+      xPos -= 0.03f;
+      s.setPosition(xPos, 0, 0);
+      Thread.sleep(3);
     }
-    
+
     s.delete();
-    
+
     // float pitch = 1;
     //
     //
@@ -82,7 +83,6 @@ public class Test {
     // }
     //
     // AudioMaster.stopMusic();
-    
 
     AudioMaster.cleanUp();
   }

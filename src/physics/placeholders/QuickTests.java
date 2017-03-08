@@ -5,7 +5,7 @@ import game.MainGameLoop;
 
 public class QuickTests {
 
-	public static void main(String[] args) {
-		(new MainGameLoop()).main(new Game());
-	}
+  public static void main(String[] args) {
+    (new MainGameLoop()).main(new Game());
+  }
 }
