@@ -23,21 +23,21 @@ public class SoundSlider extends GridPane {
   private Text value;
 
   public SoundSlider() {
-	  
-	this.setPadding(new Insets(0,0,20,0));
-		
-	  
-	TextStyle soundS = new TextStyle("SOUND EFFECTS", 30);
-	Text soundSliderText = soundS.getTextStyled();
-	
-	GridPane.setColumnSpan(soundSliderText, 2);
-	
+
+    this.setPadding(new Insets(0, 0, 20, 0));
+
+    TextStyle soundS = new TextStyle("SOUND EFFECTS", 30);
+    Text soundSliderText = soundS.getTextStyled();
+
+    GridPane.setColumnSpan(soundSliderText, 2);
+
     soundSlider = new Slider(0, 10, 5);
 
     value = new Text(Integer.toString((int) soundSlider.getValue()));
 
     try {
-      Font f = Font.loadFont(new FileInputStream(new File("src/resources/fonts/War is Over.ttf")), 30);
+      Font f = Font.loadFont(new FileInputStream(new File("src/resources/fonts/War is Over.ttf")),
+          30);
       value.setFont(f);
       value.setFill(Color.WHITE);
 
@@ -60,11 +60,11 @@ public class SoundSlider extends GridPane {
 
     add(soundSliderText, 0, 1);
     add(value, 0, 3);
-    add(soundSlider, 1, 3 );
-    
-	GridPane.setMargin(soundSliderText, new Insets(0,0,30,0));
-	GridPane.setMargin(value, new Insets(0,20,0,0));
-	
+    add(soundSlider, 1, 3);
+
+    GridPane.setMargin(soundSliderText, new Insets(0, 0, 30, 0));
+    GridPane.setMargin(value, new Insets(0, 20, 0, 0));
+
   }
 
 }

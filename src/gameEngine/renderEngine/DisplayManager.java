@@ -1,7 +1,5 @@
 package gameEngine.renderEngine;
 
-import java.awt.Toolkit;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.ContextAttribs;

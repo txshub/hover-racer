@@ -4,7 +4,8 @@ import java.util.Scanner;
 
 /**
  * Usage example
- * @author Tudor Suruceanu 
+ * 
+ * @author Tudor Suruceanu
  */
 public class Test {
 
@@ -67,7 +68,7 @@ public class Test {
     // }
     //
     // AudioMaster.stopMusic();
-    
+
     in.close();
 
     AudioMaster.cleanUp();

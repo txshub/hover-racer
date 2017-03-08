@@ -7,17 +7,12 @@ import java.io.IOException;
 import audioEngine.AudioMaster;
 import audioEngine.Sounds;
 import audioEngine.Source;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ObjectPropertyBase;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -44,13 +39,14 @@ public class MenuButton extends StackPane {
    */
   public MenuButton(String name) {
 
-    buttonText = new Text (name);
+    buttonText = new Text(name);
 
     // Tudor - initialize source
     audioSource = AudioMaster.createSFXSource();
 
     try {
-      Font f = Font.loadFont(new FileInputStream(new File("src/resources/fonts/War is Over.ttf")), 30);
+      Font f = Font.loadFont(new FileInputStream(new File("src/resources/fonts/War is Over.ttf")),
+          30);
       buttonText.setFont(f);
 
     } catch (IOException e) {
@@ -61,7 +57,7 @@ public class MenuButton extends StackPane {
     bg = new Rectangle(350, 70);
     bg.setOpacity(0.7);
     bg.setFill(Color.BLACK);
-    
+
     // blur the button colour
     GaussianBlur blur = new GaussianBlur(3.6);
     bg.setEffect(blur);
@@ -69,7 +65,7 @@ public class MenuButton extends StackPane {
     buttonText.setFill(Color.WHITE);
 
     // customise position
-    StackPane.setAlignment(buttonText,Pos.CENTER);
+    StackPane.setAlignment(buttonText, Pos.CENTER);
     // setRotate(-0.8);
 
     // add button to stack with text over the background
