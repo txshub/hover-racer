@@ -1,15 +1,6 @@
 package input;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Scanner;
-
 import org.lwjgl.input.Keyboard;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class KeyboardController extends InputController{
 	
