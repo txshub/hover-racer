@@ -50,7 +50,7 @@ public class PlayerShip extends Ship {
 	}
 
 	public void cleanUp() {
-		sound.cleanUp();
+		// sound.cleanUp();
 	}
 
 }

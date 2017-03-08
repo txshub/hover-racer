@@ -10,10 +10,7 @@ import javafx.scene.layout.GridPane;
 
 public class JoinGameRoom extends GridPane {
 
-	
-	public JoinGameRoom(){
-		
-		
-		
-	}
+  public JoinGameRoom() {
+
+  }
 }

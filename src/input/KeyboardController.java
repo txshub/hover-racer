@@ -2,8 +2,8 @@ package input;
 
 import org.lwjgl.input.Keyboard;
 
-public class KeyboardController extends InputController{
-	
+public class KeyboardController extends InputController {
+
 	public KeyboardController() {
 		super();
 	}
