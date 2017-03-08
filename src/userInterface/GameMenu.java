@@ -1,7 +1,5 @@
 package userInterface;
 
-import java.util.ArrayList;
-
 import audioEngine.AudioMaster;
 import clientComms.Client;
 import javafx.animation.TranslateTransition;
@@ -15,7 +13,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import serverComms.GameNameNumber;
 import serverComms.Lobby;
 import serverComms.ServerComm;
 
@@ -495,9 +492,5 @@ public class GameMenu extends Parent {
     // trying to improve the speed of TranslateTransition
     this.setCache(true);
     this.setCacheHint(CacheHint.SPEED);
-  }
-
-  public void passRooms(ArrayList<GameNameNumber> gameList) {
-    // TODO Auto-generated method stub
   }
 }
