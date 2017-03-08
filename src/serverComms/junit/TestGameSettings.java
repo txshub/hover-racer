@@ -6,7 +6,6 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import serverComms.GameNameNumber;
 import serverComms.GameSettings;
 import serverComms.ServerComm;
 

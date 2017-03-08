@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import physics.placeholders.DataGenerator;
 import serverComms.ClientTable;
 import serverComms.GameSettings;
 import serverComms.ServerReceiver;
@@ -85,9 +86,9 @@ public class TestClientTable {
 		String name = "Testing";
 		table.add(name);
 		if(table.getGameID(name)!=-1) fail("Game ID didn't initialise as -1");
-		if(table.joinGame(name, 0)) fail("Game was present before being made");
+		if(table.joinGame(0, DataGenerator.basicShipSetup(name))) fail("Game was present before being made");
 		table.addGame(new GameSettings(0, 1, 0, "lobby", name));
-		if(!table.joinGame(name, 0)) fail("Game wasn't present after being made");
+		if(!table.joinGame(0, DataGenerator.basicShipSetup(name))) fail("Game wasn't present after being made");
 		if(table.getGameID(name)==-1) fail("Couldn't get Game ID after being made");
 	}
 
@@ -97,9 +98,9 @@ public class TestClientTable {
 		String name = "Testing";
 		table.add(name);
 		if(table.getGameID(name)!=-1) fail("Game ID didn't initialise as -1");
-		if(table.joinGame(name, 0)) fail("Game was present before being made");
+		if(table.joinGame(0, DataGenerator.basicShipSetup(name))) fail("Game was present before being made");
 		table.addGame(new GameSettings(0, 1, 0, "lobby", name));
-		if(!table.joinGame(name, 0)) fail("Game wasn't present after being made");
+		if(!table.joinGame(0, DataGenerator.basicShipSetup(name))) fail("Game wasn't present after being made");
 		int id = table.getGameID(name);
 		if(id==-1) fail("Couldn't get Game ID after being made");
 		if(table.getGame(id)==null) fail("Game wasn't got after being initialised");
@@ -111,7 +112,7 @@ public class TestClientTable {
 		String name = "Testing";
 		table.add(name);
 		if(table.getGameID(name)!=-1) fail("Game ID didn't initialise as -1");
-		if(table.joinGame(name, 0)) fail("Game was present before being made");
+		if(table.joinGame(0, DataGenerator.basicShipSetup(name))) fail("Game was present before being made");
 		table.addGame(new GameSettings(0, 1, 0, "lobby", name));
 		if(table.getGame(0)==null) fail("Game wasn't got after being initialised");
 	}
@@ -122,9 +123,9 @@ public class TestClientTable {
 		String name = "Testing";
 		table.add(name);
 		if(table.getGameID(name)!=-1) fail("Game ID didn't initialise as -1");
-		if(table.joinGame(name, 0)) fail("Game was present before being made");
+		if(table.joinGame(0, DataGenerator.basicShipSetup(name))) fail("Game was present before being made");
 		table.addGame(new GameSettings(0, 1, 0, "lobby", name));
-		if(!table.joinGame(name, 0)) fail("Game wasn't present after being made");
+		if(!table.joinGame(0, DataGenerator.basicShipSetup(name))) fail("Game wasn't present after being made");
 		if(table.getGameID(name)==-1) fail("Couldn't get Game ID after being made");
 	}
 
