@@ -125,7 +125,7 @@ public class TrackMaker {
     centreTrack(finalCircuit);
     // Return this final track after smoothing and centring
     for(int i = 0; i < finalCircuit.size(); i++) {
-    	for(int j = i + 1; j < finalCircuit.size(); j++) {
+    	for(int j = i + 2; j < finalCircuit.size(); j++) {
     		TrackPoint l1a = finalCircuit.get(i);
     		TrackPoint l1b = finalCircuit.get((i+1)%finalCircuit.size());
     		TrackPoint l2a = finalCircuit.get(j);
