@@ -1,5 +1,6 @@
 package trackDesign;
 
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -120,9 +121,20 @@ public class TrackMaker {
     makeWidths(circuit, random);
     // Apply smoothing
     ArrayList<TrackPoint> finalCircuit = SplineUtils.dividePoints(circuit, subDivs);
-    // Center the track so it doesn't go off screen at all
+    // Centre the track so it doesn't go off screen at all
     centreTrack(finalCircuit);
     // Return this final track after smoothing and centring
+    for(int i = 0; i < finalCircuit.size(); i++) {
+    	for(int j = i + 1; j < finalCircuit.size(); j++) {
+    		TrackPoint l1a = finalCircuit.get(i);
+    		TrackPoint l1b = finalCircuit.get((i+1)%finalCircuit.size());
+    		TrackPoint l2a = finalCircuit.get(j);
+    		TrackPoint l2b = finalCircuit.get((j+1)&finalCircuit.size());
+    		Line2D l1 = new Line2D.Float(l1a.getX(), l1a.getY(), l1b.getX(), l1b.getY());
+    		Line2D l2 = new Line2D.Float(l2a.getX(), l2a.getY(), l2b.getX(), l2b.getY());
+    		if(l1.intersectsLine(l2)) return makeTrack(random.nextLong(), minTrackPoints, maxTrackPoints, minDist, seperateIterations, difficulty, maxDisp, subDivs);
+    	}
+    }
     return new SeedTrack(seed, finalCircuit);
   }
 
