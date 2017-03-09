@@ -179,6 +179,5 @@ public class Client extends Thread {
 	public MultiplayerShipManager getManager() {
 		return manager;
 	}
-
-
+	
 }

@@ -84,7 +84,7 @@ public class HostGameRoom extends GridPane {
 			gameRoomName = nameInput.getText();
 			
 			try {
-				
+
 				gameRoom = client.createGame(gameRoomSeed, maxPlayers, lapNo, gameRoomName);
 //				gameRoomLobby = new GameRoomLobby(gameRoom);
 				
