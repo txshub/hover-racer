@@ -51,7 +51,6 @@ public class ServerComm extends Thread {
   public static final byte SENDPLAYERDATA = Byte.parseByte("12");
   // Client->Server NOT YET IMPLEMENTED Host sends their name and starts the
   // game
-  // Server->Client NOT YET IMPLEMENTED Tells clients that they're starting
   public static final byte STARTGAME = Byte.parseByte("13");
   // Server->Client NOT YET IMPLEMENTED Sends position of all ships to clients
   public static final byte FULLPOSITIONUPDATE = Byte.parseByte("14");
