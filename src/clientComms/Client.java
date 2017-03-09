@@ -111,6 +111,10 @@ public class Client extends Thread {
       // Closing anyway so oh well
     }
   }
+  
+  public void startGame() throws IOException{
+	  sendByteMessage(new byte[0], ServerComm.STARTGAME);
+  }
 
   public GameRoom createGame(long seed, int maxPlayers, int lapCount, String lobbyName, ShipSetupData data)
       throws IOException {
