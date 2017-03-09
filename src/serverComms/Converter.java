@@ -19,4 +19,7 @@ public class Converter {
     return (new Gson()).toJson(data.setId((byte) i)).getBytes();
   }
 
+  public static RaceSetupData receiveRaceData(byte[] data) {
+	  return (new Gson()).fromJson(new String(data), RaceSetupData.class);
+  }
 }
