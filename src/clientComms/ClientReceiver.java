@@ -4,8 +4,11 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import game.MainGameLoop;
+import physics.network.RaceSetupData;
 import physics.ships.MultiplayerShipManager;
 import serverComms.ByteArrayByte;
+import serverComms.Converter;
 import serverComms.GameRoom;
 import serverComms.ServerComm;
 
@@ -69,7 +72,8 @@ public class ClientReceiver extends Thread {
           GameRoom gr = new GameRoom(new String(fullMsg.getMsg(), ServerComm.charset));
           client.setCurrentRoom(gr);
         } else if (fullMsg.getType() == ServerComm.RACESETUPDATA) {
-          // TODO setup game
+          RaceSetupData data = Converter.receiveRaceData(fullMsg.getMsg());
+          MainGameLoop.startMultiplayerGame(data, client);
           manager = client.getManager();
         } else if (fullMsg.getType() == ServerComm.FULLPOSITIONUPDATE) {
           if (manager == null)
