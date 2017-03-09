@@ -4,13 +4,14 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.PixelFormat;
 
 public class DisplayManager {
 
-  private static final int WIDTH = 1024;
+  private static final int WIDTH = 1280;
   private static final int HEIGHT = 720;
   private static final int FPS_CAP = 60;
 
@@ -24,9 +25,9 @@ public class DisplayManager {
         .withProfileCore(true);
 
     try {
-//      Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
+      Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
       Display.create(new PixelFormat(), attribs);
-      Display.setFullscreen(true);
+      // Display.setFullscreen(true);
       Display.setVSyncEnabled(true);
       Display.setTitle("Our First Display!");
       GL11.glEnable(GL13.GL_MULTISAMPLE);

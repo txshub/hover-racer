@@ -44,7 +44,6 @@ public class MultiplayerGame implements GameInt {
 	// Set this to print debug messages
 	public static boolean debug = true;
 
-
 	private Loader loader;
 	private ArrayList<Entity> entities;
 	private ArrayList<Entity> normalEntities;
@@ -114,7 +113,8 @@ public class MultiplayerGame implements GameInt {
 		// Create ships
 		ships = new MultiplayerShipManager(data, new FlatGroundProvider(0), input, loader);
 		ships.addShipsTo(entities);
-		client.setManager(ships); // Add the manager for the client for communication
+		client.setManager(ships); // Add the manager for the client for
+									// communication
 
 		// Player following camera
 		camera = new Camera(ships.getPlayerShip());
@@ -134,22 +134,17 @@ public class MultiplayerGame implements GameInt {
 	public void update(float delta) {
 		input.update();
 
+
 		// Check if the escape key was pressed to exit the game
-		if (input.isDown(Action.EXIT) > 0.5f)
-		    running = false;
-		
+		if (input.isDown(Action.EXIT) > 0.5f) running = false;
+
 		// Check for audio controls
 		/** @author Tudor */
-		if (input.wasPressed(Action.MUSIC_UP) > 0.5f)
-		    AudioMaster.increaseMusicVolume();
-		  if (input.wasPressed(Action.MUSIC_DOWN) > 0.5f)
-		    AudioMaster.decreaseMusicVolume();
-		  if (input.wasPressed(Action.MUSIC_SKIP) > 0.5f)
-		    AudioMaster.skipInGameMusic();
-		  if (input.wasPressed(Action.SFX_UP) > 0.5f)
-		    AudioMaster.increaseSFXVolume();
-		  if (input.wasPressed(Action.SFX_DOWN) > 0.5f)
-		    AudioMaster.decreaseSFXVolume();
+		if (input.wasPressed(Action.MUSIC_UP) > 0.5f) AudioMaster.increaseMusicVolume();
+		if (input.wasPressed(Action.MUSIC_DOWN) > 0.5f) AudioMaster.decreaseMusicVolume();
+		if (input.wasPressed(Action.MUSIC_SKIP) > 0.5f) AudioMaster.skipInGameMusic();
+		if (input.wasPressed(Action.SFX_UP) > 0.5f) AudioMaster.increaseSFXVolume();
+		if (input.wasPressed(Action.SFX_DOWN) > 0.5f) AudioMaster.decreaseSFXVolume();
 
 		if (System.nanoTime() > startsAt) ships.getPlayerShip().start();
 		ships.updateShips((float) delta);
@@ -162,6 +157,7 @@ public class MultiplayerGame implements GameInt {
 			System.err.println("Failed to send movement packet to server!");
 		}
 	}
+
 
 	public void render() {
 		GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
