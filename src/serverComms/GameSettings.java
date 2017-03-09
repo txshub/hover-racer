@@ -12,13 +12,13 @@ public class GameSettings {
   final String hostName;
   final ShipSetupData setupData;
 
-  public GameSettings(long seed, int maxPlayers, int lapCount, String lobbyName, String hostName, ShipSetupData setupData)
+  public GameSettings(long seed, int maxPlayers, int lapCount, String lobbyName, ShipSetupData setupData)
       throws IllegalArgumentException {
     this.seed = seed;
     this.maxPlayers = maxPlayers;
     this.lobbyName = lobbyName;
     this.lapCount = lapCount;
-    this.hostName = hostName;
+    this.hostName = setupData.nickname;
     this.setupData = setupData;
     if (lobbyName.contains(System.lineSeparator()))
       throw new IllegalArgumentException("Name shouldn't contain new line symbol");
