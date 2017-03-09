@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
+import physics.placeholders.DataGenerator;
 import serverComms.GameSettings;
 import serverComms.ServerComm;
 
@@ -18,8 +19,8 @@ public class TestGameSettings {
     int lapCount = 7;
     String lobbyName = "Testing";
     String hostName = "Tester";
-    String expected = seed + "|" + maxPlayers + "|" + lapCount + "|" + lobbyName + "|" + hostName;
-    GameSettings gs = new GameSettings(seed, maxPlayers, lapCount, lobbyName, hostName);
+    String expected = seed + "|" + maxPlayers + "|" + lapCount + "|" + lobbyName + "|" + hostName + "|" + DataGenerator.basicShipSetup(hostName).toString();
+    GameSettings gs = new GameSettings(seed, maxPlayers, lapCount, lobbyName, DataGenerator.basicShipSetup(hostName));
     if (!gs.toString().equals(expected))
       fail("String with params wasn't as expected");
   }
@@ -45,9 +46,9 @@ public class TestGameSettings {
     int lapCount = 7;
     String lobbyName = "Testing";
     String hostName = "Tester";
-    byte[] expected = (seed + "|" + maxPlayers + "|" + lapCount + "|" + lobbyName + "|" + hostName)
+    byte[] expected = (seed + "|" + maxPlayers + "|" + lapCount + "|" + lobbyName + "|" + hostName + "|" + DataGenerator.basicShipSetup(hostName).toString())
         .getBytes(ServerComm.charset);
-    GameSettings gs = new GameSettings(seed, maxPlayers, lapCount, lobbyName, hostName);
+    GameSettings gs = new GameSettings(seed, maxPlayers, lapCount, lobbyName, DataGenerator.basicShipSetup(hostName));
     if (!Arrays.equals(gs.toByteArray(), expected))
       fail("Byte Array with params wasn't as expected");
   }

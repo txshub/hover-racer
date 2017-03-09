@@ -62,6 +62,10 @@ public class ServerReceiver extends Thread {
         } else if (fullMsg.getType() == ServerComm.MAKEGAME) {
           lobby.clientTable
               .addGame(new GameSettings(new String(fullMsg.getMsg(), ServerComm.charset)));
+          lobby.clientTable.getQueue(clientName)
+              .offer(new ByteArrayByte(
+                  lobby.clientTable.getGame(lobby.clientTable.getGameID(clientName)).toByteArray(),
+                  ServerComm.VALIDGAME));
 
         } else if (fullMsg.getType() == ServerComm.JOINGAME) {
           IDShipData data = new IDShipData(new String(fullMsg.getMsg(), ServerComm.charset));
@@ -83,6 +87,15 @@ public class ServerReceiver extends Thread {
                 ("Can't start invalid game").getBytes(ServerComm.charset), ServerComm.INVALIDGAME));
           } else { // Valid Game
             lobby.clientTable.getGame(gameID).startGame(clientName);
+          }
+        } else if (fullMsg.getType() == ServerComm.REFRESHROOM) {
+          int gameID = lobby.clientTable.getGameID(clientName);
+          if (gameID == -1) {
+            lobby.clientTable.getQueue(clientName)
+                .offer(new ByteArrayByte(new byte[0], ServerComm.INVALIDGAME));
+          } else {
+            lobby.clientTable.getQueue(clientName).offer(new ByteArrayByte(
+                lobby.clientTable.getGame(gameID).toByteArray(), ServerComm.VALIDGAME));
           }
         } else {
           System.out.println("Unknown Message Type: " + fullMsg.getType());

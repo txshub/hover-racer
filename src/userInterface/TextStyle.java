@@ -22,7 +22,8 @@ public class TextStyle {
     text = new Text(textInput);
 
     try {
-      Font f = Font.loadFont(new FileInputStream(new File("res/fonts/War is Over.ttf")), fontSize);
+      Font f = Font.loadFont(new FileInputStream(new File("src/resources/fonts/War is Over.ttf")),
+          fontSize);
       text.setFont(f);
       text.setFill(Color.WHITE);
 

@@ -1,11 +1,15 @@
 package userInterface;
 
+import java.io.IOException;
+
+import clientComms.Client;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import physics.placeholders.DataGenerator;
 
 /**
  * 
@@ -14,6 +18,12 @@ import javafx.scene.text.Text;
  */
 
 public class HostGameRoom extends GridPane {
+
+  private Client client;
+  private int gameRoomSeed;
+  private int maxPlayers;
+  private int lapNo;
+  private String gameRoomName;
 
   public HostGameRoom() {
 
@@ -62,6 +72,21 @@ public class HostGameRoom extends GridPane {
     hostGameRoom.setOnMouseClicked(event -> {
 
       // create a game room
+      gameRoomSeed = Integer.valueOf(seedInput.getText());
+      maxPlayers = Integer.valueOf(noPlayersInput.getText());
+      lapNo = Integer.valueOf(noLapsInput.getText());
+      gameRoomName = nameInput.getText();
+
+      try {
+
+        client.createGame(gameRoomSeed, maxPlayers, lapNo, gameRoomName, DataGenerator.basicShipSetup(client.clientName));
+        // need to get the game room somehow so I can pass it to gameRoomLobby
+        // Simon? createGame creates a GameSettings obj not a GameRoom
+
+      } catch (IOException e) {
+
+        e.printStackTrace();
+      }
 
     });
 
@@ -89,4 +114,11 @@ public class HostGameRoom extends GridPane {
     GridPane.setMargin(hostGameRoom, new Insets(0, 0, 20, 0));
 
   }
+
+  public void setClient(Client client) {
+
+    this.client = client;
+
+  }
+
 }

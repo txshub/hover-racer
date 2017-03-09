@@ -95,8 +95,9 @@ public class ClientTable {
 
   public int getGameID(String clientName) {
     for (Map.Entry<String, Integer> g : games.entrySet()) {
-      if (g.getKey() == clientName)
-        return g.getValue();
+    	if (g.getKey().equals(clientName)) {
+    		return g.getValue();
+    	}
     }
     return -1;
   }
@@ -105,18 +106,22 @@ public class ClientTable {
     return allGames.get(gameID);
   }
 
-  public void addGame(GameSettings gameSettings) {
+  public boolean addGame(GameSettings gameSettings) {
     allGames.put(nextInt, new GameRoom(nextInt, gameSettings.lobbyName, gameSettings.seed,
-        gameSettings.maxPlayers, gameSettings.hostName, this));
+        gameSettings.maxPlayers, gameSettings.hostName, this, false));
     nextInt++;
+    return joinGame(nextInt-1, gameSettings.setupData);
   }
 
   public boolean joinGame(int gameNum, ShipSetupData data) {
-    if (allGames.get(gameNum) == null)
-      return false; // Show that no game exists
-    games.put(data.nickname, gameNum);
-    allGames.get(gameNum).addPlayer(data);
-    return true;
+	for(Map.Entry<Integer, GameRoom> g : allGames.entrySet()) {
+		if (g.getValue().id==gameNum) {
+			games.put(data.nickname, gameNum);
+			g.getValue().addPlayer(data);
+			return true;
+		}
+    }
+    return false;
 
   }
 

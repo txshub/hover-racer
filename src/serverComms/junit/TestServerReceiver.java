@@ -2,6 +2,8 @@ package serverComms.junit;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+
 import org.junit.Test;
 
 import clientComms.Client;
@@ -13,7 +15,12 @@ public class TestServerReceiver {
   public void test() {
     String name = "Test";
     Lobby l = new Lobby(5154);
-    DummyGameMenu m = new DummyGameMenu();
+    DummyGameMenu m = null;
+    try {
+      m = new DummyGameMenu();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     Client c = new Client(name, 5154, "localhost", m);
     c.start();
     try {

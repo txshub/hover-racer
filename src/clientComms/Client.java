@@ -24,10 +24,10 @@ import userInterface.GameMenu;
  */
 public class Client extends Thread {
 
-  public static final boolean DEBUG = true;
+  public static final boolean DEBUG = false;
   public boolean serverOn = true;
   protected DataOutputStream toServer;
-  String clientName;
+  public String clientName;
   int portNumber;
   String machineName;
   StopDisconnect serverStop;
@@ -35,6 +35,9 @@ public class Client extends Thread {
   MultiplayerShipManager manager;
   public volatile boolean alreadyAccessed = false;
   private ArrayList<GameRoom> gameList;
+  public volatile boolean alreadyAccessedList = true;
+  public volatile boolean alreadyAccessedRoom = true;
+  private GameRoom currentRoom;
 
   /**
    * Creates a client object and connects to a given server on a given port
@@ -109,26 +112,44 @@ public class Client extends Thread {
     }
   }
 
-  public void createGame(long seed, int maxPlayers, int lapCount, String lobbyName)
+  public GameRoom createGame(long seed, int maxPlayers, int lapCount, String lobbyName, ShipSetupData data)
       throws IOException {
-    GameSettings thisGame = new GameSettings(seed, maxPlayers, lapCount, lobbyName, clientName);
+    GameSettings thisGame = new GameSettings(seed, maxPlayers, lapCount, lobbyName, data);
     sendByteMessage(thisGame.toByteArray(), ServerComm.MAKEGAME);
+    return waitForRoom();
   }
 
-  public void joinGame(int id, ShipSetupData data) throws IOException {
+  public GameRoom joinGame(int id, ShipSetupData data) throws IOException {
     IDShipData toSend = new IDShipData(id, data);
     sendByteMessage(toSend.toByteArray(), ServerComm.JOINGAME);
+    return waitForRoom();
   }
 
-  public ArrayList<GameRoom> requestAllGames() throws IOException {
-    sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.SENDALLGAMES);
-    while (alreadyAccessed) {
+  public GameRoom getUpdatedRoom() throws IOException {
+    sendByteMessage(new byte[0], ServerComm.REFRESHROOM);
+    return waitForRoom();
+  }
+
+  public GameRoom waitForRoom() {
+    while (alreadyAccessedRoom) {
       try {
         Thread.sleep(100);
       } catch (InterruptedException e) {
       }
     }
-    alreadyAccessed = true;
+    alreadyAccessedRoom = true;
+    return currentRoom;
+  }
+
+  public ArrayList<GameRoom> requestAllGames() throws IOException {
+    sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.SENDALLGAMES);
+    while (alreadyAccessedList) {
+      try {
+        Thread.sleep(100);
+      } catch (InterruptedException e) {
+      }
+    }
+    alreadyAccessedList = true;
     return gameList;
   }
 
@@ -160,8 +181,13 @@ public class Client extends Thread {
 
   public void setGameList(ArrayList<GameRoom> gameList) {
     this.gameList = gameList;
-    alreadyAccessed = false;
+    alreadyAccessedList = false;
 
+  }
+
+  public void setCurrentRoom(GameRoom gr) {
+    this.currentRoom = gr;
+    alreadyAccessedRoom = false;
   }
 
   public void setManager(MultiplayerShipManager manager) {
