@@ -3,7 +3,9 @@ package audioEngine;
 import org.lwjgl.openal.AL10;
 
 /**
- * @author Tudor Suruceanu Class representing a sound source
+ * Class representing a sound source
+ * 
+ * @author Tudor Suruceanu
  */
 public class Source {
 
@@ -22,9 +24,9 @@ public class Source {
     setPosition(0, 0, 0);
     setVelocity(0, 0, 0);
 
-    // AL10.alSourcef(sourceId, AL10.AL_ROLLOFF_FACTOR, 1);
-    // AL10.alSourcef(sourceId, AL10.AL_REFERENCE_DISTANCE, 10);
-    // AL10.alSourcef(sourceId, AL10.AL_MAX_DISTANCE, 250);
+    AL10.alSourcef(sourceId, AL10.AL_ROLLOFF_FACTOR, 1);
+    AL10.alSourcef(sourceId, AL10.AL_REFERENCE_DISTANCE, 20);
+    AL10.alSourcef(sourceId, AL10.AL_MAX_DISTANCE, 300);
   }
 
   /**
@@ -133,6 +135,11 @@ public class Source {
     currentVolume = volume;
   }
 
+  /**
+   * Get the current volume of a source
+   * 
+   * @return The current volume
+   */
   public float getCurrentVolume() {
     return currentVolume;
   }

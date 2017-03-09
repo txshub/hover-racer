@@ -3,7 +3,9 @@ package audioEngine;
 import java.util.Random;
 
 /**
- * @author txs Similar to MusicPlayer. It manages the in-game music
+ * Similar to MusicPlayer. It manages the in-game music
+ * 
+ * @author Tudor Suruceanu
  */
 public class InGamePlayer {
 

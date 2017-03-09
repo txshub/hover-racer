@@ -3,7 +3,9 @@ package audioEngine;
 import java.util.HashMap;
 
 /**
- * @author Tudor Suruceanu Class storing the sounds
+ * Class storing the sounds
+ * 
+ * @author Tudor Suruceanu
  */
 public class Sounds {
 
@@ -21,10 +23,11 @@ public class Sounds {
   public static String IN_GAME_4 = PATH + "restricted-area.wav";
 
   // SFX
-  public static String ENGINE = PATH + "futuristic-machine.wav";
+  public static String ENGINE = PATH + "futuristic-machine-mono.wav";
   public static String BUTTON_CLICK = PATH + "button-spacey.wav";
   public static String BUTTON_HOVER = PATH + "button-hover.wav";
   public static String BACKGROUND_NOISE = PATH + "hover-craft.wav";
+  public static String COLLISION = PATH + "collision.wav";
 
   // The list of songs
   public static String[] songs = { MUSIC_1, MUSIC_2, MUSIC_3 };
@@ -60,8 +63,8 @@ public class Sounds {
    * Get the buffer storing a certain audio file
    * 
    * @param s
-   *          - The path to the audio file (example: Sounds.SOMETHING)
-   * @return - The buffer to be played
+   *          The path to the audio file (example: Sounds.SOMETHING)
+   * @return The buffer to be played
    */
   public static int get(String s) {
     int buffer = map.get(s);

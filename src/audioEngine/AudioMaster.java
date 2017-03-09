@@ -9,7 +9,9 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.util.WaveData;
 
 /**
- * @author Tudor Suruceanu Class managing the audio engine
+ * Class managing the audio engine
+ * 
+ * @author Tudor Suruceanu
  */
 public class AudioMaster {
 
@@ -20,6 +22,8 @@ public class AudioMaster {
 
   private static MusicPlayer player;
   private static InGamePlayer inGame;
+
+  private static float sfxMaster;
 
   private static boolean initialised = false;
 
@@ -43,6 +47,8 @@ public class AudioMaster {
 
     player = new MusicPlayer();
     inGame = new InGamePlayer();
+
+    sfxMaster = 0.5f;
 
     initialised = true;
   }
@@ -116,6 +122,12 @@ public class AudioMaster {
     return s;
   }
 
+  public static Source createSFXSource(float initialVolume) {
+    Source s = createSFXSource();
+    s.setInitialVolume(initialVolume);
+    return s;
+  }
+
   /**
    * Set the volume of all the music sources
    * 
@@ -182,33 +194,44 @@ public class AudioMaster {
     inGame.skip();
   }
 
+  /**
+   * Increase the music volume
+   */
   public static void increaseMusicVolume() {
     for (Source s : music) {
       s.setCurrentVolume(s.getCurrentVolume() + 0.1f);
     }
   }
 
+  /**
+   * Decrease the music volume
+   */
   public static void decreaseMusicVolume() {
     for (Source s : music) {
       s.setCurrentVolume(s.getCurrentVolume() - 0.1f);
     }
   }
 
+  /**
+   * Increase the sound effects volume
+   */
   public static void increaseSFXVolume() {
     for (Source s : sfx) {
       s.setCurrentVolume(s.getCurrentVolume() + 0.1f);
     }
+    sfxMaster += 0.1f;
+    sfxMaster = Math.min(sfxMaster, 1f);
   }
 
+  /**
+   * Decrease the sound effects volume
+   */
   public static void decreaseSFXVolume() {
     for (Source s : sfx) {
       s.setCurrentVolume(s.getCurrentVolume() - 0.1f);
     }
+    sfxMaster -= 0.1f;
+    sfxMaster = Math.max(sfxMaster, 0f);
   }
 
-  // public static void deleteSource(Source s) {
-  // sources.remove(s);
-  // sfx.remove(s);
-  // music.remove(s);
-  // }
 }

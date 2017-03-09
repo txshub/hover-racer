@@ -23,20 +23,21 @@ public class MusicSlider extends GridPane {
   private Text value;
 
   public MusicSlider() {
-	  
-	this.setPadding(new Insets(0,0,20,0));
-	
-	TextStyle musicS = new TextStyle("BACKGROUND MUSIC", 30);
-	Text musicSliderText = musicS.getTextStyled();
-	
-	GridPane.setColumnSpan(musicSliderText, 2);
-	
+
+    this.setPadding(new Insets(0, 0, 20, 0));
+
+    TextStyle musicS = new TextStyle("BACKGROUND MUSIC", 30);
+    Text musicSliderText = musicS.getTextStyled();
+
+    GridPane.setColumnSpan(musicSliderText, 2);
+
     musicSlider = new Slider(0, 10, 5);
 
     value = new Text(Integer.toString((int) musicSlider.getValue()));
 
     try {
-      Font f = Font.loadFont(new FileInputStream(new File("src/resources/fonts/War is Over.ttf")), 30);
+      Font f = Font.loadFont(new FileInputStream(new File("src/resources/fonts/War is Over.ttf")),
+          30);
       value.setFont(f);
       value.setFill(Color.WHITE);
 
@@ -60,10 +61,10 @@ public class MusicSlider extends GridPane {
     add(musicSliderText, 0, 1);
     add(value, 0, 3);
     add(musicSlider, 1, 3);
-    
-	GridPane.setMargin(musicSliderText, new Insets(0,0,30,0));
-	GridPane.setMargin(value, new Insets(0,20,0,0));
-    
+
+    GridPane.setMargin(musicSliderText, new Insets(0, 0, 30, 0));
+    GridPane.setMargin(value, new Insets(0, 20, 0, 0));
+
   }
 
 }

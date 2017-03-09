@@ -103,7 +103,8 @@ public class TrackMaker {
       // Spread out the points to ensure the minimum distance
       seperatePoints(points, minDist);
     }
-    // Double the number of points and offset them to account for track difficulty
+    // Double the number of points and offset them to account for track
+    // difficulty
     ArrayList<TrackPoint> circuit = doublePoints(hullPoints, difficulty, maxDisp, random);
     for (int i = 0; i < 10; i++) {
       // Ensure all angles are greater than 100 degrees to prevent sudden turns
@@ -153,7 +154,8 @@ public class TrackMaker {
         float angle = (float) (Math.atan2(points.get(i).getY() - points.get(next).getY(),
             points.get(i).getX() - points.get(next).getX())
             - Math.atan2(points.get(after).getY() - points.get(next).getY(),
-                // Find the angle between the previous and new point centred on this point
+                // Find the angle between the previous and new point centred on
+                // this point
                 points.get(after).getX() - points.get(next).getX()));
         if (angle < threshold) {
           points.remove(after);

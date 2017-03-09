@@ -96,5 +96,5 @@ public class JoinGameRoom extends GridPane {
 		
 		this.client = client;
 	}
-	
+
 }
