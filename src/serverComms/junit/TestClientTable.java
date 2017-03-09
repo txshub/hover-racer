@@ -85,7 +85,7 @@ public class TestClientTable {
       fail("Game ID didn't initialise as -1");
     if (table.joinGame(0, DataGenerator.basicShipSetup(name)))
       fail("Game was present before being made");
-    table.addGame(new GameSettings(0, 1, 0, "lobby", name));
+    table.addGame(new GameSettings(0, 1, 0, "lobby", DataGenerator.basicShipSetup(name)));
     if (!table.joinGame(0, DataGenerator.basicShipSetup(name)))
       fail("Game wasn't present after being made");
     if (table.getGameID(name) == -1)
@@ -101,7 +101,7 @@ public class TestClientTable {
       fail("Game ID didn't initialise as -1");
     if (table.joinGame(0, DataGenerator.basicShipSetup(name)))
       fail("Game was present before being made");
-    table.addGame(new GameSettings(0, 1, 0, "lobby", name));
+    table.addGame(new GameSettings(0, 1, 0, "lobby", DataGenerator.basicShipSetup(name)));
     if (!table.joinGame(0, DataGenerator.basicShipSetup(name)))
       fail("Game wasn't present after being made");
     int id = table.getGameID(name);
@@ -120,7 +120,7 @@ public class TestClientTable {
       fail("Game ID didn't initialise as -1");
     if (table.joinGame(0, DataGenerator.basicShipSetup(name)))
       fail("Game was present before being made");
-    table.addGame(new GameSettings(0, 1, 0, "lobby", name));
+    table.addGame(new GameSettings(0, 1, 0, "lobby", DataGenerator.basicShipSetup(name)));
     if (table.getGame(0) == null)
       fail("Game wasn't got after being initialised");
   }
@@ -134,7 +134,7 @@ public class TestClientTable {
       fail("Game ID didn't initialise as -1");
     if (table.joinGame(0, DataGenerator.basicShipSetup(name)))
       fail("Game was present before being made");
-    table.addGame(new GameSettings(0, 1, 0, "lobby", name));
+    table.addGame(new GameSettings(0, 1, 0, "lobby", DataGenerator.basicShipSetup(name)));
     if (!table.joinGame(0, DataGenerator.basicShipSetup(name)))
       fail("Game wasn't present after being made");
     if (table.getGameID(name) == -1)

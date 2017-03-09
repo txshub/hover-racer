@@ -7,6 +7,7 @@ import clientComms.Client;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import physics.placeholders.DataGenerator;
 import serverComms.GameRoom;
 
 /**
@@ -20,36 +21,12 @@ public class JoinGameRoom extends GridPane {
 	private ArrayList<GameRoom> gameRoomList;
 	private Client client;
 	private GameRoomLobby gameRoomLobby; 
-	private GameRoom gameRoom;
+	private GameRoom gameRoomChosen;
 	
 	
-	public JoinGameRoom() {
+	public JoinGameRoom(Client client) throws IOException {
 		
-		MenuButton refresh = new MenuButton("REFRESH", 350, 70, 30);
-		refresh.setOnMouseClicked(event -> {
-			
-			try {
-				for(int i = 0; i < this.getChildren().size(); i++) {
-					
-					if(this.getChildren().get(i) != refresh) {
-						
-						this.getChildren().remove(i);
-					}
-				}
-				this.refresh();
-			} catch (IOException e) {
-	
-				e.printStackTrace();
-			}
-			
-		});
-		
-		add(refresh, 1, 7);
-		
-	}
-	
-	public void refresh() throws IOException {
-		
+		this.client = client;
 		this.gameRoomList = client.requestAllGames(); //this gets the actual list of game rooms
 		
 		int column = 0;
@@ -57,7 +34,7 @@ public class JoinGameRoom extends GridPane {
 		
 		VBox playerNames = new VBox(10);
 		
-		for(int i=0; i<6; i++){
+		for(int i=0; i<gameRoomList.size(); i++){
 			
 			GameRoom gameRoom = gameRoomList.get(i); 
 			MenuButton btnRoom = new MenuButton(gameRoom.getName(), 350, 70, 30);
@@ -76,13 +53,22 @@ public class JoinGameRoom extends GridPane {
 				}
 				
 				
-				MenuButton joinGR = new MenuButton("JOIN THIS GAME ROOM", 350, 70, 30);
+				MenuButton joinGR = new MenuButton("JOIN THIS GAME ROOM", 200, 50, 20);
 				joinGR.setOnMouseClicked(eventjoin-> {
+						
+				try {
+					gameRoomChosen = client.joinGame(gameRoom.id, DataGenerator.basicShipSetup(GameMenu.usr));
+					gameRoomChosen.addPlayer(GameMenu.usr);
+					
+					 gameRoomLobby = new GameRoomLobby(gameRoomChosen);
+				     gameRoomLobby.setClient(client);
+				     
+				     getChildren().removeAll(playerNames, joinGR);
+				     
+				} catch (IOException e) {
 				
-				//what's the id?
-				//ship data?	
-				//gameRoom = client.joinGame(id, basicShipData);
-				//gameRoom.add(player);
+					System.err.println("JOIN DIDN'T WORK");
+				}
 					
 				});
 				
@@ -97,7 +83,7 @@ public class JoinGameRoom extends GridPane {
 	
 	public void setClient(Client client){
 		
-		this.client = client;
+		this.client =client ;
 	}
-
+	
 }

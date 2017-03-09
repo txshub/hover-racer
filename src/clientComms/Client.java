@@ -111,10 +111,11 @@ public class Client extends Thread {
       // Closing anyway so oh well
     }
   }
+  
 
   public GameRoom createGame(long seed, int maxPlayers, int lapCount, String lobbyName, ShipSetupData data)
       throws IOException {
-    GameSettings thisGame = new GameSettings(seed, maxPlayers, lapCount, lobbyName, clientName, data);
+    GameSettings thisGame = new GameSettings(seed, maxPlayers, lapCount, lobbyName, data);
     sendByteMessage(thisGame.toByteArray(), ServerComm.MAKEGAME);
     return waitForRoom();
   }
@@ -125,6 +126,10 @@ public class Client extends Thread {
     return waitForRoom();
   }
 
+  public void startGame() throws IOException{
+	  sendByteMessage(new byte[0], ServerComm.STARTGAME);
+  }
+  
   public GameRoom getUpdatedRoom() throws IOException {
     sendByteMessage(new byte[0], ServerComm.REFRESHROOM);
     return waitForRoom();
