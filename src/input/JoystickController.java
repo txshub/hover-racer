@@ -106,7 +106,7 @@ public class JoystickController extends InputController {
               keyStatus.put(Action.BREAK, 0f);
             } else {
               keyStatus.put(Action.FORWARD, 0f);
-              keyStatus.put(Action.BREAK, -value);
+              keyStatus.put(Action.BREAK, value);
             }
           }
           break;
@@ -117,7 +117,7 @@ public class JoystickController extends InputController {
               keyStatus.put(Action.STRAFE_LEFT, 0f);
             } else {
               keyStatus.put(Action.STRAFE_RIGHT, 0f);
-              keyStatus.put(Action.STRAFE_LEFT, value);
+              keyStatus.put(Action.STRAFE_LEFT, -value);
 
             }
           }
@@ -129,7 +129,7 @@ public class JoystickController extends InputController {
               keyStatus.put(Action.TURN_LEFT, 0f);
             } else {
               keyStatus.put(Action.TURN_RIGHT, 0f);
-              keyStatus.put(Action.TURN_LEFT, value);
+              keyStatus.put(Action.TURN_LEFT, -value);
             }
           }
           break;
