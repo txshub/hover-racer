@@ -147,7 +147,7 @@ public class GameRoom {
 		if (clientName.equals(hostName)) {
 			inGame = true;
 			RaceSetupData setupData = setupRace();
-			shipManager = new ServerShipManager(setupData, players.size(), maxPlayers - players.size());
+			shipManager = new ServerShipManager(setupData, players.size(), maxPlayers - players.size(), trackPoints);
 			ArrayList<CommQueue> allQueues = new ArrayList<CommQueue>();
 			for (int i = 0; i < players.size(); i++) {
 				table.getReceiver(players.get(i)).setGame(this, i);

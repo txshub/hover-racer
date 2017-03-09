@@ -11,6 +11,7 @@ import physics.placeholders.FlatGroundProvider;
 import physics.ships.AIShip;
 import physics.ships.RemoteShip;
 import physics.support.GroundProvider;
+import trackDesign.TrackPoint;
 
 public class ServerShipManager implements ServerShipProvider {
 
@@ -20,7 +21,7 @@ public class ServerShipManager implements ServerShipProvider {
 	private Map<Byte, byte[]> packets;
 	private GroundProvider ground;
 
-	public ServerShipManager(RaceSetupData data, int players, int ais) {
+	public ServerShipManager(RaceSetupData data, int players, int ais, ArrayList<TrackPoint> trackPoints) {
 		System.out.println("Race setup data when generating race:");
 		System.out.println(data.toString());
 
@@ -36,7 +37,7 @@ public class ServerShipManager implements ServerShipProvider {
 		for (int i = 0; i < amount; i++) {
 			if (data.getStartingPositions().size() == 0) throw new IllegalArgumentException("Not starting positions");
 			if (i <= players) ships.add(new RemoteShip((byte) i, null, data.getStartingPositions().get(i), ground, this));
-			else ships.add(new AIShip((byte) i, null, data.getStartingPositions().get(i), null, ground, null));
+			else ships.add(new AIShip((byte) i, null, data.getStartingPositions().get(i), null, ground, trackPoints));
 		}
 		ships.forEach(s -> s.addOtherShips(ships));
 	}
