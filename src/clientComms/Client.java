@@ -33,7 +33,7 @@ public class Client extends Thread {
   StopDisconnect serverStop;
   GameMenu gameMenu;
   MultiplayerShipManager manager;
-  public volatile boolean alreadyAccessed = false;
+  public volatile boolean alreadyAccessed = true;
   private ArrayList<GameRoom> gameList;
   public volatile boolean alreadyAccessedList = true;
   public volatile boolean alreadyAccessedRoom = true;
