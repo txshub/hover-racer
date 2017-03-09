@@ -182,7 +182,7 @@ public class GameRoom {
 
 	public RaceSetupData setupRace() {
 		HashMap<Byte, ShipSetupData> resShips = new HashMap<Byte, ShipSetupData>();
-		for (int i = 0; i < ships.size(); i++) {
+		for (int i = 0; i < maxPlayers; i++) {
 			if (ships.get(i) != null) resShips.put((byte) i, ships.get(i)); // Players
 			else resShips.put((byte) i, AIBuilder.fakeAIData()); // AIs
 		}
