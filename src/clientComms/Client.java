@@ -125,6 +125,10 @@ public class Client extends Thread {
     return waitForRoom();
   }
 
+  public void startGame() throws IOException{
+	  sendByteMessage(new byte[0], ServerComm.STARTGAME);
+  }
+  
   public GameRoom getUpdatedRoom() throws IOException {
     sendByteMessage(new byte[0], ServerComm.REFRESHROOM);
     return waitForRoom();

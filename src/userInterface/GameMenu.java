@@ -414,17 +414,20 @@ public class GameMenu extends Parent {
     // connecting multiplayer options
     MenuButton joinGR = new MenuButton("JOIN A GAME ROOM", 350, 70, 30);
 
-    joinGameRoom = new JoinGameRoom();
+    
 
-    joinGR.setOnMouseClicked(eventHost -> {
-
+    joinGR.setOnMouseClicked(event -> {
+       
       try {
-        joinGameRoom.setClient(client);
-        joinGameRoom.refresh();
-      } catch (IOException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
+    	  
+		joinGameRoom = new JoinGameRoom(client);
+		joinGameRoomWindow.getChildren().add(joinGameRoom);
+		
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+      
       getChildren().add(joinGameRoomWindow);
 
       TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25),
@@ -482,6 +485,7 @@ public class GameMenu extends Parent {
        gameRoom =  client.createGame(hostGameRoom.getSeed(), hostGameRoom.getMaxPlayers(), hostGameRoom.getNoLaps(), 
     		       hostGameRoom.getName(), DataGenerator.basicShipSetup(client.clientName));
        gameRoomLobby = new GameRoomLobby(gameRoom);
+       gameRoomLobby.setClient(client);
        
        getChildren().add(gameRoomLobby);
 
@@ -549,7 +553,7 @@ public class GameMenu extends Parent {
     hostGameRoomWindow.add(btnBackHost, 1, 2);
     
     // join a game room in multiplayer mode
-    joinGameRoomWindow.getChildren().addAll(joinGameRoom, btnBackJoin);
+    joinGameRoomWindow.getChildren().add(btnBackJoin);
 
     // GAME MENU CHILDREN
     getChildren().addAll(initialWindow, hoverText, racerText, captionText);

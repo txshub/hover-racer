@@ -1,7 +1,9 @@
 package userInterface;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import clientComms.Client;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -10,6 +12,7 @@ import serverComms.GameRoom;
 public class GameRoomLobby extends GridPane {
 
   private GameRoom gameRoom;
+  private Client client;
 
   public GameRoomLobby(GameRoom gameRoom) {
 	
@@ -57,7 +60,15 @@ public class GameRoomLobby extends GridPane {
 
     startGame.setOnMouseClicked(event -> {
 
-      gameRoom.startGame(GameMenu.usr);
+    	try {
+    		
+			client.startGame();
+			
+		} catch (IOException e) {
+			
+			System.err.println("GAME WASN'T STARTED");
+			
+		}
       
     });
 
@@ -82,6 +93,11 @@ public class GameRoomLobby extends GridPane {
 
     add(startGame, 2, 3);
     add(leaveRoom, 2, 4);
+  }
+  
+  public void setClient(Client client){
+	  
+	  this.client = client;
   }
 
 }
