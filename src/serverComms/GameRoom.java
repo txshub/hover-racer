@@ -122,10 +122,6 @@ public class GameRoom {
 		return seed;
 	}
 
-	public int getNoPlayers() {
-		return maxPlayers;
-	}
-
 	public void addPlayer(ShipSetupData data) {
 		if (data == null) throw new IllegalArgumentException("ShipSetupData cannot be null");
 		ships.add(data);
@@ -243,5 +239,10 @@ public class GameRoom {
 	public byte[] toByteArray() {
 		return toString().getBytes(ServerComm.charset);
 	}
+
+	public int getNoPlayers() {
+		return maxPlayers;
+	}
+
 
 }
