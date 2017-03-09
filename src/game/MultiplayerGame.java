@@ -135,20 +135,21 @@ public class MultiplayerGame implements GameInt {
 		input.update();
 
 		// Check if the escape key was pressed to exit the game
-if (input.isDown(Action.EXIT) > 0.5f)
-    running = false;
+		if (input.isDown(Action.EXIT) > 0.5f)
+		    running = false;
+		
 		// Check for audio controls
 		/** @author Tudor */
-if (input.wasPressed(Action.MUSIC_UP) > 0.5f)
-    AudioMaster.increaseMusicVolume();
-  if (input.wasPressed(Action.MUSIC_DOWN) > 0.5f)
-    AudioMaster.decreaseMusicVolume();
-  if (input.wasPressed(Action.MUSIC_SKIP) > 0.5f)
-    AudioMaster.skipInGameMusic();
-  if (input.wasPressed(Action.SFX_UP) > 0.5f)
-    AudioMaster.increaseSFXVolume();
-  if (input.wasPressed(Action.SFX_DOWN) > 0.5f)
-    AudioMaster.decreaseSFXVolume();
+		if (input.wasPressed(Action.MUSIC_UP) > 0.5f)
+		    AudioMaster.increaseMusicVolume();
+		  if (input.wasPressed(Action.MUSIC_DOWN) > 0.5f)
+		    AudioMaster.decreaseMusicVolume();
+		  if (input.wasPressed(Action.MUSIC_SKIP) > 0.5f)
+		    AudioMaster.skipInGameMusic();
+		  if (input.wasPressed(Action.SFX_UP) > 0.5f)
+		    AudioMaster.increaseSFXVolume();
+		  if (input.wasPressed(Action.SFX_DOWN) > 0.5f)
+		    AudioMaster.decreaseSFXVolume();
 
 		if (System.nanoTime() > startsAt) ships.getPlayerShip().start();
 		ships.updateShips((float) delta);
