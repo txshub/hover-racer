@@ -25,7 +25,8 @@ public class ServerShipManager implements ServerShipProvider {
 
 		if (amount == 0) throw new IllegalArgumentException("ServerShipManager created with no ship data");
 		if (amount != players + ais)
-			throw new IllegalArgumentException("Mismatch between ShipSetupData and amount of players: " + players + " vs " + ais);
+			throw new IllegalArgumentException(
+				"Mismatch between ShipSetupData and amount of players: " + amount + " vs " + players + "+" + ais);
 
 		this.ground = new FlatGroundProvider(GROUND_HEIGHT);
 		ships = new ArrayList<Ship>(amount);
