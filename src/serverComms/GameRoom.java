@@ -122,6 +122,10 @@ public class GameRoom {
   public long getSeed() {
     return seed;
   }
+  
+  public int getNoPlayers(){
+	  return maxPlayers;
+  }
 
   public void addPlayer(ShipSetupData data) {
     ships.add(data);

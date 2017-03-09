@@ -37,24 +37,16 @@ public class MenuButton extends StackPane {
    * @param name
    *          The name of the button.
    */
-  public MenuButton(String name) {
-
-    buttonText = new Text(name);
+  public MenuButton(String name, int width, int height, int fontSize) {
 
     // Tudor - initialize source
     audioSource = AudioMaster.createSFXSource();
 
-    try {
-      Font f = Font.loadFont(new FileInputStream(new File("src/resources/fonts/War is Over.ttf")),
-          30);
-      buttonText.setFont(f);
-
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
+    TextStyle button = new TextStyle(name, fontSize);
+    Text buttonText = button.getTextStyled();
+    
     // create button
-    bg = new Rectangle(350, 70);
+    bg = new Rectangle(width, height);
     bg.setOpacity(0.7);
     bg.setFill(Color.BLACK);
 
@@ -109,11 +101,5 @@ public class MenuButton extends StackPane {
 
   }
 
-  public void setButtonText(String text) {
-
-    Text newText = new Text(text);
-    this.buttonText = newText;
-
-  }
-
+ 
 }

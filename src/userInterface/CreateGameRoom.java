@@ -47,7 +47,7 @@ public class CreateGameRoom extends GridPane {
     TextField noAIsInput = new TextField();
     TextField noLapsInput = new TextField();
 
-    MenuButton generateTrack = new MenuButton("PREVIEW THIS TRACK");
+    MenuButton generateTrack = new MenuButton("PREVIEW THIS TRACK", 350, 70, 30);
 
     generateTrack.setOnMouseClicked(event -> {
 
@@ -61,7 +61,7 @@ public class CreateGameRoom extends GridPane {
 
     });
 
-    MenuButton createGameRoom = new MenuButton("START GAME");
+    MenuButton createGameRoom = new MenuButton("START GAME", 350, 70, 30);
 
     createGameRoom.setOnMouseClicked(event -> {
 

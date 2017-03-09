@@ -25,7 +25,7 @@ public class JoinGameRoom extends GridPane {
 	
 	public JoinGameRoom() {
 		
-		MenuButton refresh = new MenuButton("REFRESH");
+		MenuButton refresh = new MenuButton("REFRESH", 350, 70, 30);
 		refresh.setOnMouseClicked(event -> {
 			
 			try {
@@ -60,7 +60,7 @@ public class JoinGameRoom extends GridPane {
 		for(int i=0; i<6; i++){
 			
 			GameRoom gameRoom = gameRoomList.get(i); 
-			MenuButton btnRoom = new MenuButton(gameRoom.getName());
+			MenuButton btnRoom = new MenuButton(gameRoom.getName(), 350, 70, 30);
 			this.add(btnRoom, column, row);
 			row++;
 			
@@ -76,10 +76,13 @@ public class JoinGameRoom extends GridPane {
 				}
 				
 				
-				MenuButton joinGR = new MenuButton("JOIN THIS GAME ROOM");
+				MenuButton joinGR = new MenuButton("JOIN THIS GAME ROOM", 350, 70, 30);
 				joinGR.setOnMouseClicked(eventjoin-> {
-					
-					// TODO - finish this
+				
+				//what's the id?
+				//ship data?	
+				//gameRoom = client.joinGame(id, basicShipData);
+				//gameRoom.add(player);
 					
 				});
 				
