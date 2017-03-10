@@ -123,5 +123,4 @@ public class WaterFrameBuffers {
         GL30.GL_RENDERBUFFER, depthBuffer);
     return depthBuffer;
   }
-
 }
