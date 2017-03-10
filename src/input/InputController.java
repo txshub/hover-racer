@@ -39,6 +39,7 @@ public abstract class InputController {
     res.put(Keyboard.KEY_SPACE, Action.JUMP); // space
 
     res.put(Keyboard.KEY_ESCAPE, Action.EXIT);
+    res.put(Keyboard.KEY_P, Action.MENU);
 
     res.put(Keyboard.KEY_M, Action.MUSIC_UP);
     res.put(Keyboard.KEY_N, Action.MUSIC_DOWN);
