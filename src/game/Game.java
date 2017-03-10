@@ -74,6 +74,8 @@ public class Game {
 
   // TODO temporary
   private Container menu;
+  private Label posCurrent;
+  private Label posTotal;
   private UIRenderer uiRenderer;
   private ArrayList<Container> containers;
 
@@ -181,6 +183,26 @@ public class Game {
     menuText.setColor(colour);
 
     menu.setVisibility(true);
+    
+    Container posDisplay = new Container(loader, "ui/posBackground", new Vector2f(Display.getWidth() - 170, 10));
+    containers.add(posDisplay);
+    posCurrent = new Label(loader, "2", font, 5f, true, new Vector2f(30, 45), 130);
+    posCurrent.setParent(posDisplay);
+    posCurrent.setColour(1, 1, 1);
+    posCurrent = new Label(loader, "8", font, 2.8f, true, new Vector2f(15, 2), 30);
+    posCurrent.setParent(posDisplay);
+    posCurrent.setColour(1, 1, 1);
+    
+    Container lapDisplay = new Container(loader, "ui/lapBackground", new Vector2f(21, 10));
+    containers.add(lapDisplay);
+    posCurrent = new Label(loader, "2", font, 5f, true, new Vector2f(0, 45), 120);
+    posCurrent.setParent(lapDisplay);
+    posCurrent.setColour(1, 1, 1);
+    posCurrent = new Label(loader, "5", font, 2.8f, true, new Vector2f(105, 2), 30);
+    posCurrent.setParent(lapDisplay);
+    posCurrent.setColour(1, 1, 1);
+    
+    
 
     // Renderers
     renderer = new MasterRenderer(loader);
