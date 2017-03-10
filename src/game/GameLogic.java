@@ -173,6 +173,10 @@ public class GameLogic {
 	public int getCurrentLap() {
 		return currentLap;
 	}
+	
+	public int getTotalLaps() {
+	  return laps;
+	}
 
 	/**
 	 * Get the last track point the player surpassed

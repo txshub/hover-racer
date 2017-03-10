@@ -157,6 +157,10 @@ public class Game implements GameInt {
     // Player following camera
     camera = new Camera(player);
 
+    // Tudor
+    ArrayList<Ship> opponents = new ArrayList<Ship>();
+    logic = new GameLogic(player, opponents, st, 4);
+
     // GUIs
     guis = new ArrayList<>();
     containers = new ArrayList<>();
@@ -214,10 +218,11 @@ public class Game implements GameInt {
 
     Container lapDisplay = new Container(loader, "ui/lapBackground", new Vector2f(21, 10));
     containers.add(lapDisplay);
-    lapCurrent = new Label(loader, "2", font, 5f, true, new Vector2f(0, 45), 120);
+    lapCurrent = new Label(loader, Integer.toString(logic.getCurrentLap()), font, 5f, true,
+        new Vector2f(0, 45), 120);
     lapCurrent.setParent(lapDisplay);
     lapCurrent.setColour(1, 1, 1);
-    lapTotal = new Label(loader, "5", font, 2.8f, true, new Vector2f(105, 2), 30);
+    lapTotal = new Label(loader, Integer.toString(logic.getTotalLaps()), font, 2.8f, true, new Vector2f(105, 2), 30);
     lapTotal.setParent(lapDisplay);
     lapTotal.setColour(1, 1, 1);
 
@@ -229,10 +234,6 @@ public class Game implements GameInt {
     // Camera rotation with right click
     // picker = new MousePicker(camera, renderer.getProjectionMatrix(),
     // terrains);
-
-    // Tudor
-    ArrayList<Ship> opponents = new ArrayList<Ship>();
-    logic = new GameLogic(player, opponents, st, 4);
 
     AudioMaster.playInGameMusic();
     try {
@@ -292,7 +293,7 @@ public class Game implements GameInt {
     // picker.update();
 
     // Update GUI
-    posCurrent.setText("5");
+    lapCurrent.setText(Integer.toString(logic.getCurrentLap()));
   }
 
   public void render() {
