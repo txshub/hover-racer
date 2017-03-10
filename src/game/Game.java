@@ -3,6 +3,7 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -231,7 +232,8 @@ public class Game implements GameInt {
    */
   private TexturedModel createTrackModel(long seed) {
     float trackHeight = 1;
-    float barrierHeight = 2;
+    float barrierHeight = 20;
+    float barrierWidth = 10;
 
     // 6 vertices for each track point, 3 components for each vertex
     float[] vertices = new float[trackPoints.size() * 6 * 3];
@@ -244,12 +246,18 @@ public class Game implements GameInt {
     for (int i = 0; i < texCoords.length; i++) {
       texCoords[i] = 0;
     }
-    
+
     for (int i = 0; i < normals.length; i += 3) {
       addToArray(new Vector3f(0, 1, 0), normals, i);
     }
 
-    // Populate vertex array
+    // We can pre-calculate some stuff for normals
+    Vector3f normBottom = new Vector3f(0, -1, 0);
+    Vector3f normTop = new Vector3f(0, 1, 0);
+    Vector3f normLeftOuter2D = new Vector3f(-barrierHeight, barrierWidth, 0).normalize();
+    Vector3f normRightOuter2D = new Vector3f(barrierHeight, barrierWidth, 0).normalize();
+
+    // Populate vertex and normal arrays
     for (int i = 0; i < trackPoints.size(); i++) {
       TrackPoint curPoint = trackPoints.get(i);
 
@@ -265,69 +273,99 @@ public class Game implements GameInt {
       // slice
       Vector2f dirVec = new Vector2f(nextPoint).sub(prevPoint).normalize();
 
-      // Calculate the perpendicular vectors
-      Vector2f left = new Vector2f(dirVec.y, -dirVec.x).mul(curPoint.getWidth() / 2);
-      Vector2f right = new Vector2f(-dirVec.y, dirVec.x).mul(curPoint.getWidth() / 2);
+      // Calculate the perpendicular normal vectors
+      Vector2f left = new Vector2f(dirVec.y, -dirVec.x).normalize();
+      Vector2f right = new Vector2f(-dirVec.y, dirVec.x).normalize();
 
       // Apply the offsets to the center point
+      float w = curPoint.getWidth() / 2;
       Vector3f centerPoint = new Vector3f(curPoint.x, trackHeight, curPoint.y);
-      Vector3f leftPoint = new Vector3f(centerPoint).add(left.x, 0, left.y);
-      Vector3f rightPoint = new Vector3f(centerPoint).add(right.x, 0, right.y);
-      
+      Vector3f leftPoint = new Vector3f(centerPoint).add(left.x * w, 0, left.y * w);
+      Vector3f rightPoint = new Vector3f(centerPoint).add(right.x * w, 0, right.y * w);
+
       // Create barrier points
+      float b = barrierWidth;
       Vector3f lBarrierT = new Vector3f(leftPoint).add(0, barrierHeight, 0);
       Vector3f rBarrierT = new Vector3f(rightPoint).add(0, barrierHeight, 0);
-      Vector3f lBarrierB = new Vector3f(leftPoint).add(0, -trackHeight, 0);
-      Vector3f rBarrierB = new Vector3f(rightPoint).add(0, -trackHeight, 0);
-      
+      Vector3f lBarrierB = new Vector3f(leftPoint).add(left.x * b, -trackHeight, left.y * b);
+      Vector3f rBarrierB = new Vector3f(rightPoint).add(right.x * b, -trackHeight, right.y * b);
+
       addToArray(lBarrierB, vertices, i * 18 + 0);
       addToArray(lBarrierT, vertices, i * 18 + 3);
       addToArray(leftPoint, vertices, i * 18 + 6);
       addToArray(rightPoint, vertices, i * 18 + 9);
       addToArray(rBarrierT, vertices, i * 18 + 12);
       addToArray(rBarrierB, vertices, i * 18 + 15);
-      
-      // TODO Normals
+
+      // First calculate surface normals (technically edge normals as we are
+      // working in a slice but whatever)
+
+      // Get Quaternions for rotation to align with left and right vectors
+      Vector3f normLeftInner = new Vector3f(left.x, 0, left.y);
+      Quaternionf rotationLeft = new Vector3f(-1, 0, 0).rotationTo(normLeftInner,
+          new Quaternionf());
+      Vector3f normRightInner = new Vector3f(right.x, 0, right.y);
+      Quaternionf rotationRight = new Vector3f(1, 0, 0).rotationTo(normRightInner,
+          new Quaternionf());
+
+      Vector3f normLeftOuter = new Vector3f(normLeftOuter2D).rotate(rotationLeft);
+      Vector3f normRightOuter = new Vector3f(normRightOuter2D).rotate(rotationRight);
+
+      // Calculate the vertex normals
+      Vector3f normLBarrierB = new Vector3f(normBottom).add(normLeftOuter).normalize();
+      Vector3f normLBarrierT = new Vector3f(normLeftOuter).add(normLeftInner).normalize();
+      Vector3f normLPoint = new Vector3f(normLeftInner).add(normTop).normalize();
+      Vector3f normRPoint = new Vector3f(normTop).add(normRightInner).normalize();
+      Vector3f normRBarrierT = new Vector3f(normRightInner).add(normRightOuter).normalize();
+      Vector3f normRBarrerB = new Vector3f(normRightOuter).add(normBottom).normalize();
+
+      addToArray(normLBarrierB, normals, i * 18 + 0);
+      addToArray(normLBarrierT, normals, i * 18 + 3);
+      addToArray(normLPoint, normals, i * 18 + 6);
+      addToArray(normRPoint, normals, i * 18 + 9);
+      addToArray(normRBarrierT, normals, i * 18 + 12);
+      addToArray(normRBarrerB, normals, i * 18 + 15);
     }
     
+    System.out.println(trackPoints.size());
+
     // Populate indices
     for (int i = 0; i < trackPoints.size(); i++) {
       int n = i * 5;
       int offset = i * 30;
-      
-      if (i < trackPoints.size() - 1) {
-        addToArray(n, n+7, n+6, indices, offset);
-        addToArray(n, n+1, n+7, indices, offset+3);
 
-        addToArray(n+1, n+8, n+7, indices, offset+6);
-        addToArray(n+1, n+2, n+8, indices, offset+9);
+      addToArray(n, n + 7, n + 6, indices, offset);
+      addToArray(n, n + 1, n + 7, indices, offset + 3);
 
-        addToArray(n+2, n+9, n+8, indices, offset+12);
-        addToArray(n+2, n+3, n+9, indices, offset+15);
+      addToArray(n + 1, n + 8, n + 7, indices, offset + 6);
+      addToArray(n + 1, n + 2, n + 8, indices, offset + 9);
 
-        addToArray(n+3, n+10, n+9, indices, offset+18);
-        addToArray(n+3, n+4, n+10, indices, offset+21);
+      addToArray(n + 2, n + 9, n + 8, indices, offset + 12);
+      addToArray(n + 2, n + 3, n + 9, indices, offset + 15);
 
-        addToArray(n+4, n+11, n+10, indices, offset+24);
-        addToArray(n+4, n+5, n+11, indices, offset+27);
-      
-      } else {
-        // If we are at the last point we should join to the start of the track
-        addToArray(n, 2, 0, indices, offset);
-        addToArray(n, n+1, 2, indices, offset+3);
+      addToArray(n + 3, n + 10, n + 9, indices, offset + 18);
+      addToArray(n + 3, n + 4, n + 10, indices, offset + 21);
 
-        addToArray(n+1, 3, 2, indices, offset+6);
-        addToArray(n+1, n+2, 3, indices, offset+9);
+      addToArray(n + 4, n + 11, n + 10, indices, offset + 24);
+      addToArray(n + 4, n + 5, n + 11, indices, offset + 27);
 
-        addToArray(n+2, 4, 3, indices, offset+12);
-        addToArray(n+2, n+3, 4, indices, offset+15);
-
-        addToArray(n+3, 5, 4, indices, offset+18);
-        addToArray(n+3, n+4, 5, indices, offset+21);
-
-        addToArray(n+4, 6, 5, indices, offset+24);
-        addToArray(n+4, n+5, 5, indices, offset+27);
-      }
+//      else {
+//        // If we are at the last point we should join to the start of the track
+//        addToArray(n, 2, 0, indices, offset);
+//        addToArray(n, n + 1, 2, indices, offset + 3);
+//
+//        addToArray(n + 1, 3, 2, indices, offset + 6);
+//        addToArray(n + 1, n + 2, 3, indices, offset + 9);
+//
+//        addToArray(n + 2, 4, 3, indices, offset + 12);
+//        addToArray(n + 2, n + 3, 4, indices, offset + 15);
+//
+//        addToArray(n + 3, 5, 4, indices, offset + 18);
+//        addToArray(n + 3, n + 4, 5, indices, offset + 21);
+//
+//        addToArray(n + 4, 6, 5, indices, offset + 24);
+//        addToArray(n + 4, n + 5, 5, indices, offset + 27);
+//      }
     }
 
     // for (int i = 0; i <= trackPoints.size(); i++) {
@@ -493,13 +531,13 @@ public class Game implements GameInt {
         new ModelTexture(loader.loadTexture("new/TrackTexture")));
 
   }
-  
+
   private void addToArray(Vector3f vector, float[] array, int offset) {
     array[offset + 0] = vector.x;
     array[offset + 1] = vector.y;
     array[offset + 2] = vector.z;
   }
-  
+
   private void addToArray(int first, int second, int third, int[] array, int offset) {
     array[offset++] = first;
     array[offset++] = second;
