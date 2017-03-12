@@ -1,6 +1,7 @@
 package userInterface;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import audioEngine.AudioMaster;
 import clientComms.Client;
@@ -8,6 +9,7 @@ import javafx.animation.TranslateTransition;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
@@ -27,20 +29,20 @@ import serverComms.ServerComm;
  */
 public class GameMenu extends Parent {
 
-  GridPane initialWindow, settingsWindow, connectMultiWindow, hostGameRoomWindow;
-  VBox multiOptionsWindow, singleGameWindow, joinGameRoomWindow;
-  MenuButton btnPlayGame, btnPlayAI, btnOptions, btnSound, btnMusic, btnExit, btnBackSettings,
-  			 btnBackMulti, btnBackSingle, btnBackHost, btnBackMultiOptions, btnBackJoin;
-  SoundSlider soundSlider;
-  MusicSlider musicSlider;
-  CreateGameRoom createGameRoom;
-  HostGameRoom hostGameRoom;
-  JoinGameRoom joinGameRoom;
-  GameRoom gameRoom;
-  GameRoomLobby gameRoomLobby;
-  static String usr;
-  Client client;
-  final int OFFSET = 600;
+  private GridPane initialWindow, settingsWindow, connectMultiWindow, hostGameRoomWindow;
+  private VBox multiOptionsWindow, singleGameWindow, joinGameRoomWindow;
+  private MenuButton btnPlayGame, btnPlayAI, btnOptions, btnSound, btnMusic, btnExit, btnBackSettings,
+  			 		 btnBackMulti, btnBackSingle, btnBackHost, btnBackMultiOptions, btnBackJoin;
+  private SoundSlider soundSlider;
+  private MusicSlider musicSlider;
+  private CreateGameRoom createGameRoom;
+  private HostGameRoom hostGameRoom;
+  private JoinGameRoom joinGameRoom;
+  private GameRoom gameRoom;
+  private GameRoomLobby gameRoomLobby;
+  public static String usr;
+  public Client client;
+  private final int OFFSET = 600;
 
   public GameMenu() throws IOException {
 
@@ -260,7 +262,7 @@ public class GameMenu extends Parent {
       });
     });
 
-    btnBackHost = new MenuButton("BACK", 350, 70, 30);
+    btnBackHost = new MenuButton("BACK", 300, 60, 28);
     btnBackHost.setOnMouseClicked(event -> {
 
       //BACK TO MULTIPLAYER OPTIONS JOIN/HOST FROM HOST	GAME WINDOW
@@ -411,31 +413,30 @@ public class GameMenu extends Parent {
     box4Multi.setAlignment(Pos.CENTER);
     box4Multi.getChildren().add(connectMulti);
 
-    // connecting multiplayer options
+    // JOIN A GAME ROOM IN MULTIPLAYER MODE //
+    joinGameRoom = new JoinGameRoom();
+
     MenuButton joinGR = new MenuButton("JOIN A GAME ROOM", 350, 70, 30);
-
     
-
     joinGR.setOnMouseClicked(event -> {
-       
-      try {
-    	  
-		joinGameRoom = new JoinGameRoom(client);
-		joinGameRoomWindow.getChildren().add(joinGameRoom);
-		
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-      
+        
       getChildren().add(joinGameRoomWindow);
+      joinGameRoom.setClient(client);
 
-      TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25),
-          multiOptionsWindow);
+      ArrayList<GameRoom> gameRoomList;
+      try {
+    	  gameRoomList = client.requestAllGames();
+    	  joinGameRoom.setGameList(gameRoomList);
+		
+      } catch (IOException e) {
+		
+    	  System.err.println("Didn't receive list of available game rooms");
+      }
+      
+      TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), multiOptionsWindow);
       trans.setToX(multiOptionsWindow.getTranslateX() - OFFSET);
 
-      TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25),
-          joinGameRoomWindow);
+      TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), joinGameRoomWindow);
       trans1.setToX(joinGameRoomWindow.getTranslateX() - OFFSET);
 
       trans.play();
@@ -470,7 +471,32 @@ public class GameMenu extends Parent {
 
     });
     
-    MenuButton hostGameRoomButton = new MenuButton("CREATE THE GAME ROOM", 350, 70,30);
+    // PREVIEW THE TRACK //
+    
+    VBox mapBox = new VBox(10);
+    GridPane.setRowSpan(mapBox, 3);
+    mapBox.setAlignment(Pos.CENTER);
+    
+    MenuButton generateTrack = new MenuButton("PREVIEW TRACK", 300, 60, 28);
+    
+    generateTrack.setOnMouseClicked(event -> {
+
+      if (mapBox.getChildren().size() > 0) {
+
+        mapBox.getChildren().remove(0);
+      }
+      
+      hostGameRoom.setSeed();
+      
+      Map track = new Map(hostGameRoom.getSeed());
+      mapBox.getChildren().add(track);
+
+    });
+    
+    
+    // CREATE THE GAME ROOM //
+    
+    MenuButton hostGameRoomButton = new MenuButton("CREATE THE GAME ROOM", 300, 60, 28);
 
     hostGameRoomButton.setOnMouseClicked(event -> {
     	
@@ -485,6 +511,7 @@ public class GameMenu extends Parent {
        gameRoom =  client.createGame(hostGameRoom.getSeed(), hostGameRoom.getMaxPlayers(), hostGameRoom.getNoLaps(), 
     		       hostGameRoom.getName(), DataGenerator.basicShipSetup(client.clientName));
        gameRoomLobby = new GameRoomLobby(gameRoom);
+       System.out.println(client.requestAllGames().size());
        gameRoomLobby.setClient(client);
        
        getChildren().add(gameRoomLobby);
@@ -549,11 +576,13 @@ public class GameMenu extends Parent {
 
     // HOST GAME ROOM WINDOW
     hostGameRoomWindow.add(hostGameRoom, 0, 0);
-    hostGameRoomWindow.add(hostGameRoomButton, 1,1);
-    hostGameRoomWindow.add(btnBackHost, 1, 2);
+    hostGameRoomWindow.add(mapBox, 1, 0);
+    hostGameRoomWindow.add(generateTrack, 1, 1);
+    hostGameRoomWindow.add(hostGameRoomButton, 1, 2);
+    hostGameRoomWindow.add(btnBackHost, 0, 1);
     
-    // join a game room in multiplayer mode
-    joinGameRoomWindow.getChildren().add(btnBackJoin);
+    // JOIN GAME ROOM WINDOW 
+    joinGameRoomWindow.getChildren().addAll(btnBackJoin, joinGameRoom);
 
     // GAME MENU CHILDREN
     getChildren().addAll(initialWindow, hoverText, racerText, captionText);
@@ -634,6 +663,9 @@ public class GameMenu extends Parent {
 		
 	  hostGameRoomWindow.setTranslateX(700);
 	  hostGameRoomWindow.setTranslateY(80);
+	  hostGameRoomWindow.setHgap(40);
+	  hostGameRoomWindow.setVgap(10);
+	  hostGameRoomWindow.setPadding(new Insets(0,30,0,30));
 
   }
   

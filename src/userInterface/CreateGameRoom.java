@@ -18,7 +18,7 @@ public class CreateGameRoom extends GridPane {
   public CreateGameRoom() {
 
     this.setAlignment(Pos.CENTER);
-    this.setHgap(30);
+    this.setHgap(40);
     this.setVgap(3);
     this.setPadding(new Insets(20, 10, 0, 10));
 

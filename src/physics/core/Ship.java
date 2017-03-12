@@ -61,7 +61,7 @@ public abstract class Ship extends Entity {
 	private static boolean ACTUALLY_BREAK = true; // Whether the ship actually
 													// breaks when braking (and not
 													// accelerates backwards)
-	private Vector3 position;
+	transient private Vector3 position;
 	private Vector3 rotation;
 	private Vector3 velocity;
 	private Vector3 rotationalVelocity;
