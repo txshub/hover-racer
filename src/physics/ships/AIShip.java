@@ -21,7 +21,7 @@ public class AIShip extends Ship {
 	private int nextPointIndex;
 	private InputController input;
 
-	private boolean debug = true;
+	private boolean debug = false; // Please don't leave this at true
 
 	private final float twoOverPi = (float) (2 / Math.PI);
 	private final float piOverEight = (float) (Math.PI / 8);
@@ -85,7 +85,7 @@ public class AIShip extends Ship {
 		Vector2f nextTrackVec = new Vector2f(nextNextPoint).sub(nextPoint);
 		float segAngle = Math.abs(currTrackVec.angle(nextTrackVec));
 
-		System.out.print("Seg: " + segAngle + " ");
+		if (debug) System.out.print("Seg: " + segAngle + " ");
 
 		// Strafing
 		float cross = ((nextPoint.x - prevPoint.x) * (pos.y - prevPoint.y) - (nextPoint.y - prevPoint.y) * (pos.x - prevPoint.x));

@@ -38,7 +38,7 @@ public class ServerShipManager implements ServerShipProvider {
 		ships = new ArrayList<Ship>(amount);
 		for (int i = 0; i < amount; i++) {
 			if (data.getStartingPositions().size() == 0) throw new IllegalArgumentException("Not starting positions");
-			if (i <= players) ships.add(new RemoteShip((byte) i, null, data.getStartingPositions().get(i), ground, this));
+			if (i < players) ships.add(new RemoteShip((byte) i, null, data.getStartingPositions().get(i), ground, this));
 			else ships.add(new AIShip((byte) i, null, data.getStartingPositions().get(i), null, ground, trackPoints));
 		}
 		ships.forEach(s -> s.addOtherShips(ships));

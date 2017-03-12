@@ -40,7 +40,7 @@ public class MultiplayerWithoutGUI {
 		Client bob = new Client("Bob", PORT, MACHINE_NAME, null);
 		bob.start();
 
-		bob.joinGame(GAME_ID, DataGenerator.basicShipSetup("Bob"));
+		// bob.joinGame(GAME_ID, DataGenerator.basicShipSetup("Bob"));
 
 		// Start the game
 		client.startGame();

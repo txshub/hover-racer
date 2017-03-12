@@ -263,10 +263,10 @@ public abstract class Ship extends Entity {
 
 	public void updateFromPacket(byte[] bytes) {
 		ExportedShip remote = new ExportedShip(bytes);
-		this.position = remote.getPosition();
-		this.velocity = remote.getVelocity();
-		this.rotation = remote.getRotation();
-		this.rotationalVelocity = remote.getRotationalVelocity();
+		this.position.set(remote.getPosition());
+		this.velocity.set(remote.getVelocity());
+		this.rotation.set(remote.getRotation());
+		this.rotationalVelocity.set(remote.getRotationalVelocity());
 	}
 
 	public byte[] export() {
