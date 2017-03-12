@@ -92,31 +92,36 @@ public class AIShip extends Ship {
 
 		boolean isLeft = Math.abs(angle) > Math.PI / 2 ? cross > 0 : cross < 0;
 
-		if (Keyboard.isKeyDown(Keyboard.KEY_I) || input == null) {
-			if (angle > marginOfError) turn += 1f;
-			if (angle < -marginOfError) turn -= 1f;
+		try {
+			if (Keyboard.isKeyDown(Keyboard.KEY_I) || input == null) {
+				if (angle > marginOfError) turn += 1f;
+				if (angle < -marginOfError) turn -= 1f;
 
-			// if (segAngle <= piOverEight) thrust = (float) (-(4/Math.PI) *
-			// segAngle
-			// + 1);
-			// if (segAngle > piOverEight) thrust = (float) (-(4/(3*Math.PI)) *
-			// segAngle + 2/3);
-			//
-			// System.out.println(thrust);
-			// thrust = (float) Math.min(1, Math.max(0.1, thrust));
+				// if (segAngle <= piOverEight) thrust = (float) (-(4/Math.PI) *
+				// segAngle
+				// + 1);
+				// if (segAngle > piOverEight) thrust = (float) (-(4/(3*Math.PI)) *
+				// segAngle + 2/3);
+				//
+				// System.out.println(thrust);
+				// thrust = (float) Math.min(1, Math.max(0.1, thrust));
 
-			strafe = isLeft ? 1 : -1;
+				strafe = isLeft ? 1 : -1;
 
-			thrust = 0.5f;
+				thrust = 0.5f;
 
-		} else {
-			thrust += input.isDown(Action.FORWARD);
-			thrust -= input.isDown(Action.BREAK);
-			turn += input.isDown(Action.TURN_RIGHT);
-			turn -= input.isDown(Action.TURN_LEFT);
-			strafe += input.isDown(Action.STRAFE_RIGHT);
-			strafe -= input.isDown(Action.STRAFE_LEFT);
-			jump += input.isDown(Action.JUMP);
+			} else {
+				thrust += input.isDown(Action.FORWARD);
+				thrust -= input.isDown(Action.BREAK);
+				turn += input.isDown(Action.TURN_RIGHT);
+				turn -= input.isDown(Action.TURN_LEFT);
+				strafe += input.isDown(Action.STRAFE_RIGHT);
+				strafe -= input.isDown(Action.STRAFE_LEFT);
+				jump += input.isDown(Action.JUMP);
+			}
+
+		} catch (IllegalStateException e) {
+			// I'm on the server and I don't have access to Keyboard
 		}
 
 		if (debug)
