@@ -20,6 +20,7 @@ public class UpdateAllUsers extends Thread {
 	public void run() {
 		while (run) {
 			long timeStarting = System.nanoTime();
+			room.update((float) 1 / 60);
 			byte[] data = room.getShipPositions();
 			for (CommQueue queue : queues) {
 				queue.offer(new ByteArrayByte(data, ServerComm.FULLPOSITIONUPDATE));
