@@ -338,6 +338,8 @@ public class GameMenu extends Parent {
     MenuButton connectMulti = new MenuButton("CONNECT TO THE LOBBY", 350, 70, 30);
     connectMulti.setOnMouseClicked(event -> {
 
+    try {	
+    	
       usr = usernameInputMulti.getText();
       int portNo = Integer.valueOf(portInputMulti.getText());
       String machineName = machineInputMulti.getText();
@@ -374,7 +376,16 @@ public class GameMenu extends Parent {
        
         box4Multi.getChildren().add(startServerMulti);
       }
+    }
+    catch(Exception e){
+    	
+    	PopUpWindow popUp = new PopUpWindow("INVALID INPUT");
+		popUp.display();
+		
+    }
+    
     });
+    
 
     //If the server was not running - 
     //Start a server on <4444, localhost>
