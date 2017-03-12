@@ -225,7 +225,7 @@ public class GameRoom {
 		// TODO temporary thing here:
 		Map<Byte, Vector3f> res = new HashMap<>();
 		for (int i = 0; i < maxPlayers; i++) {
-			res.put((byte) i, new Vector3f(trackPoints.get(0).x, i * 10 + 5, trackPoints.get(0).y));
+			res.put((byte) i, new Vector3f(trackPoints.get(0).x + i * 20, 5, trackPoints.get(0).y));
 		}
 		return res;
 	}

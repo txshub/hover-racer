@@ -7,10 +7,8 @@ import org.lwjgl.input.Keyboard;
 import clientComms.Client;
 import gameEngine.renderEngine.DisplayManager;
 import physics.network.RaceSetupData;
-import physics.ships.MultiplayerShipManager;
 
-/** @author Reece Bennett */
-public class MainGameLoop {
+public class MainGameLoop extends Thread {
 
 	public void main(GameInt game) {
 		// TODO change to MultiplayerGame
@@ -81,12 +79,22 @@ public class MainGameLoop {
 		game.cleanUp();
 	}
 
-	public static MultiplayerShipManager startMultiplayerGame(RaceSetupData data, Client client) {
-		MainGameLoop main = new MainGameLoop();
-		MultiplayerGame game = new MultiplayerGame(data, client);
-		new Thread(() -> main.main(game)).start(); // Starts the game in a new thread
-		return game.getManager();
+	public static void startMultiplayerGame(RaceSetupData data, Client client) {
+		System.out.println("------STARTING GAME------");
+		// Start the game in a new thread - ensure all OpenGL stays in that thread
+		new Thread(() -> {
+			MainGameLoop main = new MainGameLoop();
+			MultiplayerGame game = new MultiplayerGame(data, client);
+			main.main(game);
+		}).start();
+		// Ensure setup is finished before proceeding
+		try {
+			while (client.getManager() == null)
+				Thread.sleep(10);
+		} catch (InterruptedException e) {}
 	}
+
+	// private static
 
 	public static void main(String[] args) {
 		MainGameLoop main = new MainGameLoop();
