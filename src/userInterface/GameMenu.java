@@ -344,7 +344,7 @@ public class GameMenu extends Parent {
       int portNo = Integer.valueOf(portInputMulti.getText());
       String machineName = machineInputMulti.getText();
 
-      client = new Client(usr, portNo, machineName, this);
+      client = new Client(usr, portNo, machineName);
 
       if (client.serverOn) {
 
@@ -400,7 +400,7 @@ public class GameMenu extends Parent {
       int portNo = Integer.valueOf(portInputMulti.getText());
       String machineName = machineInputMulti.getText();
 
-      client = new Client(usr, portNo, machineName, this);
+      client = new Client(usr, portNo, machineName);
       client.start();
 
       getChildren().add(multiOptionsWindow);

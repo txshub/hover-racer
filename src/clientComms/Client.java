@@ -15,7 +15,6 @@ import serverComms.GameRoom;
 import serverComms.GameSettings;
 import serverComms.IDShipData;
 import serverComms.ServerComm;
-import userInterface.GameMenu;
 
 /**
  * Main client class for client/server communications
@@ -31,11 +30,10 @@ public class Client extends Thread {
   int portNumber;
   String machineName;
   StopDisconnect serverStop;
-  GameMenu gameMenu;
   MultiplayerShipManager manager;
   public volatile boolean alreadyAccessed = false;
   private ArrayList<GameRoom> gameList;
-  public volatile boolean alreadyAccessedList = true;
+  private volatile boolean alreadyAccessedList = true;
   public volatile boolean alreadyAccessedRoom = true;
   private GameRoom currentRoom;
 
@@ -53,11 +51,10 @@ public class Client extends Thread {
    * @param gameMenu
    * @param gameMenu
    */
-  public Client(String clientName, int portNumber, String machineName, GameMenu gameMenu) {
+  public Client(String clientName, int portNumber, String machineName) {
     this.clientName = clientName;
     this.portNumber = portNumber;
     this.machineName = machineName;
-    this.gameMenu = gameMenu;
     try {
       Socket testConn = new Socket(machineName, portNumber);
       toServer = new DataOutputStream(new BufferedOutputStream(testConn.getOutputStream()));
@@ -115,12 +112,14 @@ public class Client extends Thread {
 
   public GameRoom createGame(long seed, int maxPlayers, int lapCount, String lobbyName, ShipSetupData data)
       throws IOException {
+	  alreadyAccessedRoom = true;
     GameSettings thisGame = new GameSettings(seed, maxPlayers, lapCount, lobbyName, data);
     sendByteMessage(thisGame.toByteArray(), ServerComm.MAKEGAME);
     return waitForRoom();
   }
 
   public GameRoom joinGame(int id, ShipSetupData data) throws IOException {
+	  alreadyAccessedRoom = true;
     IDShipData toSend = new IDShipData(id, data);
     sendByteMessage(toSend.toByteArray(), ServerComm.JOINGAME);
     return waitForRoom();
@@ -131,6 +130,7 @@ public class Client extends Thread {
   }
   
   public GameRoom getUpdatedRoom() throws IOException {
+	  alreadyAccessedRoom = true;
     sendByteMessage(new byte[0], ServerComm.REFRESHROOM);
     return waitForRoom();
   }
@@ -147,6 +147,7 @@ public class Client extends Thread {
   }
 
   public ArrayList<GameRoom> requestAllGames() throws IOException {
+	alreadyAccessedList = true;
     sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.SENDALLGAMES);
     while (alreadyAccessedList) {
       try {

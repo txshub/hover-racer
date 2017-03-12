@@ -62,8 +62,9 @@ public class ClientReceiver extends Thread {
               .split(System.lineSeparator());
           ArrayList<GameRoom> gameList = new ArrayList<GameRoom>();
           for (String s : allGames) {
-            if (!s.equals(""))
-              gameList.add(new GameRoom(s));
+			if (!s.equals("")) {
+				gameList.add(new GameRoom(s));
+			}
           }
           client.setGameList(gameList);
         } else if (fullMsg.getType() == ServerComm.INVALIDGAME) {
