@@ -11,7 +11,7 @@ public class MultiplayerWithoutGUI {
 	private static final String MACHINE_NAME = "localhost";
 	private static Client client;
 	private static GameRoom gameRoom;
-	private static final int GAME_ID = 50;
+	private static final int GAME_ID = 0;
 	private static final long SEED = 42;
 	private static final int MAX_PLAYERS = 3;
 	private static final int LAPS = 2;
@@ -29,14 +29,18 @@ public class MultiplayerWithoutGUI {
 		int portNo = PORT;
 		String machineName = MACHINE_NAME;
 
-		client = new Client(usr, portNo, machineName, null);
+		client = new Client(usr, PORT, MACHINE_NAME, null);
 		client.start();
 
 		// Create a game room
 		gameRoom = client.createGame(SEED, MAX_PLAYERS, LAPS, LOBBY_NAME, DataGenerator.basicShipSetup(client.clientName));
 
-		// Join a game room
-		// gameRoom = client.joinGame(GAME_ID, DataGenerator.basicShipSetup(usr));
+
+		// Create another user
+		Client bob = new Client("Bob", PORT, MACHINE_NAME, null);
+		bob.start();
+
+		bob.joinGame(GAME_ID, DataGenerator.basicShipSetup("Bob"));
 
 		// Start the game
 		client.startGame();

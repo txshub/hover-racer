@@ -37,6 +37,7 @@ public class GameRoom {
 	private boolean isSinglePlayer;
 
 	public GameRoom(int id, String name, long seed, int maxPlayers, String hostName, ClientTable table, boolean isSinglePlayer) {
+		System.out.println(hostName + " created a game room " + name + " with id " + id);
 		this.id = id;
 		this.name = name;
 		this.seed = seed;
@@ -249,6 +250,10 @@ public class GameRoom {
 
 	public int getNoPlayers() {
 		return maxPlayers;
+	}
+
+	public void update(float delta) {
+		shipManager.update(delta);
 	}
 
 
