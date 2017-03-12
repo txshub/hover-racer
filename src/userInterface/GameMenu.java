@@ -29,8 +29,8 @@ import serverComms.ServerComm;
  */
 public class GameMenu extends Parent {
 
-  private GridPane initialWindow, settingsWindow, connectMultiWindow, hostGameRoomWindow;
-  private VBox multiOptionsWindow, singleGameWindow, joinGameRoomWindow;
+  private GridPane initialWindow, settingsWindow, connectMultiWindow, hostGameRoomWindow, joinGameRoomWindow;
+  private VBox multiOptionsWindow, singleGameWindow;
   private MenuButton btnPlayGame, btnPlayAI, btnOptions, btnSound, btnMusic, btnExit, btnBackSettings,
   			 		 btnBackMulti, btnBackSingle, btnBackHost, btnBackMultiOptions, btnBackJoin;
   private SoundSlider soundSlider;
@@ -52,7 +52,7 @@ public class GameMenu extends Parent {
     multiOptionsWindow = new VBox(15);
     hostGameRoomWindow = new GridPane();
     singleGameWindow = new VBox(3);
-    joinGameRoomWindow = new VBox(3);
+    joinGameRoomWindow = new GridPane();
     
     soundSlider = new SoundSlider();
     musicSlider = new MusicSlider();
@@ -425,6 +425,7 @@ public class GameMenu extends Parent {
     box4Multi.getChildren().add(connectMulti);
 
     // JOIN A GAME ROOM IN MULTIPLAYER MODE //
+    
     joinGameRoom = new JoinGameRoom();
 
     MenuButton joinGR = new MenuButton("JOIN A GAME ROOM", 350, 70, 30);
@@ -438,6 +439,7 @@ public class GameMenu extends Parent {
       try {
     	  gameRoomList = client.requestAllGames();
     	  joinGameRoom.setGameList(gameRoomList);
+          joinGameRoom.refresh();
 		
       } catch (IOException e) {
 		
@@ -593,7 +595,9 @@ public class GameMenu extends Parent {
     hostGameRoomWindow.add(btnBackHost, 0, 1);
     
     // JOIN GAME ROOM WINDOW 
-    joinGameRoomWindow.getChildren().addAll(btnBackJoin, joinGameRoom);
+    joinGameRoomWindow.add(joinGameRoom, 0, 0);
+    GridPane.setHalignment(btnBackJoin, HPos.RIGHT);
+    joinGameRoomWindow.add(btnBackJoin, 0, 1);
 
     // GAME MENU CHILDREN
     getChildren().addAll(initialWindow, hoverText, racerText, captionText);
@@ -687,7 +691,10 @@ public class GameMenu extends Parent {
   private void buildJoinGameRoomWindow() {
 	
 	  joinGameRoomWindow.setTranslateX(700);
-	  joinGameRoomWindow.setTranslateY(50);
+	  joinGameRoomWindow.setTranslateY(80);
+	  joinGameRoomWindow.setVgap(10);
+	  joinGameRoomWindow.setPadding(new Insets(0,30,0,30));
+	  
   }
 
 }

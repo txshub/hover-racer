@@ -120,6 +120,7 @@ public class GameRoom {
 	public long getSeed() {
 		return seed;
 	}
+	
 
 	public void addPlayer(ShipSetupData data) {
 		if (data == null) throw new IllegalArgumentException("ShipSetupData cannot be null");
@@ -138,6 +139,7 @@ public class GameRoom {
 	public String getHostName() {
 		return hostName;
 	}
+	
 
 	public void startGame(String clientName) {
 		if (players.size() == 0) throw new IllegalStateException("Tried starting game with no players");
