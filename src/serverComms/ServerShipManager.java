@@ -1,6 +1,7 @@
 package serverComms;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -22,10 +23,11 @@ public class ServerShipManager implements ServerShipProvider {
 	private GroundProvider ground;
 
 	public ServerShipManager(RaceSetupData data, int players, int ais, ArrayList<TrackPoint> trackPoints) {
-		System.out.println("Race setup data when generating race:");
+		System.out.println("Server generated race data:");
 		System.out.println(data.toString());
 
 		int amount = data.shipData.values().size();
+		packets = new HashMap<>();
 
 		if (amount == 0) throw new IllegalArgumentException("ServerShipManager created with no ship data");
 		if (amount != players + ais)
