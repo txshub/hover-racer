@@ -2,6 +2,7 @@ package game;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.joml.Intersectionf;
 import org.joml.Vector3f;
@@ -26,6 +27,8 @@ public class GameLogic {
 	private int laps;
 	private int currentLap;
 	private boolean finished;
+	private boolean wrongWay;
+	private int lastValidPoint;
 
 	/**
 	 * Constructor
@@ -37,10 +40,9 @@ public class GameLogic {
 	 * @param track
 	 *            The track seed of the race
 	 */
-	public GameLogic(Ship player, ArrayList<Ship> opponents, SeedTrack track, int laps) {
+	public GameLogic(Ship player, SeedTrack track, int laps) {
 
 		this.player = player;
-		this.opponents = opponents;
 		this.laps = laps;
 
 		currentLap = 1;
@@ -54,6 +56,8 @@ public class GameLogic {
 		lastTrackPoint = 0;
 
 		finished = false;
+		wrongWay = false;
+		lastValidPoint = 0;
 	}
 
 	/**
@@ -63,15 +67,18 @@ public class GameLogic {
 	 *            The list of track points
 	 */
 	private void calculatePointsDist() {
-		if (!trackPoints.isEmpty()) {
-			pointsDist.put(trackPoints.get(0), 0f);
-		}
 		float distance = 0f;
 		for (int i = 1; i < trackPoints.size(); i++) {
 			TrackPoint previous = trackPoints.get(i - 1);
 			TrackPoint current = trackPoints.get(i);
 			distance += previous.distance(current.getX(), current.getY());
 			pointsDist.put(trackPoints.get(i), distance);
+		}
+		if (!trackPoints.isEmpty()) {
+			TrackPoint previous = trackPoints.get(trackPoints.size() - 1);
+			TrackPoint current = trackPoints.get(0);
+			distance += previous.distance(current.getX(), current.getY());
+			pointsDist.put(trackPoints.get(0), distance);
 		}
 	}
 
@@ -81,36 +88,47 @@ public class GameLogic {
 	private void updateLastPoint() {
 		Vector3f playerPos = player.getPosition();
 
-		int last = lastTrackPoint;
+		int previous = lastTrackPoint;
 
 		for (int i = 0; i < trackPoints.size(); i++) {
 			TrackPoint tp = trackPoints.get(i);
 			float pointWidth = tp.getWidth() / 2f;
 			float distanceToNext = tp.distance(playerPos.x, playerPos.z);
 
-			if (distanceToNext <= pointWidth) {
+			if (distanceToNext <= pointWidth && previous != i) {
 				lastTrackPoint = i;
+				System.out.println("Last trackpoint: " + lastTrackPoint + " Wrong way: " + wrongWay);
 			}
 		}
 
-		if (last == trackPoints.size() - 1 && lastTrackPoint == 0) {
-			if (currentLap == laps) {
-				System.err.println("CONGRATULATIONS!");
-				finished = true;
-			} else {
-				int left = laps - currentLap;
-				if (left > 1)
-					System.err.println((laps - currentLap) + " MORE LAPS!");
-				else
-					System.err.println("1 MORE LAP!");
-				currentLap++;
+		if (!wrongWay) {
+			if (previous == trackPoints.size() - 1 && lastTrackPoint == 0) {
+				if (currentLap == laps) {
+					System.err.println("CONGRATULATIONS!");
+					finished = true;
+				} else {
+					int left = laps - currentLap;
+					if (left > 1)
+						System.err.println(left + " MORE LAPS!");
+					else
+						System.err.println("1 MORE LAP!");
+					currentLap++;
+				}
+				return;
 			}
-			return;
+			if (lastTrackPoint < previous) {
+				System.err.println("WRONG WAY!");
+				wrongWay = true;
+				lastValidPoint = previous;
+				System.err.println("WRONG WAY: Last valid trackpoint: " + lastTrackPoint);
+			}
+		} else {
+			if (lastTrackPoint == lastValidPoint)
+				wrongWay = false;
 		}
-		if (lastTrackPoint < last)
-			System.err.println("WRONG WAY!");
-		if (lastTrackPoint - last > 1)
-			System.err.println("PENALTY: You left the track!");
+		
+		if (lastTrackPoint - previous > 1 )
+			System.err.println("YOU LEFT THE TRACK!");
 
 	}
 
@@ -120,7 +138,12 @@ public class GameLogic {
 	 * @return The distance travelled by the player
 	 */
 	private float calculatePlayerDist() {
-		float distance = pointsDist.get(trackPoints.get(lastTrackPoint));
+		float distance; 
+		if (lastTrackPoint == 0)
+			distance = pointsDist.get(trackPoints.get(0)) * (currentLap - 1);
+		else
+			distance = pointsDist.get(trackPoints.get(lastTrackPoint)) + pointsDist.get(trackPoints.get(0)) * (currentLap - 1);
+		
 		Vector3f playerPos = player.getPosition();
 		TrackPoint last = trackPoints.get(lastTrackPoint);
 		TrackPoint next;
@@ -128,10 +151,12 @@ public class GameLogic {
 			next = trackPoints.get(lastTrackPoint + 1);
 		else
 			next = trackPoints.get(0);
+		
 		float orth = Intersectionf.distancePointLine(playerPos.x(), playerPos.z(), last.getX(), last.getY(),
 				next.getX(), next.getY());
 		float ip = last.distance(playerPos.x(), playerPos.z());
 		distance += Math.sqrt(ip * ip - orth * orth);
+		
 		return distance;
 	}
 

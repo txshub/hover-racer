@@ -229,8 +229,7 @@ public class Game implements GameInt {
     // terrains);
 
     // Tudor
-    ArrayList<Ship> opponents = new ArrayList<Ship>();
-    logic = new GameLogic(player, opponents, st, 4);
+    logic = new GameLogic(player, st, 4);
 
     AudioMaster.playInGameMusic();
     try {
@@ -246,6 +245,9 @@ public class Game implements GameInt {
 
     // Tudor
     logic.update();
+//    System.out.println(logic.getPlayerDist());
+//    System.err.println(logic.getLastPoint());
+    
     // Check if the escape key was pressed to exit the game
     if (input.isDown(Action.EXIT) > 0.5f)
       running = false;
