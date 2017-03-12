@@ -33,7 +33,7 @@ public class Client extends Thread {
   StopDisconnect serverStop;
   GameMenu gameMenu;
   MultiplayerShipManager manager;
-  public volatile boolean alreadyAccessed = true;
+  public volatile boolean alreadyAccessed = false;
   private ArrayList<GameRoom> gameList;
   public volatile boolean alreadyAccessedList = true;
   public volatile boolean alreadyAccessedRoom = true;
@@ -112,9 +112,6 @@ public class Client extends Thread {
     }
   }
   
-  public void startGame() throws IOException{
-	  sendByteMessage(new byte[0], ServerComm.STARTGAME);
-  }
 
   public GameRoom createGame(long seed, int maxPlayers, int lapCount, String lobbyName, ShipSetupData data)
       throws IOException {
@@ -129,6 +126,10 @@ public class Client extends Thread {
     return waitForRoom();
   }
 
+  public void startGame() throws IOException{
+	  sendByteMessage(new byte[0], ServerComm.STARTGAME);
+  }
+  
   public GameRoom getUpdatedRoom() throws IOException {
     sendByteMessage(new byte[0], ServerComm.REFRESHROOM);
     return waitForRoom();
