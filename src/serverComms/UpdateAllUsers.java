@@ -6,7 +6,7 @@ public class UpdateAllUsers extends Thread {
 
   public volatile boolean run = true;
 
-  final long refreshRate = (1 / 60) * 1000000; // Refresh Rate in nanos
+  final long refreshRate = (long)(1.0 / 60.0) * 1000000; // Refresh Rate in nanos
 
   private ArrayList<CommQueue> queues;
   private GameRoom room;
@@ -26,7 +26,8 @@ public class UpdateAllUsers extends Thread {
       }
       long timeAfter = System.nanoTime();
       try {
-        Thread.sleep((refreshRate - timeAfter + timeStarting) / 1000); // Sleep
+    	  System.out.println(timeStarting + ", " + timeAfter);
+        Thread.sleep(Math.max(0, (refreshRate - timeAfter + timeStarting) / 1000)); // Sleep
                                                                        // for
                                                                        // 1/60th
                                                                        // of a

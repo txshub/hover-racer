@@ -1,5 +1,8 @@
 package game;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +20,7 @@ import gameEngine.entities.Camera;
 import gameEngine.entities.Entity;
 import gameEngine.entities.Light;
 import gameEngine.guis.GuiRenderer;
+import gameEngine.guis.GuiTexture;
 import gameEngine.models.RawModel;
 import gameEngine.models.TexturedModel;
 import gameEngine.objConverter.OBJFileLoader;
@@ -37,6 +41,12 @@ import physics.ships.MultiplayerShipManager;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
+import uiToolkit.Button;
+import uiToolkit.Container;
+import uiToolkit.Label;
+import uiToolkit.UIRenderer;
+import uiToolkit.fontMeshCreator.FontType;
+import uiToolkit.fontRendering.TextMaster;
 
 /** @author Reece Bennett and rtm592 */
 public class Game implements GameInt {
@@ -49,6 +59,7 @@ public class Game implements GameInt {
   private ArrayList<Entity> normalEntities;
   private ArrayList<Terrain> terrains;
   private ArrayList<Light> lights;
+  private ArrayList<GuiTexture> guis;
   private Ship player;
   private Camera camera;
   // private MousePicker picker;
@@ -65,6 +76,12 @@ public class Game implements GameInt {
 
   // Tudor
   private GameLogic logic;
+  // TODO temporary
+  private Container menu;
+  private Label posCurrent;
+  private Label posTotal;
+  private UIRenderer uiRenderer;
+  private ArrayList<Container> containers;
 
   public Game() {
     init();
@@ -79,6 +96,9 @@ public class Game implements GameInt {
     AudioMaster.init();
     entities = new ArrayList<Entity>();
     normalEntities = new ArrayList<Entity>();
+    TextMaster.init(loader);
+
+    System.out.println("Screen size: " + Display.getWidth() + " x " + Display.getHeight());
 
     // Terrain
     TerrainTexture background = new TerrainTexture(loader.loadTexture("new/GridTexture"));
@@ -135,9 +155,74 @@ public class Game implements GameInt {
     // Player following camera
     camera = new Camera(player);
 
+    // GUIs
+    guis = new ArrayList<>();
+    containers = new ArrayList<>();
+
+    Vector3f colour = new Vector3f(0.0275f, 0.6510f, 0.9412f);
+    FontType font = new FontType(loader.loadFontTexture("ui/calibri"),
+        new File("src/resources/ui/calibri.fnt"));
+
+    menu = new Container(loader, "ui/MenuBackground", new Vector2f(448, 120));
+    containers.add(menu);
+
+    Button resumeButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 64));
+    resumeButton.setParent(menu);
+    resumeButton.addListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        System.out.println(e.getActionCommand());
+        if (e.getActionCommand().equals("pressed")) {
+          menu.setVisibility(false);
+        }
+      }
+    });
+    Label resumeText = new Label(loader, "RESUME", font, 2.5f, true, new Vector2f(0, 8), 266);
+    resumeText.setParent(resumeButton);
+    resumeText.setColor(colour);
+
+    Button optionsButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 160));
+    optionsButton.setParent(menu);
+    Label optionsText = new Label(loader, "OPTIONS", font, 2.5f, true, new Vector2f(0, 8), 266);
+    optionsText.setParent(optionsButton);
+    optionsText.setColor(colour);
+
+    Button lobbyButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 256));
+    lobbyButton.setParent(menu);
+    Label lobbyText = new Label(loader, "LOBBY", font, 2.5f, true, new Vector2f(0, 8), 266);
+    lobbyText.setParent(lobbyButton);
+    lobbyText.setColor(colour);
+
+    Button menuButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 352));
+    menuButton.setParent(menu);
+    Label menuText = new Label(loader, "MENU", font, 2.5f, true, new Vector2f(0, 8), 266);
+    menuText.setParent(menuButton);
+    menuText.setColor(colour);
+
+    menu.setVisibility(true);
+
+    Container posDisplay = new Container(loader, "ui/posBackground",
+        new Vector2f(Display.getWidth() - 170, 10));
+    containers.add(posDisplay);
+    posCurrent = new Label(loader, "2", font, 5f, true, new Vector2f(30, 45), 130);
+    posCurrent.setParent(posDisplay);
+    posCurrent.setColour(1, 1, 1);
+    posCurrent = new Label(loader, "8", font, 2.8f, true, new Vector2f(15, 2), 30);
+    posCurrent.setParent(posDisplay);
+    posCurrent.setColour(1, 1, 1);
+
+    Container lapDisplay = new Container(loader, "ui/lapBackground", new Vector2f(21, 10));
+    containers.add(lapDisplay);
+    posCurrent = new Label(loader, "2", font, 5f, true, new Vector2f(0, 45), 120);
+    posCurrent.setParent(lapDisplay);
+    posCurrent.setColour(1, 1, 1);
+    posCurrent = new Label(loader, "5", font, 2.8f, true, new Vector2f(105, 2), 30);
+    posCurrent.setParent(lapDisplay);
+    posCurrent.setColour(1, 1, 1);
+
     // Renderers
     renderer = new MasterRenderer(loader);
     guiRender = new GuiRenderer(loader);
+    uiRenderer = new UIRenderer(loader);
 
     // Camera rotation with right click
     // picker = new MousePicker(camera, renderer.getProjectionMatrix(),
@@ -145,7 +230,7 @@ public class Game implements GameInt {
 
     // Tudor
     ArrayList<Ship> opponents = new ArrayList<Ship>();
-    logic = new GameLogic(player, opponents, st);
+    logic = new GameLogic(player, opponents, st, 4);
 
     AudioMaster.playInGameMusic();
     try {
@@ -165,6 +250,10 @@ public class Game implements GameInt {
     if (input.isDown(Action.EXIT) > 0.5f)
       running = false;
 
+    // Check for menu
+    if (input.wasPressed(Action.MENU) > 0.5f)
+      menu.setVisibility(!menu.isVisible());
+
     // Check for audio controls
     /** @author Tudor */
     if (input.wasPressed(Action.MUSIC_UP) > 0.5f)
@@ -179,6 +268,11 @@ public class Game implements GameInt {
       AudioMaster.decreaseSFXVolume();
 
     ships.updateShips((float) delta);
+    for (Container c : containers) {
+      c.update();
+    }
+
+    player.update((float) delta);
     camera.move();
 
     // move terrain based on player location so terrain seems infinite
@@ -199,12 +293,16 @@ public class Game implements GameInt {
   public void render() {
     GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
     renderer.renderScene(entities, normalEntities, terrains, lights, camera, new Vector4f());
+    // guiRender.render(guis);
+    uiRenderer.render(containers);
+    TextMaster.render();
     GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
     DisplayManager.updateDisplay();
     sortLights(lights, player.getPosition());
   }
 
   public void cleanUp() {
+    TextMaster.cleanUp();
     guiRender.cleanUp();
     renderer.cleanUp();
     loader.cleanUp();

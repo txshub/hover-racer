@@ -68,5 +68,4 @@ public class ModelTexture {
   public void setReflectivity(float reflectivity) {
     this.reflectivity = reflectivity;
   }
-
 }

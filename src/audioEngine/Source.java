@@ -38,6 +38,7 @@ public class Source {
    */
   public void setInitialVolume(float initVolume) {
     this.initVolume = initVolume;
+    setCurrentVolume(initVolume);
   }
 
   /**
@@ -59,7 +60,6 @@ public class Source {
    */
   public void delete() {
     stop();
-    // AudioMaster.deleteSource(this);
     AL10.alDeleteSources(sourceId);
   }
 
