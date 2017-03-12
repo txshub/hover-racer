@@ -39,6 +39,7 @@ public class AIShip extends Ship {
 		this.track = track;
 		nextPointIndex = 1;
 
+		System.out.println("AI " + id + "  debug information:"); // Added to not make the output confusing
 		for (int i = 0; i < track.size(); i++) {
 			TrackPoint nextPoint = track.get(i);
 			TrackPoint nextNextPoint = i + 1 >= track.size() ? track.get(0) : track.get(i + 1);
@@ -56,6 +57,7 @@ public class AIShip extends Ship {
 
 			System.out.println(segAngle + " - " + speed);
 		}
+		System.out.println();
 	}
 
 	@Override
