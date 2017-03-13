@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 
 import org.joml.Vector3f;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import audioEngine.AudioMaster;
 import audioEngine.Sounds;
 import audioEngine.Source;
@@ -44,6 +47,10 @@ public class ShipSounds {
     playerSource.play(Sounds.ENGINE);
 
     // Create other ship's Sources
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    System.out.println("---------------------Other ships:------------");
+	otherShips.forEach(s->System.out.println(s.getId()));
+	System.out.println("---------------------End of other ships-------------");
     this.otherShips = otherShips.stream()
         .collect(Collectors.toMap(Function.identity(), ship -> AudioMaster.createSFXSource()));
     for (Entry<Ship, Source> entry : this.otherShips.entrySet()) {

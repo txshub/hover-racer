@@ -61,7 +61,7 @@ public abstract class Ship extends Entity {
 	private static boolean ACTUALLY_BREAK = true; // Whether the ship actually
 													// breaks when braking (and not
 													// accelerates backwards)
-	private Vector3 position;
+	transient private Vector3 position;
 	private Vector3 rotation;
 	private Vector3 velocity;
 	private Vector3 rotationalVelocity;
@@ -176,6 +176,7 @@ public abstract class Ship extends Entity {
 	}
 
 	protected void steer(float thrust, float turn, float strafe, float jump, float brokenDelta) {
+		if (!started) return; // Don't allow input until the race has started
 		float delta = (float) 1 / 60; // TODO fix deltas
 		// Checking parameters - TODO probably remove this for production code
 		if (Math.abs(thrust) > 1 || Math.abs(turn) > 1 || Math.abs(strafe) > 1 || Math.abs(jump) > 1) {
@@ -213,7 +214,7 @@ public abstract class Ship extends Entity {
 
 	/** Changes the velocity to account for a collision with a different ship */
 	private void collideWith(Ship ship) {
-		System.out.println("COLLISION! " + ship + " vs " + this);
+		// System.out.println("COLLISION! " + ship + " vs " + this);
 		Vector3 pos = ship.getInternalPosition().copy();
 		float expectedDistance = ship.getSize() + this.getSize();
 		// Apply momentum
@@ -261,12 +262,27 @@ public abstract class Ship extends Entity {
 		this.started = true;
 	}
 
+	public void resetTo(Vector3f checkpoint, Vector3f facing) {
+		this.velocity.set(0, 0, 0);
+		this.rotationalVelocity.set(0, 0, 0);
+		float angle = (float) Math.atan2(facing.z - checkpoint.z, facing.x - checkpoint.x);
+		this.rotation.set(0, angle, 0);
+		this.position.set(checkpoint);
+	}
+
+	@Override
+	public void setRotation(Vector3f v) {
+		this.rotation.set(v);
+		this.rotation.forEach(Math::toRadians);
+		super.setRotation(v);
+	}
+
 	public void updateFromPacket(byte[] bytes) {
 		ExportedShip remote = new ExportedShip(bytes);
-		this.position = remote.getPosition();
-		this.velocity = remote.getVelocity();
-		this.rotation = remote.getRotation();
-		this.rotationalVelocity = remote.getRotationalVelocity();
+		this.position.set(remote.getPosition());
+		this.velocity.set(remote.getVelocity());
+		this.rotation.set(remote.getRotation());
+		this.rotationalVelocity.set(remote.getRotationalVelocity());
 	}
 
 	public byte[] export() {

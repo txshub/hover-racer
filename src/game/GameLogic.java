@@ -2,7 +2,6 @@ package game;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import org.joml.Intersectionf;
 import org.joml.Vector3f;
@@ -11,10 +10,8 @@ import physics.core.Ship;
 import trackDesign.SeedTrack;
 import trackDesign.TrackPoint;
 
-/**
- * @author rtm592
- * @author Tudor Suruceanu
- */
+/** @author rtm592
+ * @author Tudor Suruceanu */
 public class GameLogic {
 
 	private float playerDist;
@@ -30,18 +27,15 @@ public class GameLogic {
 	private boolean wrongWay;
 	private int lastValidPoint;
 
-	/**
-	 * Constructor
+	/** Constructor
 	 * 
 	 * @param player
-	 *            The player's ship
+	 *        The player's ship
 	 * @param opponents
-	 *            Other ships in the race
+	 *        Other ships in the race
 	 * @param track
-	 *            The track seed of the race
-	 */
+	 *        The track seed of the race */
 	public GameLogic(Ship player, SeedTrack track, int laps) {
-
 		this.player = player;
 		this.laps = Math.max(laps, 1);
 
@@ -60,12 +54,10 @@ public class GameLogic {
 		lastValidPoint = 0;
 	}
 
-	/**
-	 * Calculate the distance from the first track point to each of the others
+	/** Calculate the distance from the first track point to each of the others
 	 * 
 	 * @param track
-	 *            The list of track points
-	 */
+	 *        The list of track points */
 	private void calculatePointsDist() {
 		float distance = 0f;
 		for (int i = 1; i < trackPoints.size(); i++) {
@@ -82,9 +74,7 @@ public class GameLogic {
 		}
 	}
 
-	/**
-	 * Update the last point the player surpassed
-	 */
+	/** Update the last point the player surpassed */
 	private void updateLastPoint() {
 		Vector3f playerPos = player.getPosition();
 
@@ -116,11 +106,9 @@ public class GameLogic {
 		}
 	}
 
-	/**
-	 * Calculate the distance travelled by the player from the start
+	/** Calculate the distance travelled by the player from the start
 	 * 
-	 * @return The distance travelled by the player
-	 */
+	 * @return The distance travelled by the player */
 	private float calculatePlayerDist() {
 		float distance; 
 		if (lastTrackPoint == 0)
@@ -144,9 +132,7 @@ public class GameLogic {
 		return distance;
 	}
 
-	/**
-	 * General update method
-	 */
+	/** General update method */
 	public void update() {
 
 		updateLastPoint();
@@ -155,57 +141,49 @@ public class GameLogic {
 		// get rankings from the server
 	}
 
-	/**
-	 * Update information about the ranking
+	/** Update information about the ranking
 	 * 
 	 * @param ranking
-	 *            The current ranking
-	 */
+	 *        The current ranking */
 	public void setRankings(HashMap<Integer, Integer> ranking) {
 		this.ranking = ranking;
 	}
 
-	/**
-	 * Get the distance travelled by the player from the start
+	/** Get the distance travelled by the player from the start
 	 * 
-	 * @return The distance a player has travelled from the start
-	 */
+	 * @return The distance a player has travelled from the start */
 	public float getPlayerDist() {
 		return playerDist;
 	}
 
-	/**
-	 * Get the current lap the player is completing
+	/** Get the current lap the player is completing
 	 * 
-	 * @return The current lap
-	 */
+	 * @return The current lap */
 	public int getCurrentLap() {
 		return currentLap;
 	}
+	
+	public int getTotalLaps() {
+	  return laps;
+	}
 
-	/**
-	 * Get the last track point the player surpassed
+	/** Get the last track point the player surpassed
 	 * 
-	 * @return The last track point the player surpassed
-	 */
+	 * @return The last track point the player surpassed */
 	public int getLastPoint() {
 		return lastTrackPoint;
 	}
 
-	/**
-	 * Get the current ranking in the race
+	/** Get the current ranking in the race
 	 * 
-	 * @return The current ranking
-	 */
+	 * @return The current ranking */
 	public HashMap<Integer, Integer> getRankings() {
 		return ranking;
 	}
 
-	/**
-	 * Check if the player has finished the race
+	/** Check if the player has finished the race
 	 * 
-	 * @return Whether the player has finished the race
-	 */
+	 * @return Whether the player has finished the race */
 	public boolean finishedRace() {
 		return finished;
 	}

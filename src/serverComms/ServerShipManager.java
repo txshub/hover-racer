@@ -1,6 +1,7 @@
 package serverComms;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -22,10 +23,11 @@ public class ServerShipManager implements ServerShipProvider {
 	private GroundProvider ground;
 
 	public ServerShipManager(RaceSetupData data, int players, int ais, ArrayList<TrackPoint> trackPoints) {
-		System.out.println("Race setup data when generating race:");
+		System.out.println("Server generated race data:");
 		System.out.println(data.toString());
 
 		int amount = data.shipData.values().size();
+		packets = new HashMap<>();
 
 		if (amount == 0) throw new IllegalArgumentException("ServerShipManager created with no ship data");
 		if (amount != players + ais)
@@ -36,7 +38,7 @@ public class ServerShipManager implements ServerShipProvider {
 		ships = new ArrayList<Ship>(amount);
 		for (int i = 0; i < amount; i++) {
 			if (data.getStartingPositions().size() == 0) throw new IllegalArgumentException("Not starting positions");
-			if (i <= players) ships.add(new RemoteShip((byte) i, null, data.getStartingPositions().get(i), ground, this));
+			if (i < players) ships.add(new RemoteShip((byte) i, null, data.getStartingPositions().get(i), ground, this));
 			else ships.add(new AIShip((byte) i, null, data.getStartingPositions().get(i), null, ground, trackPoints));
 		}
 		ships.forEach(s -> s.addOtherShips(ships));
@@ -64,6 +66,10 @@ public class ServerShipManager implements ServerShipProvider {
 	@Override
 	public Optional<byte[]> getShip(byte id) {
 		return Optional.ofNullable(packets.remove(id));
+	}
+
+	public void startRace() {
+		ships.forEach(s -> s.start());
 	}
 
 }

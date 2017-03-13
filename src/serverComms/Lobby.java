@@ -14,7 +14,7 @@ public class Lobby {
   public ClientTable clientTable;
 
   public Lobby(int port) {
-    clientTable = new ClientTable();
+    clientTable = new ClientTable(this);
     ServerComm comm = new ServerComm(port, this);
     comm.start();
   }
