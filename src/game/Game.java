@@ -331,41 +331,42 @@ public class Game implements GameInt {
 
     // Populate indices
     for (int i = 0; i < trackPoints.size(); i++) {
-      int n = i * 5;
+      int n = i * 6;
       int offset = i * 30;
 
-      addToArray(n, n + 7, n + 6, indices, offset);
-      addToArray(n, n + 1, n + 7, indices, offset + 3);
-
-      addToArray(n + 1, n + 8, n + 7, indices, offset + 6);
-      addToArray(n + 1, n + 2, n + 8, indices, offset + 9);
-
-      addToArray(n + 2, n + 9, n + 8, indices, offset + 12);
-      addToArray(n + 2, n + 3, n + 9, indices, offset + 15);
-
-      addToArray(n + 3, n + 10, n + 9, indices, offset + 18);
-      addToArray(n + 3, n + 4, n + 10, indices, offset + 21);
-
-      addToArray(n + 4, n + 11, n + 10, indices, offset + 24);
-      addToArray(n + 4, n + 5, n + 11, indices, offset + 27);
-
-//      else {
-//        // If we are at the last point we should join to the start of the track
-//        addToArray(n, 2, 0, indices, offset);
-//        addToArray(n, n + 1, 2, indices, offset + 3);
-//
-//        addToArray(n + 1, 3, 2, indices, offset + 6);
-//        addToArray(n + 1, n + 2, 3, indices, offset + 9);
-//
-//        addToArray(n + 2, 4, 3, indices, offset + 12);
-//        addToArray(n + 2, n + 3, 4, indices, offset + 15);
-//
-//        addToArray(n + 3, 5, 4, indices, offset + 18);
-//        addToArray(n + 3, n + 4, 5, indices, offset + 21);
-//
-//        addToArray(n + 4, 6, 5, indices, offset + 24);
-//        addToArray(n + 4, n + 5, 5, indices, offset + 27);
-//      }
+      if (i < trackPoints.size() - 1) {
+        addToArray(n, n + 7, n + 6, indices, offset);
+        addToArray(n, n + 1, n + 7, indices, offset + 3);
+  
+        addToArray(n + 1, n + 8, n + 7, indices, offset + 6);
+        addToArray(n + 1, n + 2, n + 8, indices, offset + 9);
+  
+        addToArray(n + 2, n + 9, n + 8, indices, offset + 12);
+        addToArray(n + 2, n + 3, n + 9, indices, offset + 15);
+  
+        addToArray(n + 3, n + 10, n + 9, indices, offset + 18);
+        addToArray(n + 3, n + 4, n + 10, indices, offset + 21);
+  
+        addToArray(n + 4, n + 11, n + 10, indices, offset + 24);
+        addToArray(n + 4, n + 5, n + 11, indices, offset + 27);
+        
+      } else {
+        addToArray(n, 1, 0, indices, offset);
+        addToArray(n, n + 1, 1, indices, offset + 3);
+  
+        addToArray(n + 1, 2, 1, indices, offset + 6);
+        addToArray(n + 1, n + 2, 2, indices, offset + 9);
+  
+        addToArray(n + 2, 3, 2, indices, offset + 12);
+        addToArray(n + 2, n + 3, 3, indices, offset + 15);
+  
+        addToArray(n + 3, 4, 3, indices, offset + 18);
+        addToArray(n + 3, n + 4, 4, indices, offset + 21);
+  
+        addToArray(n + 4, 5, 4, indices, offset + 24);
+        addToArray(n + 4, n + 5, 5, indices, offset + 27);
+        
+      }
     }
 
     // for (int i = 0; i <= trackPoints.size(); i++) {
