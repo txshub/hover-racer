@@ -43,7 +43,7 @@ public class GameLogic {
 	public GameLogic(Ship player, SeedTrack track, int laps) {
 
 		this.player = player;
-		this.laps = laps;
+		this.laps = Math.max(laps, 1);
 
 		currentLap = 1;
 		trackPoints = track.getTrack();
@@ -97,39 +97,23 @@ public class GameLogic {
 
 			if (distanceToNext <= pointWidth && previous != i) {
 				lastTrackPoint = i;
-				System.out.println("Last trackpoint: " + lastTrackPoint + " Wrong way: " + wrongWay);
+				System.out.println("Last trackpoint: " + lastTrackPoint + " Current lap: " + currentLap);
 			}
 		}
 
-		if (!wrongWay) {
-			if (previous == trackPoints.size() - 1 && lastTrackPoint == 0) {
-				if (currentLap == laps) {
-					System.err.println("CONGRATULATIONS!");
-					finished = true;
-				} else {
-					int left = laps - currentLap;
-					if (left > 1)
-						System.err.println(left + " MORE LAPS!");
-					else
-						System.err.println("1 MORE LAP!");
-					currentLap++;
-				}
-				return;
-			}
-			if (lastTrackPoint < previous) {
-				System.err.println("WRONG WAY!");
-				wrongWay = true;
-				lastValidPoint = previous;
-				System.err.println("WRONG WAY: Last valid trackpoint: " + lastTrackPoint);
+		if (previous == trackPoints.size() - 1 && lastTrackPoint == 0) {
+			if (currentLap == laps) {
+				System.err.println("CONGRATULATIONS!");
+				finished = true;
+			} else {
+				currentLap++;
 			}
 		} else {
-			if (lastTrackPoint == lastValidPoint)
-				wrongWay = false;
+			if (previous == 0 && lastTrackPoint == trackPoints.size() - 1) {
+				if (currentLap > 0)
+					currentLap--;
+			}
 		}
-		
-		if (lastTrackPoint - previous > 1 )
-			System.err.println("YOU LEFT THE TRACK!");
-
 	}
 
 	/**

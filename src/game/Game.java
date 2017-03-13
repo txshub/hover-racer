@@ -229,7 +229,7 @@ public class Game implements GameInt {
     // terrains);
 
     // Tudor
-    logic = new GameLogic(player, st, 4);
+    logic = new GameLogic(player, st, 1);
 
     AudioMaster.playInGameMusic();
     try {
@@ -245,8 +245,6 @@ public class Game implements GameInt {
 
     // Tudor
     logic.update();
-//    System.out.println(logic.getPlayerDist());
-//    System.err.println(logic.getLastPoint());
     
     // Check if the escape key was pressed to exit the game
     if (input.isDown(Action.EXIT) > 0.5f)
