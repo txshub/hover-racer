@@ -36,6 +36,8 @@ public class GameRoom {
 	private UpdateAllUsers updatedUsers;
 	private boolean isSinglePlayer;
 
+	private long raceStartsAt;
+
 	public GameRoom(int id, String name, long seed, int maxPlayers, String hostName, ClientTable table, boolean isSinglePlayer) {
 		System.out.println(hostName + " created a game room " + name + " with id " + id);
 		this.id = id;
@@ -191,7 +193,7 @@ public class GameRoom {
 		}
 		Vector2f startDirection = trackPoints.get(0).sub(trackPoints.get(1));
 		return new RaceSetupData(resShips, generateStartingPositions(startDirection),
-			new Vector3f(0, (float) Math.atan2(startDirection.x, startDirection.y), 0), seed, TIME_TO_START);
+			new Vector3f(0, (float) Math.atan2(startDirection.x, startDirection.y), 0), seed, TIME_TO_START, 3); // TODO add laps
 	}
 
 	// TODO finish this

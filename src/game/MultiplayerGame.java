@@ -126,7 +126,7 @@ public class MultiplayerGame implements GameInt {
 
 		// Scale up the track so it isn't so tiny
 		for (TrackPoint tp : st.getTrack()) {
-			tp.mul(20); // TODO What else do you do with this track?
+			tp.mul(20);
 		}
 		trackPoints = st.getTrack();
 
@@ -178,6 +178,8 @@ public class MultiplayerGame implements GameInt {
 
 	public void update(float delta) {
 		input.update();
+
+		if (System.nanoTime() > startsAt) ships.startRace();
 
 		// Tudor
 		logic.update();

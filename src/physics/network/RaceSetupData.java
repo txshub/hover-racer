@@ -24,24 +24,22 @@ public class RaceSetupData {
 	public Vector3f startingOrientation;
 	public long trackSeed;
 	public long timeToStart;
+	public int laps;
 
 	public RaceSetupData(Map<Byte, ShipSetupData> shipData, Map<Byte, Vector3f> startingPositions, Vector3f startingOrientation,
-		long trackSeed, long timeToStart) {
+		long trackSeed, long timeToStart, int laps) {
 		this.shipData = shipData;
 		this.startingPositions = startingPositions;
 		this.startingOrientation = startingOrientation;
 		this.trackSeed = trackSeed;
 		this.timeToStart = timeToStart;
+		this.laps = laps;
 	}
 
 	public RaceSetupData(byte id, Map<Byte, ShipSetupData> shipData, Map<Byte, Vector3f> startingPositions, Vector3f startingOrientation,
-		long trackSeed, long timeToStart) {
+		long trackSeed, long timeToStart, int laps) {
+		this(shipData, startingPositions, startingOrientation, trackSeed, timeToStart, laps);
 		this.yourId = id;
-		this.shipData = shipData;
-		this.startingPositions = startingPositions;
-		this.startingOrientation = startingOrientation;
-		this.trackSeed = trackSeed;
-		this.timeToStart = timeToStart;
 	}
 
 	public RaceSetupData setId(byte id) {
