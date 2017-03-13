@@ -1,6 +1,5 @@
 package physics.ships;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.joml.Vector3f;
@@ -10,7 +9,6 @@ import input.Action;
 import input.InputController;
 import physics.core.Ship;
 import physics.support.GroundProvider;
-import physics.support.ShipSounds;
 
 /** Represents a Ship controlled with inputs from the Player
  * 
@@ -18,15 +16,15 @@ import physics.support.ShipSounds;
 public class PlayerShip extends Ship {
 
 	InputController input;
-	ShipSounds sound;
+	// ShipSounds sound;
 
 	public PlayerShip(byte id, TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground,
 		InputController input) {
 		super(id, model, startingPosition, ground);
 		super.addOtherShips(otherShips);
 		this.input = input; // Deal with input
-		this.sound = new ShipSounds(this, otherShips != null ? otherShips : new ArrayList<Ship>()); // Create
-																									// ShipSounds
+		// this.sound = new ShipSounds(this, otherShips != null ? otherShips : new ArrayList<Ship>()); // Create
+		// ShipSounds
 	}
 
 	@Override
@@ -44,11 +42,7 @@ public class PlayerShip extends Ship {
 		// Steer and update ship
 		super.steer(thrust, turn, strafe, jump, delta);
 		super.updatePhysics(delta);
-		sound.update(delta);
-	}
-
-	public void cleanUp() {
-		// sound.cleanUp();
+		// sound.update(delta);
 	}
 
 }
