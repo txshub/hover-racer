@@ -268,7 +268,13 @@ public abstract class Ship extends Entity {
 		float angle = (float) Math.atan2(facing.z - checkpoint.z, facing.x - checkpoint.x);
 		this.rotation.set(0, angle, 0);
 		this.position.set(checkpoint);
+	}
 
+	@Override
+	public void setRotation(Vector3f v) {
+		this.rotation.set(v);
+		this.rotation.forEach(Math::toRadians);
+		super.setRotation(v);
 	}
 
 	public void updateFromPacket(byte[] bytes) {
