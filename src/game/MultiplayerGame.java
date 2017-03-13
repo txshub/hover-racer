@@ -206,6 +206,9 @@ public class MultiplayerGame implements GameInt {
     if (input.wasPressed(Action.SFX_DOWN) > 0.5f)
       AudioMaster.decreaseSFXVolume();
 
+    if (System.nanoTime() > startsAt)
+      ships.getPlayerShip().start();
+
     ships.updateShips((float) delta);
     for (Container c : containers) {
       c.update();
@@ -319,13 +322,14 @@ public class MultiplayerGame implements GameInt {
         new Vector2f(0, 45), 120);
     lapCurrent.setParent(lapDisplay);
     lapCurrent.setColour(1, 1, 1);
-    lapTotal = new Label(loader, Integer.toString(logic.getTotalLaps()), font, 2.8f, true, new Vector2f(105, 2), 30);
+    lapTotal = new Label(loader, Integer.toString(logic.getTotalLaps()), font, 2.8f, true,
+        new Vector2f(105, 2), 30);
     lapTotal.setParent(lapDisplay);
     lapTotal.setColour(1, 1, 1);
   }
 
   /**
-   * Create a track model 
+   * Create a track model
    * 
    * @return
    * @author Reece Bennett
@@ -385,7 +389,7 @@ public class MultiplayerGame implements GameInt {
       Vector3f rBarrierT = new Vector3f(rightPoint).add(0, barrierHeight, 0);
       Vector3f lBarrierB = new Vector3f(leftPoint).add(left.x * b, -trackHeight, left.y * b);
       Vector3f rBarrierB = new Vector3f(rightPoint).add(right.x * b, -trackHeight, right.y * b);
-      
+
       addToArray(lBarrierB, vertices, i * 18 + 0);
       addToArray(lBarrierT, vertices, i * 18 + 3);
       addToArray(leftPoint, vertices, i * 18 + 6);
