@@ -10,10 +10,8 @@ import physics.core.Ship;
 import trackDesign.SeedTrack;
 import trackDesign.TrackPoint;
 
-/**
- * @author rtm592
- * @author Tudor Suruceanu
- */
+/** @author rtm592
+ * @author Tudor Suruceanu */
 public class GameLogic {
 
 	private float playerDist;
@@ -27,16 +25,14 @@ public class GameLogic {
 	private int currentLap;
 	private boolean finished;
 
-	/**
-	 * Constructor
+	/** Constructor
 	 * 
 	 * @param player
-	 *            The player's ship
+	 *        The player's ship
 	 * @param opponents
-	 *            Other ships in the race
+	 *        Other ships in the race
 	 * @param track
-	 *            The track seed of the race
-	 */
+	 *        The track seed of the race */
 	public GameLogic(Ship player, ArrayList<Ship> opponents, SeedTrack track, int laps) {
 
 		this.player = player;
@@ -56,12 +52,10 @@ public class GameLogic {
 		finished = false;
 	}
 
-	/**
-	 * Calculate the distance from the first track point to each of the others
+	/** Calculate the distance from the first track point to each of the others
 	 * 
 	 * @param track
-	 *            The list of track points
-	 */
+	 *        The list of track points */
 	private void calculatePointsDist() {
 		if (!trackPoints.isEmpty()) {
 			pointsDist.put(trackPoints.get(0), 0f);
@@ -75,9 +69,7 @@ public class GameLogic {
 		}
 	}
 
-	/**
-	 * Update the last point the player surpassed
-	 */
+	/** Update the last point the player surpassed */
 	private void updateLastPoint() {
 		Vector3f playerPos = player.getPosition();
 
@@ -99,45 +91,35 @@ public class GameLogic {
 				finished = true;
 			} else {
 				int left = laps - currentLap;
-				if (left > 1)
-					System.err.println((laps - currentLap) + " MORE LAPS!");
-				else
-					System.err.println("1 MORE LAP!");
+				if (left > 1) System.err.println((laps - currentLap) + " MORE LAPS!");
+				else System.err.println("1 MORE LAP!");
 				currentLap++;
 			}
 			return;
 		}
-		if (lastTrackPoint < last)
-			System.err.println("WRONG WAY!");
-		if (lastTrackPoint - last > 1)
-			System.err.println("PENALTY: You left the track!");
+		if (lastTrackPoint != last) System.out.println("Checkpoint " + lastTrackPoint);
+		if (lastTrackPoint < last) System.err.println("WRONG WAY!");
+		if (lastTrackPoint - last > 1) System.err.println("PENALTY: You left the track!");
 
 	}
 
-	/**
-	 * Calculate the distance travelled by the player from the start
+	/** Calculate the distance travelled by the player from the start
 	 * 
-	 * @return The distance travelled by the player
-	 */
+	 * @return The distance travelled by the player */
 	private float calculatePlayerDist() {
 		float distance = pointsDist.get(trackPoints.get(lastTrackPoint));
 		Vector3f playerPos = player.getPosition();
 		TrackPoint last = trackPoints.get(lastTrackPoint);
 		TrackPoint next;
-		if (lastTrackPoint + 1 < trackPoints.size())
-			next = trackPoints.get(lastTrackPoint + 1);
-		else
-			next = trackPoints.get(0);
-		float orth = Intersectionf.distancePointLine(playerPos.x(), playerPos.z(), last.getX(), last.getY(),
-				next.getX(), next.getY());
+		if (lastTrackPoint + 1 < trackPoints.size()) next = trackPoints.get(lastTrackPoint + 1);
+		else next = trackPoints.get(0);
+		float orth = Intersectionf.distancePointLine(playerPos.x(), playerPos.z(), last.getX(), last.getY(), next.getX(), next.getY());
 		float ip = last.distance(playerPos.x(), playerPos.z());
 		distance += Math.sqrt(ip * ip - orth * orth);
 		return distance;
 	}
 
-	/**
-	 * General update method
-	 */
+	/** General update method */
 	public void update() {
 
 		updateLastPoint();
@@ -146,57 +128,45 @@ public class GameLogic {
 		// get rankings from the server
 	}
 
-	/**
-	 * Update information about the ranking
+	/** Update information about the ranking
 	 * 
 	 * @param ranking
-	 *            The current ranking
-	 */
+	 *        The current ranking */
 	public void setRankings(HashMap<Integer, Integer> ranking) {
 		this.ranking = ranking;
 	}
 
-	/**
-	 * Get the distance travelled by the player from the start
+	/** Get the distance travelled by the player from the start
 	 * 
-	 * @return The distance a player has travelled from the start
-	 */
+	 * @return The distance a player has travelled from the start */
 	public float getPlayerDist() {
 		return playerDist;
 	}
 
-	/**
-	 * Get the current lap the player is completing
+	/** Get the current lap the player is completing
 	 * 
-	 * @return The current lap
-	 */
+	 * @return The current lap */
 	public int getCurrentLap() {
 		return currentLap;
 	}
 
-	/**
-	 * Get the last track point the player surpassed
+	/** Get the last track point the player surpassed
 	 * 
-	 * @return The last track point the player surpassed
-	 */
+	 * @return The last track point the player surpassed */
 	public int getLastPoint() {
 		return lastTrackPoint;
 	}
 
-	/**
-	 * Get the current ranking in the race
+	/** Get the current ranking in the race
 	 * 
-	 * @return The current ranking
-	 */
+	 * @return The current ranking */
 	public HashMap<Integer, Integer> getRankings() {
 		return ranking;
 	}
 
-	/**
-	 * Check if the player has finished the race
+	/** Check if the player has finished the race
 	 * 
-	 * @return Whether the player has finished the race
-	 */
+	 * @return Whether the player has finished the race */
 	public boolean finishedRace() {
 		return finished;
 	}
