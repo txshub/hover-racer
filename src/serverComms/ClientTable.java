@@ -114,7 +114,8 @@ public class ClientTable {
 
   public boolean addGame(GameSettings gameSettings) {
     allGames.put(nextInt, new GameRoom(nextInt, gameSettings.lobbyName, gameSettings.seed,
-        gameSettings.maxPlayers, gameSettings.hostName, this, false));
+    		gameSettings.maxPlayers, gameSettings.hostName, gameSettings.lapCount, this));
+
     lobby.games.add(getGame(nextInt));
     nextInt++;
     return joinGame(nextInt-1, gameSettings.setupData);

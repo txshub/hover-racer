@@ -55,14 +55,22 @@ public class Client extends Thread {
     this.clientName = clientName;
     this.portNumber = portNumber;
     this.machineName = machineName;
+
+    Socket testConn = null;
+
     try {
-      Socket testConn = new Socket(machineName, portNumber);
+      testConn = new Socket(machineName, portNumber);
       toServer = new DataOutputStream(new BufferedOutputStream(testConn.getOutputStream()));
       sendByteMessage(new byte[0], ServerComm.TESTCONN);
     } catch (UnknownHostException e) {
       serverOn = false;
     } catch (IOException e) {
       serverOn = false;
+    } finally {
+    	try {
+			testConn.close();
+		} catch (IOException e) {
+		}
     }
   }
 
@@ -127,6 +135,11 @@ public class Client extends Thread {
 
   public void startGame() throws IOException{
 	  sendByteMessage(new byte[0], ServerComm.STARTGAME);
+  }
+  
+  public void startSinglePlayerGame(long seed, int numAI, int lapCount, ShipSetupData data) throws IOException {
+	 createGame(seed, numAI+1, lapCount, "1", data);
+	 startGame();
   }
   
   public GameRoom getUpdatedRoom() throws IOException {
