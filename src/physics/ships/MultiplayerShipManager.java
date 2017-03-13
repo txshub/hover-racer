@@ -43,7 +43,7 @@ public class MultiplayerShipManager implements ServerShipProvider {
 		// Create all RemoteShips
 		this.remotes = new ArrayList<Ship>();
 		for (byte id = 0; id < models.size(); id++) {
-			if (id == playerId) id++; // Don't give them player's id
+			if (id == playerId) continue; // Don't give them player's id
 			RemoteShip remoteShip = new RemoteShip(id, models.get(id), startingPositions.get(id), ground, this);
 			remoteShip.setRotation(startingOrientation);
 			remotes.add(remoteShip);
@@ -100,8 +100,7 @@ public class MultiplayerShipManager implements ServerShipProvider {
 	 * The server won't know about it, but it will collide with things. Call
 	 * before addShipsTo(entities) or it won't be rendered.
 	 * 
-	 * @param aiShip
-	 *        The AIShip to be added */
+	 * @param aiShip The AIShip to be added */
 	public void addAI(AIShip aiShip) {
 		remotes.forEach(r -> r.addOtherShip(aiShip));
 		player.addOtherShip(aiShip);
