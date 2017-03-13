@@ -28,7 +28,7 @@ public class CreateGameRoom extends GridPane {
 		this.setAlignment(Pos.CENTER);
 		this.setHgap(40);
 		this.setVgap(3);
-		this.setPadding(new Insets(20, 10, 0, 10));
+		this.setPadding(new Insets(20, 10, 0, 30));
 
 		VBox box6 = new VBox(10);
 		GridPane.setRowSpan(box6, 2);
@@ -61,31 +61,28 @@ public class CreateGameRoom extends GridPane {
 			}
 
 			Map track = null;
-			int num = 0;
 			try {
 
 				track = new Map(Integer.valueOf(seedInput.getText()));
 				box6.getChildren().add(track);
-			} catch (Exception e) {
-				e.printStackTrace();
-				try {
+				
+			} catch (NumberFormatException e) {
+
+					int num = 0;
 					for (int i = 0; i < seedInput.getText().length(); i++) {
 						num *= (int) seedInput.getText().charAt(i);
 					}
 					track = new Map(num);
 					box6.getChildren().add(track);
-				} catch (Exception ex) {
-					ex.printStackTrace();
+			}
+			catch (Exception e) {
 					try {
 						PopUpWindow.display("NULL SEED");
 					} catch (IOException ex1) {
 						ex1.printStackTrace();
 						System.err.println("POP UP NOT WORKING");
 					}
-				}
-
 			}
-
 		});
 
 		MenuButton createGameRoom = new MenuButton("START GAME", 350, 70, 30);
@@ -112,26 +109,15 @@ public class CreateGameRoom extends GridPane {
 						DataGenerator.basicShipSetup(usernameInput.getText()));
 
 			} catch (NumberFormatException e) {
+				
 				int num = 0;
-				try {
-					for (int i = 0; i < seedInput.getText().length(); i++) {
-						num *= (int) seedInput.getText().charAt(i);
-					}
+				for (int i = 0; i < seedInput.getText().length(); i++) {
+					num *= (int) seedInput.getText().charAt(i);
+			}
 
-					localClient.startSinglePlayerGame(num, Integer.valueOf(noAIsInput.getText()),
-							Integer.valueOf(noLapsInput.getText()),
-							DataGenerator.basicShipSetup(usernameInput.getText()));
-				} catch (Exception ex) {
-					try {
-						PopUpWindow.display("NUMBER FORMAT EXCEPTION");
-					} catch (IOException e1) {
-						System.err.println("POP UP ERROR");
-					}
-				}
+			} catch (IOException exp) {
 
-			} catch (IOException e) {
-
-				e.printStackTrace();
+				exp.printStackTrace();
 			}
 
 			AudioMaster.cleanUp();
