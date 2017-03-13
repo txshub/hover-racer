@@ -155,14 +155,6 @@ public class MultiplayerGame implements GameInt {
     // Player following camera
     camera = new Camera(ships.getPlayerShip());
 
-    // GUIs
-    setupGUIs();
-
-    // Renderers
-    renderer = new MasterRenderer(loader);
-    guiRender = new GuiRenderer(loader);
-    uiRenderer = new UIRenderer(loader);
-
     // Camera rotation with right click
     // picker = new MousePicker(camera, renderer.getProjectionMatrix(),
     // terrains);
@@ -170,6 +162,14 @@ public class MultiplayerGame implements GameInt {
     // Tudor
     ArrayList<Ship> opponents = new ArrayList<Ship>();
     logic = new GameLogic(ships.getPlayerShip(), opponents, st, 4);
+
+    // GUIs
+    setupGUIs();
+
+    // Renderers
+    renderer = new MasterRenderer(loader);
+    guiRender = new GuiRenderer(loader);
+    uiRenderer = new UIRenderer(loader);
 
     AudioMaster.playInGameMusic();
     try {
