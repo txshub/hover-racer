@@ -666,7 +666,7 @@ public class GameMenu extends Parent {
   public void buildSingleGameWindow(){
 	  
 	  singleGameWindow.setTranslateX(700);
-	  singleGameWindow.setTranslateY(50);
+	  singleGameWindow.setTranslateY(80);
 	  
   }
   
