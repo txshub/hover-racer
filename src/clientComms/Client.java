@@ -62,15 +62,11 @@ public class Client extends Thread {
       testConn = new Socket(machineName, portNumber);
       toServer = new DataOutputStream(new BufferedOutputStream(testConn.getOutputStream()));
       sendByteMessage(new byte[0], ServerComm.TESTCONN);
+      testConn.close();
     } catch (UnknownHostException e) {
       serverOn = false;
     } catch (IOException e) {
       serverOn = false;
-    } finally {
-    	try {
-			testConn.close();
-		} catch (IOException e) {
-		}
     }
   }
 
