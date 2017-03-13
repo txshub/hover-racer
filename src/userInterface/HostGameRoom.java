@@ -85,25 +85,42 @@ public class HostGameRoom extends GridPane {
 
   }
   
+  public void setSettings(){
+	  
+	  try {
+		  this.gameRoomSeed = Integer.valueOf(seedInput.getText());
+		  this.maxPlayers = Integer.valueOf(noPlayersInput.getText());
+		  this.lapNo = Integer.valueOf(noLapsInput.getText());
+		  this.gameRoomName = nameInput.getText();
+	  }
+	  catch(Exception e){
+	    	
+	    	try {
+	    		PopUpWindow.display("NULL INPUT");
+	    	}
+	    	catch (IOException ex){
+	    		System.err.println("POP UP NOT WORKING");
+	    	}
+			
+	    }
+  }
+  
   public void setSeed(){
 	  
-	  this.gameRoomSeed = Integer.valueOf(seedInput.getText());
+	 try {
+		 this.gameRoomSeed = Integer.valueOf(seedInput.getText());
+	 }
+	 catch (Exception e){
+		 
+		 try {
+	    		PopUpWindow.display("NULL SEED");
+	    	}
+	    	catch (IOException ex){
+	    		System.err.println("POP UP NOT WORKING");
+	    	}
+	 }
   }
   
-  public void setMaxPlayers(){
-	  
-	  this.maxPlayers = Integer.valueOf(noPlayersInput.getText());
-  }
-  
-  public void setNoLaps(){
-	  
-	  this.lapNo = Integer.valueOf(noLapsInput.getText());
-  }
-  
-  public void setName(){
-	  
-	  this.gameRoomName = nameInput.getText();
-  }
   
   public int getSeed(){
 	  

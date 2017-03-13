@@ -9,7 +9,6 @@ import javafx.animation.TranslateTransition;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
@@ -31,7 +30,7 @@ public class GameMenu extends Parent {
 
   private GridPane initialWindow, settingsWindow, connectMultiWindow, hostGameRoomWindow, joinGameRoomWindow;
   private VBox multiOptionsWindow, singleGameWindow;
-  private MenuButton btnPlayGame, btnPlayAI, btnOptions, btnSound, btnMusic, btnExit, btnBackSettings,
+  private MenuButton btnPlayGame, btnPlayAI, btnOptions, btnExit, btnBackSettings,
   			 		 btnBackMulti, btnBackSingle, btnBackHost, btnBackMultiOptions, btnBackJoin;
   private SoundSlider soundSlider;
   private MusicSlider musicSlider;
@@ -379,8 +378,12 @@ public class GameMenu extends Parent {
     }
     catch(Exception e){
     	
-    	PopUpWindow popUp = new PopUpWindow("INVALID INPUT");
-		popUp.display();
+    	try {
+    		PopUpWindow.display("INVALID INPUT");
+    	}
+    	catch (IOException ex){
+    		System.err.println("POP UP NOT WORKING");
+    	}
 		
     }
     
@@ -513,14 +516,10 @@ public class GameMenu extends Parent {
 
     hostGameRoomButton.setOnMouseClicked(event -> {
     	
-      // create a game room
-      hostGameRoom.setSeed();
-      hostGameRoom.setMaxPlayers();
-      hostGameRoom.setNoLaps();
-      hostGameRoom.setName();
-      
       try {
   
+       hostGameRoom.setSettings();  
+       
        gameRoom =  client.createGame(hostGameRoom.getSeed(), hostGameRoom.getMaxPlayers(), hostGameRoom.getNoLaps(), 
     		       hostGameRoom.getName(), DataGenerator.basicShipSetup(client.clientName));
        gameRoomLobby = new GameRoomLobby(gameRoom);
@@ -544,7 +543,8 @@ public class GameMenu extends Parent {
 
       } catch (IOException e) {
 
-        e.printStackTrace();
+        System.err.println("HOSTING DIDN'T WORK");
+        
       }
 
     });

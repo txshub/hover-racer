@@ -1,8 +1,15 @@
 package userInterface;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -13,15 +20,10 @@ import javafx.stage.Stage;
 
 public class PopUpWindow {
 	
-	private static Text popUpText;
-	
-	public PopUpWindow(String popUp){
+	public static void display(String popText) throws IOException {
 		
-		TextStyle popUpStyle = new TextStyle(popUp, 25);
-		this.popUpText = popUpStyle.getTextStyled();
-	}
-	
-	public static void display() {
+		TextStyle popUpStyle = new TextStyle(popText, 25);
+		Text popUpText = popUpStyle.getTextStyled();
 		
 		Stage popUp=new Stage();
 	      
@@ -35,17 +37,24 @@ public class PopUpWindow {
 		});
 		
 		Rectangle background = new Rectangle(500,400);
+		background.setOpacity(0.6);
 		background.setFill(Color.BLACK);
 		
 		GridPane box = new GridPane();
 		box.setPadding(new Insets (50,100,50,100));
-		box.setVgap(10);
+		box.setVgap(20);
 		box.add(popUpText, 0, 1);
-		box.setHalignment(popUpText, HPos.CENTER);
+		GridPane.setHalignment(popUpText, HPos.CENTER);
 		box.add(btnClose, 0, 2);
 	
+		InputStream is = Files.newInputStream(Paths.get("src/resources/img/hover-racerNew.jpg"));
+	    Image image = new Image(is);
+	    is.close();
+
+	    ImageView imgView = new ImageView(image);
+		
 		Pane layout = new Pane();
-		layout.getChildren().addAll(background, box); 
+		layout.getChildren().addAll(background, imgView, box); 
 		      
 		Scene scene1= new Scene(layout, 400, 200);
 		      

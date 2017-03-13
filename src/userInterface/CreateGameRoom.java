@@ -1,5 +1,7 @@
 package userInterface;
 
+import java.io.IOException;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
@@ -56,8 +58,21 @@ public class CreateGameRoom extends GridPane {
         box6.getChildren().remove(0);
       }
 
-      Map track = new Map(Integer.valueOf(seedInput.getText()));
-      box6.getChildren().add(track);
+     try {
+    	 
+    	 Map track = new Map(Integer.valueOf(seedInput.getText()));
+    	 box6.getChildren().add(track);
+     }
+     catch(Exception e){
+     	
+     	try {
+     		PopUpWindow.display("NULL SEED");
+     	}
+     	catch (IOException ex){
+     		System.err.println("POP UP NOT WORKING");
+     	}
+ 		
+     }
 
     });
 
