@@ -56,5 +56,4 @@ public class Maths {
     viewMatrix.translate(negativeCameraPos);
     return viewMatrix;
   }
-
 }

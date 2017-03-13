@@ -25,5 +25,4 @@ public class TextureData {
   public ByteBuffer getBuffer() {
     return buffer;
   }
-
 }

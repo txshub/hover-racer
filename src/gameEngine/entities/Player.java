@@ -4,6 +4,7 @@ import org.joml.Vector3f;
 
 import gameEngine.models.TexturedModel;
 import input.Action;
+import input.InputController;
 import input.KeyboardController;
 
 /** @author rtm592 */

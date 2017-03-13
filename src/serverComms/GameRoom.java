@@ -37,6 +37,7 @@ public class GameRoom {
 	private boolean isSinglePlayer;
 
 	public GameRoom(int id, String name, long seed, int maxPlayers, String hostName, ClientTable table, boolean isSinglePlayer) {
+		System.out.println(hostName + " created a game room " + name + " with id " + id);
 		this.id = id;
 		this.name = name;
 		this.seed = seed;
@@ -47,6 +48,9 @@ public class GameRoom {
 		this.isSinglePlayer = isSinglePlayer;
 		// Generate the track
 		SeedTrack st = TrackMaker.makeTrack(seed, 10, 20, 30, 1, 40, 40, 4);
+		for (TrackPoint tp : st.getTrack()) {
+			tp.mul(20);
+		}
 		trackPoints = st.getTrack();
 	}
 
@@ -227,7 +231,7 @@ public class GameRoom {
 		// TODO temporary thing here:
 		Map<Byte, Vector3f> res = new HashMap<>();
 		for (int i = 0; i < maxPlayers; i++) {
-			res.put((byte) i, new Vector3f(trackPoints.get(0).x, i * 10 + 5, trackPoints.get(0).y));
+			res.put((byte) i, new Vector3f(trackPoints.get(0).x + i * 40, 5, trackPoints.get(0).y));
 		}
 		return res;
 	}
@@ -251,6 +255,10 @@ public class GameRoom {
 
 	public int getNoPlayers() {
 		return maxPlayers;
+	}
+
+	public void update(float delta) {
+		shipManager.update(delta);
 	}
 
 

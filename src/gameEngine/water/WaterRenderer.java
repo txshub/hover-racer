@@ -90,5 +90,4 @@ public class WaterRenderer {
     float[] vertices = { -1, -1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1 };
     quad = loader.loadToVAO(vertices, 2);
   }
-
 }

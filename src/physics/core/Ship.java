@@ -213,7 +213,7 @@ public abstract class Ship extends Entity {
 
 	/** Changes the velocity to account for a collision with a different ship */
 	private void collideWith(Ship ship) {
-		System.out.println("COLLISION! " + ship + " vs " + this);
+		// System.out.println("COLLISION! " + ship + " vs " + this);
 		Vector3 pos = ship.getInternalPosition().copy();
 		float expectedDistance = ship.getSize() + this.getSize();
 		// Apply momentum
@@ -263,10 +263,10 @@ public abstract class Ship extends Entity {
 
 	public void updateFromPacket(byte[] bytes) {
 		ExportedShip remote = new ExportedShip(bytes);
-		this.position = remote.getPosition();
-		this.velocity = remote.getVelocity();
-		this.rotation = remote.getRotation();
-		this.rotationalVelocity = remote.getRotationalVelocity();
+		this.position.set(remote.getPosition());
+		this.velocity.set(remote.getVelocity());
+		this.rotation.set(remote.getRotation());
+		this.rotationalVelocity.set(remote.getRotationalVelocity());
 	}
 
 	public byte[] export() {
