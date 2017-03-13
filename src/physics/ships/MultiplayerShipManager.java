@@ -32,9 +32,31 @@ public class MultiplayerShipManager implements ServerShipProvider {
 	private Map<Byte, byte[]> packets;
 
 	public MultiplayerShipManager(RaceSetupData data, GroundProvider ground, InputController input, Loader loader) {
-		this(data.getYourId(), input, makeModels(data.getModels(), data.getTextures(), loader), data.getStartingPositions(), ground);
+		this(data.getYourId(), input, makeModels(data.getModels(), data.getTextures(), loader), data.getStartingPositions(),
+			data.getStartingOrientation(), ground);
 	}
 
+	public MultiplayerShipManager(byte playerId, InputController input, List<TexturedModel> models, List<Vector3f> startingPositions,
+		Vector3f startingOrientation, GroundProvider ground) {
+		this.packets = new HashMap<Byte, byte[]>();
+
+		// Create all RemoteShips
+		this.remotes = new ArrayList<Ship>();
+		for (byte id = 0; id < models.size(); id++) {
+			if (id == playerId) continue; // Don't give them player's id
+			RemoteShip remoteShip = new RemoteShip(id, models.get(id), startingPositions.get(id), ground, this);
+			remoteShip.setRotation(startingOrientation);
+			remotes.add(remoteShip);
+			System.out.println("Created: " + remoteShip);
+		}
+		// Tell ships about each other
+		remotes.forEach(r -> r.addOtherShips(remotes));
+		// Finally create the player
+		this.player = new PlayerShip(playerId, models.get(playerId), startingPositions.get(playerId), remotes, ground, input);
+		remotes.forEach(r -> r.addOtherShip(player));
+	}
+
+	@Deprecated
 	public MultiplayerShipManager(byte playerId, InputController input, TexturedModel playerTexture,
 		Collection<TexturedModel> otherTextures, ArrayList<Vector3f> startingPositions, GroundProvider ground) {
 		this.packets = new HashMap<Byte, byte[]>();
@@ -50,24 +72,6 @@ public class MultiplayerShipManager implements ServerShipProvider {
 		remotes.forEach(r -> r.addOtherShips(remotes));
 		// Finally create the player
 		this.player = new PlayerShip(playerId, playerTexture, startingPositions.get(playerId), remotes, ground, input);
-		remotes.forEach(r -> r.addOtherShip(player));
-	}
-
-	public MultiplayerShipManager(byte playerId, InputController input, List<TexturedModel> models, List<Vector3f> startingPositions,
-		GroundProvider ground) {
-		this.packets = new HashMap<Byte, byte[]>();
-
-		// Create all RemoteShips
-		this.remotes = new ArrayList<Ship>();
-		for (byte id = 0; id < models.size(); id++) {
-			if (id == playerId) id++; // Don't give them player's id
-			remotes.add(new RemoteShip(id, models.get(id), startingPositions.get(id), ground, this));
-			System.out.println("Created: " + remotes.get(remotes.size() - 1));
-		}
-		// Tell ships about each other
-		remotes.forEach(r -> r.addOtherShips(remotes));
-		// Finally create the player
-		this.player = new PlayerShip(playerId, models.get(playerId), startingPositions.get(playerId), remotes, ground, input);
 		remotes.forEach(r -> r.addOtherShip(player));
 	}
 
@@ -96,8 +100,7 @@ public class MultiplayerShipManager implements ServerShipProvider {
 	 * The server won't know about it, but it will collide with things. Call
 	 * before addShipsTo(entities) or it won't be rendered.
 	 * 
-	 * @param aiShip
-	 *        The AIShip to be added */
+	 * @param aiShip The AIShip to be added */
 	public void addAI(AIShip aiShip) {
 		remotes.forEach(r -> r.addOtherShip(aiShip));
 		player.addOtherShip(aiShip);
