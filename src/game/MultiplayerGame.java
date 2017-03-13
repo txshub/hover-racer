@@ -121,12 +121,12 @@ public class MultiplayerGame implements GameInt {
 
 		// Track
 		trackSeed = data.getTrackSeed();
-		SeedTrack st = TrackMaker.makeTrack(trackSeed, 10, 20, 30, 1, 40, 40, 4);
+		SeedTrack st = TrackMaker.makeTrack(trackSeed);
 		trackPoints = st.getTrack();
 
 		// Scale up the track so it isn't so tiny
 		for (TrackPoint tp : st.getTrack()) {
-			tp.mul(20); // TODO What else do you do with this track?
+			tp.mul(20);
 		}
 		trackPoints = st.getTrack();
 
@@ -164,7 +164,7 @@ public class MultiplayerGame implements GameInt {
 
 		// Tudor
 		ArrayList<Ship> opponents = new ArrayList<Ship>();
-		logic = new GameLogic(ships.getPlayerShip(), opponents, st, 4);
+		logic = new GameLogic(ships.getPlayerShip(), opponents, st, data.laps);
 
 		AudioMaster.playInGameMusic();
 		try {
@@ -178,6 +178,8 @@ public class MultiplayerGame implements GameInt {
 
 	public void update(float delta) {
 		input.update();
+
+		if (System.nanoTime() > startsAt) ships.startRace();
 
 		// Tudor
 		logic.update();

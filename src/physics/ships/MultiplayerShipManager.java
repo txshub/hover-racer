@@ -85,6 +85,13 @@ public class MultiplayerShipManager implements ServerShipProvider {
 		return player;
 	}
 
+	/** Starts the race, allowing input through. This is when racing actually starts, so probably a few seconds after the game is loaded. */
+	public void startRace() {
+		player.start();
+		remotes.forEach(r -> r.start());
+		// TODO other effects when starting race?
+	}
+
 	/** Adds a client-side AI to a multiplayer game, only to be used for testing.
 	 * The server won't know about it, but it will collide with things. Call
 	 * before addShipsTo(entities) or it won't be rendered.

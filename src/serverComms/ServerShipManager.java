@@ -68,4 +68,8 @@ public class ServerShipManager implements ServerShipProvider {
 		return Optional.ofNullable(packets.remove(id));
 	}
 
+	public void startRace() {
+		ships.forEach(s -> s.start());
+	}
+
 }

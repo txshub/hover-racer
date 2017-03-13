@@ -15,8 +15,8 @@ import trackDesign.TrackPoint;
 
 public class GameRoom {
 
-	private static final long TIME_TO_START = 3000000000L; // Time to start race
-															// in nanoseconds
+	private static final long TIME_TO_START = 4L * 1000000000L; // Time to start race
+																// in nanoseconds
 	private static final int SIDE_DISTANCES = 10;
 	private static final int FORWARD_DISTANCES = 10;
 	private static final int STARTING_HEIGHT = 10;
@@ -36,6 +36,8 @@ public class GameRoom {
 	private ServerShipManager shipManager;
 	private UpdateAllUsers updatedUsers;
 
+	private long raceStartsAt = -1;
+
 	public GameRoom(int id, String name, long seed, int maxPlayers, String hostName, int lapCount, ClientTable table) {
 		System.out.println(hostName + " created a game room " + name + " with id " + id);
 		this.id = id;
@@ -47,7 +49,7 @@ public class GameRoom {
 		this.table = table;
 		this.ships = new ArrayList<ShipSetupData>(maxPlayers);
 		// Generate the track
-		SeedTrack st = TrackMaker.makeTrack(seed, 10, 20, 30, 1, 40, 40, 4);
+		SeedTrack st = TrackMaker.makeTrack(seed);
 		for (TrackPoint tp : st.getTrack()) {
 			tp.mul(20);
 		}
@@ -91,7 +93,7 @@ public class GameRoom {
 		hostName = collected;
 		collected = "";
 		in = in.substring(1);
-		while(in.charAt(0) != '|') {
+		while (in.charAt(0) != '|') {
 			collected += in.charAt(0);
 			in = in.substring(1);
 		}
@@ -165,6 +167,7 @@ public class GameRoom {
 				table.getQueue(players.get(i)).offer(new ByteArrayByte(Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA));
 				allQueues.add(table.getQueue(players.get(i)));
 			}
+			raceStartsAt = System.nanoTime() + TIME_TO_START;
 			updatedUsers = new UpdateAllUsers(allQueues, this);
 			updatedUsers.start();
 		}
@@ -198,7 +201,7 @@ public class GameRoom {
 		}
 		Vector2f startDirection = trackPoints.get(0).sub(trackPoints.get(1));
 		return new RaceSetupData(resShips, generateStartingPositions(startDirection),
-			new Vector3f(0, (float) Math.atan2(startDirection.x, startDirection.y), 0), seed, TIME_TO_START);
+			new Vector3f(0, (float) Math.atan2(startDirection.x, startDirection.y), 0), seed, TIME_TO_START, lapCount);
 	}
 
 	// TODO finish this
@@ -263,9 +266,11 @@ public class GameRoom {
 	}
 
 	public void update(float delta) {
+		if (raceStartsAt == -1) throw new IllegalStateException("Update called before the race was started");
+		if (System.nanoTime() >= raceStartsAt) shipManager.startRace();
 		shipManager.update(delta);
 	}
-	
+
 	public int getLaps() {
 		return lapCount;
 	}
