@@ -132,7 +132,7 @@ public class MultiplayerGame implements GameInt {
     }
     trackPoints = st.getTrack();
 
-    TexturedModel trackModel = createTrackModel(trackSeed);
+    TexturedModel trackModel = createTrackModel();
     Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 1f);
     entities.add(track);
 
@@ -322,13 +322,12 @@ public class MultiplayerGame implements GameInt {
   }
 
   /**
-   * Create a track model from a seed
+   * Create a track model 
    * 
-   * @param seed
    * @return
    * @author Reece Bennett
    */
-  private TexturedModel createTrackModel(long seed) {
+  private TexturedModel createTrackModel() {
     float trackHeight = 1;
     float barrierHeight = 20;
     float barrierWidth = 10;
@@ -343,10 +342,6 @@ public class MultiplayerGame implements GameInt {
     // TODO Actually implement textures
     for (int i = 0; i < texCoords.length; i++) {
       texCoords[i] = 0;
-    }
-
-    for (int i = 0; i < normals.length; i += 3) {
-      addToArray(new Vector3f(0, 1, 0), normals, i);
     }
 
     // We can pre-calculate some stuff for normals
@@ -387,7 +382,7 @@ public class MultiplayerGame implements GameInt {
       Vector3f rBarrierT = new Vector3f(rightPoint).add(0, barrierHeight, 0);
       Vector3f lBarrierB = new Vector3f(leftPoint).add(left.x * b, -trackHeight, left.y * b);
       Vector3f rBarrierB = new Vector3f(rightPoint).add(right.x * b, -trackHeight, right.y * b);
-
+      
       addToArray(lBarrierB, vertices, i * 18 + 0);
       addToArray(lBarrierT, vertices, i * 18 + 3);
       addToArray(leftPoint, vertices, i * 18 + 6);

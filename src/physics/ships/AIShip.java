@@ -68,6 +68,7 @@ public class AIShip extends Ship {
 		float rot = getRotation().y;
 
 		TrackPoint nextPoint = track.get(nextPointIndex);
+		//System.out.println("AI " + getId() + " nextPoint " + nextPointIndex + " : " + nextPoint);
 		Vector2f dirToPoint = new Vector2f(nextPoint).sub(pos);
 		Vector2f dirVec = new Vector2f((float) Math.sin(Math.toRadians(rot)), (float) Math.cos(Math.toRadians(rot)));
 

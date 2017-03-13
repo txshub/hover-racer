@@ -190,7 +190,7 @@ public class GameRoom {
 			if (i < ships.size()) resShips.put((byte) i, ships.get(i)); // Players
 			else resShips.put((byte) i, AIBuilder.fakeAIData()); // AIs
 		}
-		Vector2f startDirection = trackPoints.get(0).sub(trackPoints.get(1));
+		Vector2f startDirection = new Vector2f(trackPoints.get(1)).sub(trackPoints.get(0));
 		return new RaceSetupData(resShips, generateStartingPositions(startDirection),
 			new Vector3f(0, (float) Math.atan2(startDirection.x, startDirection.y), 0), seed, TIME_TO_START);
 	}
@@ -230,6 +230,7 @@ public class GameRoom {
 		// TODO temporary thing here:
 		Map<Byte, Vector3f> res = new HashMap<>();
 		for (int i = 0; i < maxPlayers; i++) {
+		  System.out.println("Trackpoint gameroom: " + trackPoints.get(0));
 			res.put((byte) i, new Vector3f(trackPoints.get(0).x + i * 40, 5, trackPoints.get(0).y));
 		}
 		return res;
