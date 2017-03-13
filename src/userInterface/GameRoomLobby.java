@@ -24,10 +24,11 @@ public class GameRoomLobby extends GridPane {
     this.gameRoom = gameRoom;
     
     int maxPlayers = gameRoom.getNoPlayers();
+    
     int k = 0;
 
     ArrayList<String> playerNames = gameRoom.getPlayers();
-
+ 
     VBox playerNamesBox = new VBox(10);
 
     for (int i = 0; i < playerNames.size(); i++) {
@@ -39,7 +40,7 @@ public class GameRoomLobby extends GridPane {
       k++;
     }
     
-    for (int i=k; i<= maxPlayers; i++){
+    for (int i=k; i< maxPlayers; i++){
     	
     	TextStyle placeholder = new TextStyle("....................................", 25);
     	Text placeholderText = placeholder.getTextStyled();

@@ -35,6 +35,12 @@ public class ClientTable {
                                                                               // respective
                                                                               // IDs
   private int nextInt = 0;
+  
+  private Lobby lobby;
+  
+  public ClientTable(Lobby lobby) {
+	  this.lobby = lobby;
+  }
 
   /**
    * Checks if the user exists already
@@ -108,7 +114,9 @@ public class ClientTable {
 
   public boolean addGame(GameSettings gameSettings) {
     allGames.put(nextInt, new GameRoom(nextInt, gameSettings.lobbyName, gameSettings.seed,
-        gameSettings.maxPlayers, gameSettings.hostName, gameSettings.lapCount, this));
+    		gameSettings.maxPlayers, gameSettings.hostName, gameSettings.lapCount, this));
+
+    lobby.games.add(getGame(nextInt));
     nextInt++;
     return joinGame(nextInt-1, gameSettings.setupData);
   }
