@@ -83,6 +83,8 @@ public class MultiplayerGame implements GameInt {
   private Container menu;
   private Label posCurrent;
   private Label posTotal;
+  private Label lapCurrent;
+  private Label lapTotal;
   private UIRenderer uiRenderer;
   private ArrayList<Container> containers;
 
@@ -279,25 +281,25 @@ public class MultiplayerGame implements GameInt {
     });
     Label resumeText = new Label(loader, "RESUME", font, 2.5f, true, new Vector2f(0, 8), 266);
     resumeText.setParent(resumeButton);
-    resumeText.setColor(colour);
+    resumeText.setColour(colour);
 
     Button optionsButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 160));
     optionsButton.setParent(menu);
     Label optionsText = new Label(loader, "OPTIONS", font, 2.5f, true, new Vector2f(0, 8), 266);
     optionsText.setParent(optionsButton);
-    optionsText.setColor(colour);
+    optionsText.setColour(colour);
 
     Button lobbyButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 256));
     lobbyButton.setParent(menu);
     Label lobbyText = new Label(loader, "LOBBY", font, 2.5f, true, new Vector2f(0, 8), 266);
     lobbyText.setParent(lobbyButton);
-    lobbyText.setColor(colour);
+    lobbyText.setColour(colour);
 
     Button menuButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 352));
     menuButton.setParent(menu);
     Label menuText = new Label(loader, "MENU", font, 2.5f, true, new Vector2f(0, 8), 266);
     menuText.setParent(menuButton);
-    menuText.setColor(colour);
+    menuText.setColour(colour);
 
     menu.setVisibility(true);
 
@@ -307,18 +309,19 @@ public class MultiplayerGame implements GameInt {
     posCurrent = new Label(loader, "2", font, 5f, true, new Vector2f(30, 45), 130);
     posCurrent.setParent(posDisplay);
     posCurrent.setColour(1, 1, 1);
-    posCurrent = new Label(loader, "8", font, 2.8f, true, new Vector2f(15, 2), 30);
-    posCurrent.setParent(posDisplay);
-    posCurrent.setColour(1, 1, 1);
+    posTotal = new Label(loader, "8", font, 2.8f, true, new Vector2f(15, 2), 30);
+    posTotal.setParent(posDisplay);
+    posTotal.setColour(1, 1, 1);
 
     Container lapDisplay = new Container(loader, "ui/lapBackground", new Vector2f(21, 10));
     containers.add(lapDisplay);
-    posCurrent = new Label(loader, "2", font, 5f, true, new Vector2f(0, 45), 120);
-    posCurrent.setParent(lapDisplay);
-    posCurrent.setColour(1, 1, 1);
-    posCurrent = new Label(loader, "5", font, 2.8f, true, new Vector2f(105, 2), 30);
-    posCurrent.setParent(lapDisplay);
-    posCurrent.setColour(1, 1, 1);
+    lapCurrent = new Label(loader, Integer.toString(logic.getCurrentLap()), font, 5f, true,
+        new Vector2f(0, 45), 120);
+    lapCurrent.setParent(lapDisplay);
+    lapCurrent.setColour(1, 1, 1);
+    lapTotal = new Label(loader, Integer.toString(logic.getTotalLaps()), font, 2.8f, true, new Vector2f(105, 2), 30);
+    lapTotal.setParent(lapDisplay);
+    lapTotal.setColour(1, 1, 1);
   }
 
   /**
