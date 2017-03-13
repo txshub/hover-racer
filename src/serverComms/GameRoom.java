@@ -15,8 +15,8 @@ import trackDesign.TrackPoint;
 
 public class GameRoom {
 
-	private static final long TIME_TO_START = 3000000000L; // Time to start race
-															// in nanoseconds
+	private static final long TIME_TO_START = 4L * 1000000000L; // Time to start race
+																// in nanoseconds
 	private static final int SIDE_DISTANCES = 10;
 	private static final int FORWARD_DISTANCES = 10;
 	private static final int STARTING_HEIGHT = 10;
@@ -49,7 +49,7 @@ public class GameRoom {
 		this.table = table;
 		this.ships = new ArrayList<ShipSetupData>(maxPlayers);
 		// Generate the track
-		SeedTrack st = TrackMaker.makeTrack(seed, 10, 20, 30, 1, 40, 40, 4);
+		SeedTrack st = TrackMaker.makeTrack(seed);
 		for (TrackPoint tp : st.getTrack()) {
 			tp.mul(20);
 		}
