@@ -29,7 +29,7 @@ public class MultiplayerWithoutGUI {
 		int portNo = PORT;
 		String machineName = MACHINE_NAME;
 
-		client = new Client(usr, PORT, MACHINE_NAME, null);
+		client = new Client(usr, PORT, MACHINE_NAME);
 		client.start();
 
 		// Create a game room
@@ -37,7 +37,7 @@ public class MultiplayerWithoutGUI {
 
 
 		// Create another user
-		Client bob = new Client("Bob", PORT, MACHINE_NAME, null);
+		Client bob = new Client("Bob", PORT, MACHINE_NAME);
 		bob.start();
 
 		// bob.joinGame(GAME_ID, DataGenerator.basicShipSetup("Bob"));

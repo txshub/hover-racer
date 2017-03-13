@@ -49,12 +49,13 @@ public class ServerReceiver extends Thread {
         } else if (fullMsg.getType() == ServerComm.SENDALLGAMES) {
           ArrayList<GameRoom> rooms = new ArrayList<GameRoom>();
           for (GameRoom room : lobby.games) {
-            if (!room.isBusy())
-              rooms.add(room);
+        	  if (!room.isBusy()) {
+        		  rooms.add(room);
+        	  }
           }
           String out = "";
           for (GameRoom r : rooms) {
-            out += r.toString() + System.lineSeparator();
+        	  out += r.toString() + System.lineSeparator();
           }
           lobby.clientTable.getQueue(clientName)
               .offer(new ByteArrayByte(out.getBytes(ServerComm.charset), ServerComm.SENDALLGAMES));

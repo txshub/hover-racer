@@ -15,8 +15,8 @@ import trackDesign.TrackPoint;
 
 public class GameRoom {
 
-	private static final long TIME_TO_START = 3000000000L; // Time to start race
-															// in nanoseconds
+	private static final long TIME_TO_START = 4L * 1000000000L; // Time to start race
+																// in nanoseconds
 	private static final int SIDE_DISTANCES = 10;
 	private static final int FORWARD_DISTANCES = 10;
 	private static final int STARTING_HEIGHT = 10;
@@ -29,23 +29,25 @@ public class GameRoom {
 	private int maxPlayers;
 	private boolean inGame = false;
 	private String hostName;
+	private int lapCount;
 	private ClientTable table;
 	private ArrayList<TrackPoint> trackPoints;
 
 	private ServerShipManager shipManager;
 	private UpdateAllUsers updatedUsers;
-	private boolean isSinglePlayer;
 
-	public GameRoom(int id, String name, long seed, int maxPlayers, String hostName, ClientTable table, boolean isSinglePlayer) {
+	private long raceStartsAt = -1;
+
+	public GameRoom(int id, String name, long seed, int maxPlayers, String hostName, int lapCount, ClientTable table) {
 		System.out.println(hostName + " created a game room " + name + " with id " + id);
 		this.id = id;
 		this.name = name;
 		this.seed = seed;
 		this.maxPlayers = maxPlayers;
 		this.hostName = hostName;
+		this.lapCount = lapCount;
 		this.table = table;
 		this.ships = new ArrayList<ShipSetupData>(maxPlayers);
-		this.isSinglePlayer = isSinglePlayer;
 		// Generate the track
 		SeedTrack st = TrackMaker.makeTrack(seed, 10, 20, 30, 1, 40, 40, 4);
     // Scale up the track so it isn't so tiny
@@ -92,6 +94,13 @@ public class GameRoom {
 		hostName = collected;
 		collected = "";
 		in = in.substring(1);
+		while (in.charAt(0) != '|') {
+			collected += in.charAt(0);
+			in = in.substring(1);
+		}
+		lapCount = Integer.parseInt(collected);
+		collected = "";
+		in = in.substring(1);
 		players = new ArrayList<String>();
 		while (in.length() > 0) {
 			while (in.charAt(0) != '|') {
@@ -125,6 +134,7 @@ public class GameRoom {
 	public long getSeed() {
 		return seed;
 	}
+	
 
 	public void addPlayer(ShipSetupData data) {
 		if (data == null) throw new IllegalArgumentException("ShipSetupData cannot be null");
@@ -143,6 +153,7 @@ public class GameRoom {
 	public String getHostName() {
 		return hostName;
 	}
+	
 
 	public void startGame(String clientName) {
 		if (players.size() == 0) throw new IllegalStateException("Tried starting game with no players");
@@ -159,6 +170,7 @@ public class GameRoom {
 				table.getQueue(players.get(i)).offer(new ByteArrayByte(Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA));
 				allQueues.add(table.getQueue(players.get(i)));
 			}
+			raceStartsAt = System.nanoTime() + TIME_TO_START;
 			updatedUsers = new UpdateAllUsers(allQueues, this);
 			updatedUsers.start();
 		}
@@ -192,7 +204,7 @@ public class GameRoom {
 		}
 		Vector2f startDirection = new Vector2f(trackPoints.get(1)).sub(trackPoints.get(0));
 		return new RaceSetupData(resShips, generateStartingPositions(startDirection),
-			new Vector3f(0, (float) Math.atan2(startDirection.x, startDirection.y), 0), seed, TIME_TO_START);
+			new Vector3f(0, (float) Math.atan2(startDirection.x, startDirection.y), 0), seed, TIME_TO_START, lapCount);
 	}
 
 	// TODO finish this
@@ -242,7 +254,7 @@ public class GameRoom {
 	}
 
 	public String toString() {
-		String out = name + "|" + id + "|" + seed + "|" + maxPlayers + "|" + hostName + "|";
+		String out = name + "|" + id + "|" + seed + "|" + maxPlayers + "|" + hostName + "|" + lapCount + "|";
 		for (String p : players) {
 			out += p + "|";
 		}
@@ -258,7 +270,13 @@ public class GameRoom {
 	}
 
 	public void update(float delta) {
+		if (raceStartsAt == -1) throw new IllegalStateException("Update called before the race was started");
+		if (System.nanoTime() >= raceStartsAt) shipManager.startRace();
 		shipManager.update(delta);
+	}
+
+	public int getLaps() {
+		return lapCount;
 	}
 
 

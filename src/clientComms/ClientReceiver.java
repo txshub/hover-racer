@@ -21,6 +21,7 @@ public class ClientReceiver extends Thread {
 	private Client client;
 	private MultiplayerShipManager manager;
 
+
 	/** Creates a ClientReceiver object
 	 * 
 	 * @param server
