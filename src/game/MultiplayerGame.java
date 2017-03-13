@@ -160,8 +160,7 @@ public class MultiplayerGame implements GameInt {
     // terrains);
 
     // Tudor
-    ArrayList<Ship> opponents = new ArrayList<Ship>();
-    logic = new GameLogic(ships.getPlayerShip(), opponents, st, 4);
+    logic = new GameLogic(ships.getPlayerShip(), st, 4);
 
     // GUIs
     setupGUIs();

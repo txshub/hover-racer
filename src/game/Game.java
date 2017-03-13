@@ -159,8 +159,7 @@ public class Game implements GameInt {
     camera = new Camera(player);
 
     // Tudor
-    ArrayList<Ship> opponents = new ArrayList<Ship>();
-    logic = new GameLogic(player, opponents, st, 4);
+    logic = new GameLogic(player, st, 4);
 
     // GUIs
     guis = new ArrayList<>();
@@ -236,6 +235,9 @@ public class Game implements GameInt {
     // picker = new MousePicker(camera, renderer.getProjectionMatrix(),
     // terrains);
 
+    // Tudor
+    logic = new GameLogic(player, st, 1);
+
     AudioMaster.playInGameMusic();
     try {
       Keyboard.create();
@@ -250,6 +252,7 @@ public class Game implements GameInt {
 
     // Tudor
     logic.update();
+    
     // Check if the escape key was pressed to exit the game
     if (input.isDown(Action.EXIT) > 0.5f)
       running = false;
