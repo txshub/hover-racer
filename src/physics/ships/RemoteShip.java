@@ -28,8 +28,6 @@ public class RemoteShip extends Ship {
 																	// if available
 		if (newShip.isPresent()) { // If received update Ships's parameters
 			super.updateFromPacket(newShip.get());
-			// TODO temporary debug
-			if (super.getId() == 1) System.out.println("C: " + super.getPosition());
 		} else { // Otherwise interpolate
 			super.updatePhysics(delta);
 		}

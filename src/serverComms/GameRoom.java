@@ -48,6 +48,9 @@ public class GameRoom {
 		this.isSinglePlayer = isSinglePlayer;
 		// Generate the track
 		SeedTrack st = TrackMaker.makeTrack(seed, 10, 20, 30, 1, 40, 40, 4);
+		for (TrackPoint tp : st.getTrack()) {
+			tp.mul(20);
+		}
 		trackPoints = st.getTrack();
 	}
 
