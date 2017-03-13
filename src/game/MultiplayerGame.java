@@ -126,7 +126,7 @@ public class MultiplayerGame implements GameInt {
 
 		// Scale up the track so it isn't so tiny
 		for (TrackPoint tp : st.getTrack()) {
-			tp.mul(20);
+			tp.mul(5);
 		}
 		trackPoints = st.getTrack();
 

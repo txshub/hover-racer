@@ -51,7 +51,7 @@ public class GameRoom {
 		// Generate the track
 		SeedTrack st = TrackMaker.makeTrack(seed);
 		for (TrackPoint tp : st.getTrack()) {
-			tp.mul(20);
+			tp.mul(5);
 		}
 		trackPoints = st.getTrack();
 	}

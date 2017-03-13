@@ -10,6 +10,7 @@ import gameEngine.models.TexturedModel;
 import physics.network.ExportedShip;
 import physics.support.CollisionListener;
 import physics.support.GroundProvider;
+import upgrades.ShipTemplate;
 
 /** A single ship entity. Can be controlled by an AI or the player. Handles all
  * the physics, namely (currently): -Keeping track of velocity and position
@@ -18,9 +19,7 @@ import physics.support.GroundProvider;
  * flat terrain only (so far) -Detecting and reacting to collision with other
  * ships (untested!) Can also export itself to an array of floats and update
  * itself with such an array received from server (used for ships controlled by
- * other players/server's AIs) TODO: - Test and polish collisions with other
- * ships - Upgrade air cushion to work with curved terrain - Panning physics
- * (matching ground below/reacting to accelerations)
+ * other players/server's AIs)
  * 
  * @author Maciej Bogacki */
 public abstract class Ship extends Entity {
@@ -30,7 +29,7 @@ public abstract class Ship extends Entity {
 	// How fast does the ship accelerate
 	private static final float ACCELERATION = 50 * SCALE;
 	// How fast does it break
-	private static final float BREAK_POWER = 10;
+	private static final float BREAK_POWER = 5;
 	// How fast does it turn
 	private static final float TURN_SPEED = 4f;
 	// How fast do ships slow down (this and acceleration determines the max speed)
@@ -55,6 +54,8 @@ public abstract class Ship extends Entity {
 	// Whether the ship actually breaks when braking (and not accelerates backwards)
 	private static boolean ACTUALLY_BREAK = true;
 
+	private StatManager stats;
+
 	private Vector3 position;
 	private Vector3 rotation;
 	private Vector3 velocity;
@@ -71,19 +72,20 @@ public abstract class Ship extends Entity {
 	long lastPrint = 0;
 	double deltaSum = 0;
 
-	protected Ship(byte id, TexturedModel model, Vector3f startingPosition, GroundProvider ground) {
+	protected Ship(byte id, TexturedModel model, Vector3f startingPosition, GroundProvider ground, ShipTemplate stats) {
 		super(model, startingPosition, new Vector3(0, 0, 0), 1);
+		if (stats == null) stats = ShipTemplate.getDefault();
 		this.id = id;
 		this.position = new Vector3(startingPosition);
 		super.position = this.position;
 		this.velocity = new Vector3(0, 0, 0);
 		this.rotation = new Vector3(0, 0, 0);
 		this.rotationalVelocity = new Vector3(0, 0, 0);
+		this.stats = new StatManager(stats);
 		this.ground = ground;
 		this.otherShips = new ArrayList<Ship>();
 
 		this.started = false;
-
 	}
 
 	public void addOtherShips(Collection<Ship> ships) {
@@ -210,7 +212,7 @@ public abstract class Ship extends Entity {
 	/** Changes the velocity to account for a collision with a different ship */
 	private void collideWith(Ship ship) {
 		// System.out.println("COLLISION! " + ship + " vs " + this);
-		if (collisionListener != null) collisionListener.addCollision(this, ship); // Tell sounds about this
+		// if (collisionListener != null) collisionListener.addCollision(this, ship); // TODO get Tudor to fix collision sounds
 		Vector3 pos = ship.getInternalPosition().copy();
 		float expectedDistance = ship.getSize() + this.getSize();
 		// Apply momentum

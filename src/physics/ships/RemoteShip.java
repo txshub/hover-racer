@@ -8,6 +8,7 @@ import gameEngine.models.TexturedModel;
 import physics.core.Ship;
 import physics.network.ServerShipProvider;
 import physics.support.GroundProvider;
+import upgrades.ShipTemplate;
 
 /** Represents a ship controlled by remote packets. This is all but the player's
  * ship on client side and all but AI's ships on the server side.
@@ -17,8 +18,9 @@ public class RemoteShip extends Ship {
 
 	private ServerShipProvider remote;
 
-	public RemoteShip(byte id, TexturedModel model, Vector3f startingPosition, GroundProvider ground, ServerShipProvider remote) {
-		super(id, model, startingPosition, ground);
+	public RemoteShip(byte id, TexturedModel model, Vector3f startingPosition, GroundProvider ground, ShipTemplate stats,
+		ServerShipProvider remote) {
+		super(id, model, startingPosition, ground, stats);
 		this.remote = remote;
 	}
 

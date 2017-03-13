@@ -9,6 +9,7 @@ import input.Action;
 import input.InputController;
 import physics.core.Ship;
 import physics.support.GroundProvider;
+import upgrades.ShipTemplate;
 
 /** Represents a Ship controlled with inputs from the Player
  * 
@@ -19,8 +20,8 @@ public class PlayerShip extends Ship {
 	// ShipSounds sound;
 
 	public PlayerShip(byte id, TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground,
-		InputController input) {
-		super(id, model, startingPosition, ground);
+		ShipTemplate stats, InputController input) {
+		super(id, model, startingPosition, ground, stats);
 		super.addOtherShips(otherShips);
 		this.input = input; // Deal with input
 		// this.sound = new ShipSounds(this, otherShips != null ? otherShips : new ArrayList<Ship>()); // Create
