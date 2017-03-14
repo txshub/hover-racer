@@ -39,7 +39,8 @@ public class ServerShipManager implements ServerShipProvider {
 		for (int i = 0; i < amount; i++) {
 			if (data.getStartingPositions().size() == 0) throw new IllegalArgumentException("Not starting positions");
 			if (i < players)
-				ships.add(new RemoteShip((byte) i, null, data.getStartingPositions().get(i), ground, data.getStats().get(i), this));
+				ships.add(
+					new RemoteShip((byte) i, null, data.getStartingPositions().get(i), ground, data.getStats().get(i), trackPoints, this));
 			else
 				ships
 					.add(new AIShip((byte) i, null, data.getStartingPositions().get(i), null, ground, trackPoints, data.getStats().get(i)));

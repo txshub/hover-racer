@@ -2,6 +2,7 @@ package physics.core;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.joml.Vector3f;
 
@@ -10,6 +11,7 @@ import gameEngine.models.TexturedModel;
 import physics.network.ExportedShip;
 import physics.support.CollisionListener;
 import physics.support.GroundProvider;
+import trackDesign.TrackPoint;
 import upgrades.ShipTemplate;
 
 /** A single ship entity. Can be controlled by an AI or the player. Handles all
@@ -64,6 +66,7 @@ public abstract class Ship extends Entity {
 	private float size = 5;
 	private Collection<Ship> otherShips;
 	private GroundProvider ground;
+	private Barriers barriers;
 	private CollisionListener collisionListener;
 
 	private byte id;
@@ -72,7 +75,8 @@ public abstract class Ship extends Entity {
 	long lastPrint = 0;
 	double deltaSum = 0;
 
-	protected Ship(byte id, TexturedModel model, Vector3f startingPosition, GroundProvider ground, ShipTemplate stats) {
+	protected Ship(byte id, TexturedModel model, Vector3f startingPosition, GroundProvider ground, ShipTemplate stats,
+		List<TrackPoint> track) {
 		super(model, startingPosition, new Vector3(0, 0, 0), 1);
 		if (stats == null) stats = ShipTemplate.getDefault();
 		this.id = id;
@@ -83,6 +87,7 @@ public abstract class Ship extends Entity {
 		this.rotationalVelocity = new Vector3(0, 0, 0);
 		this.stats = new StatManager(stats);
 		this.ground = ground;
+		this.barriers = new Barriers(track);
 		this.otherShips = new ArrayList<Ship>();
 
 		this.started = false;
@@ -200,7 +205,7 @@ public abstract class Ship extends Entity {
 		if (jump != 0) velocity.changeY(y -> y + delta * jump * JUMP_POWER * VERTICAL_SCALE);
 	}
 
-	private void doCollisions() {
+	private void shipCollisions() {
 		otherShips.stream().filter(ship -> ship.getInternalPosition().distanceTo(this.position) <= ship.getSize() + this.size)
 			.forEach(s -> collideWith(s));
 	}
@@ -244,7 +249,8 @@ public abstract class Ship extends Entity {
 
 		// Do physics
 		airResistance(delta);
-		doCollisions();
+		shipCollisions();
+		trackCollision();
 		gravity(delta);
 		airCushion(delta);
 		updateRotation(delta);
@@ -252,6 +258,10 @@ public abstract class Ship extends Entity {
 
 		// Update parent
 		super.setRotation(rotation.copy().forEach(r -> Math.toDegrees(r)));
+	}
+
+	private void trackCollision() {
+		barriers.allCollisions(this).forEach(v -> velocity.bounceOff(v, 1)); // TODO TEST TES TEST TEST IT
 	}
 
 	/** Allows the player to control the ship from now on. Call when the race

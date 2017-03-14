@@ -83,9 +83,9 @@ public class ExportedShip {
 		// System.out.println(first);
 		System.out.println(new ExportedShip(numbers));
 
-		Ship testShip = new RemoteShip((byte) 2, null, new Vector3f(12, 7, 82), null, null, null);
+		Ship testShip = new RemoteShip((byte) 2, null, new Vector3f(12, 7, 82), null, null, null, null);
 		byte[] second = testShip.export();
-		Ship receiver = new RemoteShip((byte) 2, null, new Vector3f(3, 4, 45), null, null, null);
+		Ship receiver = new RemoteShip((byte) 2, null, new Vector3f(3, 4, 45), null, null, null, null);
 		receiver.updateFromPacket(second);
 		System.out.println(receiver.getPosition());
 	}

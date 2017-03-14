@@ -35,7 +35,7 @@ public class AIShip extends Ship {
 
 	public AIShip(byte id, TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground,
 		ArrayList<TrackPoint> track, ShipTemplate stats) {
-		super(id, model, startingPosition, ground, stats);
+		super(id, model, startingPosition, ground, stats, track);
 		super.addOtherShips(otherShips);
 		this.track = track;
 		nextPointIndex = 1;
@@ -69,7 +69,7 @@ public class AIShip extends Ship {
 		float rot = getRotation().y;
 
 		TrackPoint nextPoint = track.get(nextPointIndex);
-		//System.out.println("AI " + getId() + " nextPoint " + nextPointIndex + " : " + nextPoint);
+		// System.out.println("AI " + getId() + " nextPoint " + nextPointIndex + " : " + nextPoint);
 		Vector2f dirToPoint = new Vector2f(nextPoint).sub(pos);
 		Vector2f dirVec = new Vector2f((float) Math.sin(Math.toRadians(rot)), (float) Math.cos(Math.toRadians(rot)));
 
