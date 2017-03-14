@@ -229,12 +229,16 @@ public class MultiplayerGame implements GameInt {
         + Terrain.SIZE * 1 / 4) {
       terrains.get(0).moveZ(-Terrain.SIZE / 4);
     }
+
+    // Update GUI
+    lapCurrent.setText(Integer.toString(logic.getCurrentLap()));
   }
 
   public void render() {
     GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
     renderer.renderScene(entities, normalEntities, terrains, lights, camera, new Vector4f());
     uiRenderer.render(containers);
+    TextMaster.render();
     GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
     DisplayManager.updateDisplay();
     sortLights(lights, ships.getPlayerShip().getPosition());
@@ -242,6 +246,7 @@ public class MultiplayerGame implements GameInt {
 
   public void cleanUp() {
     guiRender.cleanUp();
+    TextMaster.cleanUp();
     renderer.cleanUp();
     loader.cleanUp();
     InputController.close = true;
@@ -395,7 +400,7 @@ public class MultiplayerGame implements GameInt {
       // Define the texture coordinates
       int n = i * 6 * 2;
       int flip = (i % 2) * 2 - 1;
-      
+
       texCoords[n + 0] = 0f;
       texCoords[n + 1] = i % 2;
 
