@@ -234,6 +234,7 @@ public class MultiplayerGame implements GameInt {
   public void render() {
     GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
     renderer.renderScene(entities, normalEntities, terrains, lights, camera, new Vector4f());
+    uiRenderer.render(containers);
     GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
     DisplayManager.updateDisplay();
     sortLights(lights, ships.getPlayerShip().getPosition());
@@ -393,10 +394,12 @@ public class MultiplayerGame implements GameInt {
 
       // Define the texture coordinates
       int n = i * 6 * 2;
+      int flip = (i % 2) * 2 - 1;
+      
       texCoords[n + 0] = 0f;
       texCoords[n + 1] = i % 2;
 
-      texCoords[n + 2] = 0.2f;
+      texCoords[n + 2] = 0.1f;
       texCoords[n + 3] = i % 2;
 
       texCoords[n + 4] = 0.3f;
@@ -405,7 +408,7 @@ public class MultiplayerGame implements GameInt {
       texCoords[n + 6] = 0.7f;
       texCoords[n + 7] = i % 2;
 
-      texCoords[n + 8] = 0.8f;
+      texCoords[n + 8] = 0.9f;
       texCoords[n + 9] = i % 2;
 
       texCoords[n + 10] = 1f;
