@@ -230,6 +230,7 @@ public class MultiplayerGame implements GameInt {
 		renderer.cleanUp();
 		loader.cleanUp();
 		InputController.close = true;
+		AudioMaster.stopInGameMusic();
 		AudioMaster.cleanUp();
 		DisplayManager.closeDisplay();
 	}

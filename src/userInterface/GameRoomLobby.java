@@ -3,16 +3,22 @@ package userInterface;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import audioEngine.AudioMaster;
 import clientComms.Client;
+import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import serverComms.GameRoom;
 
 public class GameRoomLobby extends GridPane {
 
   private GameRoom gameRoom;
   private Client client;
+  private int maxPlayers;
+  private ArrayList<String> playerNames;
 
   public GameRoomLobby(GameRoom gameRoom) {
 	
@@ -20,20 +26,21 @@ public class GameRoomLobby extends GridPane {
 	this.setVgap(15);
 	
 	this.setTranslateX(700);
+	this.setTranslateY(80);
 
     this.gameRoom = gameRoom;
     
-    int maxPlayers = gameRoom.getNoPlayers();
+    maxPlayers = gameRoom.getNoPlayers();
     
     int k = 0;
 
-    ArrayList<String> playerNames = gameRoom.getPlayers();
- 
+    playerNames = gameRoom.getPlayers();
+    
     VBox playerNamesBox = new VBox(10);
 
     for (int i = 0; i < playerNames.size(); i++) {
 
-      TextStyle player = new TextStyle(playerNames.get(i), 25);
+      TextStyle player = new TextStyle(playerNames.get(i), 28);
       Text playerText = player.getTextStyled();
 
       playerNamesBox.getChildren().add(playerText);
@@ -42,16 +49,17 @@ public class GameRoomLobby extends GridPane {
     
     for (int i=k; i< maxPlayers; i++){
     	
-    	TextStyle placeholder = new TextStyle("....................................", 25);
+    	TextStyle placeholder = new TextStyle("........................................", 28);
     	Text placeholderText = placeholder.getTextStyled();
     	
     	playerNamesBox.getChildren().add(placeholderText);
     }
+    
+    MenuButton refresh = new MenuButton("REFRESH", 350, 70, 30);
+    //TO DO
+    
 
     MenuButton startGame = new MenuButton("START GAME", 350, 70, 30);
-
-    System.out.println(GameMenu.usr);
-    System.out.println(gameRoom.getHostName());
     
     if (!GameMenu.usr.equals(gameRoom.getHostName())) {
 
@@ -64,6 +72,9 @@ public class GameRoomLobby extends GridPane {
     	try {
     		
 			client.startGame();
+			AudioMaster.stopMusic();
+		    AudioMaster.cleanUp();
+			Platform.exit();
 			
 		} catch (IOException e) {
 			
@@ -83,17 +94,32 @@ public class GameRoomLobby extends GridPane {
 
     leaveRoom.setOnMouseClicked(event -> {
 
-      // transition to joinGameRoom
+      JoinGameRoom joinGameRoom = new JoinGameRoom();
+      joinGameRoom.setClient(client);
+      
+      getChildren().add(joinGameRoom);
+
+      TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), this);
+      trans.setToX(this.getTranslateX() - 600);
+
+      TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), joinGameRoom);
+      trans1.setToX(joinGameRoom.getTranslateX() - 600);
+
+      trans.play();
+      trans1.play();
+      trans.setOnFinished(evt -> {
+        getChildren().remove(this);
+      });
 
     });
 
-    // implement timer and timer task to refresh automatically
 
     add(playerNamesBox, 0, 1);
     GridPane.setRowSpan(playerNamesBox, REMAINING);
 
-    add(startGame, 2, 3);
-    add(leaveRoom, 2, 4);
+    add(refresh,1, 2);
+    add(startGame, 1, 3);
+    add(leaveRoom, 1, 4);
   }
   
   public void setClient(Client client){

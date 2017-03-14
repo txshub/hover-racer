@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import audioEngine.AudioMaster;
 import clientComms.Client;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -107,6 +108,9 @@ public class CreateGameRoom extends GridPane {
 				localClient.startSinglePlayerGame(Integer.valueOf(seedInput.getText()),
 						Integer.valueOf(noAIsInput.getText()), Integer.valueOf(noLapsInput.getText()),
 						DataGenerator.basicShipSetup(usernameInput.getText()));
+				AudioMaster.stopMusic();
+			    AudioMaster.cleanUp();
+				Platform.exit();
 
 			} catch (NumberFormatException e) {
 				
