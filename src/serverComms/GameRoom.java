@@ -51,7 +51,7 @@ public class GameRoom {
 		// Generate the track
 		SeedTrack st = TrackMaker.makeTrack(seed);
 		for (TrackPoint tp : st.getTrack()) {
-			tp.mul(5);
+			tp.mul(20);
 		}
 		trackPoints = st.getTrack();
 	}
@@ -134,6 +134,7 @@ public class GameRoom {
 		return seed;
 	}
 
+
 	public void addPlayer(ShipSetupData data) {
 		if (data == null) throw new IllegalArgumentException("ShipSetupData cannot be null");
 		ships.add(data);
@@ -151,6 +152,7 @@ public class GameRoom {
 	public String getHostName() {
 		return hostName;
 	}
+
 
 	public void startGame(String clientName) {
 		if (players.size() == 0) throw new IllegalStateException("Tried starting game with no players");
@@ -199,7 +201,7 @@ public class GameRoom {
 			if (i < ships.size()) resShips.put((byte) i, ships.get(i)); // Players
 			else resShips.put((byte) i, AIBuilder.fakeAIData()); // AIs
 		}
-		Vector2f startDirection = trackPoints.get(0).sub(trackPoints.get(1));
+		Vector2f startDirection = new Vector2f(trackPoints.get(1)).sub(trackPoints.get(0));
 		return new RaceSetupData(resShips, generateStartingPositions(startDirection),
 			new Vector3f(0, (float) Math.atan2(startDirection.x, startDirection.y), 0), seed, TIME_TO_START, lapCount);
 	}
@@ -239,6 +241,7 @@ public class GameRoom {
 		// TODO temporary thing here:
 		Map<Byte, Vector3f> res = new HashMap<>();
 		for (int i = 0; i < maxPlayers; i++) {
+			System.out.println("Trackpoint gameroom: " + trackPoints.get(0));
 			res.put((byte) i, new Vector3f(trackPoints.get(0).x + i * 40, 5, trackPoints.get(0).y));
 		}
 		return res;

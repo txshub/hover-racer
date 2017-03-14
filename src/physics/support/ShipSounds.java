@@ -47,7 +47,6 @@ public class ShipSounds implements CollisionListener {
 		}
 		update(0f);
 	}
-
 	/** Updates all sources with positions, velocities, pitch, volume etc. Called
 	 * on each update of physics.
 	 * 

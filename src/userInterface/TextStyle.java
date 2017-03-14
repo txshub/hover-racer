@@ -19,7 +19,8 @@ public class TextStyle {
 
   public TextStyle(String textInput, int fontSize) {
 
-    text = new Text(textInput);
+	String textInputCapitals = textInput.toUpperCase();  
+    text = new Text(textInputCapitals);
 
     try {
       Font f = Font.loadFont(new FileInputStream(new File("src/resources/fonts/War is Over.ttf")),

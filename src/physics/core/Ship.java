@@ -56,7 +56,7 @@ public abstract class Ship extends Entity {
 
 	private StatManager stats;
 
-	private Vector3 position;
+	transient private Vector3 position;
 	private Vector3 rotation;
 	private Vector3 velocity;
 	private Vector3 rotationalVelocity;
