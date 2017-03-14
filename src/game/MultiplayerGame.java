@@ -342,7 +342,7 @@ public class MultiplayerGame implements GameInt {
     float[] vertices = new float[trackPoints.size() * 6 * 3];
     // 10 triangles for each track point, 3 vertices per triangle
     int[] indices = new int[trackPoints.size() * 10 * 3];
-    float[] texCoords = new float[indices.length];
+    float[] texCoords = new float[trackPoints.size() * 6 * 2];
     float[] normals = new float[vertices.length];
 
     // TODO Actually implement textures
@@ -395,6 +395,26 @@ public class MultiplayerGame implements GameInt {
       addToArray(rightPoint, vertices, i * 18 + 9);
       addToArray(rBarrierT, vertices, i * 18 + 12);
       addToArray(rBarrierB, vertices, i * 18 + 15);
+      
+      // Define the texture coordinates
+      int n = i * 6 * 2;
+      texCoords[n + 0] = 0f;
+      texCoords[n + 1] = i;
+
+      texCoords[n + 2] = 0.2f;
+      texCoords[n + 3] = i;
+
+      texCoords[n + 4] = 0.3f;
+      texCoords[n + 5] = i;
+
+      texCoords[n + 6] = 0.7f;
+      texCoords[n + 7] = i;
+
+      texCoords[n + 8] = 0.8f;
+      texCoords[n + 9] = i;
+
+      texCoords[n + 10] = 1f;
+      texCoords[n + 11] = i;
 
       // First calculate surface normals (technically edge normals as we are
       // working in a slice but whatever)
@@ -467,7 +487,7 @@ public class MultiplayerGame implements GameInt {
     }
 
     return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
-        new ModelTexture(loader.loadTexture("new/TrackTexture")));
+        new ModelTexture(loader.loadTexture("newShipTexture")));
   }
 
   private void addToArray(Vector3f vector, float[] array, int offset) {
