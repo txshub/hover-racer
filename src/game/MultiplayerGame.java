@@ -345,11 +345,6 @@ public class MultiplayerGame implements GameInt {
     float[] texCoords = new float[trackPoints.size() * 6 * 2];
     float[] normals = new float[vertices.length];
 
-    // TODO Actually implement textures
-    for (int i = 0; i < texCoords.length; i++) {
-      texCoords[i] = 0;
-    }
-
     // We can pre-calculate some stuff for normals
     Vector3f normBottom = new Vector3f(0, -1, 0);
     Vector3f normTop = new Vector3f(0, 1, 0);
@@ -399,22 +394,22 @@ public class MultiplayerGame implements GameInt {
       // Define the texture coordinates
       int n = i * 6 * 2;
       texCoords[n + 0] = 0f;
-      texCoords[n + 1] = i;
+      texCoords[n + 1] = i % 2;
 
       texCoords[n + 2] = 0.2f;
-      texCoords[n + 3] = i;
+      texCoords[n + 3] = i % 2;
 
       texCoords[n + 4] = 0.3f;
-      texCoords[n + 5] = i;
+      texCoords[n + 5] = i % 2;
 
       texCoords[n + 6] = 0.7f;
-      texCoords[n + 7] = i;
+      texCoords[n + 7] = i % 2;
 
       texCoords[n + 8] = 0.8f;
-      texCoords[n + 9] = i;
+      texCoords[n + 9] = i % 2;
 
       texCoords[n + 10] = 1f;
-      texCoords[n + 11] = i;
+      texCoords[n + 11] = i % 2;
 
       // First calculate surface normals (technically edge normals as we are
       // working in a slice but whatever)
