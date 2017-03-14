@@ -346,7 +346,7 @@ public class MultiplayerGame implements GameInt {
     float[] normals = new float[vertices.length];
 
     // We can pre-calculate some stuff for normals
-    Vector3f normBottom = new Vector3f(0, -1, 0);
+    Vector3f normBot = new Vector3f(0, -1, 0);
     Vector3f normTop = new Vector3f(0, 1, 0);
     Vector3f normLeftOuter2D = new Vector3f(-barrierHeight, barrierWidth, 0).normalize();
     Vector3f normRightOuter2D = new Vector3f(barrierHeight, barrierWidth, 0).normalize();
@@ -390,7 +390,7 @@ public class MultiplayerGame implements GameInt {
       addToArray(rightPoint, vertices, i * 18 + 9);
       addToArray(rBarrierT, vertices, i * 18 + 12);
       addToArray(rBarrierB, vertices, i * 18 + 15);
-      
+
       // Define the texture coordinates
       int n = i * 6 * 2;
       texCoords[n + 0] = 0f;
@@ -415,30 +415,29 @@ public class MultiplayerGame implements GameInt {
       // working in a slice but whatever)
 
       // Get Quaternions for rotation to align with left and right vectors
-      Vector3f normLeftInner = new Vector3f(left.x, 0, left.y);
-      Quaternionf rotationLeft = new Vector3f(-1, 0, 0).rotationTo(normLeftInner,
-          new Quaternionf());
-      Vector3f normRightInner = new Vector3f(right.x, 0, right.y);
-      Quaternionf rotationRight = new Vector3f(1, 0, 0).rotationTo(normRightInner,
-          new Quaternionf());
+      Vector3f normLeft = new Vector3f(left.x, 0, left.y);
+      Vector3f normRight = new Vector3f(right.x, 0, right.y);
+
+      Quaternionf rotationLeft = new Vector3f(-1, 0, 0).rotationTo(normLeft, new Quaternionf());
+      Quaternionf rotationRight = new Vector3f(1, 0, 0).rotationTo(normRight, new Quaternionf());
 
       Vector3f normLeftOuter = new Vector3f(normLeftOuter2D).rotate(rotationLeft);
       Vector3f normRightOuter = new Vector3f(normRightOuter2D).rotate(rotationRight);
 
-      // Calculate the vertex normals
-      Vector3f normLBarrierB = new Vector3f(normBottom).add(normLeftOuter).normalize();
-      Vector3f normLBarrierT = new Vector3f(normLeftOuter).add(normLeftInner).normalize();
-      Vector3f normLPoint = new Vector3f(normLeftInner).add(normTop).normalize();
-      Vector3f normRPoint = new Vector3f(normTop).add(normRightInner).normalize();
-      Vector3f normRBarrierT = new Vector3f(normRightInner).add(normRightOuter).normalize();
-      Vector3f normRBarrerB = new Vector3f(normRightOuter).add(normBottom).normalize();
+      // Calculate the vertex normals from the surface normals
+      Vector3f normLBarrierB = new Vector3f(normLeftOuter).add(normTop).normalize();
+      Vector3f normLBarrierT = new Vector3f(normLeftOuter).add(normRight).normalize();
+      Vector3f normLPoint = new Vector3f(normRight).add(normTop).normalize();
+      Vector3f normRPoint = new Vector3f(normTop).add(normLeft).normalize();
+      Vector3f normRBarrierT = new Vector3f(normLeft).add(normRightOuter).normalize();
+      Vector3f normRBarrierB = new Vector3f(normRightOuter).add(normTop).normalize();
 
       addToArray(normLBarrierB, normals, i * 18 + 0);
       addToArray(normLBarrierT, normals, i * 18 + 3);
       addToArray(normLPoint, normals, i * 18 + 6);
       addToArray(normRPoint, normals, i * 18 + 9);
       addToArray(normRBarrierT, normals, i * 18 + 12);
-      addToArray(normRBarrerB, normals, i * 18 + 15);
+      addToArray(normRBarrierB, normals, i * 18 + 15);
     }
 
     // Populate indices
@@ -482,7 +481,7 @@ public class MultiplayerGame implements GameInt {
     }
 
     return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
-        new ModelTexture(loader.loadTexture("newShipTexture")));
+        new ModelTexture(loader.loadTexture("new/trackTexture")));
   }
 
   private void addToArray(Vector3f vector, float[] array, int offset) {
