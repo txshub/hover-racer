@@ -208,18 +208,13 @@ public void reopenPort() {
 }
 
 public void setupConnection() {
-
-    fromServer = null;
-    server = null;
     try {
       server = new Socket(machineName, portNumber);
       toServer = new DataOutputStream(new BufferedOutputStream(server.getOutputStream()));
       fromServer = new DataInputStream(new BufferedInputStream(server.getInputStream()));
     } catch (UnknownHostException e) {
       System.err.println("Unknown host: " + machineName);
-      serverOn = false;
     } catch (IOException e) {
-      serverOn = false;
     }
 }
 
