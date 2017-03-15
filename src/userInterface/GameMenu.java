@@ -242,27 +242,20 @@ public class GameMenu extends Parent {
 
       // BACK TO MAIN MENU FROM MULTIPLAYER MODE
     	
-      getChildren().add(initialWindow);
-
-      TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), multiOptionsWindow);
-      trans.setToX(multiOptionsWindow.getTranslateX() + OFFSET);
-
-      TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), initialWindow);
-      trans1.setToX(multiOptionsWindow.getTranslateX());
-
-      trans.play();
-      trans1.play();
-
-      trans.setOnFinished(evt -> {
-
-        // Disconnect client when you return to the main menu
-        client.cleanup();
-
-        getChildren().remove(multiOptionsWindow);
-        getChildren().addAll(hoverText, racerText, captionText);
-
+      client.cleanup();
+    	
+      getChildren().clear();
+      
+      try {
+			GameMenu newMenu = new GameMenu();
+			getChildren().add(newMenu);
+			
+      } catch (IOException e) {
+			
+			System.err.println("CANNOT TRANSITION TO MAIN MENU");
+	  }
+    	    	
       });
-    });
 
     btnBackHost = new MenuButton("BACK", 300, 60, 28);
     btnBackHost.setOnMouseClicked(event -> {
@@ -496,7 +489,6 @@ public class GameMenu extends Parent {
 
 			System.err.println("JOIN DIDN'T WORK");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	});
@@ -585,65 +577,12 @@ public class GameMenu extends Parent {
         System.err.println("HOSTING DIDN'T WORK");
         
       } catch (Exception e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 
     });
     
-    // START THE GAME IF THE CLIENT IS THE HOST //
     
-    MenuButton startGame = new MenuButton("START GAME", 350, 70, 30);
-    
-//    if (!GameMenu.usr.equals(gameRoomLobby.getGameRoom().getHostName())) {
-//
-//      startGame.setVisible(false);
-//
-//    }
-
-    startGame.setOnMouseClicked(event -> {
-
-    	try {
-    		
-			client.startGame();
-			AudioMaster.stopMusic();
-		    AudioMaster.cleanUp();
-			Platform.exit();
-			
-		} catch (IOException e) {
-			
-			System.err.println("GAME WASN'T STARTED");
-			
-		}
-      
-    });
-
-    MenuButton leaveRoom = new MenuButton("EXIT GAME ROOM", 350, 70, 30);
-    leaveRoom.setVisible(false);
-    
-//    if (!GameMenu.usr.equals(gameRoomLobby.getGameRoom().getHostName())) {
-//
-//      leaveRoom.setVisible(true);
-//    }
-
-    leaveRoom.setOnMouseClicked(event -> {
-      
-      getChildren().add(joinGameRoomWindow);
-
-      TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), gameRoomLobbyWindow);
-      trans.setToX(gameRoomLobbyWindow.getTranslateX() - OFFSET);
-
-      TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), joinGameRoomWindow);
-      trans1.setToX(joinGameRoomWindow.getTranslateX() - 600);
-
-      trans.play();
-      trans1.play();
-      trans.setOnFinished(evt -> {
-        getChildren().remove(gameRoomLobbyWindow);
-      });
-
-    });
-
 
     // MAIN MENU WINDOW CHILDREN
     initialWindow.add(btnPlayGame, 0, 1);
@@ -694,10 +633,6 @@ public class GameMenu extends Parent {
     GridPane.setHalignment(btnBackJoin, HPos.RIGHT);
     joinGameRoomWindow.add(btnBackJoin, 0, 1);
     joinGameRoomWindow.add(joinChosenGR, 0, 2);
-    
-    // GAME ROOM LOBBY WINDOW
-    gameRoomLobbyWindow.add(startGame, 0, 1);
-    gameRoomLobbyWindow.add(leaveRoom, 0, 2);
 
     // GAME MENU CHILDREN
     getChildren().addAll(initialWindow, hoverText, racerText, captionText);
@@ -805,7 +740,7 @@ public class GameMenu extends Parent {
   private void buildGameRoomLobbyWindow() {
 	
 	  gameRoomLobbyWindow.setTranslateX(700);
-	  gameRoomLobbyWindow.setTranslateY(80);
+	  gameRoomLobbyWindow.setTranslateY(100);
 	  gameRoomLobbyWindow.setVgap(10);
 	  gameRoomLobbyWindow.setPadding(new Insets(0,20,0,0));
 	  

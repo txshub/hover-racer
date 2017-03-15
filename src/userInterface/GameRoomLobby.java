@@ -21,6 +21,7 @@ public class GameRoomLobby extends GridPane {
   private ArrayList<String> playerNames;
   private VBox playerNamesBox;
   private MenuButton refresh;
+  private MenuButton startGame;
 
   public GameRoomLobby(GameRoom gameRoom) {
 	
@@ -39,7 +40,47 @@ public class GameRoomLobby extends GridPane {
     	
     });
     
+    // START THE GAME IF THE CLIENT IS THE HOST //
+    
+    startGame = new MenuButton("START GAME", 350, 70, 30);
+    
+    if (!GameMenu.usr.equals(gameRoom.getHostName())) {
+
+      startGame.setVisible(false);
+
+    }
+
+    startGame.setOnMouseClicked(event -> {
+
+    	try {
+    		
+			client.startGame();
+			AudioMaster.stopMusic();
+		    AudioMaster.cleanUp();
+			Platform.exit();
+			
+		} catch (IOException e) {
+			
+			System.err.println("GAME WASN'T STARTED");
+			
+		}
+      
+    });
+    
+    if (!GameMenu.usr.equals(gameRoom.getHostName())){
+    	
+    	//CHECK IF THE GAME HAS STARTED AND CLOSE THE JAVAFX THREAD //
+    	
+//    	while(){
+//    		
+//    		
+//    	}
+//    	
+    	
+    }
+
     add(refresh,1, 2);
+    add(startGame, 1, 3);
     
   }
   
@@ -47,12 +88,15 @@ public class GameRoomLobby extends GridPane {
 	  
 	  getChildren().clear();
 	  add(refresh, 1, 2);
+	  add(startGame, 1, 3);
 	  
 	  try {
+		  
 		gameRoom = client.getUpdatedRoom();
+		
 	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		
+		System.err.println("DID NOT RECEIVE UPDATED GAME ROOM");
 	}
 	  int k = 0;
 	  playerNames = gameRoom.getPlayers();
