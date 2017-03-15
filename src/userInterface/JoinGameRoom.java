@@ -28,16 +28,17 @@ public class JoinGameRoom extends GridPane {
 	private GameRoom gameRoomChosen;
 	private MenuButton refresh;
 	private VBox gameRoomData;
+	private int chosenGRid;
 
 	public JoinGameRoom() {
 
 		setHgap(30);
-		setVgap(10);
+		setVgap(5);
 
-		refresh = new MenuButton("REFRESH LIST", 350, 70, 30);
+		refresh = new MenuButton("REFRESH LIST", 320, 60, 30);
 		add(refresh, 1, 7);
 
-		gameRoomData = new VBox(10);
+		gameRoomData = new VBox(5);
 		gameRoomData.setAlignment(Pos.CENTER);
 		
 		refresh.setOnMouseClicked(eventRefresh -> {
@@ -74,7 +75,7 @@ public class JoinGameRoom extends GridPane {
 
 				gameRoomData.getChildren().clear();
 
-				String joinedText = "CURRENTLY " + gameRoom.getPlayers().size() + " OUT OF " + gameRoom.getNoPlayers();
+				String joinedText = "CURRENTLY " + gameRoom.getPlayers().size() + " OUT OF " + gameRoom.getNoPlayers() + " PLAYERS JOINED";
 				TextStyle joinedPlayers = new TextStyle(joinedText, 25);
 				Text joinedPlayersStyled = joinedPlayers.getTextStyled();
 
@@ -82,40 +83,14 @@ public class JoinGameRoom extends GridPane {
 
 				Map track = new Map(seed);
 
-				MenuButton joinGR = new MenuButton("JOIN THIS GAME ROOM", 350, 70, 30);
-				joinGR.setOnMouseClicked(eventjoin -> {
-
-					try {
-						gameRoomChosen = client.joinGame(gameRoom.id, DataGenerator.basicShipSetup(GameMenu.usr));
-						gameRoomChosen.addPlayer(GameMenu.usr);
-
-						gameRoomLobby = new GameRoomLobby(gameRoomChosen);
-						gameRoomLobby.setClient(client);
-						
-						getChildren().clear();
-						
-						getChildren().add(gameRoomLobby);
-
-					       TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), this);
-					       trans.setToX(this.getTranslateX() - 600);
-
-					       TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), gameRoomLobby);
-					       trans1.setToX(gameRoomLobby.getTranslateX() - 600);
-
-					       trans.play();
-					       trans1.play();
-					       trans.setOnFinished(evt -> {
-					         getChildren().remove(this);
-					       });
-
-					} catch (IOException e) {
-
-						System.err.println("JOIN DIDN'T WORK");
-					}
-
+				MenuButton selectGR = new MenuButton ("SELECT THIS GAME ROOM", 320, 60, 30);
+				selectGR.setOnMouseClicked(ev-> {
+				
+					setChosenGRId(gameRoom.id);
+				
 				});
 
-				gameRoomData.getChildren().addAll(joinedPlayersStyled, track, joinGR);
+				gameRoomData.getChildren().addAll(joinedPlayersStyled, track, selectGR);
 
 				if (!getChildren().contains(gameRoomData)) {
 
@@ -136,6 +111,18 @@ public class JoinGameRoom extends GridPane {
 	public void setGameList(ArrayList<GameRoom> gameRoomList) {
 
 		this.gameRoomList = gameRoomList;
+	}
+	
+	public void setChosenGRId(int chosenGRid){
+		
+		this.chosenGRid = chosenGRid;
+		
+	}
+	
+	public int getChosenGRid(){
+		
+		return this.chosenGRid;
+		
 	}
 
 }
