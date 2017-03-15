@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import clientComms.Client;
+import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import physics.placeholders.DataGenerator;
 import serverComms.GameRoom;
 
@@ -76,7 +78,7 @@ public class JoinGameRoom extends GridPane {
 				TextStyle joinedPlayers = new TextStyle(joinedText, 25);
 				Text joinedPlayersStyled = joinedPlayers.getTextStyled();
 
-				int seed = (int) gameRoom.getSeed();
+				String seed = gameRoom.getSeed();
 
 				Map track = new Map(seed);
 
@@ -89,8 +91,22 @@ public class JoinGameRoom extends GridPane {
 
 						gameRoomLobby = new GameRoomLobby(gameRoomChosen);
 						gameRoomLobby.setClient(client);
-
+						
 						getChildren().clear();
+						
+						getChildren().add(gameRoomLobby);
+
+					       TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), this);
+					       trans.setToX(this.getTranslateX() - 600);
+
+					       TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), gameRoomLobby);
+					       trans1.setToX(gameRoomLobby.getTranslateX() - 600);
+
+					       trans.play();
+					       trans1.play();
+					       trans.setOnFinished(evt -> {
+					         getChildren().remove(this);
+					       });
 
 					} catch (IOException e) {
 

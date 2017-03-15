@@ -337,55 +337,55 @@ public class GameMenu extends Parent {
     MenuButton connectMulti = new MenuButton("CONNECT TO THE LOBBY", 350, 70, 30);
     connectMulti.setOnMouseClicked(event -> {
 
-    try {	
+    	try {	
     	
-      usr = usernameInputMulti.getText();
-      int portNo = Integer.valueOf(portInputMulti.getText());
-      String machineName = machineInputMulti.getText();
+    		usr = usernameInputMulti.getText();
+    		int portNo = Integer.valueOf(portInputMulti.getText());
+    		String machineName = machineInputMulti.getText();
 
-      client = new Client(usr, portNo, machineName);
+    		client = new Client(usr, portNo, machineName);
 
-      if (client.serverOn) {
+    		if (client.serverOn) {
 
-        client.start();
+    			client.start();
 
-        getChildren().add(multiOptionsWindow);
+    			getChildren().add(multiOptionsWindow);
 
-        TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25),
-            connectMultiWindow);
-        trans.setToX(connectMultiWindow.getTranslateX() - OFFSET);
+    			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25),
+    					connectMultiWindow);
+    			trans.setToX(connectMultiWindow.getTranslateX() - OFFSET);
 
-        TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25),
-            multiOptionsWindow);
-        trans1.setToX(multiOptionsWindow.getTranslateX() - OFFSET);
+    			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25),
+    					multiOptionsWindow);
+    			trans1.setToX(multiOptionsWindow.getTranslateX() - OFFSET);
 
-        trans.play();
-        trans1.play();
-        trans.setOnFinished(evt -> {
-          getChildren().remove(connectMultiWindow);
-        });
+    			trans.play();
+    			trans1.play();
+    			trans.setOnFinished(evt -> {
+    				getChildren().remove(connectMultiWindow);
+    			});
 
-      } else {
+    		} else {
     	  
-    	//The server was not running
-        if (box4Multi.getChildren().size() > 0) {
+    			//The server was not running
+    			if (box4Multi.getChildren().size() > 0) {
 
-          box4Multi.getChildren().remove(0);
-        }
+    				box4Multi.getChildren().remove(0);
+    			}
        
-        box4Multi.getChildren().add(startServerMulti);
-      }
-    }
-    catch(Exception e){
+    			box4Multi.getChildren().add(startServerMulti);
+    		}
+    	}
+    	catch(Exception e){
     	
-    	try {
-    		PopUpWindow.display("INVALID INPUT");
+    		e.printStackTrace();
+//    		try {
+//    			PopUpWindow.display("INVALID INPUT");
+//    		}
+//    		catch (IOException ex){
+//    		System.err.println("POP UP NOT WORKING");
+//    		}
     	}
-    	catch (IOException ex){
-    		System.err.println("POP UP NOT WORKING");
-    	}
-		
-    }
     
     });
     
