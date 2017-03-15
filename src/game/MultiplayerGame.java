@@ -51,6 +51,7 @@ import uiToolkit.UIRenderer;
 import uiToolkit.fontMeshCreator.FontType;
 import uiToolkit.fontRendering.TextMaster;
 
+/** @author Reece Bennett and rtm592 */
 public class MultiplayerGame implements GameInt {
 
 	// Set this to print debug messages
