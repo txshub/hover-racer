@@ -37,7 +37,6 @@ public class ServerReceiver extends Thread {
         } else if (fullMsg.getType() == ServerComm.CLIENTDISCONNECT) {
           lobby.remove(clientName);
         } else if (fullMsg.getType() == ServerComm.DONTDISCONNECT) {
-        	System.out.println("Don't Disconnect!");
           // Do Nothing - It's just making sure we don't disconnect
         } else if (fullMsg.getType() == ServerComm.SENDALLGAMES) {
           ArrayList<GameRoom> rooms = new ArrayList<GameRoom>();
