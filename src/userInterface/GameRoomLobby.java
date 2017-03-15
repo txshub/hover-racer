@@ -3,54 +3,46 @@ package userInterface;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import audioEngine.AudioMaster;
 import clientComms.Client;
+import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import serverComms.GameRoom;
 
 public class GameRoomLobby extends GridPane {
 
   private GameRoom gameRoom;
   private Client client;
+  private int maxPlayers;
+  private ArrayList<String> playerNames;
+  private VBox playerNamesBox;
+  private MenuButton refresh;
+  private MenuButton startGame;
 
   public GameRoomLobby(GameRoom gameRoom) {
 	
 	this.setHgap(30);
 	this.setVgap(15);
 	
-	this.setTranslateX(700);
-
     this.gameRoom = gameRoom;
+    maxPlayers = gameRoom.getNoPlayers();
     
-    int maxPlayers = gameRoom.getNoPlayers();
-    int k = 0;
-
-    ArrayList<String> playerNames = gameRoom.getPlayers();
-
-    VBox playerNamesBox = new VBox(10);
-
-    for (int i = 0; i < playerNames.size(); i++) {
-
-      TextStyle player = new TextStyle(playerNames.get(i), 25);
-      Text playerText = player.getTextStyled();
-
-      playerNamesBox.getChildren().add(playerText);
-      k++;
-    }
+    playerNamesBox = new VBox(10);
     
-    for (int i=k; i<= maxPlayers; i++){
+    refresh = new MenuButton("REFRESH", 350, 70, 30);
+    refresh.setOnMouseClicked(e-> {
     	
-    	TextStyle placeholder = new TextStyle("....................................", 25);
-    	Text placeholderText = placeholder.getTextStyled();
+    	refresh();
     	
-    	playerNamesBox.getChildren().add(placeholderText);
-    }
-
-    MenuButton startGame = new MenuButton("START GAME", 350, 70, 30);
-
-    System.out.println(GameMenu.usr);
-    System.out.println(gameRoom.getHostName());
+    });
+    
+    // START THE GAME IF THE CLIENT IS THE HOST //
+    
+    startGame = new MenuButton("START GAME", 350, 70, 30);
     
     if (!GameMenu.usr.equals(gameRoom.getHostName())) {
 
@@ -63,6 +55,9 @@ public class GameRoomLobby extends GridPane {
     	try {
     		
 			client.startGame();
+			AudioMaster.stopMusic();
+		    AudioMaster.cleanUp();
+			Platform.exit();
 			
 		} catch (IOException e) {
 			
@@ -71,33 +66,67 @@ public class GameRoomLobby extends GridPane {
 		}
       
     });
-
-    MenuButton leaveRoom = new MenuButton("EXIT GAME ROOM", 350, 70, 30);
-    leaveRoom.setVisible(false);
     
-    if (!GameMenu.usr.equals(gameRoom.getHostName())) {
 
-      leaveRoom.setVisible(true);
-    }
+    add(refresh,1, 2);
+    add(startGame, 1, 3);
+    
+  }
+  
+  public void refresh(){
+	  
+	  getChildren().clear();
+	  add(refresh, 1, 2);
+	  add(startGame, 1, 3);
+	  
+	  try {
+		  
+		gameRoom = client.getUpdatedRoom();
+		
+	} catch (IOException e) {
+		
+		System.err.println("DID NOT RECEIVE UPDATED GAME ROOM");
+	}
+	  int k = 0;
+	  playerNames = gameRoom.getPlayers();
+	  System.out.println(playerNames.size());
+	  
+	  playerNamesBox.getChildren().clear();
+	  
+	  for (int i = 0; i < playerNames.size(); i++) {
 
-    leaveRoom.setOnMouseClicked(event -> {
+		  TextStyle player = new TextStyle(playerNames.get(i), 28);
+	      Text playerText = player.getTextStyled();
 
-      // transition to joinGameRoom
+	      playerNamesBox.getChildren().add(playerText);
+	      k++;
+	      
+	  }
+	    
+	  for (int i=k; i< maxPlayers; i++){
+	    	
+	    TextStyle placeholder = new TextStyle("........................................", 28);
+	    Text placeholderText = placeholder.getTextStyled();
+	    	
+	    	playerNamesBox.getChildren().add(placeholderText);
+	  }
 
-    });
+	  if (!getChildren().contains(playerNamesBox)) {
 
-    // implement timer and timer task to refresh automatically
-
-    add(playerNamesBox, 0, 1);
-    GridPane.setRowSpan(playerNamesBox, REMAINING);
-
-    add(startGame, 2, 3);
-    add(leaveRoom, 2, 4);
+			add(playerNamesBox, 0, 1);
+		}
+		GridPane.setRowSpan(playerNamesBox, 6);
+	  
   }
   
   public void setClient(Client client){
 	  
 	  this.client = client;
+  }
+  
+  public GameRoom getGameRoom(){
+	  
+	  return this.gameRoom;
   }
 
 }

@@ -1,10 +1,12 @@
 package userInterface;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import audioEngine.AudioMaster;
 import clientComms.Client;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -27,20 +29,20 @@ import serverComms.ServerComm;
  */
 public class GameMenu extends Parent {
 
-  GridPane initialWindow, settingsWindow, connectMultiWindow, hostGameRoomWindow;
-  VBox multiOptionsWindow, singleGameWindow, joinGameRoomWindow;
-  MenuButton btnPlayGame, btnPlayAI, btnOptions, btnSound, btnMusic, btnExit, btnBackSettings,
-  			 btnBackMulti, btnBackSingle, btnBackHost, btnBackMultiOptions, btnBackJoin;
-  SoundSlider soundSlider;
-  MusicSlider musicSlider;
-  CreateGameRoom createGameRoom;
-  HostGameRoom hostGameRoom;
-  JoinGameRoom joinGameRoom;
-  GameRoom gameRoom;
-  GameRoomLobby gameRoomLobby;
-  static String usr;
-  Client client;
-  final int OFFSET = 600;
+  private GridPane initialWindow, settingsWindow, connectMultiWindow, hostGameRoomWindow, joinGameRoomWindow, gameRoomLobbyWindow;
+  private VBox multiOptionsWindow, singleGameWindow;
+  private MenuButton btnPlayGame, btnPlayAI, btnOptions, btnExit, btnBackSettings,
+  			 		 btnBackMulti, btnBackSingle, btnBackHost, btnBackMultiOptions, btnBackJoin;
+  private SoundSlider soundSlider;
+  private MusicSlider musicSlider;
+  private CreateGameRoom createGameRoom;
+  private HostGameRoom hostGameRoom;
+  private JoinGameRoom joinGameRoom;
+  private GameRoom gameRoom;
+  private GameRoomLobby gameRoomLobby;
+  public static String usr;
+  public Client client;
+  private final int OFFSET = 600;
 
   public GameMenu() throws IOException {
 
@@ -50,7 +52,8 @@ public class GameMenu extends Parent {
     multiOptionsWindow = new VBox(15);
     hostGameRoomWindow = new GridPane();
     singleGameWindow = new VBox(3);
-    joinGameRoomWindow = new VBox(3);
+    joinGameRoomWindow = new GridPane();
+    gameRoomLobbyWindow = new GridPane();
     
     soundSlider = new SoundSlider();
     musicSlider = new MusicSlider();
@@ -67,6 +70,7 @@ public class GameMenu extends Parent {
     buildSingleGameWindow();
     buildHostGameRoomWindow();
     buildJoinGameRoomWindow();
+    buildGameRoomLobbyWindow();
     
     
     // GAME MENU CAPTION //
@@ -238,29 +242,22 @@ public class GameMenu extends Parent {
 
       // BACK TO MAIN MENU FROM MULTIPLAYER MODE
     	
-      getChildren().add(initialWindow);
-
-      TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), multiOptionsWindow);
-      trans.setToX(multiOptionsWindow.getTranslateX() + OFFSET);
-
-      TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), initialWindow);
-      trans1.setToX(multiOptionsWindow.getTranslateX());
-
-      trans.play();
-      trans1.play();
-
-      trans.setOnFinished(evt -> {
-
-        // Disconnect client when you return to the main menu
-        client.cleanup();
-
-        getChildren().remove(multiOptionsWindow);
-        getChildren().addAll(hoverText, racerText, captionText);
-
+      client.cleanup();
+    	
+      getChildren().clear();
+      
+      try {
+			GameMenu newMenu = new GameMenu();
+			getChildren().add(newMenu);
+			
+      } catch (IOException e) {
+			
+			System.err.println("CANNOT TRANSITION TO MAIN MENU");
+	  }
+    	    	
       });
-    });
 
-    btnBackHost = new MenuButton("BACK", 350, 70, 30);
+    btnBackHost = new MenuButton("BACK", 300, 60, 28);
     btnBackHost.setOnMouseClicked(event -> {
 
       //BACK TO MULTIPLAYER OPTIONS JOIN/HOST FROM HOST	GAME WINDOW
@@ -336,43 +333,58 @@ public class GameMenu extends Parent {
     MenuButton connectMulti = new MenuButton("CONNECT TO THE LOBBY", 350, 70, 30);
     connectMulti.setOnMouseClicked(event -> {
 
-      usr = usernameInputMulti.getText();
-      int portNo = Integer.valueOf(portInputMulti.getText());
-      String machineName = machineInputMulti.getText();
+    	try {	
+    	
+    		usr = usernameInputMulti.getText();
+    		int portNo = Integer.valueOf(portInputMulti.getText());
+    		String machineName = machineInputMulti.getText();
 
-      client = new Client(usr, portNo, machineName, this);
+    		client = new Client(usr, portNo, machineName);
 
-      if (client.serverOn) {
+    		if (client.serverOn) {
 
-        client.start();
+    			client.start();
 
-        getChildren().add(multiOptionsWindow);
+    			getChildren().add(multiOptionsWindow);
 
-        TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25),
-            connectMultiWindow);
-        trans.setToX(connectMultiWindow.getTranslateX() - OFFSET);
+    			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25),
+    					connectMultiWindow);
+    			trans.setToX(connectMultiWindow.getTranslateX() - OFFSET);
 
-        TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25),
-            multiOptionsWindow);
-        trans1.setToX(multiOptionsWindow.getTranslateX() - OFFSET);
+    			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25),
+    					multiOptionsWindow);
+    			trans1.setToX(multiOptionsWindow.getTranslateX() - OFFSET);
 
-        trans.play();
-        trans1.play();
-        trans.setOnFinished(evt -> {
-          getChildren().remove(connectMultiWindow);
-        });
+    			trans.play();
+    			trans1.play();
+    			trans.setOnFinished(evt -> {
+    				getChildren().remove(connectMultiWindow);
+    			});
 
-      } else {
+    		} else {
     	  
-    	//The server was not running
-        if (box4Multi.getChildren().size() > 0) {
+    			//The server was not running
+    			if (box4Multi.getChildren().size() > 0) {
 
-          box4Multi.getChildren().remove(0);
-        }
+    				box4Multi.getChildren().remove(0);
+    			}
        
-        box4Multi.getChildren().add(startServerMulti);
-      }
+    			box4Multi.getChildren().add(startServerMulti);
+    		}
+    	}
+    	catch(Exception e){
+    	
+    		e.printStackTrace();
+//    		try {
+//    			PopUpWindow.display("INVALID INPUT");
+//    		}
+//    		catch (IOException ex){
+//    		System.err.println("POP UP NOT WORKING");
+//    		}
+    	}
+    
     });
+    
 
     //If the server was not running - 
     //Start a server on <4444, localhost>
@@ -387,7 +399,7 @@ public class GameMenu extends Parent {
       int portNo = Integer.valueOf(portInputMulti.getText());
       String machineName = machineInputMulti.getText();
 
-      client = new Client(usr, portNo, machineName, this);
+      client = new Client(usr, portNo, machineName);
       client.start();
 
       getChildren().add(multiOptionsWindow);
@@ -411,31 +423,32 @@ public class GameMenu extends Parent {
     box4Multi.setAlignment(Pos.CENTER);
     box4Multi.getChildren().add(connectMulti);
 
-    // connecting multiplayer options
-    MenuButton joinGR = new MenuButton("JOIN A GAME ROOM", 350, 70, 30);
-
+    // JOIN A GAME ROOM IN MULTIPLAYER MODE //
     
+    joinGameRoom = new JoinGameRoom();
 
+    MenuButton joinGR = new MenuButton("JOIN A GAME ROOM", 350, 70, 30);
+    
     joinGR.setOnMouseClicked(event -> {
-       
-      try {
-    	  
-		joinGameRoom = new JoinGameRoom(client);
-		joinGameRoomWindow.getChildren().add(joinGameRoom);
-		
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-      
+        
       getChildren().add(joinGameRoomWindow);
+      joinGameRoom.setClient(client);
 
-      TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25),
-          multiOptionsWindow);
+      ArrayList<GameRoom> gameRoomList;
+      try {
+    	  gameRoomList = client.requestAllGames();
+    	  joinGameRoom.setGameList(gameRoomList);
+          joinGameRoom.refresh();
+		
+      } catch (IOException e) {
+		
+    	  System.err.println("Didn't receive list of available game rooms");
+      }
+      
+      TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), multiOptionsWindow);
       trans.setToX(multiOptionsWindow.getTranslateX() - OFFSET);
 
-      TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25),
-          joinGameRoomWindow);
+      TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), joinGameRoomWindow);
       trans1.setToX(joinGameRoomWindow.getTranslateX() - OFFSET);
 
       trans.play();
@@ -446,6 +459,40 @@ public class GameMenu extends Parent {
 
     });
 
+    // JOIN THE SELECTED GAME ROOM //
+    
+    MenuButton joinChosenGR = new MenuButton("JOIN THIS GAME ROOM", 350, 70, 30);
+	joinChosenGR.setOnMouseClicked(eventjoin -> {
+
+		try {
+			GameRoom gameRoomChosen = client.joinGame(joinGameRoom.getChosenGRid(), DataGenerator.basicShipSetup(GameMenu.usr));
+			gameRoomLobby = new GameRoomLobby(gameRoomChosen);
+			gameRoomLobby.setClient(client);
+			gameRoomLobby.refresh();
+			
+			gameRoomLobbyWindow.add(gameRoomLobby, 0, 0);
+		    getChildren().add(gameRoomLobbyWindow);
+		       
+		    TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), joinGameRoomWindow);
+		    trans.setToX(joinGameRoomWindow.getTranslateX() - OFFSET);
+
+		    TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), gameRoomLobbyWindow);
+		    trans1.setToX(gameRoomLobbyWindow.getTranslateX() - OFFSET);
+
+		    trans.play();
+		    trans1.play();
+		    trans.setOnFinished(evt -> {
+		       getChildren().remove(joinGameRoomWindow);
+		    });
+
+		} catch (IOException e) {
+
+			System.err.println("JOIN DIDN'T WORK");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	});
+    
     //HOST A GAME ROOM IN MULTIPLAYER MODE //
 
     MenuButton hostGR = new MenuButton("HOST A GAME ROOM", 350, 70, 30);
@@ -470,30 +517,53 @@ public class GameMenu extends Parent {
 
     });
     
-    MenuButton hostGameRoomButton = new MenuButton("CREATE THE GAME ROOM", 350, 70,30);
+    // PREVIEW THE TRACK //
+    
+    VBox mapBox = new VBox(10);
+    GridPane.setRowSpan(mapBox, 3);
+    mapBox.setAlignment(Pos.CENTER);
+    
+    MenuButton generateTrack = new MenuButton("PREVIEW TRACK", 300, 60, 28);
+    
+    generateTrack.setOnMouseClicked(event -> {
+
+      if (mapBox.getChildren().size() > 0) {
+
+        mapBox.getChildren().remove(0);
+      }
+      
+      hostGameRoom.setSeed();
+      
+      Map track = new Map(hostGameRoom.getSeed());
+      mapBox.getChildren().add(track);
+
+    });
+    
+    
+    // CREATE THE GAME ROOM //
+    
+    MenuButton hostGameRoomButton = new MenuButton("CREATE THE GAME ROOM", 300, 60, 28);
 
     hostGameRoomButton.setOnMouseClicked(event -> {
     	
-      // create a game room
-      hostGameRoom.setSeed();
-      hostGameRoom.setMaxPlayers();
-      hostGameRoom.setNoLaps();
-      hostGameRoom.setName();
-      
       try {
   
+       hostGameRoom.setSettings();  
+       
        gameRoom =  client.createGame(hostGameRoom.getSeed(), hostGameRoom.getMaxPlayers(), hostGameRoom.getNoLaps(), 
     		       hostGameRoom.getName(), DataGenerator.basicShipSetup(client.clientName));
-       gameRoomLobby = new GameRoomLobby(gameRoom);
+       gameRoomLobby = new GameRoomLobby(gameRoom);;
        gameRoomLobby.setClient(client);
+       gameRoomLobby.refresh();
        
-       getChildren().add(gameRoomLobby);
+       gameRoomLobbyWindow.add(gameRoomLobby, 0, 0);
+       getChildren().add(gameRoomLobbyWindow);
 
        TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), hostGameRoomWindow);
        trans.setToX(hostGameRoomWindow.getTranslateX() - OFFSET);
 
-       TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), gameRoomLobby);
-       trans1.setToX(gameRoomLobby.getTranslateX() - OFFSET);
+       TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), gameRoomLobbyWindow);
+       trans1.setToX(gameRoomLobbyWindow.getTranslateX() - OFFSET);
 
        trans.play();
        trans1.play();
@@ -504,11 +574,15 @@ public class GameMenu extends Parent {
 
       } catch (IOException e) {
 
-        e.printStackTrace();
-      }
+        System.err.println("HOSTING DIDN'T WORK");
+        
+      } catch (Exception e) {
+		e.printStackTrace();
+	}
 
     });
-
+    
+    
 
     // MAIN MENU WINDOW CHILDREN
     initialWindow.add(btnPlayGame, 0, 1);
@@ -549,11 +623,16 @@ public class GameMenu extends Parent {
 
     // HOST GAME ROOM WINDOW
     hostGameRoomWindow.add(hostGameRoom, 0, 0);
-    hostGameRoomWindow.add(hostGameRoomButton, 1,1);
-    hostGameRoomWindow.add(btnBackHost, 1, 2);
+    hostGameRoomWindow.add(mapBox, 1, 0);
+    hostGameRoomWindow.add(generateTrack, 1, 1);
+    hostGameRoomWindow.add(hostGameRoomButton, 1, 2);
+    hostGameRoomWindow.add(btnBackHost, 0, 1);
     
-    // join a game room in multiplayer mode
-    joinGameRoomWindow.getChildren().add(btnBackJoin);
+    // JOIN GAME ROOM WINDOW 
+    joinGameRoomWindow.add(joinGameRoom, 0, 0);
+    GridPane.setHalignment(btnBackJoin, HPos.RIGHT);
+    joinGameRoomWindow.add(btnBackJoin, 0, 1);
+    joinGameRoomWindow.add(joinChosenGR, 0, 2);
 
     // GAME MENU CHILDREN
     getChildren().addAll(initialWindow, hoverText, racerText, captionText);
@@ -622,7 +701,7 @@ public class GameMenu extends Parent {
   public void buildSingleGameWindow(){
 	  
 	  singleGameWindow.setTranslateX(700);
-	  singleGameWindow.setTranslateY(50);
+	  singleGameWindow.setTranslateY(80);
 	  
   }
   
@@ -634,6 +713,9 @@ public class GameMenu extends Parent {
 		
 	  hostGameRoomWindow.setTranslateX(700);
 	  hostGameRoomWindow.setTranslateY(80);
+	  hostGameRoomWindow.setHgap(40);
+	  hostGameRoomWindow.setVgap(10);
+	  hostGameRoomWindow.setPadding(new Insets(0,30,0,30));
 
   }
   
@@ -644,7 +726,24 @@ public class GameMenu extends Parent {
   private void buildJoinGameRoomWindow() {
 	
 	  joinGameRoomWindow.setTranslateX(700);
-	  joinGameRoomWindow.setTranslateY(50);
+	  joinGameRoomWindow.setTranslateY(80);
+	  joinGameRoomWindow.setVgap(10);
+	  joinGameRoomWindow.setPadding(new Insets(0,20,0,0));
+	  
+  }
+  
+  /**
+   * Sets the design for the game room lobby window,
+   * where the user can see who is currently connected to the game room
+   * and the host can start the game at any point.
+   */
+  private void buildGameRoomLobbyWindow() {
+	
+	  gameRoomLobbyWindow.setTranslateX(700);
+	  gameRoomLobbyWindow.setTranslateY(100);
+	  gameRoomLobbyWindow.setVgap(10);
+	  gameRoomLobbyWindow.setPadding(new Insets(0,20,0,0));
+	  
   }
 
 }

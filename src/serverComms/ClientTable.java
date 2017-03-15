@@ -35,6 +35,12 @@ public class ClientTable {
                                                                               // respective
                                                                               // IDs
   private int nextInt = 0;
+  
+  private Lobby lobby;
+  
+  public ClientTable(Lobby lobby) {
+	  this.lobby = lobby;
+  }
 
   /**
    * Checks if the user exists already
@@ -60,6 +66,14 @@ public class ClientTable {
   public void add(String name) {
     queueTable.put(name, new CommQueue());
   }
+  
+  public void updateUser(String name) {
+	queueTable.remove(name);
+	queueTable.put(name, new CommQueue());
+	int gameId = getGameID(name);
+	if(gameId != -1) allGames.get(gameId).rejoin(name);
+	
+}
 
   public void addReceiver(String name, ServerReceiver receiver) {
     receivers.put(name, receiver);
@@ -71,7 +85,6 @@ public class ClientTable {
     int gameId = getGameID(name);
     if (gameId != -1)
       allGames.get(gameId).remove(name);
-    games.remove(name);
   }
 
   /**
@@ -108,7 +121,9 @@ public class ClientTable {
 
   public boolean addGame(GameSettings gameSettings) {
     allGames.put(nextInt, new GameRoom(nextInt, gameSettings.lobbyName, gameSettings.seed,
-        gameSettings.maxPlayers, gameSettings.hostName, this, false));
+    		gameSettings.maxPlayers, gameSettings.hostName, gameSettings.lapCount, this));
+
+    lobby.games.add(getGame(nextInt));
     nextInt++;
     return joinGame(nextInt-1, gameSettings.setupData);
   }

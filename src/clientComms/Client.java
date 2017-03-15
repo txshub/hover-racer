@@ -15,7 +15,6 @@ import serverComms.GameRoom;
 import serverComms.GameSettings;
 import serverComms.IDShipData;
 import serverComms.ServerComm;
-import userInterface.GameMenu;
 
 /**
  * Main client class for client/server communications
@@ -31,13 +30,14 @@ public class Client extends Thread {
   int portNumber;
   String machineName;
   StopDisconnect serverStop;
-  GameMenu gameMenu;
   MultiplayerShipManager manager;
   public volatile boolean alreadyAccessed = false;
   private ArrayList<GameRoom> gameList;
-  public volatile boolean alreadyAccessedList = true;
+  private volatile boolean alreadyAccessedList = true;
   public volatile boolean alreadyAccessedRoom = true;
   private GameRoom currentRoom;
+  Socket server;
+  DataInputStream fromServer;
 
   /**
    * Creates a client object and connects to a given server on a given port
@@ -53,15 +53,18 @@ public class Client extends Thread {
    * @param gameMenu
    * @param gameMenu
    */
-  public Client(String clientName, int portNumber, String machineName, GameMenu gameMenu) {
+  public Client(String clientName, int portNumber, String machineName) {
     this.clientName = clientName;
     this.portNumber = portNumber;
     this.machineName = machineName;
-    this.gameMenu = gameMenu;
+
+    Socket testConn = null;
+
     try {
-      Socket testConn = new Socket(machineName, portNumber);
+      testConn = new Socket(machineName, portNumber);
       toServer = new DataOutputStream(new BufferedOutputStream(testConn.getOutputStream()));
       sendByteMessage(new byte[0], ServerComm.TESTCONN);
+      testConn.close();
     } catch (UnknownHostException e) {
       serverOn = false;
     } catch (IOException e) {
@@ -71,19 +74,7 @@ public class Client extends Thread {
 
   @Override
   public void run() {
-    DataInputStream fromServer = null;
-    Socket server = null;
-    try {
-      server = new Socket(machineName, portNumber);
-      toServer = new DataOutputStream(new BufferedOutputStream(server.getOutputStream()));
-      fromServer = new DataInputStream(new BufferedInputStream(server.getInputStream()));
-    } catch (UnknownHostException e) {
-      System.err.println("Unknown host: " + machineName);
-      serverOn = false;
-    } catch (IOException e) {
-      serverOn = false;
-    }
-
+	setupConnection();
     ClientReceiver receiver = new ClientReceiver(fromServer, this);
     receiver.start();
     try {
@@ -113,14 +104,16 @@ public class Client extends Thread {
   }
   
 
-  public GameRoom createGame(long seed, int maxPlayers, int lapCount, String lobbyName, ShipSetupData data)
+  public GameRoom createGame(String seed, int maxPlayers, int lapCount, String lobbyName, ShipSetupData data)
       throws IOException {
+	  alreadyAccessedRoom = true;
     GameSettings thisGame = new GameSettings(seed, maxPlayers, lapCount, lobbyName, data);
     sendByteMessage(thisGame.toByteArray(), ServerComm.MAKEGAME);
     return waitForRoom();
   }
 
   public GameRoom joinGame(int id, ShipSetupData data) throws IOException {
+	  alreadyAccessedRoom = true;
     IDShipData toSend = new IDShipData(id, data);
     sendByteMessage(toSend.toByteArray(), ServerComm.JOINGAME);
     return waitForRoom();
@@ -130,7 +123,13 @@ public class Client extends Thread {
 	  sendByteMessage(new byte[0], ServerComm.STARTGAME);
   }
   
+  public void startSinglePlayerGame(String seed, int numAI, int lapCount, ShipSetupData data) throws IOException {
+	 createGame(seed, numAI+1, lapCount, "1", data);
+	 startGame();
+  }
+  
   public GameRoom getUpdatedRoom() throws IOException {
+	  alreadyAccessedRoom = true;
     sendByteMessage(new byte[0], ServerComm.REFRESHROOM);
     return waitForRoom();
   }
@@ -138,6 +137,7 @@ public class Client extends Thread {
   public GameRoom waitForRoom() {
     while (alreadyAccessedRoom) {
       try {
+    	  System.out.println("Waiting");
         Thread.sleep(100);
       } catch (InterruptedException e) {
       }
@@ -147,6 +147,7 @@ public class Client extends Thread {
   }
 
   public ArrayList<GameRoom> requestAllGames() throws IOException {
+	alreadyAccessedList = true;
     sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.SENDALLGAMES);
     while (alreadyAccessedList) {
       try {
@@ -202,5 +203,37 @@ public class Client extends Thread {
   public MultiplayerShipManager getManager() {
     return manager;
   }
+
+public void reopenPort() {
+	server = new Socket();
+	ClientReceiver receiver = new ClientReceiver(fromServer, this);
+    receiver.start();
+    try {
+      sendByteMessage(clientName.getBytes(ServerComm.charset), ServerComm.USERRECONNECT);
+      serverStop = new StopDisconnect(this);
+      serverStop.start();
+      receiver.join();
+      toServer.close();
+      fromServer.close();
+      server.close();
+    } catch (IOException e) {
+      System.err.println("Something wrong: " + e.getMessage());
+      // What to do here?
+    } catch (InterruptedException e) {
+      System.err.println("Unexpected interruption: " + e.getMessage());
+      // What to do here?
+    }
+}
+
+public void setupConnection() {
+    try {
+      server = new Socket(machineName, portNumber);
+      toServer = new DataOutputStream(new BufferedOutputStream(server.getOutputStream()));
+      fromServer = new DataInputStream(new BufferedInputStream(server.getInputStream()));
+    } catch (UnknownHostException e) {
+      System.err.println("Unknown host: " + machineName);
+    } catch (IOException e) {
+    }
+}
 
 }

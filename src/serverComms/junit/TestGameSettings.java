@@ -14,7 +14,7 @@ public class TestGameSettings {
 
   @Test
   public void testToStringWithParams() {
-    long seed = 12432;
+    String seed = "12432";
     int maxPlayers = 3;
     int lapCount = 7;
     String lobbyName = "Testing";
@@ -27,7 +27,7 @@ public class TestGameSettings {
 
   @Test
   public void testToStringWithString() {
-    long seed = 12432;
+    String seed = "12432";
     int maxPlayers = 3;
     int lapCount = 7;
     String lobbyName = "Testing";
@@ -40,7 +40,7 @@ public class TestGameSettings {
 
   @Test
   public void testToByteArrayWithParams() {
-    long seed = 12432;
+    String seed = "12432";
     int maxPlayers = 3;
     int numAI = 4;
     int lapCount = 7;
@@ -55,7 +55,7 @@ public class TestGameSettings {
 
   @Test
   public void testToByteArrayWithString() {
-    long seed = 12432;
+    String seed = "12432";
     int maxPlayers = 3;
     int numAI = 4;
     int lapCount = 7;

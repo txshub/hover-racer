@@ -49,12 +49,13 @@ public class ServerReceiver extends Thread {
         } else if (fullMsg.getType() == ServerComm.SENDALLGAMES) {
           ArrayList<GameRoom> rooms = new ArrayList<GameRoom>();
           for (GameRoom room : lobby.games) {
-            if (!room.isBusy())
-              rooms.add(room);
+        	  if (!room.isBusy()) {
+        		  rooms.add(room);
+        	  }
           }
           String out = "";
           for (GameRoom r : rooms) {
-            out += r.toString() + System.lineSeparator();
+        	  out += r.toString() + System.lineSeparator();
           }
           lobby.clientTable.getQueue(clientName)
               .offer(new ByteArrayByte(out.getBytes(ServerComm.charset), ServerComm.SENDALLGAMES));
@@ -78,8 +79,11 @@ public class ServerReceiver extends Thread {
           }
 
         } else if (fullMsg.getType() == ServerComm.SENDPLAYERDATA) {
-          if (gameRoom != null)
-            gameRoom.updateUser(gameNum, fullMsg.getMsg());
+        	System.out.println("Send Data");
+          if (gameRoom != null) {
+        	  System.out.println("Not Null");
+        	  gameRoom.updateUser(gameNum, fullMsg.getMsg());
+          }
         } else if (fullMsg.getType() == ServerComm.STARTGAME) {
           int gameID = lobby.clientTable.getGameID(clientName);
           if (gameID == -1) {
@@ -100,6 +104,7 @@ public class ServerReceiver extends Thread {
         } else {
           System.out.println("Unknown Message Type: " + fullMsg.getType());
         }
+        detect.interrupt();
         detect = new DetectTimeout(lobby.clientTable, clientName);
         detect.start();
       }

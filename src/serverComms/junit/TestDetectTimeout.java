@@ -6,12 +6,13 @@ import org.junit.Test;
 
 import serverComms.ClientTable;
 import serverComms.DetectTimeout;
+import serverComms.Lobby;
 
 public class TestDetectTimeout {
 
   @Test
   public void test() {
-    ClientTable table = new ClientTable();
+    ClientTable table = new ClientTable(new Lobby(1234));
     String name = "Testing";
     table.add(name);
     DetectTimeout test = new DetectTimeout(table, name);

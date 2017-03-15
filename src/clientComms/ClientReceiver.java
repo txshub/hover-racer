@@ -4,7 +4,9 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import audioEngine.AudioMaster;
 import game.MainGameLoop;
+import javafx.application.Platform;
 import physics.network.RaceSetupData;
 import physics.ships.MultiplayerShipManager;
 import serverComms.ByteArrayByte;
@@ -20,6 +22,7 @@ public class ClientReceiver extends Thread {
 	private DataInputStream server;
 	private Client client;
 	private MultiplayerShipManager manager;
+
 
 	/** Creates a ClientReceiver object
 	 * 
@@ -65,16 +68,21 @@ public class ClientReceiver extends Thread {
 					client.setCurrentRoom(gr);
 				} else if (fullMsg.getType() == ServerComm.RACESETUPDATA) {
 					RaceSetupData data = Converter.receiveRaceData(fullMsg.getMsg());
+					AudioMaster.stopMusic();
+					AudioMaster.cleanUp();
+					Platform.exit();
 					MainGameLoop.startMultiplayerGame(data, client);
 				} else if (fullMsg.getType() == ServerComm.FULLPOSITIONUPDATE) {
 					if (client.getManager() == null)
 						throw new IllegalStateException("Position update received but ship manager was not added to ClientReceiver");
 					client.getManager().addPacket(fullMsg.getMsg());
+				} else if (fullMsg.getType() == ServerComm.ROOMCLOSED) {
+					//Go back to multiplayer menu (need to speak to Andreea)
 				}
 			}
 		} catch (IOException e) {
 			System.err.println("Server seems to have died: " + e.getMessage());
-			// What to do here?
+			client.reopenPort();
 		}
 	}
 
