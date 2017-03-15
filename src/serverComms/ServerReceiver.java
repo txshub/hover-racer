@@ -44,7 +44,6 @@ public class ServerReceiver extends Thread {
           lobby.remove(clientName);
 
         } else if (fullMsg.getType() == ServerComm.DONTDISCONNECT) {
-        	System.out.println("Don't Disconnect!");
           // Do Nothing - It's just making sure we don't disconnect
 
         } else if (fullMsg.getType() == ServerComm.SENDALLGAMES) {
