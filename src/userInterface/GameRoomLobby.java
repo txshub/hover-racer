@@ -67,17 +67,6 @@ public class GameRoomLobby extends GridPane {
       
     });
     
-    if (!GameMenu.usr.equals(gameRoom.getHostName())){
-    	
-    	//CHECK IF THE GAME HAS STARTED AND CLOSE THE JAVAFX THREAD //
-    	
-//    	while(){
-//    		
-//    		
-//    	}
-//    	
-    	
-    }
 
     add(refresh,1, 2);
     add(startGame, 1, 3);
