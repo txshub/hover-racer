@@ -5,14 +5,14 @@ import physics.placeholders.DataGenerator;
 
 public class GameSettings {
 
-  final long seed;
+  final String seed;
   final int maxPlayers;
   final int lapCount;
   final String lobbyName;
   final String hostName;
   final ShipSetupData setupData;
 
-  public GameSettings(long seed, int maxPlayers, int lapCount, String lobbyName, ShipSetupData setupData)
+  public GameSettings(String seed, int maxPlayers, int lapCount, String lobbyName, ShipSetupData setupData)
       throws IllegalArgumentException {
     this.seed = seed;
     this.maxPlayers = maxPlayers;
@@ -30,7 +30,7 @@ public class GameSettings {
       collected += in.charAt(0);
       in = in.substring(1);
     }
-    seed = Long.valueOf(collected);
+    seed = collected;
     in = in.substring(1);
     collected = "";
     while (in.charAt(0) != '|') {

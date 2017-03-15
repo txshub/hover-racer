@@ -10,7 +10,6 @@ import java.net.Socket;
 import clientComms.Client;
 import clientComms.ClientReceiver;
 import serverComms.ServerComm;
-import userInterface.GameMenu;
 
 public class DummyClient extends Client {
 
@@ -18,8 +17,8 @@ public class DummyClient extends Client {
   String clientName;
   boolean testsPassed = false;
 
-  public DummyClient(String clientName, int portNumber, String machineName, GameMenu gameMenu) {
-    super(clientName, portNumber, machineName, gameMenu);
+  public DummyClient(String clientName, int portNumber, String machineName) {
+    super(clientName, portNumber, machineName);
     this.clientName = clientName;
   }
 

@@ -2,18 +2,27 @@ package serverComms.junit;
 
 import static org.junit.Assert.*;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import physics.placeholders.DataGenerator;
 import serverComms.ClientTable;
 import serverComms.GameSettings;
+import serverComms.Lobby;
 import serverComms.ServerReceiver;
 
 public class TestClientTable {
+	
+	static Lobby lobby;
+	
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+		lobby = new Lobby(1234);
+	}
 
   @Test
   public void testUserExists() {
-    ClientTable table = new ClientTable();
+    ClientTable table = new ClientTable(lobby);
     if (table.userExists("Testing"))
       fail("User exists before adding");
     table.add("Testing");
@@ -23,7 +32,7 @@ public class TestClientTable {
 
   @Test
   public void testAdd() {
-    ClientTable table = new ClientTable();
+    ClientTable table = new ClientTable(lobby);
     table.add("Testing");
     if (table.getQueue("Testing") == null)
       fail("User CommQueue not found");
@@ -31,7 +40,7 @@ public class TestClientTable {
 
   @Test
   public void testAddReceiver() {
-    ClientTable table = new ClientTable();
+    ClientTable table = new ClientTable(lobby);
     String name = "Testing";
     ServerReceiver testReceiver = new ServerReceiver(null, null, null, null);
     table.add(name);
@@ -42,7 +51,7 @@ public class TestClientTable {
 
   @Test
   public void testRemove() {
-    ClientTable table = new ClientTable();
+    ClientTable table = new ClientTable(lobby);
     String name = "Testing";
     ServerReceiver testReceiver = new ServerReceiver(null, null, null, null);
     table.add(name);
@@ -56,7 +65,7 @@ public class TestClientTable {
 
   @Test
   public void testGetQueue() {
-    ClientTable table = new ClientTable();
+    ClientTable table = new ClientTable(lobby);
     String name = "Testing";
     ServerReceiver testReceiver = new ServerReceiver(null, null, null, null);
     table.add(name);
@@ -67,7 +76,7 @@ public class TestClientTable {
 
   @Test
   public void testGetReceiver() {
-    ClientTable table = new ClientTable();
+    ClientTable table = new ClientTable(lobby);
     String name = "Testing";
     ServerReceiver testReceiver = new ServerReceiver(null, null, null, null);
     table.add(name);
@@ -78,14 +87,14 @@ public class TestClientTable {
 
   @Test
   public void testGetGameID() {
-    ClientTable table = new ClientTable();
+    ClientTable table = new ClientTable(lobby);
     String name = "Testing";
     table.add(name);
     if (table.getGameID(name) != -1)
       fail("Game ID didn't initialise as -1");
     if (table.joinGame(0, DataGenerator.basicShipSetup(name)))
       fail("Game was present before being made");
-    table.addGame(new GameSettings(0, 1, 0, "lobby", DataGenerator.basicShipSetup(name)));
+    table.addGame(new GameSettings("0", 1, 0, "lobby", DataGenerator.basicShipSetup(name)));
     if (!table.joinGame(0, DataGenerator.basicShipSetup(name)))
       fail("Game wasn't present after being made");
     if (table.getGameID(name) == -1)
@@ -94,14 +103,14 @@ public class TestClientTable {
 
   @Test
   public void testGetGame() {
-    ClientTable table = new ClientTable();
+    ClientTable table = new ClientTable(lobby);
     String name = "Testing";
     table.add(name);
     if (table.getGameID(name) != -1)
       fail("Game ID didn't initialise as -1");
     if (table.joinGame(0, DataGenerator.basicShipSetup(name)))
       fail("Game was present before being made");
-    table.addGame(new GameSettings(0, 1, 0, "lobby", DataGenerator.basicShipSetup(name)));
+    table.addGame(new GameSettings("0", 1, 0, "lobby", DataGenerator.basicShipSetup(name)));
     if (!table.joinGame(0, DataGenerator.basicShipSetup(name)))
       fail("Game wasn't present after being made");
     int id = table.getGameID(name);
@@ -113,28 +122,28 @@ public class TestClientTable {
 
   @Test
   public void testAddGame() {
-    ClientTable table = new ClientTable();
+    ClientTable table = new ClientTable(lobby);
     String name = "Testing";
     table.add(name);
     if (table.getGameID(name) != -1)
       fail("Game ID didn't initialise as -1");
     if (table.joinGame(0, DataGenerator.basicShipSetup(name)))
       fail("Game was present before being made");
-    table.addGame(new GameSettings(0, 1, 0, "lobby", DataGenerator.basicShipSetup(name)));
+    table.addGame(new GameSettings("0", 1, 0, "lobby", DataGenerator.basicShipSetup(name)));
     if (table.getGame(0) == null)
       fail("Game wasn't got after being initialised");
   }
 
   @Test
   public void testJoinGame() {
-    ClientTable table = new ClientTable();
+    ClientTable table = new ClientTable(lobby);
     String name = "Testing";
     table.add(name);
     if (table.getGameID(name) != -1)
       fail("Game ID didn't initialise as -1");
     if (table.joinGame(0, DataGenerator.basicShipSetup(name)))
       fail("Game was present before being made");
-    table.addGame(new GameSettings(0, 1, 0, "lobby", DataGenerator.basicShipSetup(name)));
+    table.addGame(new GameSettings("0", 1, 0, "lobby", DataGenerator.basicShipSetup(name)));
     if (!table.joinGame(0, DataGenerator.basicShipSetup(name)))
       fail("Game wasn't present after being made");
     if (table.getGameID(name) == -1)

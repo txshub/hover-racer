@@ -71,6 +71,8 @@ public class ClientReceiver extends Thread {
 					if (client.getManager() == null)
 						throw new IllegalStateException("Position update received but ship manager was not added to ClientReceiver");
 					client.getManager().addPacket(fullMsg.getMsg());
+				} else if (fullMsg.getType() == ServerComm.ROOMCLOSED) {
+					//Go back to multiplayer menu (need to speak to Andreea)
 				}
 			}
 		} catch (IOException e) {

@@ -114,7 +114,7 @@ public class Client extends Thread {
   }
   
 
-  public GameRoom createGame(long seed, int maxPlayers, int lapCount, String lobbyName, ShipSetupData data)
+  public GameRoom createGame(String seed, int maxPlayers, int lapCount, String lobbyName, ShipSetupData data)
       throws IOException {
 	  alreadyAccessedRoom = true;
     GameSettings thisGame = new GameSettings(seed, maxPlayers, lapCount, lobbyName, data);
@@ -133,7 +133,7 @@ public class Client extends Thread {
 	  sendByteMessage(new byte[0], ServerComm.STARTGAME);
   }
   
-  public void startSinglePlayerGame(long seed, int numAI, int lapCount, ShipSetupData data) throws IOException {
+  public void startSinglePlayerGame(String seed, int numAI, int lapCount, ShipSetupData data) throws IOException {
 	 createGame(seed, numAI+1, lapCount, "1", data);
 	 startGame();
   }

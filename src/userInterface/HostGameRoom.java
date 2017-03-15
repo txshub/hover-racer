@@ -21,7 +21,7 @@ import physics.placeholders.DataGenerator;
 public class HostGameRoom extends GridPane {
 
   private Client client;
-  private int gameRoomSeed;
+  private String gameRoomSeed;
   private int maxPlayers;
   private int lapNo;
   private String gameRoomName;
@@ -88,7 +88,7 @@ public class HostGameRoom extends GridPane {
   public void setSettings(){
 	  
 	  try {
-		  this.gameRoomSeed = Integer.valueOf(seedInput.getText());
+		  this.gameRoomSeed = seedInput.getText();
 		  this.maxPlayers = Integer.valueOf(noPlayersInput.getText());
 		  this.lapNo = Integer.valueOf(noLapsInput.getText());
 		  this.gameRoomName = nameInput.getText();
@@ -108,7 +108,7 @@ public class HostGameRoom extends GridPane {
   public void setSeed(){
 	  
 	 try {
-		 this.gameRoomSeed = Integer.valueOf(seedInput.getText());
+		 this.gameRoomSeed = seedInput.getText();
 	 }
 	 catch (Exception e){
 		 
@@ -122,7 +122,7 @@ public class HostGameRoom extends GridPane {
   }
   
   
-  public int getSeed(){
+  public String getSeed(){
 	  
 	  return this.gameRoomSeed;
   }

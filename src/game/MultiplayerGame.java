@@ -67,7 +67,7 @@ public class MultiplayerGame implements GameInt {
   private MousePicker picker;
   private MasterRenderer renderer;
   private GuiRenderer guiRender;
-  private long trackSeed;
+  private String trackSeed;
   private ArrayList<TrackPoint> trackPoints;
   public static InputController input;
 
@@ -127,7 +127,7 @@ public class MultiplayerGame implements GameInt {
 
     // Track
     trackSeed = data.getTrackSeed();
-    SeedTrack st = TrackMaker.makeTrack(trackSeed, 10, 20, 30, 1, 40, 40, 4);
+    SeedTrack st = TrackMaker.makeTrack(trackSeed);
     // Scale up the track so it isn't so tiny
     for (TrackPoint tp : st.getTrack()) {
       tp.mul(20);
@@ -345,10 +345,10 @@ public class MultiplayerGame implements GameInt {
     float barrierWidth = 10;
 
     // 6 vertices for each track point, 3 components for each vertex
-    float[] vertices = new float[trackPoints.size() * 6 * 3];
+    float[] vertices = new float[(trackPoints.size() + 1) * 6 * 3];
     // 10 triangles for each track point, 3 vertices per triangle
-    int[] indices = new int[trackPoints.size() * 10 * 3];
-    float[] texCoords = new float[trackPoints.size() * 6 * 2];
+    int[] indices = new int[(trackPoints.size() + 1) * 10 * 3];
+    float[] texCoords = new float[(trackPoints.size() + 1) * 6 * 2];
     float[] normals = new float[vertices.length];
 
     // We can pre-calculate some stuff for normals
@@ -358,16 +358,25 @@ public class MultiplayerGame implements GameInt {
     Vector3f normRightOuter2D = new Vector3f(barrierHeight, barrierWidth, 0).normalize();
 
     // Populate vertex and normal arrays
-    for (int i = 0; i < trackPoints.size(); i++) {
-      TrackPoint curPoint = trackPoints.get(i);
-
-      // If we are at the first point the previous is the last point
-      int prev = (i == 0) ? trackPoints.size() - 1 : i - 1;
-      TrackPoint prevPoint = trackPoints.get(prev);
-
-      // If we are at the last point the next is the first point
-      int next = (i == trackPoints.size() - 1) ? 0 : i + 1;
-      TrackPoint nextPoint = trackPoints.get(next);
+    for (int i = 0; i <= trackPoints.size(); i++) {
+      TrackPoint curPoint = null;
+      TrackPoint prevPoint = null;
+      TrackPoint nextPoint = null;
+      if (i < trackPoints.size()) {
+        curPoint = trackPoints.get(i);
+  
+        // If we are at the first point the previous is the last point
+        int prev = (i == 0) ? trackPoints.size() - 1 : i - 1;
+        prevPoint = trackPoints.get(prev);
+  
+        // If we are at the last point the next is the first point
+        int next = (i == trackPoints.size() - 1) ? 0 : i + 1;
+        nextPoint = trackPoints.get(next);
+      } else {
+        curPoint = trackPoints.get(0);
+        prevPoint = trackPoints.get(trackPoints.size() - 1);
+        nextPoint = trackPoints.get(1);
+      }
 
       // Find the line between previous and next point for direction of this
       // slice
@@ -399,25 +408,24 @@ public class MultiplayerGame implements GameInt {
 
       // Define the texture coordinates
       int n = i * 6 * 2;
-      int flip = (i % 2) * 2 - 1;
-
+      
       texCoords[n + 0] = 0f;
-      texCoords[n + 1] = i % 2;
+      texCoords[n + 1] = i;
 
-      texCoords[n + 2] = 0.1f;
-      texCoords[n + 3] = i % 2;
+      texCoords[n + 2] = 0.15f;
+      texCoords[n + 3] = i;
 
       texCoords[n + 4] = 0.3f;
-      texCoords[n + 5] = i % 2;
+      texCoords[n + 5] = i;
 
       texCoords[n + 6] = 0.7f;
-      texCoords[n + 7] = i % 2;
+      texCoords[n + 7] = i;
 
-      texCoords[n + 8] = 0.9f;
-      texCoords[n + 9] = i % 2;
+      texCoords[n + 8] = 0.85f;
+      texCoords[n + 9] = i;
 
       texCoords[n + 10] = 1f;
-      texCoords[n + 11] = i % 2;
+      texCoords[n + 11] = i;
 
       // First calculate surface normals (technically edge normals as we are
       // working in a slice but whatever)
@@ -453,7 +461,6 @@ public class MultiplayerGame implements GameInt {
       int n = i * 6;
       int offset = i * 30;
 
-      if (i < trackPoints.size() - 1) {
         addToArray(n, n + 7, n + 6, indices, offset);
         addToArray(n, n + 1, n + 7, indices, offset + 3);
 
@@ -466,26 +473,8 @@ public class MultiplayerGame implements GameInt {
         addToArray(n + 3, n + 10, n + 9, indices, offset + 18);
         addToArray(n + 3, n + 4, n + 10, indices, offset + 21);
 
-        addToArray(n + 4, n + 11, n + 10, indices, offset + 24);
-        addToArray(n + 4, n + 5, n + 11, indices, offset + 27);
-
-      } else {
-        addToArray(n, 1, 0, indices, offset);
-        addToArray(n, n + 1, 1, indices, offset + 3);
-
-        addToArray(n + 1, 2, 1, indices, offset + 6);
-        addToArray(n + 1, n + 2, 2, indices, offset + 9);
-
-        addToArray(n + 2, 3, 2, indices, offset + 12);
-        addToArray(n + 2, n + 3, 3, indices, offset + 15);
-
-        addToArray(n + 3, 4, 3, indices, offset + 18);
-        addToArray(n + 3, n + 4, 4, indices, offset + 21);
-
-        addToArray(n + 4, 5, 4, indices, offset + 24);
-        addToArray(n + 4, n + 5, 5, indices, offset + 27);
-
-      }
+      addToArray(n + 4, n + 11, n + 10, indices, offset + 24);
+      addToArray(n + 4, n + 5, n + 11, indices, offset + 27);
     }
 
     return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
