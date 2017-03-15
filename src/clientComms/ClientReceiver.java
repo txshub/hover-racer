@@ -1,9 +1,9 @@
 package clientComms;
-
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import audioEngine.AudioMaster;
 import game.MainGameLoop;
 import javafx.application.Platform;
 import physics.network.RaceSetupData;
@@ -12,17 +12,13 @@ import serverComms.ByteArrayByte;
 import serverComms.Converter;
 import serverComms.GameRoom;
 import serverComms.ServerComm;
-
 /** Thread to receive any messages passed from the server
  * 
  * @author simon */
 public class ClientReceiver extends Thread {
-
 	private DataInputStream server;
 	private Client client;
 	private MultiplayerShipManager manager;
-
-
 	/** Creates a ClientReceiver object
 	 * 
 	 * @param server
@@ -33,7 +29,6 @@ public class ClientReceiver extends Thread {
 		this.server = server;
 		this.client = client;
 	}
-
 	/** Waits for messages from the server then deals with then appropriately */
 	@Override
 	public void run() {
@@ -67,6 +62,8 @@ public class ClientReceiver extends Thread {
 					client.setCurrentRoom(gr);
 				} else if (fullMsg.getType() == ServerComm.RACESETUPDATA) {
 					RaceSetupData data = Converter.receiveRaceData(fullMsg.getMsg());
+					AudioMaster.stopMusic();
+					AudioMaster.cleanUp();
 					Platform.exit();
 					MainGameLoop.startMultiplayerGame(data, client);
 				} else if (fullMsg.getType() == ServerComm.FULLPOSITIONUPDATE) {
@@ -82,10 +79,8 @@ public class ClientReceiver extends Thread {
 			// What to do here?
 		}
 	}
-
 	/** Adds the ShipManager, to receive the information about ships */
 	public void addManager(MultiplayerShipManager manager) {
 		this.manager = manager;
 	}
-
 }

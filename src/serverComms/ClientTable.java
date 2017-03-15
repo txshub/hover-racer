@@ -1,10 +1,7 @@
 package serverComms;
-
 import java.util.Map;
 import java.util.TreeMap;
-
 import physics.network.ShipSetupData;
-
 /**
  * Client table holding information on all clients connected to a single server
  * 
@@ -12,7 +9,6 @@ import physics.network.ShipSetupData;
  *
  */
 public class ClientTable {
-
   private Map<String, CommQueue> queueTable = new TreeMap<String, CommQueue>(); // The
                                                                                 // CommQueue
                                                                                 // for
@@ -41,7 +37,6 @@ public class ClientTable {
   public ClientTable(Lobby lobby) {
 	  this.lobby = lobby;
   }
-
   /**
    * Checks if the user exists already
    * 
@@ -56,7 +51,6 @@ public class ClientTable {
     }
     return false;
   }
-
   /**
    * Adds a user to the table
    * 
@@ -66,11 +60,9 @@ public class ClientTable {
   public void add(String name) {
     queueTable.put(name, new CommQueue());
   }
-
   public void addReceiver(String name, ServerReceiver receiver) {
     receivers.put(name, receiver);
   }
-
   public void remove(String name) {
     queueTable.remove(name);
     receivers.remove(name);
@@ -79,7 +71,6 @@ public class ClientTable {
       allGames.get(gameId).remove(name);
     games.remove(name);
   }
-
   /**
    * Returns the queue associated with a given user
    * 
@@ -90,15 +81,12 @@ public class ClientTable {
   public CommQueue getQueue(String name) {
     return queueTable.get(name);
   }
-
   public ServerReceiver getReceiver(String name) {
     return receivers.get(name);
   }
-
   public Map<String, CommQueue> getQueues() {
     return queueTable;
   }
-
   public int getGameID(String clientName) {
     for (Map.Entry<String, Integer> g : games.entrySet()) {
     	if (g.getKey().equals(clientName)) {
@@ -107,20 +95,16 @@ public class ClientTable {
     }
     return -1;
   }
-
   public GameRoom getGame(int gameID) {
     return allGames.get(gameID);
   }
-
   public boolean addGame(GameSettings gameSettings) {
     allGames.put(nextInt, new GameRoom(nextInt, gameSettings.lobbyName, gameSettings.seed,
     		gameSettings.maxPlayers, gameSettings.hostName, gameSettings.lapCount, this));
-
     lobby.games.add(getGame(nextInt));
     nextInt++;
     return joinGame(nextInt-1, gameSettings.setupData);
   }
-
   public boolean joinGame(int gameNum, ShipSetupData data) {
 	for(Map.Entry<Integer, GameRoom> g : allGames.entrySet()) {
 		if (g.getValue().id==gameNum) {
@@ -130,7 +114,5 @@ public class ClientTable {
 		}
     }
     return false;
-
   }
-
 }

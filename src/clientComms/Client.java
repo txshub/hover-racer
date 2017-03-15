@@ -1,5 +1,4 @@
 package clientComms;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
@@ -8,21 +7,18 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-
 import physics.network.ShipSetupData;
 import physics.ships.MultiplayerShipManager;
 import serverComms.GameRoom;
 import serverComms.GameSettings;
 import serverComms.IDShipData;
 import serverComms.ServerComm;
-
 /**
  * Main client class for client/server communications
  * 
  * @author simon
  */
 public class Client extends Thread {
-
   public static final boolean DEBUG = false;
   public boolean serverOn = true;
   protected DataOutputStream toServer;
@@ -36,7 +32,6 @@ public class Client extends Thread {
   private volatile boolean alreadyAccessedList = true;
   public volatile boolean alreadyAccessedRoom = true;
   private GameRoom currentRoom;
-
   /**
    * Creates a client object and connects to a given server on a given port
    * automagically
@@ -55,9 +50,7 @@ public class Client extends Thread {
     this.clientName = clientName;
     this.portNumber = portNumber;
     this.machineName = machineName;
-
     Socket testConn = null;
-
     try {
       testConn = new Socket(machineName, portNumber);
       toServer = new DataOutputStream(new BufferedOutputStream(testConn.getOutputStream()));
@@ -69,7 +62,6 @@ public class Client extends Thread {
       serverOn = false;
     }
   }
-
   @Override
   public void run() {
     DataInputStream fromServer = null;
@@ -84,7 +76,6 @@ public class Client extends Thread {
     } catch (IOException e) {
       serverOn = false;
     }
-
     ClientReceiver receiver = new ClientReceiver(fromServer, this);
     receiver.start();
     try {
@@ -103,7 +94,6 @@ public class Client extends Thread {
       // What to do here?
     }
   }
-
   public void cleanup() {
     serverStop.interrupt();
     try {
@@ -113,7 +103,6 @@ public class Client extends Thread {
     }
   }
   
-
   public GameRoom createGame(String seed, int maxPlayers, int lapCount, String lobbyName, ShipSetupData data)
       throws IOException {
 	  alreadyAccessedRoom = true;
@@ -121,14 +110,12 @@ public class Client extends Thread {
     sendByteMessage(thisGame.toByteArray(), ServerComm.MAKEGAME);
     return waitForRoom();
   }
-
   public GameRoom joinGame(int id, ShipSetupData data) throws IOException {
 	  alreadyAccessedRoom = true;
     IDShipData toSend = new IDShipData(id, data);
     sendByteMessage(toSend.toByteArray(), ServerComm.JOINGAME);
     return waitForRoom();
   }
-
   public void startGame() throws IOException{
 	  sendByteMessage(new byte[0], ServerComm.STARTGAME);
   }
@@ -143,7 +130,6 @@ public class Client extends Thread {
     sendByteMessage(new byte[0], ServerComm.REFRESHROOM);
     return waitForRoom();
   }
-
   public GameRoom waitForRoom() {
     while (alreadyAccessedRoom) {
       try {
@@ -154,7 +140,6 @@ public class Client extends Thread {
     alreadyAccessedRoom = true;
     return currentRoom;
   }
-
   public ArrayList<GameRoom> requestAllGames() throws IOException {
 	alreadyAccessedList = true;
     sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.SENDALLGAMES);
@@ -167,11 +152,9 @@ public class Client extends Thread {
     alreadyAccessedList = true;
     return gameList;
   }
-
   public void updateMe(byte[] data) throws IOException {
     sendByteMessage(data, ServerComm.SENDPLAYERDATA);
   }
-
   /**
    * Sends a message to the server
    * 
@@ -193,24 +176,18 @@ public class Client extends Thread {
       System.out.println("Sent message " + new String(message, ServerComm.charset) + " with tag "
           + Byte.toString(type));
   }
-
   public void setGameList(ArrayList<GameRoom> gameList) {
     this.gameList = gameList;
     alreadyAccessedList = false;
-
   }
-
   public void setCurrentRoom(GameRoom gr) {
     this.currentRoom = gr;
     alreadyAccessedRoom = false;
   }
-
   public void setManager(MultiplayerShipManager manager) {
     this.manager = manager;
   }
-
   public MultiplayerShipManager getManager() {
     return manager;
   }
-
 }

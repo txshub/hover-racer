@@ -1,5 +1,4 @@
 package serverComms;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
@@ -10,7 +9,6 @@ import java.net.Socket;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-
 /**
  * The server to handle a game
  * 
@@ -64,7 +62,6 @@ public class ServerComm extends Thread {
   public static final byte REFRESHROOM = Byte.parseByte("18");
   // Server->Client Host has left the game so room closed
   public static final byte ROOMCLOSED = Byte.parseByte("19");
-
   /**
    * Creates a Server object
    * 
@@ -75,7 +72,6 @@ public class ServerComm extends Thread {
     this.portNumber = portNumber;
     this.lobby = lobby;
   }
-
   /**
    * Runs the server
    */
@@ -91,7 +87,6 @@ public class ServerComm extends Thread {
     }
     if (runThread && DEBUG)
       System.out.println("Now listening on port " + portNumber);
-
     try {
       while (runThread) {
         // Wait for a client to connect
@@ -108,7 +103,6 @@ public class ServerComm extends Thread {
         ByteArrayByte msg = new ByteArrayByte(data);
         if (DEBUG)
           System.out.println("Request to server: " + new String(msg.getMsg(), charset));
-
         if (msg.getType() == TESTCONN) {
           // Requesting to join - The message is the client's username
         } else {
@@ -144,7 +138,6 @@ public class ServerComm extends Thread {
             }
             lobby.clientTable.getQueue(name)
                 .offer(new ByteArrayByte(out.getBytes(charset), SENDALLGAMES));
-
           }
         }
       }
@@ -152,7 +145,6 @@ public class ServerComm extends Thread {
       System.err.println("IO error: " + e.getMessage());
     }
   }
-
   public static void writeByteMessage(byte[] msg, byte type, DataOutputStream client)
       throws IOException {
     client.writeInt(msg.length + 1);
@@ -163,6 +155,5 @@ public class ServerComm extends Thread {
     }
     client.write(out);
     client.flush();
-
   }
 }
