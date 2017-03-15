@@ -514,4 +514,5 @@ public class MultiplayerGame implements GameInt {
       distance[i - 1] = lights.get(i).getdistance(currentPosition);
     }
   }
+
 }
