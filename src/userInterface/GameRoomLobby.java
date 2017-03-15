@@ -55,9 +55,6 @@ public class GameRoomLobby extends GridPane {
     	try {
     		
 			client.startGame();
-			AudioMaster.stopMusic();
-		    AudioMaster.cleanUp();
-			Platform.exit();
 			
 		} catch (IOException e) {
 			
@@ -95,7 +92,7 @@ public class GameRoomLobby extends GridPane {
 	  
 	  for (int i = 0; i < playerNames.size(); i++) {
 
-		  TextStyle player = new TextStyle(playerNames.get(i), 28);
+		  TextStyle player = new TextStyle(playerNames.get(i) + "                  ", 28);
 	      Text playerText = player.getTextStyled();
 
 	      playerNamesBox.getChildren().add(playerText);

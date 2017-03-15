@@ -465,26 +465,33 @@ public class GameMenu extends Parent {
 	joinChosenGR.setOnMouseClicked(eventjoin -> {
 
 		try {
-			GameRoom gameRoomChosen = client.joinGame(joinGameRoom.getChosenGRid(), DataGenerator.basicShipSetup(GameMenu.usr));
-			gameRoomLobby = new GameRoomLobby(gameRoomChosen);
-			gameRoomLobby.setClient(client);
-			gameRoomLobby.refresh();
 			
-			gameRoomLobbyWindow.add(gameRoomLobby, 0, 0);
-		    getChildren().add(gameRoomLobbyWindow);
+			if(joinGameRoom.getChosenGRid()==-1){
+				
+				PopUpWindow.display("PLEASE SELECT A GAME ROOM");
+				
+			}
+			else {
+				GameRoom gameRoomChosen = client.joinGame(joinGameRoom.getChosenGRid(), DataGenerator.basicShipSetup(GameMenu.usr));
+				gameRoomLobby = new GameRoomLobby(gameRoomChosen);
+				gameRoomLobby.setClient(client);
+				gameRoomLobby.refresh();
+			
+				gameRoomLobbyWindow.add(gameRoomLobby, 0, 0);
+				getChildren().add(gameRoomLobbyWindow);
 		       
-		    TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), joinGameRoomWindow);
-		    trans.setToX(joinGameRoomWindow.getTranslateX() - OFFSET);
+				TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), joinGameRoomWindow);
+				trans.setToX(joinGameRoomWindow.getTranslateX() - OFFSET);
 
-		    TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), gameRoomLobbyWindow);
-		    trans1.setToX(gameRoomLobbyWindow.getTranslateX() - OFFSET);
+				TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), gameRoomLobbyWindow);
+				trans1.setToX(gameRoomLobbyWindow.getTranslateX() - OFFSET);
 
-		    trans.play();
-		    trans1.play();
-		    trans.setOnFinished(evt -> {
-		       getChildren().remove(joinGameRoomWindow);
-		    });
-
+				trans.play();
+				trans1.play();
+				trans.setOnFinished(evt -> {
+					getChildren().remove(joinGameRoomWindow);
+				});
+			}	
 		} catch (IOException e) {
 
 			System.err.println("JOIN DIDN'T WORK");
