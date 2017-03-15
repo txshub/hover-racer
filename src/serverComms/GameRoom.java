@@ -25,7 +25,7 @@ public class GameRoom {
 
 	String name;
 	public final int id;
-	private long seed;
+	private String seed;
 	private int maxPlayers;
 	private boolean inGame = false;
 	private String hostName;
@@ -38,7 +38,7 @@ public class GameRoom {
 
 	private long raceStartsAt = -1;
 
-	public GameRoom(int id, String name, long seed, int maxPlayers, String hostName, int lapCount, ClientTable table) {
+	public GameRoom(int id, String name, String seed, int maxPlayers, String hostName, int lapCount, ClientTable table) {
 		System.out.println(hostName + " created a game room " + name + " with id " + id);
 		this.id = id;
 		this.name = name;
@@ -49,7 +49,7 @@ public class GameRoom {
 		this.table = table;
 		this.ships = new ArrayList<ShipSetupData>(maxPlayers);
 		// Generate the track
-		SeedTrack st = TrackMaker.makeTrack(seed, 10, 20, 30, 1, 40, 40, 4);
+		SeedTrack st = TrackMaker.makeTrack(seed);
     // Scale up the track so it isn't so tiny
     for (TrackPoint tp : st.getTrack()) {
       tp.mul(20);
@@ -77,7 +77,7 @@ public class GameRoom {
 			collected += in.charAt(0);
 			in = in.substring(1);
 		}
-		seed = Long.parseLong(collected);
+		seed = collected;
 		collected = "";
 		in = in.substring(1);
 		while (in.charAt(0) != '|') {
@@ -131,7 +131,7 @@ public class GameRoom {
 
 	}
 
-	public long getSeed() {
+	public String getSeed() {
 		return seed;
 	}
 	

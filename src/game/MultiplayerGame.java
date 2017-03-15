@@ -67,7 +67,7 @@ public class MultiplayerGame implements GameInt {
   private MousePicker picker;
   private MasterRenderer renderer;
   private GuiRenderer guiRender;
-  private long trackSeed;
+  private String trackSeed;
   private ArrayList<TrackPoint> trackPoints;
   public static InputController input;
 
@@ -127,7 +127,7 @@ public class MultiplayerGame implements GameInt {
 
     // Track
     trackSeed = data.getTrackSeed();
-    SeedTrack st = TrackMaker.makeTrack(trackSeed, 10, 20, 30, 1, 40, 40, 4);
+    SeedTrack st = TrackMaker.makeTrack(trackSeed);
     // Scale up the track so it isn't so tiny
     for (TrackPoint tp : st.getTrack()) {
       tp.mul(20);

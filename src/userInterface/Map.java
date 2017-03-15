@@ -17,11 +17,11 @@ import trackDesign.TrackPoint;
 public class Map extends Canvas {
 
   private ArrayList<TrackPoint> track;
-  private long seed;
+  private String seed;
 
   // private Canvas canvas;
 
-  public Map(long seed) {
+  public Map(String seed) {
 
     this.seed = seed;
 

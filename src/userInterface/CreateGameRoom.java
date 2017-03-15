@@ -64,19 +64,9 @@ public class CreateGameRoom extends GridPane {
 			Map track = null;
 			try {
 
-				track = new Map(Integer.valueOf(seedInput.getText()));
+				track = new Map(seedInput.getText());
 				box6.getChildren().add(track);
-				
-			} catch (NumberFormatException e) {
-
-					int num = 0;
-					for (int i = 0; i < seedInput.getText().length(); i++) {
-						num *= (int) seedInput.getText().charAt(i);
-					}
-					track = new Map(num);
-					box6.getChildren().add(track);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 					try {
 						PopUpWindow.display("NULL SEED");
 					} catch (IOException ex1) {
@@ -105,7 +95,7 @@ public class CreateGameRoom extends GridPane {
 
 			try {
 
-				localClient.startSinglePlayerGame(Integer.valueOf(seedInput.getText()),
+				localClient.startSinglePlayerGame(seedInput.getText(),
 						Integer.valueOf(noAIsInput.getText()), Integer.valueOf(noLapsInput.getText()),
 						DataGenerator.basicShipSetup(usernameInput.getText()));
 				AudioMaster.stopMusic();

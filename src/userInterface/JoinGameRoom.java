@@ -78,7 +78,7 @@ public class JoinGameRoom extends GridPane {
 				TextStyle joinedPlayers = new TextStyle(joinedText, 25);
 				Text joinedPlayersStyled = joinedPlayers.getTextStyled();
 
-				int seed = (int) gameRoom.getSeed();
+				String seed = gameRoom.getSeed();
 
 				Map track = new Map(seed);
 

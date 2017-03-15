@@ -18,9 +18,13 @@ public class TrackMaker {
   public static SeedTrack makeTrack() {
     return makeTrack(10, 20, 30, 1, 30, 40, 4);
   }
-
-  public static SeedTrack makeTrack(long seed) {
-    return makeTrack(seed, 10, 20, 30, 1, 30, 40, 4);
+  
+  public static SeedTrack makeTrack(String seed) {
+	  long hash = 0;
+	  for(char c: seed.toCharArray()) {
+		  hash = 32L*hash + c;
+	  }
+	  return makeTrack(hash, 10, 20, 30, 1, 30, 40, 4);
   }
 
   public static SeedTrack makeStraightTrack(float length) {
