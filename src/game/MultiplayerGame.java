@@ -3,6 +3,7 @@ package game;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +43,7 @@ import physics.core.Ship;
 import physics.network.RaceSetupData;
 import physics.placeholders.FlatGroundProvider;
 import physics.ships.MultiplayerShipManager;
+import serverComms.ServerComm;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
@@ -209,6 +211,10 @@ public class MultiplayerGame implements GameInt {
       ships.getPlayerShip().start();
 
     ships.updateShips((float) delta);
+    try {
+		client.sendByteMessage(ships.getShipPacket(), ServerComm.SENDPLAYERDATA);
+	} catch (IOException e) {
+	}
     for (Container c : containers) {
       c.update();
     }
