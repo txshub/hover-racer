@@ -64,7 +64,7 @@ public class ServerComm extends Thread {
   public static final byte REFRESHROOM = Byte.parseByte("18");
   // Server->Client Host has left the game so room closed
   public static final byte ROOMCLOSED = Byte.parseByte("19");
-  public static final byte USERRECCONECT = Byte.parseByte("20");
+  public static final byte USERRECONNECT = Byte.parseByte("20");
 
   /**
    * Creates a Server object
@@ -112,7 +112,7 @@ public class ServerComm extends Thread {
 
         if (msg.getType() == TESTCONN) {
           // Requesting to join - The message is the client's username
-        } else if(msg.getType() == USERRECCONECT) {
+        } else if(msg.getType() == USERRECONNECT) {
         	String name = new String(msg.getMsg(), charset);
       	  lobby.clientTable.updateUser(name);
       	  DataOutputStream toClient = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));

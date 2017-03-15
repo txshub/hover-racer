@@ -78,7 +78,7 @@ public class Client extends Thread {
     ClientReceiver receiver = new ClientReceiver(fromServer, this);
     receiver.start();
     try {
-      sendByteMessage(clientName.getBytes(ServerComm.charset), ServerComm.USERRECCONECT);
+      sendByteMessage(clientName.getBytes(ServerComm.charset), ServerComm.USERSENDING);
       serverStop = new StopDisconnect(this);
       serverStop.start();
       receiver.join();
@@ -137,6 +137,7 @@ public class Client extends Thread {
   public GameRoom waitForRoom() {
     while (alreadyAccessedRoom) {
       try {
+    	  System.out.println("Waiting");
         Thread.sleep(100);
       } catch (InterruptedException e) {
       }
@@ -205,6 +206,23 @@ public class Client extends Thread {
 
 public void reopenPort() {
 	server = new Socket();
+	ClientReceiver receiver = new ClientReceiver(fromServer, this);
+    receiver.start();
+    try {
+      sendByteMessage(clientName.getBytes(ServerComm.charset), ServerComm.USERRECONNECT);
+      serverStop = new StopDisconnect(this);
+      serverStop.start();
+      receiver.join();
+      toServer.close();
+      fromServer.close();
+      server.close();
+    } catch (IOException e) {
+      System.err.println("Something wrong: " + e.getMessage());
+      // What to do here?
+    } catch (InterruptedException e) {
+      System.err.println("Unexpected interruption: " + e.getMessage());
+      // What to do here?
+    }
 }
 
 public void setupConnection() {
