@@ -44,6 +44,7 @@ public class ServerReceiver extends Thread {
           lobby.remove(clientName);
 
         } else if (fullMsg.getType() == ServerComm.DONTDISCONNECT) {
+        	System.out.println("Don't Disconnect!");
           // Do Nothing - It's just making sure we don't disconnect
 
         } else if (fullMsg.getType() == ServerComm.SENDALLGAMES) {
@@ -79,8 +80,11 @@ public class ServerReceiver extends Thread {
           }
 
         } else if (fullMsg.getType() == ServerComm.SENDPLAYERDATA) {
-          if (gameRoom != null)
-            gameRoom.updateUser(gameNum, fullMsg.getMsg());
+        	System.out.println("Send Data");
+          if (gameRoom != null) {
+        	  System.out.println("Not Null");
+        	  gameRoom.updateUser(gameNum, fullMsg.getMsg());
+          }
         } else if (fullMsg.getType() == ServerComm.STARTGAME) {
           int gameID = lobby.clientTable.getGameID(clientName);
           if (gameID == -1) {

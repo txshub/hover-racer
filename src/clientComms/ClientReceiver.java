@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import game.MainGameLoop;
+import javafx.application.Platform;
 import physics.network.RaceSetupData;
 import physics.ships.MultiplayerShipManager;
 import serverComms.ByteArrayByte;
@@ -66,6 +67,7 @@ public class ClientReceiver extends Thread {
 					client.setCurrentRoom(gr);
 				} else if (fullMsg.getType() == ServerComm.RACESETUPDATA) {
 					RaceSetupData data = Converter.receiveRaceData(fullMsg.getMsg());
+					Platform.exit();
 					MainGameLoop.startMultiplayerGame(data, client);
 				} else if (fullMsg.getType() == ServerComm.FULLPOSITIONUPDATE) {
 					if (client.getManager() == null)

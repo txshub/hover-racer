@@ -15,7 +15,7 @@ public class TestServerComm {
                                // want this so make another
     ServerComm comm = new ServerComm(5153, l);
     comm.start();
-    DummyClient client = new DummyClient("Test", 5153, "localhost", null);
+    DummyClient client = new DummyClient("Test", 5153, "localhost");
     if (!client.serverOn)
       fail("Server wasn't on");
     client.start();

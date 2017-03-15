@@ -24,7 +24,7 @@ public class TrackMaker {
 	  for(char c: seed.toCharArray()) {
 		  hash = 32L*hash + c;
 	  }
-	  return makeTrack(hash, 10, 20, 30, 1, 30, 40, 4);
+	  return makeTrack(hash, 10, 20, 30, 1, 30, 40, 6);
   }
 
   public static SeedTrack makeStraightTrack(float length) {
@@ -90,7 +90,8 @@ public class TrackMaker {
   public static SeedTrack makeTrack(long seed, int minTrackPoints, int maxTrackPoints,
       float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs) {
     if (seed == 0)
-      return makeStraightTrack(250);
+    	return makeTrack((new Random(seed)).nextLong(), minTrackPoints, maxTrackPoints, minDist, seperateIterations, difficulty, maxDisp, subDivs);
+      //return makeStraightTrack(250);
     Random random = new Random(seed); // Make the random object
     ArrayList<TrackPoint> points = new ArrayList<TrackPoint>();
     ArrayList<TrackPoint> hullPoints = new ArrayList<TrackPoint>();
