@@ -1,20 +1,15 @@
 package serverComms;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-
 import physics.network.RaceSetupData;
 import physics.network.ShipSetupData;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
-
 public class GameRoom {
-
 	private static final long TIME_TO_START = 4L * 1000000000L; // Time to start race
 																// in nanoseconds
 	private static final int SIDE_DISTANCES = 10;
@@ -22,7 +17,6 @@ public class GameRoom {
 	private static final int STARTING_HEIGHT = 10;
 	ArrayList<String> players = new ArrayList<String>();
 	ArrayList<ShipSetupData> ships;
-
 	String name;
 	public final int id;
 	private String seed;
@@ -32,12 +26,9 @@ public class GameRoom {
 	private int lapCount;
 	private ClientTable table;
 	private ArrayList<TrackPoint> trackPoints;
-
 	private ServerShipManager shipManager;
 	private UpdateAllUsers updatedUsers;
-
 	private long raceStartsAt = -1;
-
 	public GameRoom(int id, String name, String seed, int maxPlayers, String hostName, int lapCount, ClientTable table) {
 		System.out.println(hostName + " created a game room " + name + " with id " + id);
 		this.id = id;
@@ -56,7 +47,6 @@ public class GameRoom {
     }
     trackPoints = st.getTrack();
 	}
-
 	public GameRoom(String in) {
 		String collected = "";
 		while (in.charAt(0) != '|') {
@@ -112,54 +102,42 @@ public class GameRoom {
 			in = in.substring(1);
 		}
 	}
-
 	public boolean isBusy() {
 		return (players.size() >= maxPlayers || inGame);
 	}
-
 	public String getName() {
 		return name;
 	}
-
 	public int getId() {
 		return id;
 	}
-
 	public void remove(String name) {
-		//players.remove(name);
+		players.remove(name);
 		// Add in method to replace with AI?
-
 	}
-
 	public String getSeed() {
 		return seed;
 	}
 	
-
 	public void addPlayer(ShipSetupData data) {
 		if (data == null) throw new IllegalArgumentException("ShipSetupData cannot be null");
 		ships.add(data);
 		players.add(data.getNickname());
 	}
-
 	public void addPlayer(String username) {
 		players.add(username);
 	}
-
 	public ArrayList<String> getPlayers() {
 		return players;
 	}
-
 	public String getHostName() {
 		return hostName;
 	}
 	
-
 	public void startGame(String clientName) {
 		if (players.size() == 0) throw new IllegalStateException("Tried starting game with no players");
 		if (ships.size() != players.size())
 			throw new IllegalStateException("Mismatch between amount of ships and players when staring game.");
-
 		if (clientName.equals(hostName)) {
 			inGame = true;
 			RaceSetupData setupData = setupRace();
@@ -175,7 +153,6 @@ public class GameRoom {
 			updatedUsers.start();
 		}
 	}
-
 	public void endGame() {
 		inGame = false;
 		//If the host is still in the room, don't end the game
@@ -185,24 +162,19 @@ public class GameRoom {
 			table.getQueue(players.get(i)).offer(new ByteArrayByte(new byte[0], ServerComm.ROOMCLOSED));
 		}
 	}
-
 	public void updateUser(int gameNum, byte[] msg) {
 		System.out.println("Updating user no. " + gameNum);
 		shipManager.addPacket(msg);
 	}
-
 	public byte[] getShipPositions() {
 		return shipManager.getPositionMessage();
 	}
-
 	public void addSetupData(int gameNum, byte[] msg) {
 		ships.set(gameNum, Converter.buildShipData(msg));
 	}
-
 	public void addSetupData(int gameNum, String msg) {
 		ships.set(gameNum, Converter.buildShipData(msg));
 	}
-
 	public RaceSetupData setupRace() {
 		HashMap<Byte, ShipSetupData> resShips = new HashMap<Byte, ShipSetupData>();
 		for (int i = 0; i < maxPlayers; i++) {
@@ -213,7 +185,6 @@ public class GameRoom {
 		return new RaceSetupData(resShips, generateStartingPositions(startDirection),
 			new Vector3f(0, (float) Math.atan2(startDirection.x, startDirection.y), 0), seed, TIME_TO_START, lapCount);
 	}
-
 	// TODO finish this
 	private Map<Byte, Vector3f> generateStartingPositions(Vector2f startDirection) {
 		// Map<Byte, Vector2f> res = new HashMap<Byte, Vector2f>();
@@ -245,7 +216,6 @@ public class GameRoom {
 		// }
 		// return res.entrySet().stream()
 		// .collect(Collectors.toMap(e -> e.getKey(), e -> new Vector3f(e.getValue().x, STARTING_HEIGHT, e.getValue().y)));
-
 		// TODO temporary thing here:
 		Map<Byte, Vector3f> res = new HashMap<>();
 		for (int i = 0; i < maxPlayers; i++) {
@@ -254,12 +224,10 @@ public class GameRoom {
 		}
 		return res;
 	}
-
 	private float getTrackDirection() {
 		Vector2f relative = trackPoints.get(0).sub(trackPoints.get(1));
 		return (float) Math.atan2(relative.x, relative.y);
 	}
-
 	public String toString() {
 		String out = name + "|" + id + "|" + seed + "|" + maxPlayers + "|" + hostName + "|" + lapCount + "|";
 		for (String p : players) {
@@ -267,29 +235,18 @@ public class GameRoom {
 		}
 		return out;
 	}
-
 	public byte[] toByteArray() {
 		return toString().getBytes(ServerComm.charset);
 	}
-
 	public int getNoPlayers() {
 		return maxPlayers;
 	}
-
 	public void update(float delta) {
 		if (raceStartsAt == -1) throw new IllegalStateException("Update called before the race was started");
 		if (System.nanoTime() >= raceStartsAt) shipManager.startRace();
 		shipManager.update(delta);
 	}
-
 	public int getLaps() {
 		return lapCount;
 	}
-
-	public void rejoin(String name2) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 }
