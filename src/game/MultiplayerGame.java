@@ -137,6 +137,13 @@ public class MultiplayerGame implements GameInt {
     TexturedModel trackModel = createTrackModel();
     Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 1f);
     entities.add(track);
+    
+    // Finish Line
+    TexturedModel finishLineModel = new TexturedModel(getModel("finishLine", loader), new ModelTexture(loader.loadTexture("new/finishLineTexture")));
+    Vector3f firstPoint = new Vector3f(st.getStart());
+    firstPoint.y = 1.05f;
+    Entity finishLine = new Entity(finishLineModel, firstPoint, new Vector3f(), 16f);
+    entities.add(finishLine);
 
     // Lighting
     // Lighting
