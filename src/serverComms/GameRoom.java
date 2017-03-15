@@ -126,7 +126,7 @@ public class GameRoom {
 	}
 
 	public void remove(String name) {
-		players.remove(name);
+		//players.remove(name);
 		// Add in method to replace with AI?
 
 	}
@@ -284,6 +284,11 @@ public class GameRoom {
 
 	public int getLaps() {
 		return lapCount;
+	}
+
+	public void rejoin(String name2) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

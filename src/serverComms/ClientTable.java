@@ -66,6 +66,14 @@ public class ClientTable {
   public void add(String name) {
     queueTable.put(name, new CommQueue());
   }
+  
+  public void updateUser(String name) {
+	queueTable.remove(name);
+	queueTable.put(name, new CommQueue());
+	int gameId = getGameID(name);
+	if(gameId != -1) allGames.get(gameId).rejoin(name);
+	
+}
 
   public void addReceiver(String name, ServerReceiver receiver) {
     receivers.put(name, receiver);
@@ -77,7 +85,6 @@ public class ClientTable {
     int gameId = getGameID(name);
     if (gameId != -1)
       allGames.get(gameId).remove(name);
-    games.remove(name);
   }
 
   /**

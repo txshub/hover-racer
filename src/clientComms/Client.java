@@ -36,6 +36,8 @@ public class Client extends Thread {
   private volatile boolean alreadyAccessedList = true;
   public volatile boolean alreadyAccessedRoom = true;
   private GameRoom currentRoom;
+  Socket server;
+  DataInputStream fromServer;
 
   /**
    * Creates a client object and connects to a given server on a given port
@@ -72,23 +74,11 @@ public class Client extends Thread {
 
   @Override
   public void run() {
-    DataInputStream fromServer = null;
-    Socket server = null;
-    try {
-      server = new Socket(machineName, portNumber);
-      toServer = new DataOutputStream(new BufferedOutputStream(server.getOutputStream()));
-      fromServer = new DataInputStream(new BufferedInputStream(server.getInputStream()));
-    } catch (UnknownHostException e) {
-      System.err.println("Unknown host: " + machineName);
-      serverOn = false;
-    } catch (IOException e) {
-      serverOn = false;
-    }
-
+	setupConnection();
     ClientReceiver receiver = new ClientReceiver(fromServer, this);
     receiver.start();
     try {
-      sendByteMessage(clientName.getBytes(ServerComm.charset), ServerComm.USERSENDING);
+      sendByteMessage(clientName.getBytes(ServerComm.charset), ServerComm.USERRECCONECT);
       serverStop = new StopDisconnect(this);
       serverStop.start();
       receiver.join();
@@ -212,5 +202,25 @@ public class Client extends Thread {
   public MultiplayerShipManager getManager() {
     return manager;
   }
+
+public void reopenPort() {
+	server = new Socket();
+}
+
+public void setupConnection() {
+
+    fromServer = null;
+    server = null;
+    try {
+      server = new Socket(machineName, portNumber);
+      toServer = new DataOutputStream(new BufferedOutputStream(server.getOutputStream()));
+      fromServer = new DataInputStream(new BufferedInputStream(server.getInputStream()));
+    } catch (UnknownHostException e) {
+      System.err.println("Unknown host: " + machineName);
+      serverOn = false;
+    } catch (IOException e) {
+      serverOn = false;
+    }
+}
 
 }

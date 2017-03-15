@@ -82,8 +82,7 @@ public class ClientReceiver extends Thread {
 			}
 		} catch (IOException e) {
 			System.err.println("Server seems to have died: " + e.getMessage());
-			client = new Client(client.clientName, client.portNumber, client.machineName);
-			client.start();
+			client.reopenPort();
 		}
 	}
 
