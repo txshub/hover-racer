@@ -65,8 +65,8 @@ public class ClientReceiver extends Thread {
 					client.setCurrentRoom(gr);
 				} else if (fullMsg.getType() == ServerComm.RACESETUPDATA) {
 					RaceSetupData data = Converter.receiveRaceData(fullMsg.getMsg());
-//					AudioMaster.stopMusic();
-//					AudioMaster.cleanUp();
+					AudioMaster.stopMusic();
+					AudioMaster.cleanUp();
 				    Platform.exit();
 					MainGameLoop.startMultiplayerGame(data, client);
 				} else if (fullMsg.getType() == ServerComm.FULLPOSITIONUPDATE) {

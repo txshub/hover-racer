@@ -111,8 +111,6 @@ public class CreateGameRoom extends GridPane {
 
 				exp.printStackTrace();
 			}
-
-			AudioMaster.cleanUp();
 			((Node) event.getSource()).getScene().getWindow().hide();
 
 		});
