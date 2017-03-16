@@ -85,18 +85,18 @@ public class Vector3 extends Vector3f {
 		// System.out.println(wall.makeBase());
 		// System.out.println(current.rotateTo(wall));
 
-		System.out.println("cosTheta: " + cosTheta);
-		System.out.println("theta: " + theta);
-		System.out.println("tangent: " + Math.tan(theta));
-		System.out.println("vLength: " + current.length());
-		System.out.println("nLength: " + nLength);
-		System.out.println("scaledNormal: " + scaledNormal);
-		System.out.println("Velocity changed from [" + x + "," + z + "] to " + res);
+		/* System.out.println("cosTheta: " + cosTheta);
+		 * System.out.println("theta: " + theta);
+		 * System.out.println("tangent: " + Math.tan(theta));
+		 * System.out.println("vLength: " + current.length());
+		 * System.out.println("nLength: " + nLength);
+		 * System.out.println("scaledNormal: " + scaledNormal);
+		 * System.out.println("Velocity changed from [" + x + "," + z + "] to " + res); */
 		if (current.rotateTo(wall).getY() > 0) {
 			x = res.getX();
 			z = res.getY();
-			System.out.println("Collision applied");
-		} else System.out.println("Collision ignored");
+			// System.out.println("Collision applied");
+		} // else System.out.println("Collision ignored");
 
 		forEach(v -> v * elasticity);
 	}
