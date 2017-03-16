@@ -1,8 +1,10 @@
 package serverComms;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+
 public class ServerReceiver extends Thread {
   private DetectTimeout detect;
   private String clientName;
