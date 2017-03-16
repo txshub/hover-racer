@@ -138,9 +138,12 @@ public class AudioMaster {
 		player.start();
 	}
 
+
 	/** Stop the music player */
 	public static void stopMusic() {
-		if (player != null) player.terminate();
+		if (player != null) {
+			player.terminate();
+		}
 	}
 
 	/** Skip the current song */
