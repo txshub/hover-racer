@@ -51,7 +51,7 @@ public class Button extends Container {
   public void update() {
     super.update();
     
-    if (bounds.contains(Mouse.getX(), Mouse.getY()) && Mouse.isButtonDown(0) && !pressed) {
+    if (bounds.contains(Mouse.getX(), Mouse.getY()) && Mouse.isButtonDown(0) && !pressed && isVisible()) {
       pressed = true;
       for (ActionListener a : listeners) {
         a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "pressed"));
