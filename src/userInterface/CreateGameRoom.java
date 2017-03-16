@@ -19,11 +19,16 @@ import serverComms.ServerComm;
 /**
  * 
  * @author Andreea Gheorghe
+ * Class that implements the design and functionality of
+ * the single player mode window.
  *
  */
 
 public class CreateGameRoom extends GridPane {
 
+	/**
+	 * Constructor for the CreateGameRoom class.
+	 */
 	public CreateGameRoom() {
 
 		this.setAlignment(Pos.CENTER);
@@ -53,7 +58,6 @@ public class CreateGameRoom extends GridPane {
 		TextField noLapsInput = new TextField();
 
 		MenuButton generateTrack = new MenuButton("PREVIEW THIS TRACK", 350, 70, 30);
-
 		generateTrack.setOnMouseClicked(event -> {
 
 			if (box6.getChildren().size() > 0) {
@@ -77,7 +81,6 @@ public class CreateGameRoom extends GridPane {
 		});
 
 		MenuButton createGameRoom = new MenuButton("START GAME", 350, 70, 30);
-
 		createGameRoom.setOnMouseClicked(event -> {
 
 			// CREATE LOCAL SERVER //
@@ -93,8 +96,6 @@ public class CreateGameRoom extends GridPane {
 
 			try {
 				
-//				AudioMaster.stopMusic();
-//			    AudioMaster.cleanUp();
 				localClient.startSinglePlayerGame(seedInput.getText(),
 						Integer.valueOf(noAIsInput.getText()), Integer.valueOf(noLapsInput.getText()),
 						DataGenerator.basicShipSetup(usernameInput.getText()));
@@ -116,6 +117,8 @@ public class CreateGameRoom extends GridPane {
 			((Node) event.getSource()).getScene().getWindow().hide();
 
 		});
+		
+		// GRID LAYOUT //
 
 		add(usernameText, 0, 1);
 		add(usernameInput, 0, 2);
