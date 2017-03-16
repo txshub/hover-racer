@@ -8,6 +8,7 @@ import org.joml.Intersectionf;
 import org.joml.Vector3f;
 
 import physics.core.Ship;
+import serverComms.GameRoom;
 import trackDesign.SeedTrack;
 import trackDesign.TrackPoint;
 
@@ -22,10 +23,12 @@ public class GameLogic {
 	private ArrayList<TrackPoint> trackPoints;
 	private int laps;
 	private int finished;
+	private GameRoom gameRoom;
 
-	public GameLogic(ArrayList<Ship> players, SeedTrack track, int laps) {
+	public GameLogic(ArrayList<Ship> players, SeedTrack track, int laps, GameRoom gameRoom) {
 		this.players = players;
 		this.laps = Math.max(laps, 1);
+		this.gameRoom = gameRoom;
 		trackPoints = track.getTrack();
 		pointsDist = new HashMap<TrackPoint, Float>();
 		calculatePointsDist();
@@ -140,6 +143,10 @@ public class GameLogic {
 			updateLastPoint(player);
 		}
 		updateRankings();
+		
+		for (Ship player : players) {
+			gameRoom.sendLogicUpdate(player.getId(), player.getRanking(), player.finished(), player.getCurrentLap());
+		}
 	}
 
 	public int getTotalLaps() {
