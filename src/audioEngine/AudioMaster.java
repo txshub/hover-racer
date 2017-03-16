@@ -122,6 +122,13 @@ public class AudioMaster {
 			s.setVolume(master);
 		}
 	}
+	
+	public static float getMusicVolume() {
+	  for (Source s : music) {
+	    return s.getCurrentVolume();
+	  }
+	  return -1;
+	}
 
 	/** Set the volume of all the sfx sources
 	 * 
@@ -131,6 +138,13 @@ public class AudioMaster {
 		for (Source s : sfx) {
 			s.setVolume(master);
 		}
+	}
+	
+	public static float getSFXVolume() {
+	  for (Source s : sfx) {
+	    return s.getCurrentVolume();
+	  }
+	  return -1;
 	}
 
 	/** Start the music player */
