@@ -83,8 +83,6 @@ public class CreateGameRoom extends GridPane {
 			// CREATE LOCAL SERVER //
 
 			Lobby localLobby = new Lobby(4445);
-			ServerComm server = new ServerComm(4445, localLobby);
-			server.start();
 
 			// CREATE SINGLE PLAYER CLIENT //
 
@@ -94,12 +92,12 @@ public class CreateGameRoom extends GridPane {
 			// START SINGLE PLAYER GAME //
 
 			try {
-
+				
+//				AudioMaster.stopMusic();
+//			    AudioMaster.cleanUp();
 				localClient.startSinglePlayerGame(seedInput.getText(),
 						Integer.valueOf(noAIsInput.getText()), Integer.valueOf(noLapsInput.getText()),
 						DataGenerator.basicShipSetup(usernameInput.getText()));
-				AudioMaster.stopMusic();
-			    AudioMaster.cleanUp();
 				Platform.exit();
 
 			} catch (NumberFormatException e) {

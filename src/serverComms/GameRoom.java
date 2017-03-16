@@ -163,7 +163,6 @@ public class GameRoom {
 		}
 	}
 	public void updateUser(int gameNum, byte[] msg) {
-		System.out.println("Updating user no. " + gameNum);
 		shipManager.addPacket(msg);
 	}
 	public byte[] getShipPositions() {

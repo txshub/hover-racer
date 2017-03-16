@@ -121,7 +121,7 @@ public class Game implements GameInt {
         loader, texturePack, blendMap, "new/FlatHeightMap"));
 
     // Track
-    SeedTrack st = TrackMaker.makeTrack(10, 20, 30, 1, 40, 40, 4);
+    SeedTrack st = TrackMaker.makeTrack();
     // Scale up the track so it isn't so tiny
     for (TrackPoint tp : st.getTrack()) {
       tp.mul(20);

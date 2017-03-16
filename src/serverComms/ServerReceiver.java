@@ -68,9 +68,7 @@ public class ServerReceiver extends Thread {
                 lobby.clientTable.getGame(data.id).toByteArray(), ServerComm.VALIDGAME));
           }
         } else if (fullMsg.getType() == ServerComm.SENDPLAYERDATA) {
-        	System.out.println("Send Data");
           if (gameRoom != null) {
-        	  System.out.println("Not Null");
         	  gameRoom.updateUser(gameNum, fullMsg.getMsg());
           }
         } else if (fullMsg.getType() == ServerComm.STARTGAME) {
