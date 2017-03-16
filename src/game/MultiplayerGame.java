@@ -81,14 +81,17 @@ public class MultiplayerGame implements GameInt {
 
   // Tudor
   private GameLogic logic;
-  // TODO temporary
+
+  // UI Globals
   private Container menu;
+  private Container optionsMenu;
   private Label posCurrent;
   private Label posTotal;
   private Label lapCurrent;
   private Label lapTotal;
   private UIRenderer uiRenderer;
   private ArrayList<Container> containers;
+  private String currentMenu = "none";
 
   public MultiplayerGame(RaceSetupData data, Client client) {
     init(data, client);
@@ -139,9 +142,10 @@ public class MultiplayerGame implements GameInt {
     TexturedModel trackModel = createTrackModel();
     Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 1f);
     entities.add(track);
-    
+
     // Finish Line
-    TexturedModel finishLineModel = new TexturedModel(getModel("finishLine", loader), new ModelTexture(loader.loadTexture("new/finishLineTexture")));
+    TexturedModel finishLineModel = new TexturedModel(getModel("finishLine", loader),
+        new ModelTexture(loader.loadTexture("new/finishLineTexture")));
     Vector3f firstPoint = new Vector3f(st.getStart());
     firstPoint.y = 1.05f;
     Entity finishLine = new Entity(finishLineModel, firstPoint, new Vector3f(), 16f);
@@ -193,13 +197,21 @@ public class MultiplayerGame implements GameInt {
 
     // Tudor
     logic.update();
-    // Check if the escape key was pressed to exit the game
-    if (input.isDown(Action.EXIT) > 0.5f)
-      running = false;
 
     // Check for menu
-    if (input.wasPressed(Action.MENU) > 0.5f)
-      menu.setVisibility(!menu.isVisible());
+    if (input.wasPressed(Action.MENU) > 0.5f) {
+      if (currentMenu.equals("none")) {
+        menu.setVisibility(true);
+        currentMenu = "main";
+      } else if (currentMenu.equals("main")) {
+        menu.setVisibility(false);
+        currentMenu = "none";
+      } else if (currentMenu.equals("options")) {
+        menu.setVisibility(true);
+        optionsMenu.setVisibility(false);
+        currentMenu = "main";
+      }
+    }
 
     // Check for audio controls
     /** @author Tudor */
@@ -219,9 +231,9 @@ public class MultiplayerGame implements GameInt {
 
     ships.updateShips((float) delta);
     try {
-		client.sendByteMessage(ships.getShipPacket(), ServerComm.SENDPLAYERDATA);
-	} catch (IOException e) {
-	}
+      client.sendByteMessage(ships.getShipPacket(), ServerComm.SENDPLAYERDATA);
+    } catch (IOException e) {
+    }
     for (Container c : containers) {
       c.update();
     }
@@ -286,17 +298,17 @@ public class MultiplayerGame implements GameInt {
     FontType font = new FontType(loader.loadFontTexture("ui/calibri"),
         new File("src/resources/ui/calibri.fnt"));
 
+    // Main pause menu
     menu = new Container(loader, "ui/MenuBackground", new Vector2f(448, 120));
     containers.add(menu);
 
     Button resumeButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 64));
     resumeButton.setParent(menu);
     resumeButton.addListener(new ActionListener() {
-
       public void actionPerformed(ActionEvent e) {
-        System.out.println(e.getActionCommand());
         if (e.getActionCommand().equals("pressed")) {
           menu.setVisibility(false);
+          currentMenu = "none";
         }
       }
     });
@@ -306,23 +318,93 @@ public class MultiplayerGame implements GameInt {
 
     Button optionsButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 160));
     optionsButton.setParent(menu);
+    optionsButton.addListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("pressed")) {
+          menu.setVisibility(false);
+          optionsMenu.setVisibility(true);
+          currentMenu = "options";
+        }
+      }
+    });
     Label optionsText = new Label(loader, "OPTIONS", font, 2.5f, true, new Vector2f(0, 8), 266);
     optionsText.setParent(optionsButton);
     optionsText.setColour(colour);
 
-    Button lobbyButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 256));
-    lobbyButton.setParent(menu);
-    Label lobbyText = new Label(loader, "LOBBY", font, 2.5f, true, new Vector2f(0, 8), 266);
-    lobbyText.setParent(lobbyButton);
-    lobbyText.setColour(colour);
-
-    Button menuButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 352));
+    Button menuButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 256));
     menuButton.setParent(menu);
+    menuButton.addListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        System.out.println("Exiting to the menu");
+        // TODO Menu exit stuff here
+      }
+    });
     Label menuText = new Label(loader, "MENU", font, 2.5f, true, new Vector2f(0, 8), 266);
     menuText.setParent(menuButton);
     menuText.setColour(colour);
 
-    menu.setVisibility(true);
+    Button exitButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 352));
+    exitButton.setParent(menu);
+    exitButton.addListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("pressed")) {
+          System.out.println("Exit button pressed");
+          running = false;
+        }
+      }
+    });
+    Label exitText = new Label(loader, "EXIT", font, 2.5f, true, new Vector2f(0, 8), 266);
+    exitText.setParent(exitButton);
+    exitText.setColour(colour);
+    
+    menu.setVisibility(false);
+
+    // Options sub menu
+    optionsMenu = new Container(loader, "ui/MenuBackground", new Vector2f(448, 120));
+    containers.add(optionsMenu);
+
+    Label musicText = new Label(loader, "MUSIC VOLUME", font, 2f, true, new Vector2f(0, 67), 384);
+    musicText.setParent(optionsMenu);
+    musicText.setColour(colour);
+
+    Button musicMinusButton = new Button(loader, "ui/minusButton", new Vector2f(58, 114));
+    musicMinusButton.setParent(optionsMenu);
+
+    Label musicVolume = new Label(loader, "45%", font, 2.5f, true, new Vector2f(158, 114), 90);
+    musicVolume.setParent(optionsMenu);
+    musicVolume.setColour(colour);
+
+    Button musicPlusButton = new Button(loader, "ui/plusButton", new Vector2f(260, 114));
+    musicPlusButton.setParent(optionsMenu);
+
+    Label sfxText = new Label(loader, "SFX VOLUME", font, 2f, true, new Vector2f(0, 208), 384);
+    sfxText.setParent(optionsMenu);
+    sfxText.setColour(colour);
+
+    Button sfxMinusButton = new Button(loader, "ui/minusButton", new Vector2f(58, 255));
+    sfxMinusButton.setParent(optionsMenu);
+
+    Label sfxVolume = new Label(loader, "65%", font, 2.5f, true, new Vector2f(158, 255), 90);
+    sfxVolume.setParent(optionsMenu);
+    sfxVolume.setColour(colour);
+
+    Button sfxPlusButton = new Button(loader, "ui/plusButton", new Vector2f(260, 255));
+    sfxPlusButton.setParent(optionsMenu);
+
+    Button backButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 349));
+    backButton.setParent(optionsMenu);
+    backButton.addListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        optionsMenu.setVisibility(false);
+        menu.setVisibility(true);
+        currentMenu = "main"; 
+      }
+    });
+    Label backText = new Label(loader, "BACK", font, 2.5f, true, new Vector2f(0, 6), 266);
+    backText.setParent(backButton);
+    backText.setColour(colour);
+    
+    optionsMenu.setVisibility(false);
 
     Container posDisplay = new Container(loader, "ui/posBackground",
         new Vector2f(Display.getWidth() - 170, 10));
@@ -377,11 +459,11 @@ public class MultiplayerGame implements GameInt {
       TrackPoint nextPoint = null;
       if (i < trackPoints.size()) {
         curPoint = trackPoints.get(i);
-  
+
         // If we are at the first point the previous is the last point
         int prev = (i == 0) ? trackPoints.size() - 1 : i - 1;
         prevPoint = trackPoints.get(prev);
-  
+
         // If we are at the last point the next is the first point
         int next = (i == trackPoints.size() - 1) ? 0 : i + 1;
         nextPoint = trackPoints.get(next);
@@ -421,7 +503,7 @@ public class MultiplayerGame implements GameInt {
 
       // Define the texture coordinates
       int n = i * 6 * 2;
-      
+
       texCoords[n + 0] = 0f;
       texCoords[n + 1] = i;
 
@@ -474,17 +556,17 @@ public class MultiplayerGame implements GameInt {
       int n = i * 6;
       int offset = i * 30;
 
-        addToArray(n, n + 7, n + 6, indices, offset);
-        addToArray(n, n + 1, n + 7, indices, offset + 3);
+      addToArray(n, n + 7, n + 6, indices, offset);
+      addToArray(n, n + 1, n + 7, indices, offset + 3);
 
-        addToArray(n + 1, n + 8, n + 7, indices, offset + 6);
-        addToArray(n + 1, n + 2, n + 8, indices, offset + 9);
+      addToArray(n + 1, n + 8, n + 7, indices, offset + 6);
+      addToArray(n + 1, n + 2, n + 8, indices, offset + 9);
 
-        addToArray(n + 2, n + 9, n + 8, indices, offset + 12);
-        addToArray(n + 2, n + 3, n + 9, indices, offset + 15);
+      addToArray(n + 2, n + 9, n + 8, indices, offset + 12);
+      addToArray(n + 2, n + 3, n + 9, indices, offset + 15);
 
-        addToArray(n + 3, n + 10, n + 9, indices, offset + 18);
-        addToArray(n + 3, n + 4, n + 10, indices, offset + 21);
+      addToArray(n + 3, n + 10, n + 9, indices, offset + 18);
+      addToArray(n + 3, n + 4, n + 10, indices, offset + 21);
 
       addToArray(n + 4, n + 11, n + 10, indices, offset + 24);
       addToArray(n + 4, n + 5, n + 11, indices, offset + 27);
