@@ -118,8 +118,7 @@ public class MultiplayerGame implements GameInt {
     TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("new/GridTexture"));
     TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("new/GridTexture"));
     TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("new/GridTexture"));
-    TerrainTexturePack texturePack = new TerrainTexturePack(background, rTexture, gTexture,
-        bTexture);
+		TerrainTexturePack texturePack = new TerrainTexturePack(background, rTexture, gTexture, bTexture);
 
     // TerrainTexture blendMap = new
     // TerrainTexture(loader.loadTexture("blendMap"));
@@ -127,8 +126,8 @@ public class MultiplayerGame implements GameInt {
     TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("new/GridTexture"));
 
     terrains = new ArrayList<Terrain>();
-    terrains.add(new Terrain((int) (-SkyboxRenderer.SIZE * 2f), (int) (-SkyboxRenderer.SIZE * 2f),
-        loader, texturePack, blendMap, "new/FlatHeightMap"));
+		terrains.add(new Terrain((int) (-SkyboxRenderer.SIZE * 2f), (int) (-SkyboxRenderer.SIZE * 2f), loader,
+				texturePack, blendMap, "new/FlatHeightMap"));
 
     // Track
     trackSeed = data.getTrackSeed();
@@ -148,7 +147,8 @@ public class MultiplayerGame implements GameInt {
         new ModelTexture(loader.loadTexture("new/finishLineTextureUpdated")));
     Vector3f firstPoint = new Vector3f(st.getStart());
     firstPoint.y = 1.05f;
-    Entity finishLine = new Entity(finishLineModel, firstPoint, new Vector3f(), 16f);
+		Entity finishLine = new Entity(finishLineModel, firstPoint, data.startingOrientation,
+				st.getTrack().get(0).getWidth() * 0.7f);
     entities.add(finishLine);
 
     // Lighting
@@ -156,7 +156,8 @@ public class MultiplayerGame implements GameInt {
     lights = new ArrayList<Light>();
     Light sun = new Light(new Vector3f(0, 100000, 0), new Vector3f(1f, 1f, 1f));
     lights.add(sun);
-    // Light sun = new Light(new Vector3f(256, 1000, 256), new Vector3f(1f, 1f,
+		// Light sun = new Light(new Vector3f(256, 1000, 256), new Vector3f(1f,
+		// 1f,
     // 1f));
 
     // Create ships
@@ -243,15 +244,13 @@ public class MultiplayerGame implements GameInt {
     // move terrain based on player location so terrain seems infinite
     if (ships.getPlayerShip().getPosition().x > terrains.get(0).getX() + Terrain.SIZE * 3 / 4) {
       terrains.get(0).moveX(Terrain.SIZE / 4);
-    } else if (ships.getPlayerShip().getPosition().x < terrains.get(0).getX()
-        + Terrain.SIZE * 1 / 4) {
+		} else if (ships.getPlayerShip().getPosition().x < terrains.get(0).getX() + Terrain.SIZE * 1 / 4) {
       terrains.get(0).moveX(-Terrain.SIZE / 4);
     }
 
     if (ships.getPlayerShip().getPosition().z > terrains.get(0).getZ() + Terrain.SIZE * 3 / 4) {
       terrains.get(0).moveZ(Terrain.SIZE / 4);
-    } else if (ships.getPlayerShip().getPosition().z < terrains.get(0).getZ()
-        + Terrain.SIZE * 1 / 4) {
+		} else if (ships.getPlayerShip().getPosition().z < terrains.get(0).getZ() + Terrain.SIZE * 1 / 4) {
       terrains.get(0).moveZ(-Terrain.SIZE / 4);
     }
 
@@ -295,8 +294,7 @@ public class MultiplayerGame implements GameInt {
     containers = new ArrayList<>();
 
     Vector3f colour = new Vector3f(0.0275f, 0.6510f, 0.9412f);
-    FontType font = new FontType(loader.loadFontTexture("ui/calibri"),
-        new File("src/resources/ui/calibri.fnt"));
+		FontType font = new FontType(loader.loadFontTexture("ui/calibri"), new File("src/resources/ui/calibri.fnt"));
 
     // Main pause menu
     menu = new Container(loader, "ui/MenuBackground", new Vector2f(448, 120));
@@ -440,8 +438,7 @@ public class MultiplayerGame implements GameInt {
 
     optionsMenu.setVisibility(false);
 
-    Container posDisplay = new Container(loader, "ui/posBackground",
-        new Vector2f(Display.getWidth() - 170, 10));
+		Container posDisplay = new Container(loader, "ui/posBackground", new Vector2f(Display.getWidth() - 170, 10));
     containers.add(posDisplay);
     posCurrent = new Label(loader, "2", font, 5f, true, new Vector2f(30, 45), 130);
     posCurrent.setParent(posDisplay);
@@ -452,8 +449,8 @@ public class MultiplayerGame implements GameInt {
 
     Container lapDisplay = new Container(loader, "ui/lapBackground", new Vector2f(21, 10));
     containers.add(lapDisplay);
-    lapCurrent = new Label(loader, Integer.toString(logic.getCurrentLap()), font, 5f, true,
-        new Vector2f(0, 45), 120);
+		lapCurrent = new Label(loader, Integer.toString(logic.getCurrentLap()), font, 5f, true, new Vector2f(0, 45),
+				120);
     lapCurrent.setParent(lapDisplay);
     lapCurrent.setColour(1, 1, 1);
     lapTotal = new Label(loader, Integer.toString(logic.getTotalLaps()), font, 2.8f, true,
@@ -507,7 +504,8 @@ public class MultiplayerGame implements GameInt {
         nextPoint = trackPoints.get(1);
       }
 
-      // Find the line between previous and next point for direction of this
+			// Find the line between previous and next point for direction of
+			// this
       // slice
       Vector2f dirVec = new Vector2f(nextPoint).sub(prevPoint).normalize();
 
@@ -556,7 +554,8 @@ public class MultiplayerGame implements GameInt {
       texCoords[n + 10] = 1f;
       texCoords[n + 11] = i;
 
-      // First calculate surface normals (technically edge normals as we are
+			// First calculate surface normals (technically edge normals as we
+			// are
       // working in a slice but whatever)
 
       // Get Quaternions for rotation to align with left and right vectors

@@ -75,10 +75,6 @@ public abstract class Ship extends Entity {
 	private byte id;
 	private boolean started;
 
-	// Game logic data
-	private int lap;
-	private float distance;
-
 	long lastPrint = 0;
 	double deltaSum = 0;
 
@@ -124,11 +120,10 @@ public abstract class Ship extends Entity {
 	 *        Direction of the acceleration in standard notation: 0 is right,
 	 *        0.5pi it forward etc. */
 	public void accelerate2d(float force, float angle) {
-		final float angle2 = correctAngle(rotation.y + angle); // Adjust the angle
-																// for ship's own
-																// rotation
-		velocity.changeX(x -> x + force * Math.cos(angle2));
-		velocity.changeZ(z -> z - force * Math.sin(angle2));
+		final float relativeAngle = correctAngle(rotation.y + angle);
+
+		velocity.changeX(x -> x + force * Math.cos(relativeAngle));
+		velocity.changeZ(z -> z - force * Math.sin(relativeAngle));
 	}
 
 	/** Applies air resistance, i.e. slows down velocities
@@ -265,7 +260,7 @@ public abstract class Ship extends Entity {
 		updatePosition(delta);
 
 		// Update parent
-		super.setRotation(rotation.copy().forEach(r -> Math.toDegrees(r)));
+		super.setRotation(this.rotation.copy().forEach(r -> Math.toDegrees(r)));
 	}
 
 	private void trackCollision() {
@@ -287,10 +282,10 @@ public abstract class Ship extends Entity {
 	}
 
 	@Override
-	public void setRotation(Vector3f v) {
-		this.rotation.set(v);
-		this.rotation.forEach(Math::toRadians);
-		super.setRotation(v);
+	public void setRotation(Vector3f rot) {
+		this.rotation.set(rot);
+		this.rotation.forEach(Math::toRadians).forEach(this::correctAngle);
+		super.setRotation(rotation.copy().forEach(r -> Math.toDegrees(r)));
 	}
 
 	public void updateFromPacket(byte[] bytes) {
@@ -340,21 +335,6 @@ public abstract class Ship extends Entity {
 	 * @param delta
 	 *        Time since last call of this function (TODO specify units) */
 	public abstract void update(float delta);
-
-
-	// Game logic data
-	public int getLap() {
-		return lap;
-	}
-	public void setLap(int lap) {
-		this.lap = lap;
-	}
-	public float getDistance() {
-		return distance;
-	}
-	public void setDistance(float distance) {
-		this.distance = distance;
-	}
 
 	@Override
 	public String toString() {

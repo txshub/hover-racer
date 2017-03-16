@@ -61,6 +61,7 @@ public class MultiplayerShipManager implements ServerShipProvider {
 		// Finally create the player
 		this.player = new PlayerShip(playerId, models.get(playerId), startingPositions.get(playerId), remotes, ground, stats.get(playerId),
 			track, input);
+		player.setRotation(startingOrientation);
 		remotes.forEach(r -> r.addOtherShip(player));
 		// Create sounds
 		sounds = new ShipSounds(player, remotes);

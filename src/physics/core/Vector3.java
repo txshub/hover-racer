@@ -63,42 +63,26 @@ public class Vector3 extends Vector3f {
 	}
 
 	public void bounceOff(ImVector2f wall, float elasticity) {
-		System.out.println("Bounced of " + wall + " at " + System.nanoTime());
+		// System.out.println("Bounced of " + wall + " at " + System.nanoTime());
 
 		ImVector2f normal = new ImVector2f(wall.getY(), -wall.getX());
 		ImVector2f current = new ImVector2f(this);
 
 		float cosTheta = current.dot(wall) / (current.length() * wall.length());
 		if (cosTheta < 0) cosTheta *= -1;
-		if (cosTheta < 0 || cosTheta > 1) {
-			System.out.println("Invalid cos " + cosTheta + ", not colliding");
-			return;
-		}
+		if (cosTheta < 0 || cosTheta > 1) return;
+
 		float theta = (float) Math.acos(cosTheta);
 		float nLength = (float) (current.length() * Math.sin(theta));
-		// float nLength = (float) (current.length() * Math.sqrt(1 - cosTheta * cosTheta) / cosTheta);
 
 		ImVector2f scaledNormal = normal.div(normal.length()).mul(nLength);
 		ImVector2f res = current.add(scaledNormal.mul(2));
 
-
-		// System.out.println(wall.makeBase());
-		// System.out.println(current.rotateTo(wall));
-
-		/* System.out.println("cosTheta: " + cosTheta);
-		 * System.out.println("theta: " + theta);
-		 * System.out.println("tangent: " + Math.tan(theta));
-		 * System.out.println("vLength: " + current.length());
-		 * System.out.println("nLength: " + nLength);
-		 * System.out.println("scaledNormal: " + scaledNormal);
-		 * System.out.println("Velocity changed from [" + x + "," + z + "] to " + res); */
 		if (current.rotateTo(wall).getY() > 0) {
 			x = res.getX();
 			z = res.getY();
-			// System.out.println("Collision applied");
-		} // else System.out.println("Collision ignored");
-
-		forEach(v -> v * elasticity);
+			forEach(v -> v * elasticity);
+		}
 	}
 
 	public Vector3f getDownDirection() {
