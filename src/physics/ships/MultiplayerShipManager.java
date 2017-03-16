@@ -19,6 +19,9 @@ import physics.core.Ship;
 import physics.network.RaceSetupData;
 import physics.network.ServerShipProvider;
 import physics.support.GroundProvider;
+import physics.support.ShipSounds;
+import trackDesign.TrackPoint;
+import upgrades.ShipTemplate;
 
 /** A class that manages ship on client side while in multiplayer mode. Handles
  * creating them, updating and communicating with the server.
@@ -30,21 +33,25 @@ public class MultiplayerShipManager implements ServerShipProvider {
 	private Ship player;
 	private List<Ship> remotes;
 	private Map<Byte, byte[]> packets;
+	private ShipSounds sounds;
+	private ArrayList<TrackPoint> track;
 
-	public MultiplayerShipManager(RaceSetupData data, GroundProvider ground, InputController input, Loader loader) {
+	public MultiplayerShipManager(RaceSetupData data, GroundProvider ground, InputController input, Loader loader,
+		ArrayList<TrackPoint> track) {
 		this(data.getYourId(), input, makeModels(data.getModels(), data.getTextures(), loader), data.getStartingPositions(),
-			data.getStartingOrientation(), ground);
+			data.getStartingOrientation(), data.getStats(), ground, track);
 	}
 
 	public MultiplayerShipManager(byte playerId, InputController input, List<TexturedModel> models, List<Vector3f> startingPositions,
-		Vector3f startingOrientation, GroundProvider ground) {
+		Vector3f startingOrientation, List<ShipTemplate> stats, GroundProvider ground, ArrayList<TrackPoint> track) {
 		this.packets = new HashMap<Byte, byte[]>();
+		this.track = track;
 
 		// Create all RemoteShips
 		this.remotes = new ArrayList<Ship>();
 		for (byte id = 0; id < models.size(); id++) {
 			if (id == playerId) continue; // Don't give them player's id
-			RemoteShip remoteShip = new RemoteShip(id, models.get(id), startingPositions.get(id), ground, this);
+			RemoteShip remoteShip = new RemoteShip(id, models.get(id), startingPositions.get(id), ground, stats.get(id), track, this);
 			remoteShip.setRotation(startingOrientation);
 			remotes.add(remoteShip);
 			System.out.println("Created: " + remoteShip);
@@ -52,8 +59,12 @@ public class MultiplayerShipManager implements ServerShipProvider {
 		// Tell ships about each other
 		remotes.forEach(r -> r.addOtherShips(remotes));
 		// Finally create the player
-		this.player = new PlayerShip(playerId, models.get(playerId), startingPositions.get(playerId), remotes, ground, input);
+		this.player = new PlayerShip(playerId, models.get(playerId), startingPositions.get(playerId), remotes, ground, stats.get(playerId),
+			track, input);
 		remotes.forEach(r -> r.addOtherShip(player));
+		// Create sounds
+		sounds = new ShipSounds(player, remotes);
+		player.setCollisionListener(sounds);
 	}
 
 	@Deprecated
@@ -66,18 +77,19 @@ public class MultiplayerShipManager implements ServerShipProvider {
 		byte id = 0;
 		for (TexturedModel texturedModel : otherTextures) {
 			if (id == playerId) id++; // Don't give them player's id
-			remotes.add(new RemoteShip(id, texturedModel, startingPositions.get(id++), ground, this));
+			remotes.add(new RemoteShip(id, texturedModel, startingPositions.get(id++), ground, null, null, this));
 		}
 		// Tell ships about each other
 		remotes.forEach(r -> r.addOtherShips(remotes));
 		// Finally create the player
-		this.player = new PlayerShip(playerId, playerTexture, startingPositions.get(playerId), remotes, ground, input);
+		this.player = new PlayerShip(playerId, playerTexture, startingPositions.get(playerId), remotes, ground, null, null, input);
 		remotes.forEach(r -> r.addOtherShip(player));
 	}
 
 	public void updateShips(float delta) {
 		player.update(delta);
 		remotes.forEach(r -> r.update(delta));
+		sounds.update(delta);
 	}
 
 	public void addShipsTo(Collection<Entity> entities) {

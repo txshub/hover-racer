@@ -18,8 +18,21 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * @author Andreea Gheorghe
+ * Class that implements the pop up windows that will be used 
+ * for error handling throughout the User Interface.
+ *
+ */
 public class PopUpWindow {
 	
+	/**
+	 * Displays the pop up window with a given text,
+	 * to reflect the type of error and the action that must be taken by the user.
+	 * @param popText The error text.
+	 * @throws IOException
+	 */
 	public static void display(String popText) throws IOException {
 		
 		TextStyle popUpStyle = new TextStyle(popText, 25);
@@ -47,6 +60,7 @@ public class PopUpWindow {
 		GridPane.setHalignment(popUpText, HPos.CENTER);
 		box.add(btnClose, 0, 2);
 	
+		// Style - the same background as the main menu
 		InputStream is = Files.newInputStream(Paths.get("src/resources/img/hover-racerNew.jpg"));
 	    Image image = new Image(is);
 	    is.close();
@@ -56,6 +70,7 @@ public class PopUpWindow {
 		Pane layout = new Pane();
 		layout.getChildren().addAll(background, imgView, box); 
 		      
+		// Create the scene that will be displayed on the stage
 		Scene scene1= new Scene(layout, 400, 200);
 		      
 		popUp.setScene(scene1);

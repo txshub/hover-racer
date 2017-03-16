@@ -1,15 +1,20 @@
 package serverComms;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+
 import physics.network.RaceSetupData;
 import physics.network.ShipSetupData;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
+
 public class GameRoom {
+
 	private static final long TIME_TO_START = 4L * 1000000000L; // Time to start race
 																// in nanoseconds
 	private static final int SIDE_DISTANCES = 10;
@@ -41,11 +46,10 @@ public class GameRoom {
 		this.ships = new ArrayList<ShipSetupData>(maxPlayers);
 		// Generate the track
 		SeedTrack st = TrackMaker.makeTrack(seed);
-    // Scale up the track so it isn't so tiny
-    for (TrackPoint tp : st.getTrack()) {
-      tp.mul(20);
-    }
-    trackPoints = st.getTrack();
+		for (TrackPoint tp : st.getTrack()) {
+			tp.mul(20);
+		}
+		trackPoints = st.getTrack();
 	}
 	public GameRoom(String in) {
 		String collected = "";
@@ -118,7 +122,7 @@ public class GameRoom {
 	public String getSeed() {
 		return seed;
 	}
-	
+
 	public void addPlayer(ShipSetupData data) {
 		if (data == null) throw new IllegalArgumentException("ShipSetupData cannot be null");
 		ships.add(data);
@@ -133,7 +137,7 @@ public class GameRoom {
 	public String getHostName() {
 		return hostName;
 	}
-	
+
 	public void startGame(String clientName) {
 		if (players.size() == 0) throw new IllegalStateException("Tried starting game with no players");
 		if (ships.size() != players.size())
@@ -155,15 +159,14 @@ public class GameRoom {
 	}
 	public void endGame() {
 		inGame = false;
-		//If the host is still in the room, don't end the game
-		if(players.contains(hostName)) return;
-		//Otherwise send the closed methods to all currently connected clients
-		for(int i = 0; i < players.size(); i++) {
+		// If the host is still in the room, don't end the game
+		if (players.contains(hostName)) return;
+		// Otherwise send the closed methods to all currently connected clients
+		for (int i = 0; i < players.size(); i++) {
 			table.getQueue(players.get(i)).offer(new ByteArrayByte(new byte[0], ServerComm.ROOMCLOSED));
 		}
 	}
 	public void updateUser(int gameNum, byte[] msg) {
-		System.out.println("Updating user no. " + gameNum);
 		shipManager.addPacket(msg);
 	}
 	public byte[] getShipPositions() {
@@ -219,7 +222,7 @@ public class GameRoom {
 		// TODO temporary thing here:
 		Map<Byte, Vector3f> res = new HashMap<>();
 		for (int i = 0; i < maxPlayers; i++) {
-		  System.out.println("Trackpoint gameroom: " + trackPoints.get(0));
+			System.out.println("Trackpoint gameroom: " + trackPoints.get(0));
 			res.put((byte) i, new Vector3f(trackPoints.get(0).x + i * 40, 5, trackPoints.get(0).y));
 		}
 		return res;

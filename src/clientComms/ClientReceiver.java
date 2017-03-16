@@ -2,6 +2,8 @@ package clientComms;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import audioEngine.AudioMaster;
 import game.MainGameLoop;
 import javafx.application.Platform;
 import physics.network.RaceSetupData;
@@ -10,6 +12,7 @@ import serverComms.ByteArrayByte;
 import serverComms.Converter;
 import serverComms.GameRoom;
 import serverComms.ServerComm;
+import userInterface.MainMenu;
 /** Thread to receive any messages passed from the server
  * 
  * @author simon */
@@ -60,7 +63,9 @@ public class ClientReceiver extends Thread {
 					client.setCurrentRoom(gr);
 				} else if (fullMsg.getType() == ServerComm.RACESETUPDATA) {
 					RaceSetupData data = Converter.receiveRaceData(fullMsg.getMsg());
-					Platform.exit();
+//					AudioMaster.stopMusic();
+//					AudioMaster.cleanUp();
+//				    Platform.exit();
 					MainGameLoop.startMultiplayerGame(data, client);
 				} else if (fullMsg.getType() == ServerComm.FULLPOSITIONUPDATE) {
 					if (client.getManager() == null)

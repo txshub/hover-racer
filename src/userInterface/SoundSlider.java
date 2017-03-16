@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 /**
  * 
  * @author Andreea Gheorghe
+ * Class that defines the style of the sound effects slider.
  *
  */
 public class SoundSlider extends GridPane {
@@ -22,6 +23,9 @@ public class SoundSlider extends GridPane {
   private Slider soundSlider;
   private Text value;
 
+  /**
+   * Constructor for the SoundSlider class.
+   */
   public SoundSlider() {
 
     this.setPadding(new Insets(0, 0, 20, 0));
@@ -52,7 +56,7 @@ public class SoundSlider extends GridPane {
       int i = newValue.intValue();
       value.setText(Integer.toString(i));
 
-      // TUDOR ADD AUDIO STUFF
+      // TUDOR - add audio functionality
       AudioMaster.setSFXVolume((float) (i / 10.0));
     }
 
