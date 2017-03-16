@@ -50,7 +50,7 @@ public class Barriers {
 		// TODO temporary debug data
 		if (ship.getId() == 0) {
 			// System.out.println(ship.getPosition());
-			System.out.println(pos.distance(left(0)));
+			// System.out.println(pos.distance(left(0)));
 			// System.out.println(distanceTo(new Vector2f(pos.x, pos.z), left(0), left(1)));
 		}
 
