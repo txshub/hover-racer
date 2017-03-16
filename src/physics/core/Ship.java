@@ -45,6 +45,9 @@ public abstract class Ship extends Entity {
 	private static final double CUSHION_SCALE = 0.8f;
 	// Jumping, for science! (testing vertical stuff)
 	private static final float JUMP_POWER = 30 * SCALE;
+	// How much speed is retained during a wall collision
+	private static final float WALL_ELASTICITY = 0.5f;
+
 
 	// 15, 100, 2, 30: magnet-like
 	// 15, 50, 0.8, 30: nicely cushiony
@@ -178,14 +181,16 @@ public abstract class Ship extends Entity {
 	}
 
 	protected void steer(float thrust, float turn, float brokenDelta) {
-		steer(thrust, turn, 0f, 0f, brokenDelta);
+		steer(Math.max(0, thrust), -thrust, turn, 0f, 0f, brokenDelta);
 	}
-
 	protected void steer(float thrust, float turn, float strafe, float brokenDelta) {
-		steer(thrust, turn, strafe, 0f, brokenDelta);
+		steer(Math.max(0, thrust), -thrust, turn, strafe, 0f, brokenDelta);
+	}
+	protected void steer(float thrust, float turn, float strafe, float jump, float brokenDelta) {
+		steer(Math.max(0, thrust), -thrust, turn, strafe, jump, brokenDelta);
 	}
 
-	protected void steer(float thrust, float turn, float strafe, float jump, float brokenDelta) {
+	protected void steer(float thrust, float breaking, float turn, float strafe, float jump, float brokenDelta) {
 		if (!started) return; // Don't allow input until the race has started
 		float delta = (float) 1 / 60; // TODO fix deltas
 		// Checking parameters - TODO probably remove this for production code
@@ -198,12 +203,11 @@ public abstract class Ship extends Entity {
 			rotationalVelocity.changeY(y -> y - delta * turn * TURN_SPEED);
 			rotationalVelocity.changeZ(z -> z + delta * turn * TURN_SPEED * SPEED_OF_ROTATION_WHILE_TURNING);
 		}
-		// Accelerating/breaking
-		if (!ACTUALLY_BREAK && thrust != 0) accelerate2d(delta * thrust * ACCELERATION, (float) Math.PI * 1.5f);
-		else if (ACTUALLY_BREAK && thrust > 0) accelerate2d(delta * thrust * ACCELERATION, (float) Math.PI * 1.5f);
-		else if (ACTUALLY_BREAK && thrust < 0) airResistance(-delta * thrust * BREAK_POWER);
-		// Strafing
-		// TODO change to an instant boost (?)
+		// Accelerating
+		accelerate2d(delta * thrust * ACCELERATION, (float) Math.PI * 1.5f);
+		// Breaking
+		if (breaking > 0) airResistance(delta * breaking * BREAK_POWER);
+		// Strafing TODO change to an instant boost (?)
 		if (strafe != 0) accelerate2d(delta * strafe * ACCELERATION, (float) Math.PI);
 		// Jumping
 		if (jump != 0) velocity.changeY(y -> y + delta * jump * JUMP_POWER * VERTICAL_SCALE);
@@ -265,7 +269,7 @@ public abstract class Ship extends Entity {
 	}
 
 	private void trackCollision() {
-		barriers.allCollisions(this).forEach(v -> velocity.bounceOff(v, 1)); // TODO TEST TES TEST TEST IT
+		barriers.allCollisions(this).forEach(v -> velocity.bounceOff(v, WALL_ELASTICITY));
 	}
 
 	/** Allows the player to control the ship from now on. Call when the race
