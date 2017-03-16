@@ -72,6 +72,10 @@ public abstract class Ship extends Entity {
 	private byte id;
 	private boolean started;
 
+	// Game logic data
+	private int lap;
+	private float distance;
+
 	long lastPrint = 0;
 	double deltaSum = 0;
 
@@ -332,6 +336,21 @@ public abstract class Ship extends Entity {
 	 * @param delta
 	 *        Time since last call of this function (TODO specify units) */
 	public abstract void update(float delta);
+
+
+	// Game logic data
+	public int getLap() {
+		return lap;
+	}
+	public void setLap(int lap) {
+		this.lap = lap;
+	}
+	public float getDistance() {
+		return distance;
+	}
+	public void setDistance(float distance) {
+		this.distance = distance;
+	}
 
 	@Override
 	public String toString() {
