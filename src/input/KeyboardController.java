@@ -11,7 +11,7 @@ public class KeyboardController extends InputController {
 	/** Updates the keyStatus and prevStatus maps with new key information. */
 	public void update() {
 		// mapping.keySet().forEach(key -> keyStatus.put(mapping.get(key),
-		// Keyboard.isKeyDown(key)));
+		// Keyboard.isKeyDown(key) ? 1f : 0f));
 		for (Integer key : mapping.keySet()) {
 			prevStatus.put(mapping.get(key), keyStatus.get(mapping.get(key)));
 			if (Keyboard.isKeyDown(key)) {
@@ -21,15 +21,4 @@ public class KeyboardController extends InputController {
 			}
 		}
 	}
-
-	public static void main(String[] args) {
-		KeyboardController input = new KeyboardController();
-		System.out.println("----------Changing 42 to FORWARD--------------");
-		input.changeKey(42, Action.FORWARD);
-		input.printSettings();
-		System.out.println("----------Changing 42 to BREAK--------------");
-		input.changeKey(42, Action.BREAK);
-		input.printSettings();
-	}
-
 }

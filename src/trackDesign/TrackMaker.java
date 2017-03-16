@@ -16,7 +16,7 @@ import trackDesign.catmullrom.SplineUtils;
 public class TrackMaker {
 
   public static SeedTrack makeTrack() {
-    return makeTrack(10, 20, 30, 1, 30, 40, 4);
+    return makeTrack(10, 20, 30, 1, 30, 40, 4, 120, 260);
   }
   
   public static SeedTrack makeTrack(String seed) {
@@ -24,7 +24,7 @@ public class TrackMaker {
 	  for(char c: seed.toCharArray()) {
 		  hash = 32L*hash + c;
 	  }
-	  return makeTrack(hash, 10, 20, 30, 1, 30, 40, 6);
+	  return makeTrack(hash, 10, 20, 30, 1, 30, 40, 6, 200, 300);
   }
 
   public static SeedTrack makeStraightTrack(float length) {
@@ -57,10 +57,10 @@ public class TrackMaker {
    * @return A track in the form of an arraylist of points
    */
   public static SeedTrack makeTrack(int minTrackPoints, int maxTrackPoints, float minDist,
-      int seperateIterations, float difficulty, float maxDisp, int subDivs) {
+      int seperateIterations, float difficulty, float maxDisp, int subDivs, int minTrackWidth, int maxTrackWidth) {
     Random temp = new Random(); // Create a new random object
     return makeTrack(temp.nextLong(), minTrackPoints, maxTrackPoints, minDist, seperateIterations,
-        difficulty, maxDisp, subDivs); // Return the made track with a random
+        difficulty, maxDisp, subDivs, minTrackWidth, maxTrackWidth); // Return the made track with a random
                                        // seed
   }
 
@@ -88,9 +88,9 @@ public class TrackMaker {
    * @return A track in the form of an arraylist of points
    */
   public static SeedTrack makeTrack(long seed, int minTrackPoints, int maxTrackPoints,
-      float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs) {
+      float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs, int minTrackWidth, int maxTrackWidth) {
     if (seed == 0)
-    	return makeTrack((new Random(seed)).nextLong(), minTrackPoints, maxTrackPoints, minDist, seperateIterations, difficulty, maxDisp, subDivs);
+    	return makeTrack((new Random(seed)).nextLong(), minTrackPoints, maxTrackPoints, minDist, seperateIterations, difficulty, maxDisp, subDivs, minTrackWidth, maxTrackWidth);
       //return makeStraightTrack(250);
     Random random = new Random(seed); // Make the random object
     ArrayList<TrackPoint> points = new ArrayList<TrackPoint>();
@@ -121,9 +121,10 @@ public class TrackMaker {
     spreadAngles(circuit);
     if (circuit.size() < 5)
       return makeTrack(random.nextLong(), minTrackPoints, maxTrackPoints, minDist,
-          // If the track generation has failed spectacularly then try again
-          seperateIterations, difficulty, maxDisp, subDivs);
-    makeWidths(circuit, random);
+          seperateIterations, difficulty, maxDisp, subDivs, minTrackWidth, maxTrackWidth); 
+    // If the track generation has failed spectacularly then try again
+    
+    makeWidths(circuit, random, minTrackWidth, maxTrackWidth);
     // Apply smoothing
     ArrayList<TrackPoint> finalCircuit = SplineUtils.dividePoints(circuit, subDivs);
     // Centre the track so it doesn't go off screen at all
@@ -139,26 +140,32 @@ public class TrackMaker {
     		Line2D l2 = new Line2D.Float(l2a.getX(), l2a.getY(), l2b.getX(), l2b.getY());
     		if(l1.intersectsLine(l2)) {
     			System.out.println("i=" + i + ", j=" + j + ", length=" + finalCircuit.size());
-    			return makeTrack(random.nextLong(), minTrackPoints, maxTrackPoints, minDist, seperateIterations, difficulty, maxDisp, subDivs);
+    			return makeTrack(random.nextLong(), minTrackPoints, maxTrackPoints, minDist, seperateIterations, difficulty, maxDisp, subDivs, minTrackWidth, maxTrackWidth);
     		}
     	}
     }
     return new SeedTrack(seed, finalCircuit);
   }
 
-  private static void makeWidths(ArrayList<TrackPoint> points, Random random) {
-    for (TrackPoint p : points) {
+  private static void makeWidths(ArrayList<TrackPoint> points, Random random, int minWidth, int maxWidth) {
+	  int secondMin = ((maxWidth-minWidth)/4)+minWidth;
+	  int mid = (maxWidth+minWidth)/2;
+	  int secondMax = ((maxWidth-minWidth)/4)+minWidth;
+	  
+	  points.get(0).setWidth(mid);
+	  
+    for (int i = 1; i < points.size(); i++) {
       int rand = random.nextInt(100);
       if (rand < 10) {
-        p.setWidth(120);
+        points.get(i).setWidth(minWidth);
       } else if (rand < 30) {
-        p.setWidth(160);
+        points.get(i).setWidth(secondMin);
       } else if (rand < 70) {
-        p.setWidth(200);
+        points.get(i).setWidth(mid);
       } else if (rand < 90) {
-        p.setWidth(240);
+        points.get(i).setWidth(secondMax);
       } else {
-        p.setWidth(280);
+        points.get(i).setWidth(maxWidth);
       }
     }
   }

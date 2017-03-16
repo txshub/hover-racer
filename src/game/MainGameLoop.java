@@ -70,10 +70,6 @@ public class MainGameLoop extends Thread {
 				fps = 0;
 				ups = 0;
 			}
-
-			if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-				break;
-			}
 		}
 
 		game.cleanUp();
@@ -94,11 +90,6 @@ public class MainGameLoop extends Thread {
 		} catch (InterruptedException e) {}
 	}
 
-	// private static
 
-	public static void main(String[] args) {
-		MainGameLoop main = new MainGameLoop();
-		main.main(new Game());
-	}
 
 }
