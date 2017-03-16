@@ -77,6 +77,11 @@ public abstract class Ship extends Entity {
 
 	long lastPrint = 0;
 	double deltaSum = 0;
+	
+	// Tudor
+	private int ranking;
+	private boolean finished;
+	private int currentLap;
 
 	protected Ship(byte id, TexturedModel model, Vector3f startingPosition, GroundProvider ground, ShipTemplate stats,
 		List<TrackPoint> track) {
@@ -94,6 +99,12 @@ public abstract class Ship extends Entity {
 		this.otherShips = new ArrayList<Ship>();
 
 		this.started = false;
+
+		// Tudor;
+		ranking = 0;
+		finished = false;
+		currentLap = 1;
+
 	}
 
 	public void addOtherShips(Collection<Ship> ships) {
@@ -355,6 +366,32 @@ public abstract class Ship extends Entity {
 		} catch (ClassCastException e) {
 			return false;
 		}
+	}
+
+	// Tudor
+	
+	public void setRanking(int i) {
+		ranking = i;
+	}
+
+	public int getRanking() {
+		return ranking;
+	}
+
+	public boolean finished() {
+		return finished;
+	}
+
+	public void setFinished(boolean finished) {
+		this.finished = finished;
+	}
+
+	public void setCurrentLap(int lap) {
+		currentLap = lap;
+	}
+
+	public int getCurrentLap() {
+		return currentLap;
 	}
 
 }
