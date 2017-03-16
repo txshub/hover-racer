@@ -67,7 +67,7 @@ public class ClientReceiver extends Thread {
 					RaceSetupData data = Converter.receiveRaceData(fullMsg.getMsg());
 //					AudioMaster.stopMusic();
 //					AudioMaster.cleanUp();
-//				    Platform.exit();
+				    Platform.exit();
 					MainGameLoop.startMultiplayerGame(data, client);
 				} else if (fullMsg.getType() == ServerComm.FULLPOSITIONUPDATE) {
 					if (client.getManager() == null)
