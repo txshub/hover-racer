@@ -33,7 +33,7 @@ public class Barriers {
 
 		// Generate barriers
 		for (int i = 0; i < points; i++) {
-			Vector2f side = new Vector2f(middle.get(i).y, -middle.get(i).x).normalize().mul(track.get(i).getWidth());
+			Vector2f side = new Vector2f(middle.get(i).y, -middle.get(i).x).normalize().mul(track.get(i).getWidth() / 2);
 			rightPoints.add(point(i).add(side));
 			leftPoints.add(point(i).sub(side));
 		}
@@ -51,7 +51,8 @@ public class Barriers {
 		if (ship.getId() == 0) {
 			// System.out.println(ship.getPosition());
 			// System.out.println(pos.distance(left(0)));
-			// System.out.println(distanceTo(new Vector2f(pos.x, pos.z), left(0), left(1)));
+			// System.out.println(ship);
+			// System.out.println(distanceTo(pos, left(0), left(1)));
 		}
 
 

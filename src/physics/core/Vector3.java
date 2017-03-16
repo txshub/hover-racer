@@ -64,10 +64,13 @@ public class Vector3 extends Vector3f {
 	}
 
 	public void bounceOff(Vector2f line, float elasticity) {
-		Vector2f normal = new Vector2f(line.y, -line.x);
+		System.out.println("Bounced of " + line);
+		Vector2f normal = new Vector2f(line.y, -line.x).normalize();
 		Vector2f current = new Vector2f(x, z);
 		// res = current - normal*2*(current dot normal)
-		Vector2f res = new Vector2f(current).sub(new Vector2f(normal).mul(2).mul(new Vector2f(current).dot(normal)));
+		Vector2f res = new Vector2f(current)
+			.sub(new Vector2f(normal).mul(2).mul(new Vector2f(current).normalize().dot(new Vector2f(normal).normalize())));
+		System.out.println("Velocity changed from [" + x + "," + z + "] to " + res);
 		x = res.x;
 		z = res.y;
 		forEach(v -> v * elasticity);
