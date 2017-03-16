@@ -364,6 +364,15 @@ public class GameMenu extends Parent {
 
       });
     });
+    
+    //SKIP CURRENT MUSIC TRACK
+    MenuButton skipMusic = new MenuButton("SKIP MUSIC", 350, 70, 30);
+    skipMusic.setOnMouseClicked(e-> {
+    	
+    	//Tudor - add skip music functionality
+    	AudioMaster.skipMusic();
+    	
+    });
 
     // CONNECT TO THE SERVER //
     
@@ -664,7 +673,8 @@ public class GameMenu extends Parent {
     
     settingsWindow.add(musicSlider, 0, 1);
     settingsWindow.add(soundSlider, 0, 2);
-    settingsWindow.add(btnBackSettings, 0, 3);
+    settingsWindow.add(skipMusic, 0, 3);
+    settingsWindow.add(btnBackSettings, 0, 4);
     
     // CREDITS WINDOW CHILDREN //
     
@@ -744,7 +754,7 @@ public class GameMenu extends Parent {
   public void buildSettingsWindow(){
 	  
 	  settingsWindow.setTranslateX(700);
-	  settingsWindow.setTranslateY(140);
+	  settingsWindow.setTranslateY(110);
 	  settingsWindow.setAlignment(Pos.CENTER);
 	  settingsWindow.setHgap(10);
 	  settingsWindow.setVgap(10);

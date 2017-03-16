@@ -92,9 +92,7 @@ public class CreateGameRoom extends GridPane {
 			// START SINGLE PLAYER GAME //
 
 			try {
-				
-//				AudioMaster.stopMusic();
-//			    AudioMaster.cleanUp();
+	
 				localClient.startSinglePlayerGame(seedInput.getText(),
 						Integer.valueOf(noAIsInput.getText()), Integer.valueOf(noLapsInput.getText()),
 						DataGenerator.basicShipSetup(usernameInput.getText()));

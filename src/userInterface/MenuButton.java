@@ -50,7 +50,7 @@ public class MenuButton extends StackPane {
     
     // Create button shape
     bg = new Rectangle(width, height);
-    bg.setOpacity(0.7);
+    bg.setOpacity(0.8);
     bg.setFill(Color.BLACK);
 
     // Blur the button colour

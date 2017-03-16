@@ -61,7 +61,7 @@ public class PopUpWindow {
 		box.add(btnClose, 0, 2);
 	
 		// Style - the same background as the main menu
-		InputStream is = Files.newInputStream(Paths.get("src/resources/img/hover-racerNew.jpg"));
+		InputStream is = Files.newInputStream(Paths.get("src/resources/img/hover-racer.jpg"));
 	    Image image = new Image(is);
 	    is.close();
 
