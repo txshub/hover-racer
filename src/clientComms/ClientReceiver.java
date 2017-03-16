@@ -15,11 +15,13 @@ import serverComms.ServerComm;
 import userInterface.MainMenu;
 /** Thread to receive any messages passed from the server
  * 
- * @author simon */
+ * @author simon 
+ */
 public class ClientReceiver extends Thread {
 	private DataInputStream server;
 	private Client client;
 	private MultiplayerShipManager manager;
+	
 	/** Creates a ClientReceiver object
 	 * 
 	 * @param server
@@ -65,7 +67,7 @@ public class ClientReceiver extends Thread {
 					RaceSetupData data = Converter.receiveRaceData(fullMsg.getMsg());
 //					AudioMaster.stopMusic();
 //					AudioMaster.cleanUp();
-//				    Platform.exit();
+				    Platform.exit();
 					MainGameLoop.startMultiplayerGame(data, client);
 				} else if (fullMsg.getType() == ServerComm.FULLPOSITIONUPDATE) {
 					if (client.getManager() == null)

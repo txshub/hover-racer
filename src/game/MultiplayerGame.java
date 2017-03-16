@@ -173,7 +173,7 @@ public class MultiplayerGame implements GameInt {
     // terrains);
 
     // Tudor
-    logic = new GameLogic(ships.getPlayerShip(), st, 4);
+    logic = new GameLogic(ships.getPlayerShip(), st, data.laps);
 
     // GUIs
     setupGUIs();

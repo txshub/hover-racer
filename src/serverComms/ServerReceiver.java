@@ -12,14 +12,15 @@ public class ServerReceiver extends Thread {
   private Lobby lobby;
   private GameRoom gameRoom = null;
   private int gameNum = -1;
+  
   public ServerReceiver(Socket socket, String clientName, DataInputStream client, Lobby lobby) {
     this.clientName = clientName;
     this.client = client;
     this.lobby = lobby;
+    detect = new DetectTimeout(lobby.clientTable, clientName);
   }
   public void run() {
     try {
-      detect = new DetectTimeout(lobby.clientTable, clientName);
       while (true) {
         int in = client.readInt();
         byte[] messageIn = new byte[in];
