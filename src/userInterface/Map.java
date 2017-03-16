@@ -12,16 +12,21 @@ import trackDesign.TrackPoint;
 /**
  * 
  * @author Andreea Gheorghe
+ * Class that implements the dynamic track map.
+ * Will be used to preview the track when the user inputs a seed.
  *
  */
 public class Map extends Canvas {
 
   private ArrayList<TrackPoint> track;
-  private long seed;
+  private String seed;
 
-  // private Canvas canvas;
-
-  public Map(long seed) {
+  /**
+   * Constructor for the Map class that generates the track
+   * according to a given seed.
+   * @param seed The given seed that will generate the track.
+   */
+  public Map(String seed) {
 
     this.seed = seed;
 
@@ -32,12 +37,18 @@ public class Map extends Canvas {
     drawShapes(gc);
 
   }
-
+  
+  /**
+   * Method that draws the map.
+   * @param gc The GraphicsContext needed to display the elements.
+   */
   public void drawShapes(GraphicsContext gc) {
 
     SeedTrack st = TrackMaker.makeTrack(seed);
     track = st.getTrack();
 
+    // Go through each track point, connect them
+    // Resize so that it will fit in the canvas size
     for (int i = 0; i < track.size(); i++) {
 
       double x1 = (((track.get(i).getX() * 2) / 3.3));

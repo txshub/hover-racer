@@ -15,13 +15,7 @@ public class TestServerReceiver {
   public void test() {
     String name = "Test";
     Lobby l = new Lobby(5154);
-    DummyGameMenu m = null;
-    try {
-      m = new DummyGameMenu();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    Client c = new Client(name, 5154, "localhost", m);
+    Client c = new Client(name, 5154, "localhost");
     c.start();
     try {
       Thread.sleep(1000);

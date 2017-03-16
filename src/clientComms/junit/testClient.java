@@ -19,15 +19,10 @@ public class testClient {
 	static Lobby lobby;
 	static int port = 1234;
 	static String local = "localhost";
-	static long seed = 114553;
+	static String seed = "114553";
 	static int maxPlayers = 3;
 	static int lapCount = 5;
 	static String lobbyName = "Test Lobby";
-	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		lobby = new Lobby(1234);
-	}
 
 	@Test
 	public void testServerOff() {
@@ -40,6 +35,7 @@ public class testClient {
 	
 	@Test
 	public void testServerOnConnect() {
+		lobby = new Lobby(1111);
 		String name = "Mike";
 		Client test = new Client(name, port, local);
 		if(!test.clientName.equals(name)) fail("Name given not equal to actual name");
