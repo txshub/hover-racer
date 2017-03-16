@@ -351,6 +351,11 @@ public class GameRoom {
 		shipManager.update(delta);
 	}
 
+	public void sendLogicUpdate(byte id, int ranking, boolean finished, int currrentLap) {
+
+	}
+
+
 	/** Returns the number of laps in this race
 	 * 
 	 * @return The number of laps in this race */
