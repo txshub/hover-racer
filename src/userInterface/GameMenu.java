@@ -31,12 +31,14 @@ import serverComms.ServerComm;
  */
 public class GameMenu extends Parent {
 
-  private GridPane initialWindow, settingsWindow, connectMultiWindow, hostGameRoomWindow, joinGameRoomWindow, gameRoomLobbyWindow;
+  private GridPane initialWindow, settingsWindow, connectMultiWindow, hostGameRoomWindow, joinGameRoomWindow, gameRoomLobbyWindow,
+  				   creditsWindow;
   private VBox multiOptionsWindow, singleGameWindow;
-  private MenuButton btnPlayGame, btnPlayAI, btnOptions, btnExit, btnBackSettings,
+  private MenuButton btnPlayGame, btnPlayAI, btnOptions, btnExit, btnCredits, btnBackCredits, btnBackSettings,
   			 		 btnBackMulti, btnBackSingle, btnBackHost, btnBackMultiOptions, btnBackJoin;
   private SoundSlider soundSlider;
   private MusicSlider musicSlider;
+  private Credits credits;
   private CreateGameRoom createGameRoom;
   private HostGameRoom hostGameRoom;
   private JoinGameRoom joinGameRoom;
@@ -54,6 +56,7 @@ public class GameMenu extends Parent {
 
     initialWindow = new GridPane();
     settingsWindow = new GridPane();
+    creditsWindow = new GridPane();
     connectMultiWindow = new GridPane();
     multiOptionsWindow = new VBox(15);
     hostGameRoomWindow = new GridPane();
@@ -63,6 +66,7 @@ public class GameMenu extends Parent {
     
     soundSlider = new SoundSlider();
     musicSlider = new MusicSlider();
+    credits = new Credits();
 
     hostGameRoom = new HostGameRoom();
     createGameRoom = new CreateGameRoom();
@@ -71,6 +75,7 @@ public class GameMenu extends Parent {
     
     buildInitialWindow();
     buildSettingsWindow();
+    buildCreditsWindow();
     buildConnectMultiWindow();
     buildMultiOptionsWindow();
     buildSingleGameWindow();
@@ -165,6 +170,28 @@ public class GameMenu extends Parent {
         getChildren().remove(initialWindow);
       });
     });
+    
+    btnCredits = new MenuButton("CREDITS", 350, 70, 30);
+    btnCredits.setOnMouseClicked(event -> {
+
+      // GAME CREDITS  	
+      // Transition to the credits window
+    	
+      getChildren().add(creditsWindow);
+      getChildren().removeAll(hoverText, racerText, captionText);
+
+      TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), initialWindow);
+      trans.setToX(initialWindow.getTranslateX() - OFFSET);
+
+      TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), creditsWindow);
+      trans1.setToX(creditsWindow.getTranslateX() - OFFSET);
+
+      trans.play();
+      trans1.play();
+      trans.setOnFinished(evt -> {
+        getChildren().remove(initialWindow);
+      });
+    });
 
     btnExit = new MenuButton("EXIT", 350, 70, 30);
     btnExit.setOnMouseClicked(event -> {
@@ -196,6 +223,28 @@ public class GameMenu extends Parent {
       trans1.play();
       trans.setOnFinished(evt -> {
         getChildren().remove(settingsWindow);
+        getChildren().addAll(hoverText, racerText, captionText);
+      });
+    });
+    
+    btnBackCredits = new MenuButton("BACK", 350, 70, 30);
+    btnBackCredits.setOnMouseClicked(event -> {
+    	
+      // BACK TO MAIN MENU FROM CREDITS WINDOW
+      // Transition to the initial window	
+    	
+      getChildren().add(initialWindow);
+
+      TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), creditsWindow);
+      trans.setToX(creditsWindow.getTranslateX() + OFFSET);
+
+      TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), initialWindow);
+      trans1.setToX(creditsWindow.getTranslateX());
+
+      trans.play();
+      trans1.play();
+      trans.setOnFinished(evt -> {
+        getChildren().remove(creditsWindow);
         getChildren().addAll(hoverText, racerText, captionText);
       });
     });
@@ -608,13 +657,19 @@ public class GameMenu extends Parent {
     initialWindow.add(btnPlayGame, 0, 1);
     initialWindow.add(btnPlayAI, 0, 2);
     initialWindow.add(btnOptions, 0, 3);
-    initialWindow.add(btnExit, 0, 4);
+    initialWindow.add(btnCredits, 0, 4);
+    initialWindow.add(btnExit, 0, 5);
 
     // SETTINGS WINDOW CHILDREN //
     
     settingsWindow.add(musicSlider, 0, 1);
     settingsWindow.add(soundSlider, 0, 2);
     settingsWindow.add(btnBackSettings, 0, 3);
+    
+    // CREDITS WINDOW CHILDREN //
+    
+    creditsWindow.add(credits, 0, 0);
+    creditsWindow.add(btnBackCredits, 0, 1);
 
     // CONNECT IN MULTIPLAYER MODE CHILDREN //
     
@@ -670,13 +725,13 @@ public class GameMenu extends Parent {
     this.setCacheHint(CacheHint.SPEED);
   }
 
-/**
+  /**
    * Sets the design of the initial game menu window.
    */
   public void buildInitialWindow(){
 	  
 	  initialWindow.setTranslateX(100);
-	  initialWindow.setTranslateY(180);
+	  initialWindow.setTranslateY(150);
 	  initialWindow.setAlignment(Pos.CENTER);
 	  initialWindow.setHgap(10);
 	  initialWindow.setVgap(10);
@@ -694,6 +749,18 @@ public class GameMenu extends Parent {
 	  settingsWindow.setHgap(10);
 	  settingsWindow.setVgap(10);
 	  settingsWindow.setPadding(new Insets(20, 30, 0, 30));
+	  
+  }
+  
+  /**
+   * Sets the design of the creditswindow.
+   */
+  public void buildCreditsWindow(){
+	  
+	  creditsWindow.setTranslateX(700);
+	  creditsWindow.setTranslateY(100);
+	  creditsWindow.setAlignment(Pos.CENTER);
+	  creditsWindow.setVgap(20);
 	  
   }
   
