@@ -39,7 +39,6 @@ import gameEngine.toolbox.MousePicker;
 import input.Action;
 import input.InputController;
 import input.KeyboardController;
-import physics.core.Ship;
 import physics.network.RaceSetupData;
 import physics.placeholders.FlatGroundProvider;
 import physics.ships.MultiplayerShipManager;
@@ -356,7 +355,7 @@ public class MultiplayerGame implements GameInt {
     Label exitText = new Label(loader, "EXIT", font, 2.5f, true, new Vector2f(0, 8), 266);
     exitText.setParent(exitButton);
     exitText.setColour(colour);
-    
+
     menu.setVisibility(false);
 
     // Options sub menu
@@ -397,13 +396,13 @@ public class MultiplayerGame implements GameInt {
       public void actionPerformed(ActionEvent e) {
         optionsMenu.setVisibility(false);
         menu.setVisibility(true);
-        currentMenu = "main"; 
+        currentMenu = "main";
       }
     });
     Label backText = new Label(loader, "BACK", font, 2.5f, true, new Vector2f(0, 6), 266);
     backText.setParent(backButton);
     backText.setColour(colour);
-    
+
     optionsMenu.setVisibility(false);
 
     Container posDisplay = new Container(loader, "ui/posBackground",
@@ -598,5 +597,4 @@ public class MultiplayerGame implements GameInt {
       distance[i - 1] = lights.get(i).getdistance(currentPosition);
     }
   }
-
 }

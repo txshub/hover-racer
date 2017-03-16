@@ -1,8 +1,10 @@
 package serverComms;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+
 public class ServerReceiver extends Thread {
   private DetectTimeout detect;
   private String clientName;
@@ -68,9 +70,7 @@ public class ServerReceiver extends Thread {
                 lobby.clientTable.getGame(data.id).toByteArray(), ServerComm.VALIDGAME));
           }
         } else if (fullMsg.getType() == ServerComm.SENDPLAYERDATA) {
-        	System.out.println("Send Data");
           if (gameRoom != null) {
-        	  System.out.println("Not Null");
         	  gameRoom.updateUser(gameNum, fullMsg.getMsg());
           }
         } else if (fullMsg.getType() == ServerComm.STARTGAME) {

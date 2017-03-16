@@ -13,6 +13,7 @@ import input.InputController;
 import physics.core.Ship;
 import physics.support.GroundProvider;
 import trackDesign.TrackPoint;
+import upgrades.ShipTemplate;
 
 /** @author Reece Bennett */
 public class AIShip extends Ship {
@@ -27,14 +28,14 @@ public class AIShip extends Ship {
 	private final float piOverEight = (float) (Math.PI / 8);
 
 	public AIShip(byte id, TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground,
-		ArrayList<TrackPoint> track, InputController input) {
-		this(id, model, startingPosition, otherShips, ground, track);
+		ArrayList<TrackPoint> track, ShipTemplate stats, InputController input) {
+		this(id, model, startingPosition, otherShips, ground, track, stats);
 		this.input = input;
 	}
 
 	public AIShip(byte id, TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground,
-		ArrayList<TrackPoint> track) {
-		super(id, model, startingPosition, ground);
+		ArrayList<TrackPoint> track, ShipTemplate stats) {
+		super(id, model, startingPosition, ground, stats, track);
 		super.addOtherShips(otherShips);
 		this.track = track;
 		nextPointIndex = 1;
@@ -68,7 +69,7 @@ public class AIShip extends Ship {
 		float rot = getRotation().y;
 
 		TrackPoint nextPoint = track.get(nextPointIndex);
-		//System.out.println("AI " + getId() + " nextPoint " + nextPointIndex + " : " + nextPoint);
+		// System.out.println("AI " + getId() + " nextPoint " + nextPointIndex + " : " + nextPoint);
 		Vector2f dirToPoint = new Vector2f(nextPoint).sub(pos);
 		Vector2f dirVec = new Vector2f((float) Math.sin(Math.toRadians(rot)), (float) Math.cos(Math.toRadians(rot)));
 

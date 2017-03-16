@@ -62,7 +62,12 @@ public class Client extends Thread {
       serverOn = false;
     }
   }
+  
+  
   @Override
+  /**
+   * 
+   */
   public void run() {
     DataInputStream fromServer = null;
     Socket server = null;
@@ -121,7 +126,8 @@ public class Client extends Thread {
   }
   
   public void startSinglePlayerGame(String seed, int numAI, int lapCount, ShipSetupData data) throws IOException {
-	 createGame(seed, numAI+1, lapCount, "1", data);
+	 GameRoom room = createGame(seed, numAI+1, lapCount, "1", data);
+	 if(room==null) System.out.println("Null Game");
 	 startGame();
   }
   

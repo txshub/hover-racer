@@ -123,5 +123,4 @@ public abstract class InputController {
      * System.out.println(key + " -> " + value); }
      */
   }
-
 }
