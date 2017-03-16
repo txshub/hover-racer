@@ -10,6 +10,8 @@ import org.joml.Vector3f;
 
 import trackDesign.TrackPoint;
 
+// Added a comment here
+
 public class Barriers {
 
 	List<TrackPoint> track;
