@@ -12,6 +12,7 @@ import serverComms.ByteArrayByte;
 import serverComms.Converter;
 import serverComms.GameRoom;
 import serverComms.ServerComm;
+import userInterface.MainMenu;
 /** Thread to receive any messages passed from the server
  * 
  * @author simon */
@@ -64,7 +65,7 @@ public class ClientReceiver extends Thread {
 					RaceSetupData data = Converter.receiveRaceData(fullMsg.getMsg());
 					AudioMaster.stopMusic();
 					AudioMaster.cleanUp();
-					Platform.exit();
+				    Platform.exit();
 					MainGameLoop.startMultiplayerGame(data, client);
 				} else if (fullMsg.getType() == ServerComm.FULLPOSITIONUPDATE) {
 					if (client.getManager() == null)

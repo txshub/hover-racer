@@ -35,6 +35,9 @@ public class JoinGameRoom extends GridPane {
 		setHgap(30);
 		setVgap(5);
 
+		//No game room has been selected yet 
+		chosenGRid = -1;
+		
 		refresh = new MenuButton("REFRESH LIST", 320, 60, 30);
 		add(refresh, 1, 7);
 

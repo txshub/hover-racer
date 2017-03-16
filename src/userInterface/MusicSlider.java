@@ -15,13 +15,17 @@ import javafx.scene.text.Text;
 /**
  * 
  * @author Andreea Gheorghe
+ * Class that defines the style of the music slider.
  *
  */
 public class MusicSlider extends GridPane {
 
   private Slider musicSlider;
   private Text value;
-
+  
+  /**
+   * Constructor for the MusicSlider class.
+   */
   public MusicSlider() {
 
     this.setPadding(new Insets(0, 0, 20, 0));
@@ -52,7 +56,7 @@ public class MusicSlider extends GridPane {
       int i = newValue.intValue();
       value.setText(Integer.toString(i));
 
-      // TUDOR ADD AUDIO STUFF
+      // TUDOR - audio functionality
       AudioMaster.setMusicVolume((float) (i / 10.0));
     }
 

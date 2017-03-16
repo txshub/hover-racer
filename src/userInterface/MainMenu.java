@@ -20,13 +20,18 @@ import javafx.stage.WindowEvent;
 /**
  * 
  * @author Andreea Gheorghe
+ * Class for launching the User Interface.
  *
  */
 public class MainMenu extends Application {
 
-  private GameMenu gameMenu;
+  public GameMenu gameMenu;
+  public Scene scene;
 
-  @Override
+  /**
+   * Method that initializes the primary stage and the current scene.
+   * @param primaryStage The primary JavaFX stage.
+   */
   public void start(Stage primaryStage) throws Exception {
 
     // Tudor - start the audio engine
@@ -52,9 +57,8 @@ public class MainMenu extends Application {
     bg.setFill(Color.BLACK);
 
     root.getChildren().addAll(imgView, bg, gameMenu);
-
-    // create a scene
-    Scene scene = new Scene(root);
+    
+    scene = new Scene(root);
 
     primaryStage.setResizable(false);
     primaryStage.sizeToScene();
@@ -62,6 +66,7 @@ public class MainMenu extends Application {
     primaryStage.setScene(scene);
     primaryStage.show();
 
+    // Handle closing the window by pressing 'X'
     primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 
       public void handle(WindowEvent we) {
@@ -75,10 +80,11 @@ public class MainMenu extends Application {
     AudioMaster.playMusic();
 
   }
-
+  
   public static void main(String[] args) {
 
     launch(args);
 
   }
+
 }
