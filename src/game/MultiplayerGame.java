@@ -148,7 +148,7 @@ public class MultiplayerGame implements GameInt {
         new ModelTexture(loader.loadTexture("new/finishLineTextureUpdated")));
     Vector3f firstPoint = new Vector3f(st.getStart());
     firstPoint.y = 1.05f;
-    Entity finishLine = new Entity(finishLineModel, firstPoint, new Vector3f(), 16f);
+    Entity finishLine = new Entity(finishLineModel, firstPoint, new Vector3f(), st.getTrack().get(0).getWidth()*0.7f);
     entities.add(finishLine);
 
     // Lighting
