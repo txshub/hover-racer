@@ -367,29 +367,63 @@ public class MultiplayerGame implements GameInt {
     musicText.setParent(optionsMenu);
     musicText.setColour(colour);
 
-    Button musicMinusButton = new Button(loader, "ui/minusButton", new Vector2f(58, 114));
-    musicMinusButton.setParent(optionsMenu);
-
-    Label musicVolume = new Label(loader, "45%", font, 2.5f, true, new Vector2f(158, 114), 90);
+    Label musicVolume = new Label(loader, "-1%", font, 2.5f, true, new Vector2f(128, 114), 120);
     musicVolume.setParent(optionsMenu);
     musicVolume.setColour(colour);
+    musicVolume.setText(Float.toString(AudioMaster.getMusicVolume()));
+
+    Button musicMinusButton = new Button(loader, "ui/minusButton", new Vector2f(58, 114));
+    musicMinusButton.setParent(optionsMenu);
+    musicMinusButton.addListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("pressed")) {
+          AudioMaster.decreaseMusicVolume();
+          musicVolume.setText(Float.toString(AudioMaster.getMusicVolume()));
+        }
+      }
+    });
 
     Button musicPlusButton = new Button(loader, "ui/plusButton", new Vector2f(260, 114));
     musicPlusButton.setParent(optionsMenu);
+    musicPlusButton.addListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("pressed")) {
+          AudioMaster.increaseMusicVolume();
+          musicVolume.setText(Float.toString(AudioMaster.getMusicVolume()));
+        }
+      }
+    });
 
     Label sfxText = new Label(loader, "SFX VOLUME", font, 2f, true, new Vector2f(0, 208), 384);
     sfxText.setParent(optionsMenu);
     sfxText.setColour(colour);
 
-    Button sfxMinusButton = new Button(loader, "ui/minusButton", new Vector2f(58, 255));
-    sfxMinusButton.setParent(optionsMenu);
-
-    Label sfxVolume = new Label(loader, "65%", font, 2.5f, true, new Vector2f(158, 255), 90);
+    Label sfxVolume = new Label(loader, "-1%", font, 2.5f, true, new Vector2f(128, 255), 120);
     sfxVolume.setParent(optionsMenu);
     sfxVolume.setColour(colour);
+    sfxVolume.setText(Float.toString(AudioMaster.getSFXVolume()));
+
+    Button sfxMinusButton = new Button(loader, "ui/minusButton", new Vector2f(58, 255));
+    sfxMinusButton.setParent(optionsMenu);
+    sfxMinusButton.addListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("pressed")) {
+          AudioMaster.decreaseSFXVolume();
+          sfxVolume.setText(Float.toString(AudioMaster.getSFXVolume()));
+        }
+      }
+    });
 
     Button sfxPlusButton = new Button(loader, "ui/plusButton", new Vector2f(260, 255));
     sfxPlusButton.setParent(optionsMenu);
+    sfxPlusButton.addListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("pressed")) {
+          AudioMaster.increaseSFXVolume();
+          sfxVolume.setText(Float.toString(AudioMaster.getSFXVolume()));
+        }
+      }
+    });
 
     Button backButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 349));
     backButton.setParent(optionsMenu);
@@ -412,7 +446,7 @@ public class MultiplayerGame implements GameInt {
     posCurrent = new Label(loader, "2", font, 5f, true, new Vector2f(30, 45), 130);
     posCurrent.setParent(posDisplay);
     posCurrent.setColour(1, 1, 1);
-    posTotal = new Label(loader, "8", font, 2.8f, true, new Vector2f(15, 2), 30);
+    posTotal = new Label(loader, "8", font, 2.8f, true, new Vector2f(-5, 2), 50);
     posTotal.setParent(posDisplay);
     posTotal.setColour(1, 1, 1);
 
@@ -423,7 +457,7 @@ public class MultiplayerGame implements GameInt {
     lapCurrent.setParent(lapDisplay);
     lapCurrent.setColour(1, 1, 1);
     lapTotal = new Label(loader, Integer.toString(logic.getTotalLaps()), font, 2.8f, true,
-        new Vector2f(105, 2), 30);
+        new Vector2f(95, 2), 50);
     lapTotal.setParent(lapDisplay);
     lapTotal.setColour(1, 1, 1);
   }
