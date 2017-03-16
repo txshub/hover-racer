@@ -24,7 +24,7 @@ public class TrackMaker {
 	  for(char c: seed.toCharArray()) {
 		  hash = 32L*hash + c;
 	  }
-	  return makeTrack(hash, 10, 20, 30, 1, 30, 40, 6, 240, 400);
+	  return makeTrack(hash, 10, 20, 30, 1, 30, 40, 6, 200, 300);
   }
 
   public static SeedTrack makeStraightTrack(float length) {
