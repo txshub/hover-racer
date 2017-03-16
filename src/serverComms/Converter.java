@@ -27,8 +27,10 @@ public class Converter {
 
 	public static byte[] buildLogicData(int ranking, boolean finished, int currrentLap) {
 		ByteBuffer buffer = ByteBuffer.allocate(4 + 1 + 4);
-		// buffer.put(ranking); //TODO in progress
-		return null;
+		buffer.putInt(ranking);
+		buffer.put(finished ? (byte) 0 : (byte) 1);
+		buffer.putInt(currrentLap);
+		return buffer.array();
 	}
 
 

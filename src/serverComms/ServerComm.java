@@ -62,6 +62,8 @@ public class ServerComm extends Thread {
   public static final byte REFRESHROOM = Byte.parseByte("18");
   // Server->Client Host has left the game so room closed
   public static final byte ROOMCLOSED = Byte.parseByte("19");
+  // Server->Client Updating rank, current lap and whether the game has finished 
+  public static final byte LOGIC_UPDATE = Byte.parseByte("20");
   /**
    * Creates a Server object
    * 

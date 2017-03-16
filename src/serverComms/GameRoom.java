@@ -351,8 +351,12 @@ public class GameRoom {
 		shipManager.update(delta);
 	}
 
+	/** Sends a game logic update to a single client
+	 * 
+	 * @param id Client's (and ship's) id */
 	public void sendLogicUpdate(byte id, int ranking, boolean finished, int currrentLap) {
-
+		table.getQueue(players.get(id))
+			.offer(new ByteArrayByte(Converter.buildLogicData(ranking, finished, currrentLap), ServerComm.LOGIC_UPDATE));
 	}
 
 
