@@ -19,7 +19,6 @@ public class ServerReceiver extends Thread {
   }
   public void run() {
     try {
-      detect = new DetectTimeout(lobby.clientTable, clientName);
       while (true) {
         int in = client.readInt();
         byte[] messageIn = new byte[in];
