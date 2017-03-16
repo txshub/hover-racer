@@ -53,6 +53,7 @@ import uiToolkit.UIRenderer;
 import uiToolkit.fontMeshCreator.FontType;
 import uiToolkit.fontRendering.TextMaster;
 
+/** @author Reece Bennett and rtm592 */
 public class MultiplayerGame implements GameInt {
 
   // Set this to print debug messages
@@ -143,8 +144,8 @@ public class MultiplayerGame implements GameInt {
     entities.add(track);
 
     // Finish Line
-    TexturedModel finishLineModel = new TexturedModel(getModel("finishLine", loader),
-        new ModelTexture(loader.loadTexture("new/finishLineTexture")));
+    TexturedModel finishLineModel = new TexturedModel(getModel("finishLineUpdated", loader),
+        new ModelTexture(loader.loadTexture("new/finishLineTextureUpdated")));
     Vector3f firstPoint = new Vector3f(st.getStart());
     firstPoint.y = 1.05f;
     Entity finishLine = new Entity(finishLineModel, firstPoint, new Vector3f(), 16f);
