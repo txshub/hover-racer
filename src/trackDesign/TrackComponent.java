@@ -44,7 +44,7 @@ public class TrackComponent extends JComponent {
     track = st.getTrack();
     seed = st.getSeed();
     System.out.println("TrackComponent.TrackComponent(), " + seed);
-    track2 = TrackMaker.makeTrack(seed, 10, 20, 30, 1, 30, 40, 1).getTrack();
+    track2 = TrackMaker.makeTrack("1ftfddfgf").getTrack();
   }
 
   /**
