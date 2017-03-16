@@ -28,10 +28,29 @@ public class Converter {
 	public static byte[] buildLogicData(int ranking, boolean finished, int currrentLap) {
 		ByteBuffer buffer = ByteBuffer.allocate(4 + 1 + 4);
 		buffer.putInt(ranking);
-		buffer.put(finished ? (byte) 0 : (byte) 1);
+		buffer.put(finished ? (byte) 1 : (byte) 0);
 		buffer.putInt(currrentLap);
 		return buffer.array();
 	}
 
+	// Game logic data
+	public static int receiveRanking(byte[] packet) {
+		return ByteBuffer.wrap(packet).getInt();
+	}
+	public static boolean receiveFinished(byte[] packet) {
+		return ByteBuffer.wrap(packet).get(4) == (byte) 1;
+	}
+	public static int receiveCurrentLap(byte[] packet) {
+		ByteBuffer buffer = ByteBuffer.wrap(packet);
+		buffer.position(5);
+		return buffer.getInt();
+	}
+
+	public static void main(String[] args) {
+		byte[] message = buildLogicData(42, false, 93);
+		System.out.println(receiveRanking(message));
+		System.out.println(receiveFinished(message));
+		System.out.println(receiveCurrentLap(message));
+	}
 
 }
