@@ -41,10 +41,20 @@ public class Barriers {
 
 	public List<Vector2f> allCollisions(Ship ship) {
 		List<Vector2f> res = new LinkedList<>();
+		Vector3f pos3d = ship.getPosition();
+		Vector2f pos = new Vector2f(pos3d.x, pos3d.z);
 		for (int i = 0; i < points; i++) {
-			Vector3f pos = ship.getPosition();
-			res.addAll(collisionVectorsAt(new Vector2f(pos.x, pos.z), ship.getSize(), i));
+			res.addAll(collisionVectorsAt(pos, ship.getSize(), i));
 		}
+
+		// TODO temporary debug data
+		if (ship.getId() == 0) {
+			// System.out.println(ship.getPosition());
+			System.out.println(pos.distance(left(0)));
+			// System.out.println(distanceTo(new Vector2f(pos.x, pos.z), left(0), left(1)));
+		}
+
+
 		return res;
 	}
 
