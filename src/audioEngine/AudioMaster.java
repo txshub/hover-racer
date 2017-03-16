@@ -163,7 +163,9 @@ public class AudioMaster {
    * Stop the music player
    */
   public static void stopMusic() {
-    player.terminate();
+    if (player != null) {
+      player.terminate();
+    }
   }
 
   /**
