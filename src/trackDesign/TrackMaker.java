@@ -178,12 +178,12 @@ public class TrackMaker {
   }
 
   /**
-   * Ensures all angles are a minimum of 40 degrees
+   * Ensures all angles are a minimum of 30 degrees
    * @param points The points of the track
    */
   private static void spreadAngles(ArrayList<TrackPoint> points) {
     boolean changed = true;
-    final float threshold = (float) Math.toRadians(40);
+    final float threshold = (float) Math.toRadians(30);
     while (changed) {
       changed = false;
       for (int i = 0; i < points.size(); i++) {
@@ -273,7 +273,7 @@ public class TrackMaker {
    * @param points List of all track points
    */
   public static void fixAngles(ArrayList<TrackPoint> points) {
-    final float angle60 = (float) Math.toRadians(60); // 60 degrees in radians
+    final float angle30 = (float) Math.toRadians(30); // 30 degrees in radians
     for (int i = 0; i < points.size(); i++) { // For each point
       TrackPoint currentPoint = points.get(i); // Get this point
       TrackPoint prevPoint; // Get the previous point
@@ -291,7 +291,7 @@ public class TrackMaker {
                                                         // between the previous
                                                         // and next point
                                                         // centred on this point
-      if (Math.abs(angle) < angle60) { // If the angle is less than 100 degrees
+      if (Math.abs(angle) < angle30) { // If the angle is less than 100 degrees
                                         // (i.e needs to be increased)
         if (cross(prevPoint, currentPoint, nextPoint) < 0) { // If the angle is
                                                              // Anti-Clockwise
@@ -319,7 +319,7 @@ public class TrackMaker {
                   belowCentre.getX() - currentPoint.getX())); // Find the angle
                                                               // to the negative
                                                               // Y axis
-          float angleNeeded = (angle60 * -1f) + angleToNegativeY; // Get the
+          float angleNeeded = (angle30 * -1f) + angleToNegativeY; // Get the
                                                                    // angle
                                                                    // needed on
                                                                    // the other
@@ -350,7 +350,7 @@ public class TrackMaker {
               prevPoint.getX() - currentPoint.getX())
               - Math.atan2(aboveCentre.getY() - currentPoint.getY(),
                   aboveCentre.getX() - currentPoint.getX()));
-          float angleNeeded = angle60 - angleToPositiveY;
+          float angleNeeded = angle30 - angleToPositiveY;
           float length = currentPoint.distance(nextPoint);
           float newY = (float) Math.cos(angleNeeded) * length;
           float nexX = (float) Math.sin(angleNeeded) * length;
