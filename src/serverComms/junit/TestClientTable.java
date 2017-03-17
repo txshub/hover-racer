@@ -12,13 +12,13 @@ import serverComms.Lobby;
 import serverComms.ServerReceiver;
 
 public class TestClientTable {
-	
-	static Lobby lobby;
-	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		lobby = new Lobby(1234);
-	}
+
+  static Lobby lobby;
+
+  @BeforeClass
+  public static void setUpBeforeClass() throws Exception {
+    lobby = new Lobby(1234);
+  }
 
   @Test
   public void testUserExists() {

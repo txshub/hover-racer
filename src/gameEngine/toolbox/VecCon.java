@@ -31,5 +31,5 @@ public class VecCon {
     return new org.joml.Vector4f(vec.x, vec.y, vec.z, vec.w);
 
   }
-	
+
 }

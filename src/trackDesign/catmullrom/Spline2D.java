@@ -14,10 +14,15 @@ public class Spline2D {
 
   /**
    * Creates a Spline2D object
-   * @param p0 The point before the two in question
-   * @param p1 The first of the two points in question
-   * @param p2 The second of the two points in question
-   * @param p3 The point after the two in question
+   * 
+   * @param p0
+   *          The point before the two in question
+   * @param p1
+   *          The first of the two points in question
+   * @param p2
+   *          The second of the two points in question
+   * @param p3
+   *          The point after the two in question
    */
   public Spline2D(TrackPoint p0, TrackPoint p1, TrackPoint p2, TrackPoint p3) {
     splineXs = new Spline(p0.getX(), p1.getX(), p2.getX(), p3.getX());
@@ -27,8 +32,10 @@ public class Spline2D {
   }
 
   /**
-   * Returns the coordinates of the point proportion t between p1 & p2 
-   * @param t The proportion between the two points
+   * Returns the coordinates of the point proportion t between p1 & p2
+   * 
+   * @param t
+   *          The proportion between the two points
    * @return The coordinates of the point proportion t between p1 & p2
    */
   public TrackPoint q(float t) {

@@ -18,13 +18,13 @@ public class TrackMaker {
   public static SeedTrack makeTrack() {
     return makeTrack(10, 20, 30, 1, 30, 40, 4, 120, 260);
   }
-  
+
   public static SeedTrack makeTrack(String seed) {
-	  long hash = 0;
-	  for(char c: seed.toCharArray()) {
-		  hash = 32L*hash + c;
-	  }
-	  return makeTrack(hash, 10, 20, 30, 1, 30, 40, 6, 200, 300);
+    long hash = 0;
+    for (char c : seed.toCharArray()) {
+      hash = 32L * hash + c;
+    }
+    return makeTrack(hash, 10, 20, 30, 1, 30, 40, 6, 200, 300);
   }
 
   public static SeedTrack makeStraightTrack(float length) {
@@ -57,11 +57,16 @@ public class TrackMaker {
    * @return A track in the form of an arraylist of points
    */
   public static SeedTrack makeTrack(int minTrackPoints, int maxTrackPoints, float minDist,
-      int seperateIterations, float difficulty, float maxDisp, int subDivs, int minTrackWidth, int maxTrackWidth) {
+      int seperateIterations, float difficulty, float maxDisp, int subDivs, int minTrackWidth,
+      int maxTrackWidth) {
     Random temp = new Random(); // Create a new random object
     return makeTrack(temp.nextLong(), minTrackPoints, maxTrackPoints, minDist, seperateIterations,
-        difficulty, maxDisp, subDivs, minTrackWidth, maxTrackWidth); // Return the made track with a random
-                                       // seed
+        difficulty, maxDisp, subDivs, minTrackWidth, maxTrackWidth); // Return
+                                                                     // the made
+                                                                     // track
+                                                                     // with a
+                                                                     // random
+    // seed
   }
 
   /**
@@ -88,10 +93,12 @@ public class TrackMaker {
    * @return A track in the form of an arraylist of points
    */
   public static SeedTrack makeTrack(long seed, int minTrackPoints, int maxTrackPoints,
-      float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs, int minTrackWidth, int maxTrackWidth) {
+      float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs,
+      int minTrackWidth, int maxTrackWidth) {
     if (seed == 0)
-    	return makeTrack((new Random(seed)).nextLong(), minTrackPoints, maxTrackPoints, minDist, seperateIterations, difficulty, maxDisp, subDivs, minTrackWidth, maxTrackWidth);
-      //return makeStraightTrack(250);
+      return makeTrack((new Random(seed)).nextLong(), minTrackPoints, maxTrackPoints, minDist,
+          seperateIterations, difficulty, maxDisp, subDivs, minTrackWidth, maxTrackWidth);
+    // return makeStraightTrack(250);
     Random random = new Random(seed); // Make the random object
     ArrayList<TrackPoint> points = new ArrayList<TrackPoint>();
     ArrayList<TrackPoint> hullPoints = new ArrayList<TrackPoint>();
@@ -121,46 +128,53 @@ public class TrackMaker {
     spreadAngles(circuit);
     if (circuit.size() < 5)
       return makeTrack(random.nextLong(), minTrackPoints, maxTrackPoints, minDist,
-          seperateIterations, difficulty, maxDisp, subDivs, minTrackWidth, maxTrackWidth); 
+          seperateIterations, difficulty, maxDisp, subDivs, minTrackWidth, maxTrackWidth);
     // If the track generation has failed spectacularly then try again
-    
+
     makeWidths(circuit, random, minTrackWidth, maxTrackWidth);
     // Apply smoothing
     ArrayList<TrackPoint> finalCircuit = SplineUtils.dividePoints(circuit, subDivs);
     // Centre the track so it doesn't go off screen at all
     centreTrack(finalCircuit);
     // Return this final track after smoothing and centring
-    for(int i = 0; i < finalCircuit.size(); i++) {
-    	for(int j = i + 2; j < finalCircuit.size() -1; j++) {
-    		TrackPoint l1a = finalCircuit.get(i);
-    		TrackPoint l1b = finalCircuit.get((i+1)%finalCircuit.size());
-    		TrackPoint l2a = finalCircuit.get(j);
-    		TrackPoint l2b = finalCircuit.get((j+1)%finalCircuit.size());
-    		Line2D l1 = new Line2D.Float(l1a.getX(), l1a.getY(), l1b.getX(), l1b.getY());
-    		Line2D l2 = new Line2D.Float(l2a.getX(), l2a.getY(), l2b.getX(), l2b.getY());
-    		if(l1.intersectsLine(l2)) {
-    			System.out.println("i=" + i + ", j=" + j + ", length=" + finalCircuit.size());
-    			return makeTrack(random.nextLong(), minTrackPoints, maxTrackPoints, minDist, seperateIterations, difficulty, maxDisp, subDivs, minTrackWidth, maxTrackWidth);
-    		}
-    	}
+    for (int i = 0; i < finalCircuit.size(); i++) {
+      for (int j = i + 2; j < finalCircuit.size() - 1; j++) {
+        TrackPoint l1a = finalCircuit.get(i);
+        TrackPoint l1b = finalCircuit.get((i + 1) % finalCircuit.size());
+        TrackPoint l2a = finalCircuit.get(j);
+        TrackPoint l2b = finalCircuit.get((j + 1) % finalCircuit.size());
+        Line2D l1 = new Line2D.Float(l1a.getX(), l1a.getY(), l1b.getX(), l1b.getY());
+        Line2D l2 = new Line2D.Float(l2a.getX(), l2a.getY(), l2b.getX(), l2b.getY());
+        if (l1.intersectsLine(l2)) {
+          System.out.println("i=" + i + ", j=" + j + ", length=" + finalCircuit.size());
+          return makeTrack(random.nextLong(), minTrackPoints, maxTrackPoints, minDist,
+              seperateIterations, difficulty, maxDisp, subDivs, minTrackWidth, maxTrackWidth);
+        }
+      }
     }
     return new SeedTrack(seed, finalCircuit);
   }
 
   /**
    * Make the widths of all of the tracks
-   * @param points The points to set widths for
-   * @param random The random object
-   * @param minWidth The minimum track width
-   * @param maxWidth The maximum track width
+   * 
+   * @param points
+   *          The points to set widths for
+   * @param random
+   *          The random object
+   * @param minWidth
+   *          The minimum track width
+   * @param maxWidth
+   *          The maximum track width
    */
-  private static void makeWidths(ArrayList<TrackPoint> points, Random random, int minWidth, int maxWidth) {
-	  int secondMin = ((maxWidth-minWidth)/4)+minWidth;
-	  int mid = (maxWidth+minWidth)/2;
-	  int secondMax = ((maxWidth-minWidth)/4)+minWidth;
-	  
-	  points.get(0).setWidth(mid);
-	  
+  private static void makeWidths(ArrayList<TrackPoint> points, Random random, int minWidth,
+      int maxWidth) {
+    int secondMin = ((maxWidth - minWidth) / 4) + minWidth;
+    int mid = (maxWidth + minWidth) / 2;
+    int secondMax = ((maxWidth - minWidth) / 4) + minWidth;
+
+    points.get(0).setWidth(mid);
+
     for (int i = 1; i < points.size(); i++) {
       int rand = random.nextInt(100);
       if (rand < 10) {
@@ -178,8 +192,15 @@ public class TrackMaker {
   }
 
   /**
+<<<<<<< HEAD
    * Ensures all angles are a minimum of 30 degrees
    * @param points The points of the track
+=======
+   * Ensures all angles are a minimum of 40 degrees
+   * 
+   * @param points
+   *          The points of the track
+>>>>>>> branch 'dev' of https://git-teaching.cs.bham.ac.uk/mod-team-proj-2016/e1.git
    */
   private static void spreadAngles(ArrayList<TrackPoint> points) {
     boolean changed = true;
@@ -204,8 +225,11 @@ public class TrackMaker {
 
   /**
    * Merge close points into one
-   * @param points The list of all trackpoints
-   * @param minDist Minimum distance for two points to NOT be joined together
+   * 
+   * @param points
+   *          The list of all trackpoints
+   * @param minDist
+   *          Minimum distance for two points to NOT be joined together
    */
   private static void mergeClosePoints(ArrayList<TrackPoint> points, float minDist) {
     boolean changed = true;
@@ -270,7 +294,9 @@ public class TrackMaker {
 
   /**
    * Fixes all angles that are less than 60 degrees
-   * @param points List of all track points
+   * 
+   * @param points
+   *          List of all track points
    */
   public static void fixAngles(ArrayList<TrackPoint> points) {
     final float angle30 = (float) Math.toRadians(30); // 30 degrees in radians

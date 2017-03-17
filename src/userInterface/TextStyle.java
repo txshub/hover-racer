@@ -10,24 +10,26 @@ import javafx.scene.text.Text;
 
 /**
  * 
- * @author Andreea Gheorghe
- * Class that implements the text style that will be used
- * throughout the User Interface.
+ * @author Andreea Gheorghe Class that implements the text style that will be
+ *         used throughout the User Interface.
  *
  */
 public class TextStyle {
 
   private Text text;
-  
+
   /**
    * Constructor for the TextStyle class.
-   * @param textInput The text that must be displayed.
-   * @param fontSize  The chosen font size.
+   * 
+   * @param textInput
+   *          The text that must be displayed.
+   * @param fontSize
+   *          The chosen font size.
    */
   public TextStyle(String textInput, int fontSize) {
 
-	// Convert the input so that it can be rendered  
-	String textInputCapitals = textInput.toUpperCase();  
+    // Convert the input so that it can be rendered
+    String textInputCapitals = textInput.toUpperCase();
     text = new Text(textInputCapitals);
 
     try {
@@ -41,13 +43,14 @@ public class TextStyle {
     }
 
   }
-  
+
   /**
    * Get method for the styled text that can be easily displayed.
+   * 
    * @return The styled text.
    */
   public Text getTextStyled() {
     return this.text;
   }
-  
+
 }

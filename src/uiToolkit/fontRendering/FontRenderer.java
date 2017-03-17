@@ -26,18 +26,19 @@ public class FontRenderer {
 
   public void render(Map<FontType, List<GUIText>> texts) {
     prepare();
-    
+
     // Bind the font atlas for each font
     for (FontType font : texts.keySet()) {
       GL13.glActiveTexture(GL13.GL_TEXTURE0);
       GL11.glBindTexture(GL11.GL_TEXTURE_2D, font.getTextureAtlas());
-      
+
       // Render each instance of that font
       for (GUIText text : texts.get(font)) {
-        if (text.isVisible()) renderText(text);
+        if (text.isVisible())
+          renderText(text);
       }
     }
-    
+
     endRendering();
   }
 
@@ -58,9 +59,9 @@ public class FontRenderer {
     GL20.glEnableVertexAttribArray(1);
     shader.loadColour(text.getColour());
     shader.loadTranslation(text.getPosition());
-    
+
     GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, text.getVertexCount());
-    
+
     GL20.glDisableVertexAttribArray(0);
     GL20.glDisableVertexAttribArray(1);
     GL30.glBindVertexArray(0);
