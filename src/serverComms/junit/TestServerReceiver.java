@@ -2,8 +2,6 @@ package serverComms.junit;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
-
 import org.junit.Test;
 
 import clientComms.Client;

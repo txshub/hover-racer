@@ -25,7 +25,7 @@ public class Button extends Container {
 
   private ArrayList<ActionListener> listeners;
   private boolean pressed;
-  
+
   private boolean prevMouseClick = false;
   private boolean mouseClick = false;
 
@@ -53,16 +53,17 @@ public class Button extends Container {
   @Override
   public void update() {
     super.update();
-    
+
     prevMouseClick = mouseClick;
-    
+
     if (Mouse.isButtonDown(0)) {
       mouseClick = true;
     } else {
       mouseClick = false;
     }
-    
-    if (bounds.contains(Mouse.getX(), Mouse.getY()) && mouseClick && !prevMouseClick && !pressed && isVisible()) {
+
+    if (bounds.contains(Mouse.getX(), Mouse.getY()) && mouseClick && !prevMouseClick && !pressed
+        && isVisible()) {
       pressed = true;
       for (ActionListener a : listeners) {
         a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "pressed"));

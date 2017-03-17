@@ -19,8 +19,7 @@ import javafx.stage.WindowEvent;
 
 /**
  * 
- * @author Andreea Gheorghe
- * Class for launching the User Interface.
+ * @author Andreea Gheorghe Class for launching the User Interface.
  *
  */
 public class MainMenu extends Application {
@@ -30,7 +29,9 @@ public class MainMenu extends Application {
 
   /**
    * Method that initializes the primary stage and the current scene.
-   * @param primaryStage The primary JavaFX stage.
+   * 
+   * @param primaryStage
+   *          The primary JavaFX stage.
    */
   public void start(Stage primaryStage) throws Exception {
 
@@ -57,7 +58,7 @@ public class MainMenu extends Application {
     bg.setFill(Color.BLACK);
 
     root.getChildren().addAll(imgView, bg, gameMenu);
-    
+
     scene = new Scene(root);
 
     primaryStage.setResizable(false);
@@ -80,7 +81,7 @@ public class MainMenu extends Application {
     AudioMaster.playMusic();
 
   }
-  
+
   public static void main(String[] args) {
 
     launch(args);

@@ -24,7 +24,7 @@ public class GUIText {
   private FontType font;
 
   private boolean centerText = false;
-  
+
   private boolean visible = true;
 
   /**
@@ -188,11 +188,11 @@ public class GUIText {
   protected String getTextString() {
     return textString;
   }
-  
+
   public boolean isVisible() {
     return visible;
   }
-  
+
   public void setVisibility(boolean visible) {
     this.visible = visible;
   }
