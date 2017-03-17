@@ -12,13 +12,13 @@ import serverComms.Lobby;
 import serverComms.ServerReceiver;
 
 public class TestClientTable {
-	
-	static Lobby lobby;
-	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		lobby = new Lobby(1234);
-	}
+
+  static Lobby lobby;
+
+  @BeforeClass
+  public static void setUpBeforeClass() throws Exception {
+    lobby = new Lobby(1234);
+  }
 
   @Test
   public void testUserExists() {
@@ -42,7 +42,7 @@ public class TestClientTable {
   public void testAddReceiver() {
     ClientTable table = new ClientTable(lobby);
     String name = "Testing";
-    ServerReceiver testReceiver = new ServerReceiver(null, null, null, null);
+    ServerReceiver testReceiver = new ServerReceiver(null, null, null);
     table.add(name);
     table.addReceiver(name, testReceiver);
     if (table.getReceiver(name) != testReceiver)
@@ -53,7 +53,7 @@ public class TestClientTable {
   public void testRemove() {
     ClientTable table = new ClientTable(lobby);
     String name = "Testing";
-    ServerReceiver testReceiver = new ServerReceiver(null, null, null, null);
+    ServerReceiver testReceiver = new ServerReceiver(null, null, null);
     table.add(name);
     table.addReceiver(name, testReceiver);
     table.remove(name);
@@ -67,7 +67,7 @@ public class TestClientTable {
   public void testGetQueue() {
     ClientTable table = new ClientTable(lobby);
     String name = "Testing";
-    ServerReceiver testReceiver = new ServerReceiver(null, null, null, null);
+    ServerReceiver testReceiver = new ServerReceiver(null, null, null);
     table.add(name);
     table.addReceiver(name, testReceiver);
     if (table.getQueue(name) == null)
@@ -78,7 +78,7 @@ public class TestClientTable {
   public void testGetReceiver() {
     ClientTable table = new ClientTable(lobby);
     String name = "Testing";
-    ServerReceiver testReceiver = new ServerReceiver(null, null, null, null);
+    ServerReceiver testReceiver = new ServerReceiver(null, null, null);
     table.add(name);
     table.addReceiver(name, testReceiver);
     if (table.getReceiver(name) != testReceiver)

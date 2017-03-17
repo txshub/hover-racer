@@ -7,10 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import serverComms.GameRoom;
-import physics.placeholders.DataGenerator;
 
 /**
  * 
@@ -29,10 +26,9 @@ public class HostGameRoom extends GridPane {
   private TextField noPlayersInput;
   private TextField noLapsInput;
   private TextField nameInput;
-  
 
   public HostGameRoom() {
-	  
+
     this.setAlignment(Pos.CENTER);
     this.setVgap(5);
     this.setPadding(new Insets(20, 10, 0, 10));
@@ -51,16 +47,16 @@ public class HostGameRoom extends GridPane {
 
     nameInput = new TextField();
     nameInput.setPrefSize(300, 20);
-    
+
     seedInput = new TextField();
     seedInput.setPrefSize(300, 20);
-    
+
     noPlayersInput = new TextField();
     noPlayersInput.setPrefSize(300, 20);
-    
+
     noLapsInput = new TextField();
     noLapsInput.setPrefSize(300, 20);
-    
+
     add(nameText, 0, 1);
     add(nameInput, 0, 2);
 
@@ -76,7 +72,7 @@ public class HostGameRoom extends GridPane {
     GridPane.setMargin(nameInput, new Insets(0, 0, 20, 0));
     GridPane.setMargin(seedInput, new Insets(0, 0, 20, 0));
     GridPane.setMargin(noPlayersInput, new Insets(0, 0, 20, 0));
- 
+
   }
 
   public void setClient(Client client) {
@@ -84,61 +80,56 @@ public class HostGameRoom extends GridPane {
     this.client = client;
 
   }
-  
-  public void setSettings(){
-	  
-	  try {
-		  this.gameRoomSeed = seedInput.getText();
-		  this.maxPlayers = Integer.valueOf(noPlayersInput.getText());
-		  this.lapNo = Integer.valueOf(noLapsInput.getText());
-		  this.gameRoomName = nameInput.getText();
-	  }
-	  catch(Exception e){
-	    	
-	    	try {
-	    		PopUpWindow.display("NULL INPUT");
-	    	}
-	    	catch (IOException ex){
-	    		System.err.println("POP UP NOT WORKING");
-	    	}
-			
-	    }
+
+  public void setSettings() {
+
+    try {
+      this.gameRoomSeed = seedInput.getText();
+      this.maxPlayers = Integer.valueOf(noPlayersInput.getText());
+      this.lapNo = Integer.valueOf(noLapsInput.getText());
+      this.gameRoomName = nameInput.getText();
+    } catch (Exception e) {
+
+      try {
+        PopUpWindow.display("NULL INPUT");
+      } catch (IOException ex) {
+        System.err.println("POP UP NOT WORKING");
+      }
+
+    }
   }
-  
-  public void setSeed(){
-	  
-	 try {
-		 this.gameRoomSeed = seedInput.getText();
-	 }
-	 catch (Exception e){
-		 
-		 try {
-	    		PopUpWindow.display("NULL SEED");
-	    	}
-	    	catch (IOException ex){
-	    		System.err.println("POP UP NOT WORKING");
-	    	}
-	 }
+
+  public void setSeed() {
+
+    try {
+      this.gameRoomSeed = seedInput.getText();
+    } catch (Exception e) {
+
+      try {
+        PopUpWindow.display("NULL SEED");
+      } catch (IOException ex) {
+        System.err.println("POP UP NOT WORKING");
+      }
+    }
   }
-  
-  
-  public String getSeed(){
-	  
-	  return this.gameRoomSeed;
+
+  public String getSeed() {
+
+    return this.gameRoomSeed;
   }
-  
-  public int getMaxPlayers(){
-	  
-	 return this.maxPlayers; 
+
+  public int getMaxPlayers() {
+
+    return this.maxPlayers;
   }
-  
-  public int getNoLaps(){
-	  
-	 return this.lapNo;
+
+  public int getNoLaps() {
+
+    return this.lapNo;
   }
-  
-  public String getName(){
-	  
-	 return this.gameRoomName;
+
+  public String getName() {
+
+    return this.gameRoomName;
   }
 }

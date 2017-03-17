@@ -14,15 +14,14 @@ import javafx.scene.text.Text;
 
 /**
  * 
- * @author Andreea Gheorghe
- * Class that defines the style of the music slider.
+ * @author Andreea Gheorghe Class that defines the style of the music slider.
  *
  */
 public class MusicSlider extends GridPane {
 
   private Slider musicSlider;
   private Text value;
-  
+
   /**
    * Constructor for the MusicSlider class.
    */

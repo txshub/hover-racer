@@ -1,4 +1,5 @@
 package clientComms;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
@@ -15,6 +16,7 @@ import serverComms.GameRoom;
 import serverComms.GameSettings;
 import serverComms.IDShipData;
 import serverComms.ServerComm;
+
 /**
  * Main client class for client/server communications
  * 
@@ -35,7 +37,7 @@ public class Client extends Thread {
   public volatile boolean alreadyAccessedRoom = true;
   private GameRoom currentRoom;
   public MultiplayerGame multiplayerGame;
-  
+
   /**
    * Creates a client object and connects to a given server on a given port
    * automagically
@@ -66,8 +68,7 @@ public class Client extends Thread {
       serverOn = false;
     }
   }
-  
-  
+
   @Override
   /**
    * Runs the client (called via client.start())
@@ -103,9 +104,10 @@ public class Client extends Thread {
       // What to do here?
     }
   }
-  
+
   /**
-   * Cleans up the client by stopping the thread that constantly pings the server then sends the disconnect message to the server
+   * Cleans up the client by stopping the thread that constantly pings the
+   * server then sends the disconnect message to the server
    */
   public void cleanup() {
     serverStop.interrupt();
@@ -115,74 +117,99 @@ public class Client extends Thread {
       // Closing anyway so oh well
     }
   }
-  
+
   /**
-   * Sends a request to the server to make a game room then returns the resulting room
-   * @param seed The seed to make the track with
-   * @param maxPlayers Max number of players in the room
-   * @param lapCount Number of laps to be done
-   * @param lobbyName Name of the lobby
-   * @param data Ship data for this user
+   * Sends a request to the server to make a game room then returns the
+   * resulting room
+   * 
+   * @param seed
+   *          The seed to make the track with
+   * @param maxPlayers
+   *          Max number of players in the room
+   * @param lapCount
+   *          Number of laps to be done
+   * @param lobbyName
+   *          Name of the lobby
+   * @param data
+   *          Ship data for this user
    * @return The resulting game room
-   * @throws IOException If there is an issue in writing a message to the server
+   * @throws IOException
+   *           If there is an issue in writing a message to the server
    */
-  public GameRoom createGame(String seed, int maxPlayers, int lapCount, String lobbyName, ShipSetupData data)
-      throws IOException {
-	  alreadyAccessedRoom = true;
+  public GameRoom createGame(String seed, int maxPlayers, int lapCount, String lobbyName,
+      ShipSetupData data) throws IOException {
+    alreadyAccessedRoom = true;
     GameSettings thisGame = new GameSettings(seed, maxPlayers, lapCount, lobbyName, data);
     sendByteMessage(thisGame.toByteArray(), ServerComm.MAKEGAME);
     return waitForRoom();
   }
-  
+
   /**
    * Joins a gameroom
-   * @param id The gameroom id
-   * @param data The ship setup data for this user
+   * 
+   * @param id
+   *          The gameroom id
+   * @param data
+   *          The ship setup data for this user
    * @return The resulting game room
-   * @throws IOException If there is an issue in writing a message to the server
+   * @throws IOException
+   *           If there is an issue in writing a message to the server
    */
   public GameRoom joinGame(int id, ShipSetupData data) throws IOException {
-	  alreadyAccessedRoom = true;
+    alreadyAccessedRoom = true;
     IDShipData toSend = new IDShipData(id, data);
     sendByteMessage(toSend.toByteArray(), ServerComm.JOINGAME);
     return waitForRoom();
   }
-  
+
   /**
    * Method called by the host of a game room to start the game
-   * @throws IOException If there is an issue in writing a message to the server
+   * 
+   * @throws IOException
+   *           If there is an issue in writing a message to the server
    */
-  public void startGame() throws IOException{
-	  sendByteMessage(new byte[0], ServerComm.STARTGAME);
+  public void startGame() throws IOException {
+    sendByteMessage(new byte[0], ServerComm.STARTGAME);
   }
-  
+
   /**
    * Starts a single player game by creating a game then immediately starting it
-   * @param seed The seed to generate the track with
-   * @param numAI The number of AI to play against
-   * @param lapCount The number of laps to complete
-   * @param data The ship data for this user
-   * @throws IOException If there is an issue in writing a message to the server
+   * 
+   * @param seed
+   *          The seed to generate the track with
+   * @param numAI
+   *          The number of AI to play against
+   * @param lapCount
+   *          The number of laps to complete
+   * @param data
+   *          The ship data for this user
+   * @throws IOException
+   *           If there is an issue in writing a message to the server
    */
-  public void startSinglePlayerGame(String seed, int numAI, int lapCount, ShipSetupData data) throws IOException {
-	 GameRoom room = createGame(seed, numAI+1, lapCount, "1", data);
-	 if(room==null) System.out.println("Null Game");
-	 startGame();
+  public void startSinglePlayerGame(String seed, int numAI, int lapCount, ShipSetupData data)
+      throws IOException {
+    GameRoom room = createGame(seed, numAI + 1, lapCount, "1", data);
+    if (room == null)
+      System.out.println("Null Game");
+    startGame();
   }
-  
+
   /**
    * Returns the updated gameroom from the server
+   * 
    * @return The updated gameroom from the server
-   * @throws IOException If there is an issue in writing a message to the server
+   * @throws IOException
+   *           If there is an issue in writing a message to the server
    */
   public GameRoom getUpdatedRoom() throws IOException {
-	  alreadyAccessedRoom = true;
+    alreadyAccessedRoom = true;
     sendByteMessage(new byte[0], ServerComm.REFRESHROOM);
     return waitForRoom();
   }
-  
+
   /**
    * Returns the gameroom object when it is received from the server
+   * 
    * @return The gameroom object when it is received from the server
    */
   public GameRoom waitForRoom() {
@@ -195,14 +222,16 @@ public class Client extends Thread {
     alreadyAccessedRoom = true;
     return currentRoom;
   }
-  
+
   /**
    * Returns a list of all joinable gamerooms for the server you're connected to
+   * 
    * @return A list of all joinable gamerooms for the server you're connected to
-   * @throws IOException If there is an issue in writing a message to the server
+   * @throws IOException
+   *           If there is an issue in writing a message to the server
    */
   public ArrayList<GameRoom> requestAllGames() throws IOException {
-	alreadyAccessedList = true;
+    alreadyAccessedList = true;
     sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.SENDALLGAMES);
     while (alreadyAccessedList) {
       try {
@@ -213,16 +242,19 @@ public class Client extends Thread {
     alreadyAccessedList = true;
     return gameList;
   }
-  
+
   /**
    * Sends the updated position to the server
-   * @param data The player data to send to the server
-   * @throws IOException If there is an issue in writing a message to the server
+   * 
+   * @param data
+   *          The player data to send to the server
+   * @throws IOException
+   *           If there is an issue in writing a message to the server
    */
   public void updateMe(byte[] data) throws IOException {
     sendByteMessage(data, ServerComm.SENDPLAYERDATA);
   }
-  
+
   /**
    * Sends a message to the server
    * 
@@ -244,44 +276,50 @@ public class Client extends Thread {
       System.out.println("Sent message " + new String(message, ServerComm.charset) + " with tag "
           + Byte.toString(type));
   }
-  
+
   /**
    * Sets the game list when received by ClientReceiver
-   * @param gameList The game list to update with
+   * 
+   * @param gameList
+   *          The game list to update with
    */
   public void setGameList(ArrayList<GameRoom> gameList) {
     this.gameList = gameList;
     alreadyAccessedList = false;
   }
-  
+
   /**
    * Sets the current room when received by the ClientReceiver
-   * @param gr The gameroom to update with
+   * 
+   * @param gr
+   *          The gameroom to update with
    */
   public void setCurrentRoom(GameRoom gr) {
     this.currentRoom = gr;
     alreadyAccessedRoom = false;
   }
-  
+
   /**
    * Sets the ship manager
-   * @param manager The ship manager
+   * 
+   * @param manager
+   *          The ship manager
    */
   public void setManager(MultiplayerShipManager manager) {
     this.manager = manager;
   }
-  
+
   /**
    * Returns the current ship manager
+   * 
    * @return The current ship manager
    */
   public MultiplayerShipManager getManager() {
     return manager;
   }
 
+  public void setMultiplayerGame(MultiplayerGame multiplayerGame) {
+    this.multiplayerGame = multiplayerGame;
 
-public void setMultiplayerGame(MultiplayerGame multiplayerGame) {
-	this.multiplayerGame = multiplayerGame;
-	
-}
+  }
 }

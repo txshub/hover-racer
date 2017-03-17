@@ -5,6 +5,7 @@ import physics.placeholders.DataGenerator;
 
 /**
  * Container for all relevant game settings
+ * 
  * @author simon
  *
  */
@@ -19,15 +20,23 @@ public class GameSettings {
 
   /**
    * Creates a GameSettings object
-   * @param seed The seed for track generation
-   * @param maxPlayers The maximum number of players
-   * @param lapCount The number of laps
-   * @param lobbyName The lobby name
-   * @param setupData The ship data for the host
-   * @throws IllegalArgumentException If the lobby name contains a new line symbol (will break the communications)
+   * 
+   * @param seed
+   *          The seed for track generation
+   * @param maxPlayers
+   *          The maximum number of players
+   * @param lapCount
+   *          The number of laps
+   * @param lobbyName
+   *          The lobby name
+   * @param setupData
+   *          The ship data for the host
+   * @throws IllegalArgumentException
+   *           If the lobby name contains a new line symbol (will break the
+   *           communications)
    */
-  public GameSettings(String seed, int maxPlayers, int lapCount, String lobbyName, ShipSetupData setupData)
-      throws IllegalArgumentException {
+  public GameSettings(String seed, int maxPlayers, int lapCount, String lobbyName,
+      ShipSetupData setupData) throws IllegalArgumentException {
     this.seed = seed;
     this.maxPlayers = maxPlayers;
     this.lobbyName = lobbyName;
@@ -40,7 +49,9 @@ public class GameSettings {
 
   /**
    * Creates the object from a GameSettings string passed over the network
-   * @param in The string passed across the network
+   * 
+   * @param in
+   *          The string passed across the network
    */
   public GameSettings(String in) {
     String collected = "";
@@ -73,8 +84,8 @@ public class GameSettings {
     in = in.substring(1);
     collected = "";
     while (in.charAt(0) != '|') {
-    	collected += in.charAt(0);
-    	in = in.substring(1);
+      collected += in.charAt(0);
+      in = in.substring(1);
     }
     hostName = collected;
     setupData = DataGenerator.fromJson(in.substring(1));
@@ -84,11 +95,13 @@ public class GameSettings {
    * Returns a string representing the data
    */
   public String toString() {
-    return seed + "|" + maxPlayers + "|" + lapCount + "|" + lobbyName + "|" + hostName + "|" + setupData.toString();
+    return seed + "|" + maxPlayers + "|" + lapCount + "|" + lobbyName + "|" + hostName + "|"
+        + setupData.toString();
   }
 
   /**
    * Returns a byte array from the toString() method
+   * 
    * @return A byte array from the toString() method
    */
   public byte[] toByteArray() {
