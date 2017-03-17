@@ -1,4 +1,4 @@
-package game;
+package serverLogic;
 
 import java.util.ArrayList;
 import java.util.Comparator;

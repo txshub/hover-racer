@@ -7,11 +7,11 @@ import java.util.Map;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import game.GameLogic;
 import physics.network.RaceSetupData;
 import physics.network.ShipSetupData;
 import serverLogic.AIBuilder;
 import serverLogic.Converter;
+import serverLogic.GameLogic;
 import serverLogic.ServerShipManager;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
