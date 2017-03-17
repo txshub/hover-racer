@@ -193,7 +193,6 @@ public class MultiplayerGame implements GameInt {
 	}
 
 	public void update(float delta) {
-		// TODO update is here (click on the todo to get here)
 		input.update();
 
 		// Check for menu
@@ -227,7 +226,7 @@ public class MultiplayerGame implements GameInt {
 		if (System.nanoTime() > startsAt)
 			ships.getPlayerShip().start();
 
-		ships.updateShips((float) delta);
+		ships.updateShips(delta);
 		try {
 			client.sendByteMessage(ships.getShipPacket(), ServerComm.SENDPLAYERDATA);
 		} catch (IOException e) {

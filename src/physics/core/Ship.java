@@ -290,9 +290,7 @@ public abstract class Ship extends Entity {
 	 *            Time in seconds that passed since the last call of this
 	 *            function
 	 */
-	public void updatePhysics(float preDelta) {
-		float delta = (float) 1 / 60; // TODO fix deltas
-
+	public void updatePhysics(float delta) {
 		// Do physics
 		airResistance(delta);
 		shipCollisions();
