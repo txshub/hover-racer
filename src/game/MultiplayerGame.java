@@ -479,6 +479,7 @@ public class MultiplayerGame implements GameInt {
 		float trackHeight = 1;
 		float barrierHeight = 20;
 		float barrierWidth = 10;
+		barrierPoints = new ArrayList<>();
 
 		// 6 vertices for each track point, 3 components for each vertex
 		float[] vertices = new float[(trackPoints.size() + 1) * 6 * 3];
