@@ -147,7 +147,7 @@ public class MultiplayerGame implements GameInt {
 		}
 		trackPoints = st.getTrack();
 
-		TexturedModel trackModel = createTrackModel();
+		TexturedModel trackModel = createTrackModel(st);
 		Entity track = new Entity(trackModel, new Vector3f(0, 0, 0), new Vector3f(), 1f);
 		entities.add(track);
 
@@ -475,10 +475,10 @@ public class MultiplayerGame implements GameInt {
 	 * @return
 	 * @author Reece Bennett
 	 */
-	private TexturedModel createTrackModel() {
-		float trackHeight = 1;
-		float barrierHeight = 20;
-		float barrierWidth = 10;
+	private TexturedModel createTrackModel(SeedTrack st) {
+		float trackHeight = st.getTrackHeight();
+		float barrierHeight = st.getBarrierHeight();
+		float barrierWidth = st.getBarrierWidth();
 		barrierPoints = new ArrayList<>();
 
 		// 6 vertices for each track point, 3 components for each vertex
