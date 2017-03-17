@@ -107,6 +107,7 @@ public abstract class Ship extends Entity {
 	}
 
 	public void addBarrier(ArrayList<Vector3f> barrierPoints) {
+		System.out.println("Added barriers to " + id + " " + this.getClass().getName());
 		this.barriers = new Barriers(barrierPoints);
 	}
 
