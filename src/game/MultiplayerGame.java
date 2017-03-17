@@ -70,11 +70,12 @@ public class MultiplayerGame implements GameInt {
   private ArrayList<Terrain> terrains;
   private ArrayList<Light> lights;
   private ArrayList<GuiTexture> guis;
+  private ArrayList<TrackPoint> trackPoints;
+  private ArrayList<Vector3f> barrierPoints;
   private Camera camera;
   private MasterRenderer renderer;
   private GuiRenderer guiRender;
   private String trackSeed;
-  private ArrayList<TrackPoint> trackPoints;
   public static InputController input;
 
   private MultiplayerShipManager ships;
@@ -165,6 +166,7 @@ public class MultiplayerGame implements GameInt {
 
     // Create ships
     ships = new MultiplayerShipManager(data, new FlatGroundProvider(0), input, loader, trackPoints);
+    ships.addBarrier(barrierPoints);
     ships.addShipsTo(entities);
     client.setManager(ships);
 
@@ -480,6 +482,8 @@ public class MultiplayerGame implements GameInt {
     Vector3f normLeftOuter2D = new Vector3f(-barrierHeight, barrierWidth, 0).normalize();
     Vector3f normRightOuter2D = new Vector3f(barrierHeight, barrierWidth, 0).normalize();
 
+    barrierPoints = new ArrayList<>();
+    
     // Populate vertex and normal arrays
     for (int i = 0; i <= trackPoints.size(); i++) {
       TrackPoint curPoint = null;
@@ -514,6 +518,9 @@ public class MultiplayerGame implements GameInt {
       Vector3f centerPoint = new Vector3f(curPoint.x, trackHeight, curPoint.y);
       Vector3f leftPoint = new Vector3f(centerPoint).add(left.x * w, 0, left.y * w);
       Vector3f rightPoint = new Vector3f(centerPoint).add(right.x * w, 0, right.y * w);
+      
+      barrierPoints.add(leftPoint);
+      barrierPoints.add(rightPoint);
 
       // Create barrier points
       float b = barrierWidth;
