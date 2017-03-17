@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * Class to read any incoming messages from the client and branch it out as required
+ * @author simon
+ *
+ */
 public class ServerReceiver extends Thread {
   private DetectTimeout detect;
   private String clientName;
@@ -13,12 +18,23 @@ public class ServerReceiver extends Thread {
   private GameRoom gameRoom = null;
   private int gameNum = -1;
   
-  public ServerReceiver(Socket socket, String clientName, DataInputStream client, Lobby lobby) {
+  /**
+   * Creates a ServerReceiver object
+   * @param clientName The client's name
+   * @param client The stream to read from
+   * @param lobby The lobby in use 
+   */
+  public ServerReceiver(String clientName, DataInputStream client, Lobby lobby) {
     this.clientName = clientName;
     this.client = client;
     this.lobby = lobby;
     detect = new DetectTimeout(lobby.clientTable, clientName);
   }
+  
+  /**
+   * Runs the receiver
+   * (Called by ServerReceiver.start())
+   */
   public void run() {
     try {
       while (true) {
@@ -102,6 +118,12 @@ public class ServerReceiver extends Thread {
       // What to do?
     }
   }
+  
+  /**
+   * Sets the gameroom for this client and the client's ID within that room
+   * @param gameRoom The GameRoom
+   * @param gameNum The client's ID within that room
+   */
   public void setGame(GameRoom gameRoom, int gameNum) {
     this.gameRoom = gameRoom;
     this.gameNum = gameNum;

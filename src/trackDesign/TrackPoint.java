@@ -8,7 +8,7 @@ import org.joml.Vector2f;
  * This class exists in order to have a sortable point, as well as a distance
  * measure
  * 
- * @author sxw588
+ * @author simon
  *
  */
 public class TrackPoint extends Vector2f implements Comparable<TrackPoint> {

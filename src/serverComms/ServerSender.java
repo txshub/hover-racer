@@ -24,7 +24,10 @@ public class ServerSender extends Thread {
 		this.toClient = toClient;
 	}
 
-	/** Runs the sender */
+	/** 
+	 * Runs the sender 
+	 * (Called via ServerSender.start())
+	 */
 	public void run() {
 		while (continueSending) {
 			try {

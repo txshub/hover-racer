@@ -2,21 +2,34 @@ package serverComms;
 
 import java.util.ArrayList;
 
+/**
+ * Sends a message out to all clients every frame
+ * @author simon
+ *
+ */
 public class UpdateAllUsers extends Thread {
 
 	public volatile boolean run = true;
 
-	final float refreshRate = 1f / 60f; // Refresh Rate in nanos
-
+	final float refreshRate = 1f / 60f; // Refresh Rate
 	private ArrayList<CommQueue> queues;
 	private GameRoom room;
 
+	/**
+	 * Creates an UpdateAllUsers object
+	 * @param queues All of the queues to send data to
+	 * @param room The GameRoom in question
+	 */
 	public UpdateAllUsers(ArrayList<CommQueue> queues, GameRoom room) {
 		this.queues = queues;
 		this.room = room;
 	}
 
 	@Override
+	/**
+	 * Runs the updater
+	 * (Called via UpdateAllUsers.start())
+	 */
 	public void run() {
 		while (run) {
 			long timeStarting = System.nanoTime();

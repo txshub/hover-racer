@@ -126,7 +126,7 @@ public class ServerComm extends Thread {
                 .offer(new ByteArrayByte(("Valid").getBytes(charset), ACCEPTEDUSER));
             if (DEBUG)
               System.out.println("Sent Accepted User to client");
-            ServerReceiver receiver = new ServerReceiver(socket, name, fromClient, lobby);
+            ServerReceiver receiver = new ServerReceiver(name, fromClient, lobby);
             lobby.clientTable.addReceiver(name, receiver);
             receiver.start();
             ArrayList<GameRoom> rooms = new ArrayList<GameRoom>();
@@ -147,6 +147,14 @@ public class ServerComm extends Thread {
       System.err.println("IO error: " + e.getMessage());
     }
   }
+  
+  /**
+   * Sends a byte message to the specified output stream
+   * @param msg The message being sent
+   * @param type The type of message
+   * @param client The outputstream to send the message to
+   * @throws IOException If there is a problem with writing
+   */
   public static void writeByteMessage(byte[] msg, byte type, DataOutputStream client)
       throws IOException {
     client.writeInt(msg.length + 1);

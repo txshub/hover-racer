@@ -45,7 +45,7 @@ public class SeedTrack {
   public ArrayList<TrackPoint> getTrack() {
     return track;
   }
-
+  
   public Vector3f getStart() {
     return new Vector3f(track.get(1).x, 0f, track.get(1).y);
   }
