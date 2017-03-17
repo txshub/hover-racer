@@ -224,7 +224,7 @@ public class GameRoom {
 		      RaceSetupData setupData = setupRace();
 		      shipManager = new ServerShipManager(setupData, players.size(), maxPlayers - players.size(),
 		          trackPoints);
-		      logic = new GameLogic(shipManager.getAllShips(), trackPoints, lapCount, this);
+		      logic = new GameLogic(shipManager.getShipsLogics(), trackPoints, lapCount, this);
 		      ArrayList<CommQueue> allQueues = new ArrayList<CommQueue>();
 		      for (int i = 0; i < players.size(); i++) {
 		        table.getReceiver(players.get(i)).setGame(this, i);

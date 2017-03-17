@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import physics.core.Ship;
 import physics.network.RaceSetupData;
@@ -76,8 +77,8 @@ public class ServerShipManager implements ServerShipProvider {
 		ships.forEach(s -> s.start());
 	}
 
-	public ArrayList<Ship> getAllShips() {
-		return ships;
+	public ArrayList<ShipLogicData> getShipsLogics() {
+		return ships.stream().map(ship -> new ShipLogicData(ship)).collect(Collectors.toCollection(ArrayList::new));
 	}
 
 }

@@ -7,22 +7,21 @@ import java.util.HashMap;
 import org.joml.Intersectionf;
 import org.joml.Vector3f;
 
-import physics.core.Ship;
 import serverComms.GameRoom;
 import trackDesign.TrackPoint;
 
 /** @author Tudor Suruceanu */
 public class GameLogic {
 
-	private ArrayList<Ship> players;
+	private ArrayList<ShipLogicData> players;
 	private HashMap<TrackPoint, Float> pointsDist;
-	private HashMap<Ship, Integer> lastTrackPoints;
+	private HashMap<ShipLogicData, Integer> lastTrackPoints;
 	private ArrayList<TrackPoint> trackPoints;
 	private int laps;
 	private int finished;
 	private GameRoom gameRoom;
 
-	public GameLogic(ArrayList<Ship> players, ArrayList<TrackPoint> trackPoints, int laps, GameRoom gameRoom) {
+	public GameLogic(ArrayList<ShipLogicData> players, ArrayList<TrackPoint> trackPoints, int laps, GameRoom gameRoom) {
 		this.players = players;
 		this.laps = Math.max(laps, 1);
 		this.gameRoom = gameRoom;
@@ -32,22 +31,22 @@ public class GameLogic {
 		finished = 0;
 
 
-		lastTrackPoints = new HashMap<Ship, Integer>();
-		for (Ship player : players) {
+		lastTrackPoints = new HashMap<ShipLogicData, Integer>();
+		for (ShipLogicData player : players) {
 			player.setFinished(false);
 			lastTrackPoints.put(player, 0);
 		}
 	}
 
 	private void updateRankings() {
-		ArrayList<Ship> racingPlayers = new ArrayList<Ship>();
-		for (Ship player : players) {
+		ArrayList<ShipLogicData> racingPlayers = new ArrayList<ShipLogicData>();
+		for (ShipLogicData player : players) {
 			if (!player.finished()) racingPlayers.add(player);
 		}
-		racingPlayers.sort(new Comparator<Ship>() {
+		racingPlayers.sort(new Comparator<ShipLogicData>() {
 
 			@Override
-			public int compare(Ship p1, Ship p2) {
+			public int compare(ShipLogicData p1, ShipLogicData p2) {
 				float d1 = getPlayerDist(p1);
 				float d2 = getPlayerDist(p2);
 				if (d1 > d2) return -1;
@@ -76,7 +75,7 @@ public class GameLogic {
 		}
 	}
 
-	private void updateLastPoint(Ship player) {
+	private void updateLastPoint(ShipLogicData player) {
 		int lastTrackPoint = lastTrackPoints.get(player);
 		int currentLap = player.getCurrentLap();
 
@@ -108,7 +107,7 @@ public class GameLogic {
 		}
 	}
 
-	private float getPlayerDist(Ship player) {
+	private float getPlayerDist(ShipLogicData player) {
 		float distance;
 		int lastTrackPoint = lastTrackPoints.get(player);
 		if (lastTrackPoint == 0) distance = pointsDist.get(trackPoints.get(0)) * (player.getCurrentLap() - 1);
@@ -128,12 +127,12 @@ public class GameLogic {
 	}
 
 	public void update() {
-		for (Ship player : players) {
+		for (ShipLogicData player : players) {
 			updateLastPoint(player);
 		}
 		updateRankings();
 
-		for (Ship player : players) {
+		for (ShipLogicData player : players) {
 			gameRoom.sendLogicUpdate(player.getId(), player.getRanking(), player.finished(), player.getCurrentLap());
 		}
 	}
@@ -146,8 +145,8 @@ public class GameLogic {
 		return finished == players.size();
 	}
 
-	public Ship getWinner() {
-		for (Ship player : players) {
+	public ShipLogicData getWinner() {
+		for (ShipLogicData player : players) {
 			if (player.getRanking() == 1 && player.finished()) return player;
 		}
 		return null;
