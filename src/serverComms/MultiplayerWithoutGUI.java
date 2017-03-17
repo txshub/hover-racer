@@ -13,7 +13,7 @@ public class MultiplayerWithoutGUI {
   private static GameRoom gameRoom;
   private static final int GAME_ID = 0;
   private static final String SEED = "234";
-  private static final int MAX_PLAYERS = 100;
+  private static final int MAX_PLAYERS = 10;
   private static final int LAPS = 2;
   private static final String LOBBY_NAME = "Testonium";
 

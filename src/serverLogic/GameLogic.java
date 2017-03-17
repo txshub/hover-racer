@@ -18,15 +18,21 @@ public class GameLogic {
 	private HashMap<ShipLogicData, Integer> lastTrackPoints;
 	private ArrayList<TrackPoint> trackPoints;
 	private int laps;
+	private int amountOfPlayers;
 	private int finished;
 	private GameRoom gameRoom;
 
-	public GameLogic(ArrayList<ShipLogicData> players, ArrayList<TrackPoint> trackPoints, int laps, GameRoom gameRoom) {
+	public GameLogic(ArrayList<ShipLogicData> players, ArrayList<TrackPoint> trackPoints, int laps, int amountOfPlayers,
+		GameRoom gameRoom) {
+		;
+		if (players == null || trackPoints == null || laps == 0 || gameRoom == null) throw new IllegalArgumentException();
 		this.players = players;
 		this.laps = Math.max(laps, 1);
+		this.amountOfPlayers = amountOfPlayers;
 		this.gameRoom = gameRoom;
 		this.trackPoints = trackPoints;
 		pointsDist = new HashMap<TrackPoint, Float>();
+		calculatePointsDist();
 
 		finished = 0;
 
@@ -110,6 +116,10 @@ public class GameLogic {
 	private float getPlayerDist(ShipLogicData player) {
 		float distance;
 		int lastTrackPoint = lastTrackPoints.get(player);
+		if (pointsDist == null) throw new IllegalStateException("pointsDist is null");
+		if (trackPoints == null) throw new IllegalStateException("trackPoints is null");
+		if (player == null) throw new IllegalStateException("player is null");
+		if (pointsDist.get(trackPoints.get(0)) == null) throw new IllegalStateException("large thing is null");
 		if (lastTrackPoint == 0) distance = pointsDist.get(trackPoints.get(0)) * (player.getCurrentLap() - 1);
 		else distance = pointsDist.get(trackPoints.get(lastTrackPoint)) + pointsDist.get(trackPoints.get(0)) * (player.getCurrentLap() - 1);
 
@@ -133,7 +143,8 @@ public class GameLogic {
 		updateRankings();
 
 		for (ShipLogicData player : players) {
-			gameRoom.sendLogicUpdate(player.getId(), player.getRanking(), player.finished(), player.getCurrentLap());
+			if (player.getId() < amountOfPlayers)
+				gameRoom.sendLogicUpdate(player.getId(), player.getRanking(), player.finished(), player.getCurrentLap());
 		}
 	}
 
