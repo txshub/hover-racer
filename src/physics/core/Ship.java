@@ -47,7 +47,9 @@ public abstract class Ship extends Entity {
 	// Jumping, for science! (testing vertical stuff)
 	private static final float JUMP_POWER = 30 * SCALE;
 	// How much speed is retained during a wall collision
-	private static final float WALL_ELASTICITY = 0.5f;
+	private static final float WALL_ELASTICITY = 0.35f;
+	// How much energy is retained during ship collisions
+	private static final float SHIP_COLLISION_ELASTICITY = 0.8f;
 
 	// 15, 100, 2, 30: magnet-like
 	// 15, 50, 0.8, 30: nicely cushiony
@@ -107,7 +109,6 @@ public abstract class Ship extends Entity {
 	}
 
 	public void addBarrier(ArrayList<Vector3f> barrierPoints) {
-		System.out.println("Added barriers to " + id + " " + this.getClass().getName());
 		this.barriers = new Barriers(barrierPoints);
 	}
 
@@ -233,7 +234,7 @@ public abstract class Ship extends Entity {
 		Vector3 pos = ship.getInternalPosition().copy();
 		float expectedDistance = ship.getSize() + this.getSize();
 		// Apply momentum
-		velocity.add(ship.getVelocity().sub(this.velocity).mul(ship.getMass()).mul(1 / this.getMass()).mul(1.5f));
+		velocity.add(ship.getVelocity().sub(this.velocity).mul(ship.getMass()).mul(1 / this.getMass()).mul(SHIP_COLLISION_ELASTICITY));
 		// Get out of collision zone
 		position.add(this.position.copy().sub(pos).mul((expectedDistance - position.distance(pos)) / expectedDistance));
 	}
