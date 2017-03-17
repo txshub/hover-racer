@@ -13,6 +13,8 @@ import trackDesign.catmullrom.SplineUtils;
  * @author sxw588
  *
  */
+
+//567ujnb
 public class TrackMaker {
 
   public static SeedTrack makeTrack() {
@@ -22,9 +24,9 @@ public class TrackMaker {
   public static SeedTrack makeTrack(String seed) {
     long hash = 0;
     for (char c : seed.toCharArray()) {
-      hash = 32L * hash + c;
+      hash = 36L * hash + c;
     }
-    return makeTrack(hash, 10, 20, 30, 1, 30, 40, 6, 200, 300);
+    return makeTrack(hash, 10, 20, 20, 3, 30, 40, 5, 200, 260);
   }
 
   public static SeedTrack makeStraightTrack(float length) {
@@ -121,8 +123,8 @@ public class TrackMaker {
     ArrayList<TrackPoint> circuit = doublePoints(hullPoints, difficulty, maxDisp, random);
     for (int i = 0; i < 10; i++) {
       // Ensure all angles are greater than 100 degrees to prevent sudden turns
-      fixAngles(circuit);
       seperatePoints(circuit, minDist); // Separate the points again
+      fixAngles(circuit);
     }
     mergeClosePoints(circuit, minDist * 2);
     spreadAngles(circuit);
@@ -152,6 +154,8 @@ public class TrackMaker {
         }
       }
     }
+    if(random.nextBoolean()) return new SeedTrack(seed, finalCircuit);
+    Collections.reverse(finalCircuit);
     return new SeedTrack(seed, finalCircuit);
   }
 
