@@ -208,35 +208,29 @@ public class GameRoom {
 		return hostName;
 	}
 
-	/**
-   * @author Mac Starts the game
-   * @param clientName
-   *          The name of the caller (to check it is the host calling this)
-   */
-	  public void startGame(String clientName) {
-		    if (players.size() == 0)
-		      throw new IllegalStateException("Tried starting game with no players");
-		    if (ships.size() != players.size())
-		      throw new IllegalStateException(
-		          "Mismatch between amount of ships and players when staring game.");
-		    if (clientName.equals(hostName)) {
-		      inGame = true;
-		      RaceSetupData setupData = setupRace();
-		      shipManager = new ServerShipManager(setupData, players.size(), maxPlayers - players.size(),
-		          trackPoints);
-		      logic = new GameLogic(shipManager.getShipsLogics(), trackPoints, lapCount, this);
-		      ArrayList<CommQueue> allQueues = new ArrayList<CommQueue>();
-		      for (int i = 0; i < players.size(); i++) {
-		        table.getReceiver(players.get(i)).setGame(this, i);
-		        table.getQueue(players.get(i)).offer(
-		            new ByteArrayByte(Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA));
-		        allQueues.add(table.getQueue(players.get(i)));
-		      }
-		      raceStartsAt = System.nanoTime() + TIME_TO_START;
-		      updatedUsers = new UpdateAllUsers(allQueues, this);
-		      updatedUsers.start();
-		    }
-		  }
+	/** @author Mac Starts the game
+	 * @param clientName
+	 *        The name of the caller (to check it is the host calling this) */
+	public void startGame(String clientName) {
+		if (players.size() == 0) throw new IllegalStateException("Tried starting game with no players");
+		if (ships.size() != players.size())
+			throw new IllegalStateException("Mismatch between amount of ships and players when staring game.");
+		if (clientName.equals(hostName)) {
+			inGame = true;
+			RaceSetupData setupData = setupRace();
+			shipManager = new ServerShipManager(setupData, players.size(), maxPlayers - players.size(), trackPoints);
+			logic = new GameLogic(shipManager.getShipsLogics(), trackPoints, lapCount, players.size(), this);
+			ArrayList<CommQueue> allQueues = new ArrayList<CommQueue>();
+			for (int i = 0; i < players.size(); i++) {
+				table.getReceiver(players.get(i)).setGame(this, i);
+				table.getQueue(players.get(i)).offer(new ByteArrayByte(Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA));
+				allQueues.add(table.getQueue(players.get(i)));
+			}
+			raceStartsAt = System.nanoTime() + TIME_TO_START;
+			updatedUsers = new UpdateAllUsers(allQueues, this);
+			updatedUsers.start();
+		}
+	}
 
 
 	/** @author Mac Called when the game ends */
@@ -251,16 +245,14 @@ public class GameRoom {
 	// }
 	// }
 
-  /**
-   * @author Mac
-   * @param gameNum
-   *          The user's ID
-   * @param msg
-   *          The msg to update with
-   */
-  public void updateUser(int gameNum, byte[] msg) {
-    shipManager.addPacket(msg);
-  }
+	/** @author Mac
+	 * @param gameNum
+	 *        The user's ID
+	 * @param msg
+	 *        The msg to update with */
+	public void updateUser(int gameNum, byte[] msg) {
+		shipManager.addPacket(msg);
+	}
 
 	/** @author Mac Gets all the ship positions
 	 * @return all the ship positions */
@@ -386,6 +378,7 @@ public class GameRoom {
 		if (raceStartsAt == -1) throw new IllegalStateException("Update called before the race was started");
 		if (System.nanoTime() >= raceStartsAt) shipManager.startRace();
 		shipManager.update(delta);
+		logic.update();
 	}
 
 	/** Sends a game logic update to a single client
