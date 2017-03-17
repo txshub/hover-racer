@@ -9,7 +9,7 @@ import physics.network.RaceSetupData;
 public class MainGameLoop extends Thread {
 
   public void main(GameInt game) {
-    // TODO change to MultiplayerGame
+    
     boolean debug = true;
 
     // Set the FPS and UPS caps
@@ -50,7 +50,7 @@ public class MainGameLoop extends Thread {
 
       // If updateDur has passed since the last update, do an update
       while (deltaUPS >= 1.0) {
-        game.update((float) deltaUPS);
+        game.update(1f / updateCap);
         ups++;
         deltaUPS--;
       }
