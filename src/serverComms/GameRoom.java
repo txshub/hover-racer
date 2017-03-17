@@ -294,44 +294,7 @@ public class GameRoom {
 
 	// TODO finish this
 	private Map<Byte, Vector3f> generateStartingPositions(Vector2f startDirection) {
-		// Map<Byte, Vector2f> res = new HashMap<Byte, Vector2f>();
-		// float width = trackPoints.get(0).getWidth();
-		// int shipsInRow = (int) width / SIDE_DISTANCES;
-		// float sidePadding = (width - shipsInRow * SIDE_DISTANCES) / 2;
-		// int shipsLeft = maxPlayers;
-		// int currentRow = 0;
-		// float startAngle = (float) Math.atan2(startDirection.x,
-		// startDirection.y);
-		// float sin = (float) Math.cos(startAngle);
-		// float cos = (float) Math.cos(startAngle);
-		// Vector2f firstShip = new Vector2f((float) (trackPoints.get(0).x + cos *
-		// trackPoints.get(0).getWidth() / 2),
-		// (float) (trackPoints.get(0).y + sin * trackPoints.get(0).getWidth() /
-		// 2));
-		// while (shipsLeft > shipsInRow) {
-		// for (int i = 0; i < shipsInRow; i++) {
-		// res.put((byte) (maxPlayers - shipsLeft), new
-		// Vector2f(firstShip).add(SIDE_DISTANCES * i * cos, SIDE_DISTANCES * i *
-		// sin))
-		// .add(FORWARD_DISTANCES * currentRow * sin, FORWARD_DISTANCES * currentRow
-		// * cos);
-		// }
-		// currentRow++;
-		// }
-		// float extraPadding = shipsLeft % 2 == 0 ? 0.5f : 0f;
-		// if (shipsLeft % 2 == 0) {
-		// float padding = (width - sidePadding * 2) / shipsLeft;
-		// for (int i = 0; i < shipsLeft; i++) {
-		// res.put((byte) (maxPlayers - shipsLeft),
-		// new Vector2f(firstShip).add(padding * (i + extraPadding) * cos, padding *
-		// (i + extraPadding) * sin))
-		// .add(FORWARD_DISTANCES * currentRow * sin, FORWARD_DISTANCES * currentRow
-		// * cos);
-		// }
-		// }
-		// return res.entrySet().stream()
-		// .collect(Collectors.toMap(e -> e.getKey(), e -> new
-		// Vector3f(e.getValue().x, STARTING_HEIGHT, e.getValue().y)));
+
 		// TODO temporary thing here:
 		Map<Byte, Vector3f> res = new HashMap<>();
 		for (int i = 0; i < maxPlayers; i++) {
