@@ -24,7 +24,6 @@ public class GameLogic {
 
 	public GameLogic(ArrayList<ShipLogicData> players, ArrayList<TrackPoint> trackPoints, int laps, int amountOfPlayers,
 		GameRoom gameRoom) {
-		;
 		if (players == null || trackPoints == null || laps == 0 || gameRoom == null) throw new IllegalArgumentException();
 		this.players = players;
 		this.laps = Math.max(laps, 1);

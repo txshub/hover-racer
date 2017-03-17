@@ -13,6 +13,9 @@ public class ShipLogicData {
 	public ShipLogicData(Ship ship) {
 		super();
 		this.ship = ship;
+		this.ranking = 0;
+		this.finished = false;
+		this.currentLap = 1;
 	}
 
 	public int getRanking() {
