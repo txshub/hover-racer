@@ -102,6 +102,7 @@ public class MultiplayerGame implements GameInt {
     startsAt = System.nanoTime() + data.getTimeToStart();
 
     this.client = client;
+    client.setMultiplayerGame(this);
 
     DisplayManager.createDisplay();
     loader = new Loader();
@@ -625,4 +626,9 @@ public class MultiplayerGame implements GameInt {
       distance[i - 1] = lights.get(i).getdistance(currentPosition);
     }
   }
+
+public void updateLogic(int ranking, boolean finished, int currentLap) {
+	// TODO
+	
+}
 }

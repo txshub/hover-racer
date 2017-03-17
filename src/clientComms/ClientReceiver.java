@@ -75,6 +75,8 @@ public class ClientReceiver extends Thread {
 					client.getManager().addPacket(fullMsg.getMsg());
 				} else if (fullMsg.getType() == ServerComm.ROOMCLOSED) {
 					//Go back to multiplayer menu (need to speak to Andreea)
+				} else if (fullMsg.getType() == ServerComm.LOGIC_UPDATE) {
+					if(client.multiplayerGame != null) client.multiplayerGame.updateLogic(Converter.receiveRanking(fullMsg.getMsg()), Converter.receiveFinished(fullMsg.getMsg()), Converter.receiveCurrentLap(fullMsg.getMsg()));
 				}
 			}
 		} catch (IOException e) {

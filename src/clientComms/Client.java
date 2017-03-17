@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+
+import game.MultiplayerGame;
 import physics.network.ShipSetupData;
 import physics.ships.MultiplayerShipManager;
 import serverComms.GameRoom;
@@ -32,6 +34,7 @@ public class Client extends Thread {
   private volatile boolean alreadyAccessedList = true;
   public volatile boolean alreadyAccessedRoom = true;
   private GameRoom currentRoom;
+  public MultiplayerGame multiplayerGame;
   
   /**
    * Creates a client object and connects to a given server on a given port
@@ -275,4 +278,10 @@ public class Client extends Thread {
   public MultiplayerShipManager getManager() {
     return manager;
   }
+
+
+public void setMultiplayerGame(MultiplayerGame multiplayerGame) {
+	this.multiplayerGame = multiplayerGame;
+	
+}
 }

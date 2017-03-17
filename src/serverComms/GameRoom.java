@@ -216,15 +216,15 @@ public class GameRoom {
 
 	/** @author Mac
 	 *         Called when the game ends */
-	public void endGame() {
-		inGame = false;
-		// If the host is still in the room, don't end the game
-		if (players.contains(hostName)) return;
-		// Otherwise send the closed methods to all currently connected clients
-		for (int i = 0; i < players.size(); i++) {
-			table.getQueue(players.get(i)).offer(new ByteArrayByte(new byte[0], ServerComm.ROOMCLOSED));
-		}
-	}
+//	public void endGame() {
+//		//inGame = false;
+//		// If the host is still in the room, don't end the game
+//		if (players.contains(hostName)) return;
+//		// Otherwise send the closed methods to all currently connected clients
+//		for (int i = 0; i < players.size(); i++) {
+//			table.getQueue(players.get(i)).offer(new ByteArrayByte(new byte[0], ServerComm.ROOMCLOSED));
+//		}
+//	}
 
 	/** @author Mac
 	 * @param gameNum The user's ID
