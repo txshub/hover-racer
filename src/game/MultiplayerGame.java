@@ -454,7 +454,7 @@ public class MultiplayerGame implements GameInt {
 		posCurrent = new Label(loader, "", font, 5f, true, new Vector2f(30, 45), 130);
 		posCurrent.setParent(posDisplay);
 		posCurrent.setColour(1, 1, 1);
-		posTotal = new Label(loader, Integer.toString(data.shipData.size()), font, 2.8f, true, new Vector2f(-5, 2), 50);
+		posTotal = new Label(loader, Integer.toString(data.shipData.size()), font, 2.8f, true, new Vector2f(4, 2), 50);
 		posTotal.setParent(posDisplay);
 		posTotal.setColour(1, 1, 1);
 
