@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.joml.Vector2f;
+import org.joml.Vector3f;
+
 import physics.core.Ship;
 import physics.network.RaceSetupData;
 import physics.network.ServerShipProvider;
@@ -13,6 +16,7 @@ import physics.placeholders.FlatGroundProvider;
 import physics.ships.AIShip;
 import physics.ships.RemoteShip;
 import physics.support.GroundProvider;
+import trackDesign.SeedTrack;
 import trackDesign.TrackPoint;
 
 public class ServerShipManager implements ServerShipProvider {
@@ -47,6 +51,10 @@ public class ServerShipManager implements ServerShipProvider {
 					.add(new AIShip((byte) i, null, data.getStartingPositions().get(i), null, ground, trackPoints, data.getStats().get(i)));
 		}
 		ships.forEach(s -> s.addOtherShips(ships));
+
+		for (Ship ship : ships) {
+			ship.addBarrier(makeBarrierPoints(trackPoints));
+		}
 	}
 
 	public void update(float delta) {
@@ -68,6 +76,7 @@ public class ServerShipManager implements ServerShipProvider {
 		return res;
 	}
 
+
 	@Override
 	public Optional<byte[]> getShip(byte id) {
 		return Optional.ofNullable(packets.remove(id));
@@ -80,5 +89,49 @@ public class ServerShipManager implements ServerShipProvider {
 	public ArrayList<ShipLogicData> getShipsLogics() {
 		return ships.stream().map(ship -> new ShipLogicData(ship)).collect(Collectors.toCollection(ArrayList::new));
 	}
+
+	private ArrayList<Vector3f> makeBarrierPoints(ArrayList<TrackPoint> trackPoints) {
+		float trackHeight = SeedTrack.getTrackHeight();
+		float barrierHeight = SeedTrack.getBarrierHeight();
+		float barrierWidth = SeedTrack.getBarrierWidth();
+		ArrayList<Vector3f> barrierPoints = new ArrayList<>();
+		for (int i = 0; i <= trackPoints.size(); i++) {
+			TrackPoint curPoint = null;
+			TrackPoint prevPoint = null;
+			TrackPoint nextPoint = null;
+			if (i < trackPoints.size()) {
+				curPoint = trackPoints.get(i);
+				// If we are at the first point the previous is the last point
+				int prev = (i == 0) ? trackPoints.size() - 1 : i - 1;
+				prevPoint = trackPoints.get(prev);
+
+				// If we are at the last point the next is the first point
+				int next = (i == trackPoints.size() - 1) ? 0 : i + 1;
+				nextPoint = trackPoints.get(next);
+			} else {
+				curPoint = trackPoints.get(0);
+				prevPoint = trackPoints.get(trackPoints.size() - 1);
+				nextPoint = trackPoints.get(1);
+			}
+			// Find the line between previous and next point for direction of
+			// this
+			// slice
+			Vector2f dirVec = new Vector2f(nextPoint).sub(prevPoint).normalize();
+
+			// Calculate the perpendicular normal vectors
+			Vector2f left = new Vector2f(dirVec.y, -dirVec.x).normalize();
+			Vector2f right = new Vector2f(-dirVec.y, dirVec.x).normalize();
+
+			// Apply the offsets to the center point
+			float w = curPoint.getWidth() / 2;
+			Vector3f centerPoint = new Vector3f(curPoint.x, trackHeight, curPoint.y);
+			Vector3f leftPoint = new Vector3f(centerPoint).add(left.x * w, 0, left.y * w);
+			Vector3f rightPoint = new Vector3f(centerPoint).add(right.x * w, 0, right.y * w);
+			barrierPoints.add(leftPoint);
+			barrierPoints.add(rightPoint);
+		}
+		return barrierPoints;
+	}
+
 
 }

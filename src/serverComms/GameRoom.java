@@ -294,9 +294,6 @@ public class GameRoom {
 
 	// TODO finish this
 	private Map<Byte, Vector3f> generateStartingPositions(Vector2f startDirection) {
-	  
-	  
-	  
 		Map<Byte, Vector3f> res = new HashMap<>();
 		for (int i = 0; i < maxPlayers; i++) {
 		  if (i == 0) {
