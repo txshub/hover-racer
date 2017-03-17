@@ -13,32 +13,20 @@ import trackDesign.TrackPoint;
 
 public class Barriers {
 
-  List<TrackPoint> track;
-  int points;
-  List<ImVector2f> middle;
+  List<Vector3f> track;
   List<ImVector2f> rightPoints;
   List<ImVector2f> leftPoints;
 
-  public Barriers(List<TrackPoint> track) {
+  public Barriers(List<Vector3f> track) {
     this.track = track;
-    this.points = track.size();
-    if (points == 0)
-      throw new IllegalArgumentException("Track doen't have any points");
-    this.middle = new ArrayList<>();
     this.rightPoints = new ArrayList<>();
     this.leftPoints = new ArrayList<>();
 
-    // Generate the middle of the track
-    for (int i = 0; i < points; i++) {
-      middle.add(point(i + 1).sub(point(i)));
-    }
 
     // Generate barriers
-    for (int i = 0; i < points; i++) {
-      ImVector2f side = new ImVector2f(middle.get(i).getY(), -middle.get(i).getX()).normalize()
-          .mul(track.get(i).getWidth() / 2);
-      leftPoints.add(point(i).add(side));
-      rightPoints.add(point(i).sub(side));
+    for (int i = 0; i < track.size(); i+=2) {
+      leftPoints.add(new ImVector2f(track.get(i)));
+      rightPoints.add(new ImVector2f(track.get(i+1)));
     }
   }
 
@@ -46,7 +34,7 @@ public class Barriers {
     List<ImVector2f> res = new LinkedList<>();
     Vector3f pos3d = ship.getPosition();
     ImVector2f pos = new ImVector2f(pos3d.x, pos3d.z);
-    for (int i = 0; i < points; i++) {
+    for (int i = 0; i < track.size(); i++) {
       res.addAll(collisionVectorsAt(pos, ship.getSize(), i));
     }
 
@@ -109,15 +97,15 @@ public class Barriers {
   }
 
   private ImVector2f point(int i) {
-    return new ImVector2f(track.get(i % points));
+    return new ImVector2f(track.get(i % track.size()));
   }
 
   private ImVector2f left(int i) {
-    return leftPoints.get(i % points);
+    return leftPoints.get(i % leftPoints.size());
   }
 
   private ImVector2f right(int i) {
-    return rightPoints.get(i % points);
+    return rightPoints.get(i % rightPoints.size());
   }
 
 }

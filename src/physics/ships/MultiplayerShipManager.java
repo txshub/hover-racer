@@ -159,4 +159,12 @@ public class MultiplayerShipManager implements ServerShipProvider {
 		return new TexturedModel(OBJFileLoader.loadOBJ("newShip", loader), new ModelTexture(loader.loadTexture("newShipTexture")));
 	}
 
+public void addBarrier(ArrayList<Vector3f> barrierPoints) {
+	
+	player.addBarrier(barrierPoints);
+	for(Ship ship: remotes){
+		ship.addBarrier(barrierPoints);
+	}
+}
+
 }

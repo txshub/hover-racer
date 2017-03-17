@@ -53,10 +53,12 @@ import uiToolkit.UIRenderer;
 import uiToolkit.fontMeshCreator.FontType;
 import uiToolkit.fontRendering.TextMaster;
 
-/** Main game class
+/**
+ * Main game class
  * 
  * @author Reece Bennett
- * @author rtm592 */
+ * @author rtm592
+ */
 public class MultiplayerGame implements GameInt {
 
 	// Set this to print debug messages
@@ -68,11 +70,12 @@ public class MultiplayerGame implements GameInt {
 	private ArrayList<Terrain> terrains;
 	private ArrayList<Light> lights;
 	private ArrayList<GuiTexture> guis;
+	private ArrayList<TrackPoint> trackPoints;
+	private ArrayList<Vector3f> barrierPoints;
 	private Camera camera;
 	private MasterRenderer renderer;
 	private GuiRenderer guiRender;
 	private String trackSeed;
-	private ArrayList<TrackPoint> trackPoints;
 	public static InputController input;
 
 	private MultiplayerShipManager ships;
@@ -116,7 +119,8 @@ public class MultiplayerGame implements GameInt {
 		normalEntities = new ArrayList<Entity>();
 		TextMaster.init(loader);
 
-		if (debug) System.out.println("Screen size: " + Display.getWidth() + " x " + Display.getHeight());
+		if (debug)
+			System.out.println("Screen size: " + Display.getWidth() + " x " + Display.getHeight());
 
 		// Terrain
 		TerrainTexture background = new TerrainTexture(loader.loadTexture("new/GridTexture"));
@@ -131,8 +135,8 @@ public class MultiplayerGame implements GameInt {
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("new/GridTexture"));
 
 		terrains = new ArrayList<Terrain>();
-		terrains.add(new Terrain((int) (-SkyboxRenderer.SIZE * 2f), (int) (-SkyboxRenderer.SIZE * 2f), loader, texturePack, blendMap,
-			"new/FlatHeightMap"));
+		terrains.add(new Terrain((int) (-SkyboxRenderer.SIZE * 2f), (int) (-SkyboxRenderer.SIZE * 2f), loader,
+				texturePack, blendMap, "new/FlatHeightMap"));
 
 		// Track
 		trackSeed = data.getTrackSeed();
@@ -148,11 +152,12 @@ public class MultiplayerGame implements GameInt {
 		entities.add(track);
 
 		// Finish Line
-		TexturedModel finishLineModel =
-			new TexturedModel(getModel("finishLineUpdated", loader), new ModelTexture(loader.loadTexture("new/finishLineTextureUpdated")));
+		TexturedModel finishLineModel = new TexturedModel(getModel("finishLineUpdated", loader),
+				new ModelTexture(loader.loadTexture("new/finishLineTextureUpdated")));
 		Vector3f firstPoint = new Vector3f(st.getStart());
 		firstPoint.y = 1.05f;
-		Entity finishLine = new Entity(finishLineModel, firstPoint, data.startingOrientation, st.getTrack().get(0).getWidth() * 0.7f);
+		Entity finishLine = new Entity(finishLineModel, firstPoint, data.startingOrientation,
+				st.getTrack().get(0).getWidth() * 0.7f);
 		entities.add(finishLine);
 
 		// Lighting
@@ -162,7 +167,9 @@ public class MultiplayerGame implements GameInt {
 
 		// Create ships
 		ships = new MultiplayerShipManager(data, new FlatGroundProvider(0), input, loader, trackPoints);
+		ships.addBarrier(barrierPoints);
 		ships.addShipsTo(entities);
+		client.setManager(ships);
 
 		// Player following camera
 		camera = new Camera(ships.getPlayerShip());
@@ -206,18 +213,25 @@ public class MultiplayerGame implements GameInt {
 
 		// Check for audio controls
 		/** @author Tudor */
-		if (input.wasPressed(Action.MUSIC_UP) > 0.5f) AudioMaster.increaseMusicVolume();
-		if (input.wasPressed(Action.MUSIC_DOWN) > 0.5f) AudioMaster.decreaseMusicVolume();
-		if (input.wasPressed(Action.MUSIC_SKIP) > 0.5f) AudioMaster.skipInGameMusic();
-		if (input.wasPressed(Action.SFX_UP) > 0.5f) AudioMaster.increaseSFXVolume();
-		if (input.wasPressed(Action.SFX_DOWN) > 0.5f) AudioMaster.decreaseSFXVolume();
+		if (input.wasPressed(Action.MUSIC_UP) > 0.5f)
+			AudioMaster.increaseMusicVolume();
+		if (input.wasPressed(Action.MUSIC_DOWN) > 0.5f)
+			AudioMaster.decreaseMusicVolume();
+		if (input.wasPressed(Action.MUSIC_SKIP) > 0.5f)
+			AudioMaster.skipInGameMusic();
+		if (input.wasPressed(Action.SFX_UP) > 0.5f)
+			AudioMaster.increaseSFXVolume();
+		if (input.wasPressed(Action.SFX_DOWN) > 0.5f)
+			AudioMaster.decreaseSFXVolume();
 
-		if (System.nanoTime() > startsAt) ships.getPlayerShip().start();
+		if (System.nanoTime() > startsAt)
+			ships.getPlayerShip().start();
 
 		ships.updateShips((float) delta);
 		try {
 			client.sendByteMessage(ships.getShipPacket(), ServerComm.SENDPLAYERDATA);
-		} catch (IOException e) {}
+		} catch (IOException e) {
+		}
 		for (Container c : containers) {
 			c.update();
 		}
@@ -270,11 +284,13 @@ public class MultiplayerGame implements GameInt {
 		return data;
 	}
 
-	/** Setup the UIs
+	/**
+	 * Setup the UIs
 	 * 
 	 * @param data
-	 *        RaceSetupData including total laps and total players
-	 * @author Reece Bennett */
+	 *            RaceSetupData including total laps and total players
+	 * @author Reece Bennett
+	 */
 	private void setupUI(RaceSetupData data) {
 		guis = new ArrayList<>();
 		containers = new ArrayList<>();
@@ -453,14 +469,17 @@ public class MultiplayerGame implements GameInt {
 		lapTotal.setColour(1, 1, 1);
 	}
 
-	/** Create a track model
+	/**
+	 * Create a track model
 	 * 
 	 * @return
-	 * @author Reece Bennett */
+	 * @author Reece Bennett
+	 */
 	private TexturedModel createTrackModel() {
 		float trackHeight = 1;
 		float barrierHeight = 20;
 		float barrierWidth = 10;
+		barrierPoints = new ArrayList<>();
 
 		// 6 vertices for each track point, 3 components for each vertex
 		float[] vertices = new float[(trackPoints.size() + 1) * 6 * 3];
@@ -481,7 +500,6 @@ public class MultiplayerGame implements GameInt {
 			TrackPoint nextPoint = null;
 			if (i < trackPoints.size()) {
 				curPoint = trackPoints.get(i);
-
 				// If we are at the first point the previous is the last point
 				int prev = (i == 0) ? trackPoints.size() - 1 : i - 1;
 				prevPoint = trackPoints.get(prev);
@@ -495,7 +513,8 @@ public class MultiplayerGame implements GameInt {
 				nextPoint = trackPoints.get(1);
 			}
 
-			// Find the line between previous and next point for direction of this
+			// Find the line between previous and next point for direction of
+			// this
 			// slice
 			Vector2f dirVec = new Vector2f(nextPoint).sub(prevPoint).normalize();
 
@@ -515,6 +534,8 @@ public class MultiplayerGame implements GameInt {
 			Vector3f rBarrierT = new Vector3f(rightPoint).add(0, barrierHeight, 0);
 			Vector3f lBarrierB = new Vector3f(leftPoint).add(left.x * b, -trackHeight, left.y * b);
 			Vector3f rBarrierB = new Vector3f(rightPoint).add(right.x * b, -trackHeight, right.y * b);
+			barrierPoints.add(leftPoint);
+			barrierPoints.add(rightPoint);
 
 			addToArray(lBarrierB, vertices, i * 18 + 0);
 			addToArray(lBarrierT, vertices, i * 18 + 3);
@@ -544,7 +565,8 @@ public class MultiplayerGame implements GameInt {
 			texCoords[n + 10] = 1f;
 			texCoords[n + 11] = i;
 
-			// First calculate surface normals (technically edge normals as we are
+			// First calculate surface normals (technically edge normals as we
+			// are
 			// working in a slice but whatever)
 
 			// Get Quaternions for rotation to align with left and right vectors
@@ -595,7 +617,7 @@ public class MultiplayerGame implements GameInt {
 		}
 
 		return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
-			new ModelTexture(loader.loadTexture("new/trackTexture")));
+				new ModelTexture(loader.loadTexture("new/trackTexture")));
 	}
 
 	private void addToArray(Vector3f vector, float[] array, int offset) {
