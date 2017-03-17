@@ -99,6 +99,8 @@ public class MultiplayerGame implements GameInt {
 	private UIRenderer uiRenderer;
 	private ArrayList<Container> containers;
 	private String currentMenu = "none";
+	private Container finishContainer;
+	private Label finishText;
 
 	public MultiplayerGame(RaceSetupData data, Client client) {
 		init(data, client);
@@ -235,7 +237,13 @@ public class MultiplayerGame implements GameInt {
 			c.update();
 		}
 
-		updateLabels();
+		// Update UI Stuff
+    lapCurrent.setText(Integer.toString(currentLap));
+    posCurrent.setText(Integer.toString(ranking));
+    
+    if (finishText == null && logic.raceFinished()) {
+      
+    }
 
 		camera.move();
 
@@ -466,6 +474,15 @@ public class MultiplayerGame implements GameInt {
 		lapTotal = new Label(loader, Integer.toString(data.laps), font, 2.8f, true, new Vector2f(95, 2), 50);
 		lapTotal.setParent(lapDisplay);
 		lapTotal.setColour(1, 1, 1);
+		
+		finishContainer = new Container(loader, "ui/menuBackground", new Vector2f(448, 120));
+		containers.add(finishContainer);
+		
+		finishText = new Label(loader, "You finished!", font, 3f, true, new Vector2f(0, 100), 384);
+		finishText.setColour(colour);
+		finishText.setParent(finishContainer);
+		
+		finishContainer.setVisibility(true);
 	}
 
 	/**
@@ -645,10 +662,5 @@ public class MultiplayerGame implements GameInt {
 	public void updateLogic(int ranking, boolean finished, int currentLap) {
 		this.currentLap = currentLap;
 		this.ranking = ranking;
-	}
-
-	private void updateLabels() {
-		lapCurrent.setText(Integer.toString(currentLap));
-		posCurrent.setText(Integer.toString(ranking));
 	}
 }
