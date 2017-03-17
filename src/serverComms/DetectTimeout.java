@@ -31,7 +31,7 @@ public class DetectTimeout extends Thread {
    */
   public void run() {
     try {
-      Thread.sleep(5000); // Sleep for 5s
+      Thread.sleep(20000); // Sleep for 20s
       if (!messageReceived) { // If no message is received
         if (ServerComm.DEBUG)
           System.out.println("Client " + user + " disconnected"); // If debug is
