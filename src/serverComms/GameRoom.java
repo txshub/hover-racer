@@ -7,8 +7,12 @@ import java.util.Map;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import game.GameLogic;
 import physics.network.RaceSetupData;
 import physics.network.ShipSetupData;
+import serverLogic.AIBuilder;
+import serverLogic.Converter;
+import serverLogic.ServerShipManager;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
@@ -35,6 +39,7 @@ public class GameRoom {
 	private ClientTable table;
 	private ArrayList<TrackPoint> trackPoints;
 	private ServerShipManager shipManager;
+	private GameLogic logic;
 	private UpdateAllUsers updatedUsers;
 	private long raceStartsAt = -1;
 
@@ -202,6 +207,7 @@ public class GameRoom {
 			inGame = true;
 			RaceSetupData setupData = setupRace();
 			shipManager = new ServerShipManager(setupData, players.size(), maxPlayers - players.size(), trackPoints);
+			logic = new GameLogic(shipManager.getAllShips(), trackPoints, lapCount, this);
 			ArrayList<CommQueue> allQueues = new ArrayList<CommQueue>();
 			for (int i = 0; i < players.size(); i++) {
 				table.getReceiver(players.get(i)).setGame(this, i);
@@ -216,15 +222,15 @@ public class GameRoom {
 
 	/** @author Mac
 	 *         Called when the game ends */
-//	public void endGame() {
-//		//inGame = false;
-//		// If the host is still in the room, don't end the game
-//		if (players.contains(hostName)) return;
-//		// Otherwise send the closed methods to all currently connected clients
-//		for (int i = 0; i < players.size(); i++) {
-//			table.getQueue(players.get(i)).offer(new ByteArrayByte(new byte[0], ServerComm.ROOMCLOSED));
-//		}
-//	}
+	// public void endGame() {
+	// //inGame = false;
+	// // If the host is still in the room, don't end the game
+	// if (players.contains(hostName)) return;
+	// // Otherwise send the closed methods to all currently connected clients
+	// for (int i = 0; i < players.size(); i++) {
+	// table.getQueue(players.get(i)).offer(new ByteArrayByte(new byte[0], ServerComm.ROOMCLOSED));
+	// }
+	// }
 
 	/** @author Mac
 	 * @param gameNum The user's ID

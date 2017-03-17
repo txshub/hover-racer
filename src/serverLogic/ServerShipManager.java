@@ -1,4 +1,4 @@
-package serverComms;
+package serverLogic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,6 +74,10 @@ public class ServerShipManager implements ServerShipProvider {
 
 	public void startRace() {
 		ships.forEach(s -> s.start());
+	}
+
+	public ArrayList<Ship> getAllShips() {
+		return ships;
 	}
 
 }

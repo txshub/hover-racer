@@ -1,4 +1,4 @@
-package serverComms;
+package serverLogic;
 
 import java.nio.ByteBuffer;
 

@@ -1,4 +1,4 @@
-package serverComms;
+package serverLogic;
 
 import physics.network.ShipSetupData;
 import upgrades.ShipTemplate;

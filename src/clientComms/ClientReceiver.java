@@ -9,9 +9,9 @@ import javafx.application.Platform;
 import physics.network.RaceSetupData;
 import physics.ships.MultiplayerShipManager;
 import serverComms.ByteArrayByte;
-import serverComms.Converter;
 import serverComms.GameRoom;
 import serverComms.ServerComm;
+import serverLogic.Converter;
 import userInterface.MainMenu;
 /** Thread to receive any messages passed from the server
  * 

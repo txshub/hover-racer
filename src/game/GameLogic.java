@@ -25,11 +25,11 @@ public class GameLogic {
 	private int finished;
 	private GameRoom gameRoom;
 
-	public GameLogic(ArrayList<Ship> players, SeedTrack track, int laps, GameRoom gameRoom) {
+	public GameLogic(ArrayList<Ship> players,ArrayList<TrackPoint> trackPoints, int laps, GameRoom gameRoom) {
 		this.players = players;
 		this.laps = Math.max(laps, 1);
 		this.gameRoom = gameRoom;
-		trackPoints = track.getTrack();
+		trackPoints = trackPoints;
 		pointsDist = new HashMap<TrackPoint, Float>();
 		calculatePointsDist();
 		finished = 0;
