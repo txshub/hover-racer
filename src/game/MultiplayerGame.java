@@ -175,7 +175,7 @@ public class MultiplayerGame implements GameInt {
     // terrains);
 
     // GUIs
-    setupGUIs();
+    setupGUIs(data);
 
     // Renderers
     renderer = new MasterRenderer(loader);
@@ -248,8 +248,6 @@ public class MultiplayerGame implements GameInt {
       terrains.get(0).moveZ(-Terrain.SIZE / 4);
     }
 
-    // Update GUI
-//    lapCurrent.setText(Integer.toString(logic.getCurrentLap()));
   }
 
   public void render() {
@@ -282,7 +280,7 @@ public class MultiplayerGame implements GameInt {
     return data;
   }
 
-  private void setupGUIs() {
+  private void setupGUIs(RaceSetupData data) {
     // GUIs
     guis = new ArrayList<>();
     containers = new ArrayList<>();
@@ -435,23 +433,23 @@ public class MultiplayerGame implements GameInt {
 		Container posDisplay = new Container(loader, "ui/posBackground", new Vector2f(Display.getWidth() - 170, 10));
 
     containers.add(posDisplay);
-    posCurrent = new Label(loader, "2", font, 5f, true, new Vector2f(30, 45), 130);
+    posCurrent = new Label(loader, "", font, 5f, true, new Vector2f(30, 45), 130);
     posCurrent.setParent(posDisplay);
     posCurrent.setColour(1, 1, 1);
-    posTotal = new Label(loader, "8", font, 2.8f, true, new Vector2f(-5, 2), 50);
+    posTotal = new Label(loader, Integer.toString(data.shipData.size()), font, 2.8f, true, new Vector2f(-5, 2), 50);
     posTotal.setParent(posDisplay);
     posTotal.setColour(1, 1, 1);
 
     Container lapDisplay = new Container(loader, "ui/lapBackground", new Vector2f(21, 10));
     containers.add(lapDisplay);
-//	lapCurrent = new Label(loader, Integer.toString(logic.getCurrentLap()), font, 5f, true, new Vector2f(0, 45),
-//				120);
-//    lapCurrent.setParent(lapDisplay);
-//    lapCurrent.setColour(1, 1, 1);
-//    lapTotal = new Label(loader, Integer.toString(logic.getTotalLaps()), font, 2.8f, true,
-//        new Vector2f(95, 2), 50);
-//    lapTotal.setParent(lapDisplay);
-//    lapTotal.setColour(1, 1, 1);
+	lapCurrent = new Label(loader, "", font, 5f, true, new Vector2f(0, 45),
+				120);
+    lapCurrent.setParent(lapDisplay);
+    lapCurrent.setColour(1, 1, 1);
+    lapTotal = new Label(loader, Integer.toString(data.laps), font, 2.8f, true,
+        new Vector2f(95, 2), 50);
+    lapTotal.setParent(lapDisplay);
+    lapTotal.setColour(1, 1, 1);
   }
 
   /**
@@ -627,8 +625,8 @@ public class MultiplayerGame implements GameInt {
     }
   }
 
-public void updateLogic(int ranking, boolean finished, int currentLap) {
-	// TODO
-	
-}
+  public void updateLogic(int ranking, boolean finished, int currentLap) {
+	  lapCurrent.setText(Integer.toString(currentLap));
+	  posCurrent.setText(Integer.toString(ranking));
+  }
 }
