@@ -91,7 +91,7 @@ public abstract class Ship extends Entity {
 		this.rotationalVelocity = new Vector3(0, 0, 0);
 		this.stats = new StatManager(stats);
 		this.ground = ground;
-		this.barriers = new Barriers(track);
+		// this.barriers = new Barriers(track);
 		this.otherShips = new ArrayList<Ship>();
 
 		this.started = false;
@@ -104,6 +104,10 @@ public abstract class Ship extends Entity {
 
 	public void addOtherShip(Ship ship) {
 		if (ship.getId() != id) otherShips.add(ship);
+	}
+
+	public void addBarrier(ArrayList<Vector3f> barrierPoints) {
+		this.barriers = new Barriers(barrierPoints);
 	}
 
 	public void setCollisionListener(CollisionListener collisionListener) {
