@@ -22,7 +22,7 @@ import trackDesign.TrackPoint;
  * @author simon mostly, specified where not */
 public class GameRoom {
 
-	private static final long TIME_TO_START = 4L * 1000000000L; // Time to start
+	private static final long TIME_TO_START = 10L * 1000000000L; // Time to start
 																// race
 	// in nanoseconds
 	private static final int SIDE_DISTANCES = 10;
@@ -294,13 +294,22 @@ public class GameRoom {
 
 	// TODO finish this
 	private Map<Byte, Vector3f> generateStartingPositions(Vector2f startDirection) {
+	  float offset = 40;
 		Map<Byte, Vector3f> res = new HashMap<>();
+		
 		for (int i = 0; i < maxPlayers; i++) {
-		  if (i == 0) {
-		    res.put((byte) i, new Vector3f(trackPoints.get(0).x, 5, trackPoints.get(0).y));
-		  } else {
-		    res.put((byte) i, new Vector3f(trackPoints.get(0).x + 20, 5, trackPoints.get(0).y));
-		  }
+		  float xOffset = (i % 4 - 2) * offset;
+		  float yOffset = (float) (Math.floor(i / 4)) * offset;
+		  
+		  Vector2f forward = new Vector2f(trackPoints.get(0)).sub(trackPoints.get(trackPoints.size()-1)).normalize();
+		  Vector2f left = new Vector2f(-forward.y, forward.x).normalize();
+		  
+		  left.mul(xOffset);
+		  forward.mul(-yOffset);
+		  
+		  Vector2f combined = new Vector2f(left).add(forward);
+		  
+	    res.put((byte) i, new Vector3f(trackPoints.get(0).x + combined.x, 5, trackPoints.get(0).y + combined.y));
 		}
 		return res;
 	}
