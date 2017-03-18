@@ -455,8 +455,8 @@ public class GameMenu extends Parent {
     startServerMulti.setOnMouseClicked(event -> {
 
       Lobby serverLobby = new Lobby(4444);
-      ServerComm server = new ServerComm(4444, serverLobby);
-      server.start();
+//      ServerComm server = new ServerComm(4444, serverLobby);
+//      server.start();
 
       usr = usernameInputMulti.getText();
       int portNo = Integer.valueOf(portInputMulti.getText());
