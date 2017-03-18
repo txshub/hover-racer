@@ -482,7 +482,7 @@ public class MultiplayerGame implements GameInt {
 		finishText.setColour(colour);
 		finishText.setParent(finishContainer);
 		
-		finishContainer.setVisibility(true);
+		finishContainer.setVisibility(false);
 	}
 
 	/**
