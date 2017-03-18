@@ -23,18 +23,18 @@ public class GameLogic {
 	private GameRoom gameRoom;
 
 	public GameLogic(ArrayList<ShipLogicData> players, ArrayList<TrackPoint> trackPoints, int laps, int amountOfPlayers,
-		GameRoom gameRoom) {
-		if (players == null || trackPoints == null || laps == 0 || gameRoom == null) throw new IllegalArgumentException();
+			GameRoom gameRoom) {
+		if (players == null || trackPoints == null || laps == 0 || gameRoom == null)
+			throw new IllegalArgumentException();
 		this.players = players;
 		this.laps = Math.max(laps, 1);
-		this.amountOfPlayers = amountOfPlayers;
+		this.amountOfPlayers = amountOfPlayers; // Number of non-AI players
 		this.gameRoom = gameRoom;
 		this.trackPoints = trackPoints;
 		pointsDist = new HashMap<TrackPoint, Float>();
 		calculatePointsDist();
 
 		finished = 0;
-
 
 		lastTrackPoints = new HashMap<ShipLogicData, Integer>();
 		for (ShipLogicData player : players) {
@@ -46,7 +46,8 @@ public class GameLogic {
 	private void updateRankings() {
 		ArrayList<ShipLogicData> racingPlayers = new ArrayList<ShipLogicData>();
 		for (ShipLogicData player : players) {
-			if (!player.finished()) racingPlayers.add(player);
+			if (!player.finished())
+				racingPlayers.add(player);
 		}
 		racingPlayers.sort(new Comparator<ShipLogicData>() {
 
@@ -54,8 +55,10 @@ public class GameLogic {
 			public int compare(ShipLogicData p1, ShipLogicData p2) {
 				float d1 = getPlayerDist(p1);
 				float d2 = getPlayerDist(p2);
-				if (d1 > d2) return -1;
-				if (d1 < d2) return 1;
+				if (d1 > d2)
+					return -1;
+				if (d1 < d2)
+					return 1;
 				return 0;
 			}
 		});
@@ -83,9 +86,9 @@ public class GameLogic {
 	private void updateLastPoint(ShipLogicData player) {
 		int lastTrackPoint = lastTrackPoints.get(player);
 		int currentLap = player.getCurrentLap();
-
 		Vector3f playerPos = player.getPosition();
 		int previous = lastTrackPoints.get(player);
+		
 		for (int i = 0; i < trackPoints.size(); i++) {
 			TrackPoint tp = trackPoints.get(i);
 			float pointWidth = tp.getWidth() / 2f;
@@ -107,28 +110,32 @@ public class GameLogic {
 			}
 		} else {
 			if (previous == 0 && lastTrackPoint == trackPoints.size() - 1) {
-				if (currentLap > 0) player.setCurrentLap(currentLap - 1);
+				if (currentLap > 0)
+					player.setCurrentLap(currentLap - 1);
 			}
 		}
+		
 	}
 
 	private float getPlayerDist(ShipLogicData player) {
 		float distance;
 		int lastTrackPoint = lastTrackPoints.get(player);
-		if (pointsDist == null) throw new IllegalStateException("pointsDist is null");
-		if (trackPoints == null) throw new IllegalStateException("trackPoints is null");
-		if (player == null) throw new IllegalStateException("player is null");
-		if (pointsDist.get(trackPoints.get(0)) == null) throw new IllegalStateException("large thing is null");
-		if (lastTrackPoint == 0) distance = pointsDist.get(trackPoints.get(0)) * (player.getCurrentLap() - 1);
-		else distance = pointsDist.get(trackPoints.get(lastTrackPoint)) + pointsDist.get(trackPoints.get(0)) * (player.getCurrentLap() - 1);
+		if (lastTrackPoint == 0)
+			distance = pointsDist.get(trackPoints.get(0)) * (player.getCurrentLap() - 1);
+		else
+			distance = pointsDist.get(trackPoints.get(lastTrackPoint))
+					+ pointsDist.get(trackPoints.get(0)) * (player.getCurrentLap() - 1);
 
 		Vector3f playerPos = player.getPosition();
 		TrackPoint last = trackPoints.get(lastTrackPoint);
 		TrackPoint next;
-		if (lastTrackPoint + 1 < trackPoints.size()) next = trackPoints.get(lastTrackPoint + 1);
-		else next = trackPoints.get(0);
+		if (lastTrackPoint + 1 < trackPoints.size())
+			next = trackPoints.get(lastTrackPoint + 1);
+		else
+			next = trackPoints.get(0);
 
-		float orth = Intersectionf.distancePointLine(playerPos.x(), playerPos.z(), last.getX(), last.getY(), next.getX(), next.getY());
+		float orth = Intersectionf.distancePointLine(playerPos.x(), playerPos.z(), last.getX(), last.getY(),
+				next.getX(), next.getY());
 		float ip = last.distance(playerPos.x(), playerPos.z());
 		distance += Math.sqrt(ip * ip - orth * orth);
 
@@ -143,7 +150,8 @@ public class GameLogic {
 
 		for (ShipLogicData player : players) {
 			if (player.getId() < amountOfPlayers)
-				gameRoom.sendLogicUpdate(player.getId(), player.getRanking(), player.finished(), player.getCurrentLap());
+				gameRoom.sendLogicUpdate(player.getId(), player.getRanking(), player.finished(),
+						player.getCurrentLap());
 		}
 	}
 
@@ -157,7 +165,8 @@ public class GameLogic {
 
 	public ShipLogicData getWinner() {
 		for (ShipLogicData player : players) {
-			if (player.getRanking() == 1 && player.finished()) return player;
+			if (player.getRanking() == 1 && player.finished())
+				return player;
 		}
 		return null;
 	}

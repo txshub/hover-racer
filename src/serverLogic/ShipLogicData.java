@@ -43,6 +43,4 @@ public class ShipLogicData {
 		return ship.getId();
 	}
 
-
-
 }
