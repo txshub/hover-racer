@@ -24,68 +24,68 @@ import javafx.stage.WindowEvent;
  */
 public class MainMenu extends Application {
 
-  public GameMenu gameMenu;
-  public Scene scene;
+	public GameMenu gameMenu;
+	public Scene scene;
 
-  /**
-   * Method that initializes the primary stage and the current scene.
-   * 
-   * @param primaryStage
-   *          The primary JavaFX stage.
-   */
-  public void start(Stage primaryStage) throws Exception {
+	/**
+	 * Method that initializes the primary stage and the current scene.
+	 * 
+	 * @param primaryStage
+	 *            The primary JavaFX stage.
+	 */
+	public void start(Stage primaryStage) throws Exception {
 
-    // Tudor - start the audio engine
-    AudioMaster.init();
+		// Tudor - start the audio engine
+		AudioMaster.init();
 
-    Pane root = new Pane();
-    root.setPrefSize(1000, 600);
+		Pane root = new Pane();
+		root.setPrefSize(1000, 600);
 
-    // get file from path
-    InputStream is = Files.newInputStream(Paths.get("src/resources/img/hover-racer.jpg"));
-    Image background = new Image(is);
-    is.close();
+		// get file from path
+		InputStream is = Files.newInputStream(Paths.get("src/resources/img/hover-racer.jpg"));
+		Image background = new Image(is);
+		is.close();
 
-    ImageView imgView = new ImageView(background);
-    imgView.setFitWidth(1000);
-    imgView.setFitHeight(600);
+		ImageView imgView = new ImageView(background);
+		imgView.setFitWidth(1000);
+		imgView.setFitHeight(600);
 
-    gameMenu = new GameMenu();
-    gameMenu.setVisible(true);
+		gameMenu = new GameMenu();
+		gameMenu.setVisible(true);
 
-    Rectangle bg = new Rectangle(1000, 600);
-    bg.setOpacity(0.5);
-    bg.setFill(Color.BLACK);
+		Rectangle bg = new Rectangle(1000, 600);
+		bg.setOpacity(0.5);
+		bg.setFill(Color.BLACK);
 
-    root.getChildren().addAll(imgView, bg, gameMenu);
+		root.getChildren().addAll(imgView, bg, gameMenu);
 
-    scene = new Scene(root);
+		scene = new Scene(root);
 
-    primaryStage.setResizable(false);
-    primaryStage.sizeToScene();
+		primaryStage.setResizable(false);
+		primaryStage.sizeToScene();
 
-    primaryStage.setScene(scene);
-    primaryStage.show();
+		primaryStage.setScene(scene);
+		primaryStage.show();
 
-    // Handle closing the window by pressing 'X'
-    primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		// Handle closing the window by pressing 'X'
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 
-      public void handle(WindowEvent we) {
-        AudioMaster.stopMusic();
-        AudioMaster.cleanUp();
-        System.exit(0);
-      }
-    });
+			public void handle(WindowEvent we) {
+				AudioMaster.stopMusic();
+				AudioMaster.cleanUp();
+				System.exit(0);
+			}
+		});
 
-    // Tudor - start the music
-    AudioMaster.playMusic();
+		// Tudor - start the music
+		AudioMaster.playMusic();
 
-  }
+	}
 
-  public static void main(String[] args) {
+	public static void main(String[] args) {
 
-    launch(args);
+		launch(args);
 
-  }
+	}
 
 }
