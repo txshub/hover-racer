@@ -22,8 +22,6 @@ import clientComms.Client;
 import gameEngine.entities.Camera;
 import gameEngine.entities.Entity;
 import gameEngine.entities.Light;
-import gameEngine.guis.GuiRenderer;
-import gameEngine.guis.GuiTexture;
 import gameEngine.models.RawModel;
 import gameEngine.models.TexturedModel;
 import gameEngine.objConverter.OBJFileLoader;
@@ -66,15 +64,12 @@ public class MultiplayerGame implements GameInt {
 
 	private Loader loader;
 	private ArrayList<Entity> entities;
-	private ArrayList<Entity> normalEntities;
 	private ArrayList<Terrain> terrains;
 	private ArrayList<Light> lights;
-	private ArrayList<GuiTexture> guis;
 	private ArrayList<TrackPoint> trackPoints;
 	private ArrayList<Vector3f> barrierPoints;
 	private Camera camera;
 	private MasterRenderer renderer;
-	private GuiRenderer guiRender;
 	private String trackSeed;
 	public static InputController input;
 
@@ -118,7 +113,6 @@ public class MultiplayerGame implements GameInt {
 		MultiplayerGame.input = new KeyboardController();
 		AudioMaster.init();
 		entities = new ArrayList<Entity>();
-		normalEntities = new ArrayList<Entity>();
 		TextMaster.init(loader);
 
 		if (debug)
@@ -180,7 +174,6 @@ public class MultiplayerGame implements GameInt {
 
 		// Renderers
 		renderer = new MasterRenderer(loader);
-		guiRender = new GuiRenderer(loader);
 		uiRenderer = new UIRenderer(loader);
 
 		AudioMaster.playInGameMusic();
@@ -263,7 +256,7 @@ public class MultiplayerGame implements GameInt {
 
 	public void render() {
 		GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
-		renderer.renderScene(entities, normalEntities, terrains, lights, camera, new Vector4f());
+		renderer.renderScene(entities, terrains, lights, camera, new Vector4f());
 		uiRenderer.render(containers);
 		TextMaster.render();
 		GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
@@ -272,7 +265,6 @@ public class MultiplayerGame implements GameInt {
 	}
 
 	public void cleanUp() {
-		guiRender.cleanUp();
 		TextMaster.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
@@ -299,7 +291,6 @@ public class MultiplayerGame implements GameInt {
 	 * @author Reece Bennett
 	 */
 	private void setupUI(RaceSetupData data) {
-		guis = new ArrayList<>();
 		containers = new ArrayList<>();
 
 		Vector3f colour = new Vector3f(0.0275f, 0.6510f, 0.9412f);
