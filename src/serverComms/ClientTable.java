@@ -56,8 +56,7 @@ public class ClientTable {
    */
   public boolean userExists(String name) {
     for (Map.Entry<String, CommQueue> entry : queueTable.entrySet()) {
-      if (entry.getKey().equals(name))
-        return true;
+      if (entry.getKey().equals(name)) {return true;}
     }
     return false;
   }
@@ -167,7 +166,7 @@ public class ClientTable {
    */
   public boolean addGame(GameSettings gameSettings) {
     allGames.put(nextInt, new GameRoom(nextInt, gameSettings.lobbyName, gameSettings.seed,
-        gameSettings.maxPlayers, gameSettings.hostName, gameSettings.lapCount, this));
+        gameSettings.maxPlayers, gameSettings.setupData.nickname, gameSettings.lapCount, this));
     lobby.games.add(getGame(nextInt));
     nextInt++;
     return joinGame(nextInt - 1, gameSettings.setupData);

@@ -185,15 +185,6 @@ public class GameRoom {
 		players.add(data.getNickname());
 	}
 
-	@Deprecated
-	/** Adds a player to the game. NOT TO BE USED
-	 * 
-	 * @param username
-	 *        The username to add */
-	public void addPlayer(String username) {
-		players.add(username);
-	}
-
 	/** Gets a list of all connected players
 	 * 
 	 * @return A list of all connected players */

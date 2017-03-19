@@ -20,12 +20,12 @@ public class TestDetectTimeout {
     if (!table.userExists(name))
       fail("Didn't wait to delete user");
     try {
-      Thread.sleep(6000);
+      Thread.sleep(21000);
     } catch (InterruptedException e) {
       fail("Time Out");
     }
     if (table.userExists(name))
-      fail("Name wasn't deleted after 5s");
+      fail("Name wasn't deleted after 20s");
   }
 
 }

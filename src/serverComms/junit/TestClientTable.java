@@ -13,15 +13,9 @@ import serverComms.ServerReceiver;
 
 public class TestClientTable {
 
-  static Lobby lobby;
-
-  @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-    lobby = new Lobby(1234);
-  }
-
   @Test
   public void testUserExists() {
+	  Lobby lobby = new Lobby(1120);
     ClientTable table = new ClientTable(lobby);
     if (table.userExists("Testing"))
       fail("User exists before adding");
@@ -32,6 +26,7 @@ public class TestClientTable {
 
   @Test
   public void testAdd() {
+	  Lobby lobby = new Lobby(1121);
     ClientTable table = new ClientTable(lobby);
     table.add("Testing");
     if (table.getQueue("Testing") == null)
@@ -40,9 +35,10 @@ public class TestClientTable {
 
   @Test
   public void testAddReceiver() {
+	  Lobby lobby = new Lobby(1122);
     ClientTable table = new ClientTable(lobby);
     String name = "Testing";
-    ServerReceiver testReceiver = new ServerReceiver(null, null, null);
+    ServerReceiver testReceiver = new ServerReceiver(name, null, lobby);
     table.add(name);
     table.addReceiver(name, testReceiver);
     if (table.getReceiver(name) != testReceiver)
@@ -51,9 +47,10 @@ public class TestClientTable {
 
   @Test
   public void testRemove() {
+	  Lobby lobby = new Lobby(1123);
     ClientTable table = new ClientTable(lobby);
     String name = "Testing";
-    ServerReceiver testReceiver = new ServerReceiver(null, null, null);
+    ServerReceiver testReceiver = new ServerReceiver(name, null, lobby);
     table.add(name);
     table.addReceiver(name, testReceiver);
     table.remove(name);
@@ -65,9 +62,10 @@ public class TestClientTable {
 
   @Test
   public void testGetQueue() {
-    ClientTable table = new ClientTable(lobby);
+	  Lobby lobby = new Lobby(1124);
+    ClientTable table = lobby.clientTable;
     String name = "Testing";
-    ServerReceiver testReceiver = new ServerReceiver(null, null, null);
+    ServerReceiver testReceiver = new ServerReceiver(name, null, lobby);
     table.add(name);
     table.addReceiver(name, testReceiver);
     if (table.getQueue(name) == null)
@@ -76,9 +74,10 @@ public class TestClientTable {
 
   @Test
   public void testGetReceiver() {
+	  Lobby lobby = new Lobby(1125);
     ClientTable table = new ClientTable(lobby);
     String name = "Testing";
-    ServerReceiver testReceiver = new ServerReceiver(null, null, null);
+    ServerReceiver testReceiver = new ServerReceiver(name, null, lobby);
     table.add(name);
     table.addReceiver(name, testReceiver);
     if (table.getReceiver(name) != testReceiver)
@@ -87,6 +86,7 @@ public class TestClientTable {
 
   @Test
   public void testGetGameID() {
+	  Lobby lobby = new Lobby(1126);
     ClientTable table = new ClientTable(lobby);
     String name = "Testing";
     table.add(name);
@@ -103,6 +103,7 @@ public class TestClientTable {
 
   @Test
   public void testGetGame() {
+	  Lobby lobby = new Lobby(1127);
     ClientTable table = new ClientTable(lobby);
     String name = "Testing";
     table.add(name);
@@ -122,6 +123,7 @@ public class TestClientTable {
 
   @Test
   public void testAddGame() {
+	  Lobby lobby = new Lobby(1128);
     ClientTable table = new ClientTable(lobby);
     String name = "Testing";
     table.add(name);
@@ -136,6 +138,7 @@ public class TestClientTable {
 
   @Test
   public void testJoinGame() {
+	  Lobby lobby = new Lobby(1129);
     ClientTable table = new ClientTable(lobby);
     String name = "Testing";
     table.add(name);
