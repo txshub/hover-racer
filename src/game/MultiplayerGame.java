@@ -36,6 +36,7 @@ import gameEngine.textures.TerrainTexturePack;
 import input.Action;
 import input.InputController;
 import input.KeyboardController;
+import javafx.application.Platform;
 import physics.network.RaceSetupData;
 import physics.placeholders.FlatGroundProvider;
 import physics.ships.MultiplayerShipManager;
@@ -49,6 +50,8 @@ import uiToolkit.Label;
 import uiToolkit.UIRenderer;
 import uiToolkit.fontMeshCreator.FontType;
 import uiToolkit.fontRendering.TextMaster;
+import userInterface.GameMenu;
+import userInterface.MainMenu;
 
 /** Main game class
  * 
@@ -340,7 +343,12 @@ public class MultiplayerGame {
 
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Exiting to the menu");
-				// TODO Menu exit stuff here
+				Platform.runLater(new Runnable() {
+					
+					public void run(){
+						MainMenu.reloadScene();	
+					}
+				});	
 			}
 		});
 		Label menuText = new Label(loader, "MENU", font, 2.5f, true, new Vector2f(0, 8), 266);
