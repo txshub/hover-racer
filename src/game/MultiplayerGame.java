@@ -216,6 +216,7 @@ public class MultiplayerGame {
 		if (input.wasPressed(Action.SFX_UP) > 0.5f) AudioMaster.increaseSFXVolume();
 		if (input.wasPressed(Action.SFX_DOWN) > 0.5f) AudioMaster.decreaseSFXVolume();
 
+		// Allow inputs iff the race has started
 		if (System.nanoTime() > startsAt) ships.getPlayerShip().start();
 
 		ships.updateShips(delta);
@@ -230,8 +231,11 @@ public class MultiplayerGame {
 		lapCurrent.setText(Integer.toString(currentLap));
 		posCurrent.setText(Integer.toString(ranking));
 		// TODO display the leaderboard, currently printing to console
-		System.out.println("You finished! GUI is in progress, but here is the leaderboard:");
-		leaderboard.forEach(System.out::println);
+		if (finished) {
+			System.out.println("You finished! GUI is in progress, but here is the leaderboard:");
+			leaderboard.forEach(System.out::println);
+		}
+
 
 		camera.move();
 
@@ -648,8 +652,10 @@ public class MultiplayerGame {
 	}
 
 	public void updateFinishData(byte[] msg) {
+		System.out.println("Received finish data");
 		for (int i = 0; i < msg.length; i++) {
 			leaderboard.set(i, nicknames.get(msg[i]));
+			if (i == ships.getPlayerShip().getId()) ships.getPlayerShip().finish();
 		}
 
 	}
