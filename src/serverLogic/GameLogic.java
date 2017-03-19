@@ -221,7 +221,7 @@ public class GameLogic {
 		byte[] ranking = new byte[finished];
 		for (ShipLogicData player : players) {
 			if (player.finished()) {
-				ranking[player.getRanking()] = player.getId();
+				ranking[player.getRanking() - 1] = player.getId();
 			}
 		}
 		return ranking;

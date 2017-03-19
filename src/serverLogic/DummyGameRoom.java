@@ -20,4 +20,9 @@ public class DummyGameRoom extends GameRoom {
 	public void sendLogicUpdate(byte id, int ranking, boolean finished, int currrentLap) {
 		// Do nothing
 	}
+	
+	@Override
+	public void sendFinishData(byte id, byte[] data) {
+		// Do nothing
+	}
 }
