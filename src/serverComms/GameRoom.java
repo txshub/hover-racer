@@ -61,7 +61,7 @@ public class GameRoom {
 	 * @param table
 	 *        The client table for communications */
 	public GameRoom(int id, String name, String seed, int maxPlayers, String hostName, int lapCount, ClientTable table) {
-		System.out.println(hostName + " created a game room " + name + " with id " + id);
+		System.out.println(hostName + " created a game room " + name + " with id " + id + " and seed " + seed);
 		this.id = id;
 		this.name = name;
 		this.seed = seed;

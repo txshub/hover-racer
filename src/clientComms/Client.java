@@ -232,7 +232,7 @@ public class Client extends Thread {
    */
   public ArrayList<GameRoom> requestAllGames() throws IOException {
     alreadyAccessedList = true;
-    sendByteMessage(("").getBytes(ServerComm.charset), ServerComm.SENDALLGAMES);
+    sendByteMessage(new byte[0], ServerComm.SENDALLGAMES);
     while (alreadyAccessedList) {
       try {
         Thread.sleep(100);
