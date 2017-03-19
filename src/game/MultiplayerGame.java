@@ -230,7 +230,7 @@ public class MultiplayerGame {
 		lapCurrent.setText(Integer.toString(currentLap));
 		posCurrent.setText(Integer.toString(ranking));
 		// TODO display the leaderboard, currently printing to console
-		System.out.println("You finished! GUI is in progress, but here is the leaderboard:");
+//		System.out.println("You finished! GUI is in progress, but here is the leaderboard:");
 		leaderboard.forEach(System.out::println);
 
 		camera.move();
