@@ -88,9 +88,15 @@ public class GameLogicTests {
 	@Test
 	public void testPlayerFinished() {
 		ships.get(0).setPosition(new Vector3f(900f, 0f, 0f));
+		ships.get(1).setPosition(new Vector3f(0f, 0f, 10f));
+		ships.get(2).setPosition(new Vector3f(0f, 0f, 10f));
+		players.get(0).setCurrentLap(3);
 		logic.update();
 		ships.get(0).setPosition(new Vector3f(0f, 0f, 0f));
 		players.get(0).setCurrentLap(laps);
+		System.out.println(players.get(0).getRanking());
+		System.out.println(players.get(1).getRanking());
+		System.out.println(players.get(2).getRanking());
 		logic.update();
 		assertEquals(players.get(0).finished(), true);
 	}
