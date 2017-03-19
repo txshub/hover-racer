@@ -189,6 +189,8 @@ public class GameLogic {
 			if (player.getId() < amountOfPlayers)
 				gameRoom.sendLogicUpdate(player.getId(), player.getRanking(), player.finished(),
 						player.getCurrentLap());
+			if (player.finished())
+				gameRoom.sendFinishData(player.getId(), getRanking());
 		}
 	}
 
@@ -216,7 +218,7 @@ public class GameLogic {
 	 * 
 	 * @return The ranking of the players that finished the race
 	 */
-	public byte[] getRanking() {
+	private byte[] getRanking() {
 		byte[] ranking = new byte[finished];
 		for (ShipLogicData player : players) {
 			if (player.finished()) {
