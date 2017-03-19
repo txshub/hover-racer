@@ -345,7 +345,9 @@ public class GameRoom {
 		logic.update();
 	}
 
-	/** Sends a game logic update to a single client
+	/** 
+	 * @author Mac
+	 * Sends a game logic update to a single client
 	 * 
 	 * @param id
 	 *        Client's (and ship's) id */

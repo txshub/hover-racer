@@ -35,12 +35,14 @@ public class DummyClient extends Client {
       super.sendByteMessage(clientName.getBytes(ServerComm.charset), ServerComm.USERSENDING);
       Thread.sleep(1000);
       testsPassed = ((DummyReceiver) receiver).testsPassed;
-    } catch (IOException e) {
-
-    } catch (InterruptedException e) {
-
-    }
-
+      server = new Socket("localhost", 5153);
+      toServer = new DataOutputStream(new BufferedOutputStream(server.getOutputStream()));
+      fromServer = new DataInputStream(new BufferedInputStream(server.getInputStream()));
+      receiver = new DummyReceiverFail(fromServer, this);
+      receiver.start();
+      super.sendByteMessage(clientName.getBytes(ServerComm.charset), ServerComm.USERSENDING);
+      Thread.sleep(1000);
+      testsPassed = testsPassed && ((DummyReceiverFail) receiver).testsPassed;
+    } catch (Exception e) {}
   }
-
 }

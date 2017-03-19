@@ -11,6 +11,22 @@ import serverComms.GameSettings;
 import serverComms.ServerComm;
 
 public class TestGameSettings {
+	
+	@Test
+	public void testNewLineInLobbyName() {
+		String seed = "12432";
+		int maxPlayers = 3;
+		int lapCount = 7;
+		String lobbyName = "New" + System.lineSeparator() + "Line Test";
+		String hostName = "Tester";
+		try {
+			GameSettings test = new GameSettings(seed, maxPlayers, lapCount, lobbyName, DataGenerator.basicShipSetup(hostName));
+			//Constructor should throw exception
+			fail("IllegalArgumentException not raised");
+		} catch (IllegalArgumentException e) {
+			//Should reach here
+		}
+	}
 
 	@Test
 	public void testToStringWithParams() {
