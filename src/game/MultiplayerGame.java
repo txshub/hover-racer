@@ -57,7 +57,7 @@ import uiToolkit.fontRendering.TextMaster;
  * @author Reece Bennett
  * @author rtm592
  */
-public class MultiplayerGame implements GameInt {
+public class MultiplayerGame {
 
 	// Set this to print debug messages
 	public static boolean debug = true;

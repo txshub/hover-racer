@@ -8,7 +8,7 @@ import physics.network.RaceSetupData;
 
 public class MainGameLoop extends Thread {
 
-  public void main(GameInt game) {
+  public void main(MultiplayerGame game) {
     
     boolean debug = true;
 
