@@ -1,15 +1,25 @@
 package gameEngine.textures;
 
+/**
+ * @author rtm592 Hold a terrains texture
+ */
 public class TerrainTexture {
 
-  private int textureID;
+	private int textureID;
 
-  public TerrainTexture(int textureID) {
-    this.textureID = textureID;
-  }
+	/**
+	 * @param textureID
+	 *            the texture id
+	 */
+	public TerrainTexture(int textureID) {
+		this.textureID = textureID;
+	}
 
-  public int getTextureID() {
-    return textureID;
-  }
+	/**
+	 * @return the texture id
+	 */
+	public int getTextureID() {
+		return textureID;
+	}
 
 }

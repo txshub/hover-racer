@@ -20,91 +20,91 @@ import javafx.scene.text.Text;
  */
 public class MenuButton extends StackPane {
 
-  private Text buttonText;
-  private Rectangle bg;
+	private Text buttonText;
+	private Rectangle bg;
 
-  // Tudor - audio source
-  private Source audioSource;
+	// Tudor - audio source
+	private Source audioSource;
 
-  /**
-   * Constructor for the MenuButton class that creates a menu button, according
-   * to the given style settings.
-   * 
-   * @param name
-   *          The text that will be displayed on the button.
-   * @param width
-   *          The width of the button.
-   * @param height
-   *          The height of the button.
-   * @param fontSize
-   *          The chosen font size.
-   */
-  public MenuButton(String name, int width, int height, int fontSize) {
+	/**
+	 * Constructor for the MenuButton class that creates a menu button,
+	 * according to the given style settings.
+	 * 
+	 * @param name
+	 *            The text that will be displayed on the button.
+	 * @param width
+	 *            The width of the button.
+	 * @param height
+	 *            The height of the button.
+	 * @param fontSize
+	 *            The chosen font size.
+	 */
+	public MenuButton(String name, int width, int height, int fontSize) {
 
-    // Tudor - initialize audio source
-    audioSource = AudioMaster.createSFXSource();
+		// Tudor - initialize audio source
+		audioSource = AudioMaster.createSFXSource();
 
-    TextStyle button = new TextStyle(name, fontSize);
-    Text buttonText = button.getTextStyled();
+		TextStyle button = new TextStyle(name, fontSize);
+		Text buttonText = button.getTextStyled();
 
-    // Create button shape
-    bg = new Rectangle(width, height);
-    bg.setOpacity(0.8);
-    bg.setFill(Color.BLACK);
+		// Create button shape
+		bg = new Rectangle(width, height);
+		bg.setOpacity(0.8);
+		bg.setFill(Color.BLACK);
 
-    // Blur the button colour
-    GaussianBlur blur = new GaussianBlur(3.6);
-    bg.setEffect(blur);
+		// Blur the button colour
+		GaussianBlur blur = new GaussianBlur(3.6);
+		bg.setEffect(blur);
 
-    buttonText.setFill(Color.WHITE);
+		buttonText.setFill(Color.WHITE);
 
-    // Customise text position
-    StackPane.setAlignment(buttonText, Pos.CENTER);
+		// Customise text position
+		StackPane.setAlignment(buttonText, Pos.CENTER);
 
-    // Add button to stack with text over the background
-    getChildren().addAll(bg, buttonText);
+		// Add button to stack with text over the background
+		getChildren().addAll(bg, buttonText);
 
-    // Hover over button
-    this.setOnMouseEntered(event -> {
+		// Hover over button
+		this.setOnMouseEntered(event -> {
 
-      bg.setTranslateX(6);
-      buttonText.setTranslateX(6);
-      bg.setFill(Color.DIMGRAY);
-      buttonText.setFill(Color.WHITE);
+			bg.setTranslateX(6);
+			buttonText.setTranslateX(6);
+			bg.setFill(Color.DIMGRAY);
+			buttonText.setFill(Color.WHITE);
 
-      // Tudor - play sound
-      audioSource.play(Sounds.BUTTON_HOVER);
+			// Tudor - play sound
+			audioSource.play(Sounds.BUTTON_HOVER);
 
-    });
+		});
 
-    // Stop hovering over button
-    this.setOnMouseExited(event -> {
+		// Stop hovering over button
+		this.setOnMouseExited(event -> {
 
-      bg.setTranslateX(0);
-      buttonText.setTranslateX(0);
-      bg.setFill(Color.BLACK);
-      buttonText.setFill(Color.WHITE);
+			bg.setTranslateX(0);
+			buttonText.setTranslateX(0);
+			bg.setFill(Color.BLACK);
+			buttonText.setFill(Color.WHITE);
 
-    });
+		});
 
-    // Create glow effect to let user know they have clicked a button
-    DropShadow effect = new DropShadow(50, Color.WHITE);
-    effect.setInput(new Glow());
+		// Create glow effect to let user know they have clicked a button
+		DropShadow effect = new DropShadow(50, Color.WHITE);
+		effect.setInput(new Glow());
 
-    // Clicked on button
-    this.setOnMousePressed(event -> {
+		// Clicked on button
+		this.setOnMousePressed(event -> {
 
-      setEffect(effect);
-      // Tudor - play sound
-      audioSource.play(Sounds.BUTTON_CLICK);
+			setEffect(effect);
+			// Tudor - play sound
+			audioSource.play(Sounds.BUTTON_CLICK);
 
-    });
+		});
 
-    // Release button and remove effect
-    this.setOnMouseReleased(event -> {
-      setEffect(null);
-    });
+		// Release button and remove effect
+		this.setOnMouseReleased(event -> {
+			setEffect(null);
+		});
 
-  }
+	}
 
 }

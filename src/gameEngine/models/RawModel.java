@@ -1,21 +1,36 @@
 package gameEngine.models;
 
+/**
+ * @author rtm592 An objects raw model
+ */
 public class RawModel {
 
-  private int vaoID;
-  private int vertexCount;
+	private int vaoID;
+	private int vertexCount;
 
-  public RawModel(int vaoID, int vertexCount) {
-    this.vaoID = vaoID;
-    this.vertexCount = vertexCount;
-  }
+	/**
+	 * @param vaoID
+	 *            the models vao id
+	 * @param vertexCount
+	 *            the number of vertecies in the model
+	 */
+	public RawModel(int vaoID, int vertexCount) {
+		this.vaoID = vaoID;
+		this.vertexCount = vertexCount;
+	}
 
-  public int getVaoID() {
-    return vaoID;
-  }
+	/**
+	 * @return the vao id
+	 */
+	public int getVaoID() {
+		return vaoID;
+	}
 
-  public int getVertexCount() {
-    return vertexCount;
-  }
+	/**
+	 * @return the number of vertecies in the model
+	 */
+	public int getVertexCount() {
+		return vertexCount;
+	}
 
 }

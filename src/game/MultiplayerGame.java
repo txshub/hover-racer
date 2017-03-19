@@ -82,6 +82,7 @@ public class MultiplayerGame {
 	private boolean finished;
 	private List<String> nicknames;
 	private ArrayList<String> leaderboard;
+	private boolean changed = false; // TODO temporary
 
 	// UI Globals
 	private Container menu;
@@ -177,7 +178,12 @@ public class MultiplayerGame {
 
 		// Store player nicknames
 		nicknames = data.getNicknames();
-		leaderboard = new ArrayList<>(nicknames.size());
+
+		leaderboard = new ArrayList<String>(nicknames.size());
+		for (int i = 0; i < nicknames.size(); i++) {
+			leaderboard.add("-----------");
+		}
+
 
 		AudioMaster.playInGameMusic();
 		try {
@@ -216,6 +222,7 @@ public class MultiplayerGame {
 		if (input.wasPressed(Action.SFX_UP) > 0.5f) AudioMaster.increaseSFXVolume();
 		if (input.wasPressed(Action.SFX_DOWN) > 0.5f) AudioMaster.decreaseSFXVolume();
 
+		// Allow inputs iff the race has started
 		if (System.nanoTime() > startsAt) ships.getPlayerShip().start();
 
 		ships.updateShips(delta);
@@ -230,8 +237,11 @@ public class MultiplayerGame {
 		lapCurrent.setText(Integer.toString(currentLap));
 		posCurrent.setText(Integer.toString(ranking));
 		// TODO display the leaderboard, currently printing to console
-		System.out.println("You finished! GUI is in progress, but here is the leaderboard:");
-		leaderboard.forEach(System.out::println);
+		if (finished && changed) {
+			System.out.println("You finished! GUI is in progress, but here is the leaderboard:");
+			leaderboard.forEach(System.out::println);
+			changed = false;
+		}
 
 		camera.move();
 
@@ -649,7 +659,9 @@ public class MultiplayerGame {
 
 	public void updateFinishData(byte[] msg) {
 		for (int i = 0; i < msg.length; i++) {
+			if (!nicknames.get(msg[i]).equals(leaderboard.get(i))) changed = true;
 			leaderboard.set(i, nicknames.get(msg[i]));
+			if (i == ships.getPlayerShip().getId()) ships.getPlayerShip().finish();
 		}
 
 	}

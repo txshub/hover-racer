@@ -12,117 +12,154 @@ import serverComms.GameRoom;
 
 /**
  * 
- * @author Andreea Gheorghe
+ * @author Andreea Gheorghe Class that implements the design and functionality
+ *         of joining a game room, option that is provided in the multiplayer
+ *         mode options.
  *
  */
 
 public class JoinGameRoom extends GridPane {
 
-  private ArrayList<GameRoom> gameRoomList;
-  private Client client;
-  private GameRoomLobby gameRoomLobby;
-  private GameRoom gameRoomChosen;
-  private MenuButton refresh;
-  private VBox gameRoomData;
-  private int chosenGRid;
+	private ArrayList<GameRoom> gameRoomList;
+	private Client client;
+	private GameRoomLobby gameRoomLobby;
+	private GameRoom gameRoomChosen;
+	private MenuButton refresh;
+	private VBox gameRoomData;
+	private int chosenGRid;
 
-  public JoinGameRoom() {
+	/**
+	 * Constructor for the JoinGameRoom class.
+	 */
+	public JoinGameRoom() {
 
-    setHgap(30);
-    setVgap(5);
+		setHgap(30);
+		setVgap(5);
 
-    // No game room has been selected yet
-    chosenGRid = -1;
+		// No game room has been selected yet
+		chosenGRid = -1;
 
-    refresh = new MenuButton("REFRESH LIST", 320, 60, 30);
-    add(refresh, 1, 7);
+		refresh = new MenuButton("REFRESH LIST", 320, 60, 30);
+		add(refresh, 1, 7);
 
-    gameRoomData = new VBox(5);
-    gameRoomData.setAlignment(Pos.CENTER);
+		gameRoomData = new VBox(5);
+		gameRoomData.setAlignment(Pos.CENTER);
 
-    refresh.setOnMouseClicked(eventRefresh -> {
+		refresh.setOnMouseClicked(eventRefresh -> {
 
-      refresh();
+			refresh();
 
-    });
+		});
 
-  }
+	}
 
-  public void refresh() {
+	/**
+	 * Method that refreshes the window, to display updated information of the
+	 * game room and the number of connected players.
+	 */
+	public void refresh() {
 
-    getChildren().clear();
-    add(refresh, 1, 7);
+		getChildren().clear();
+		add(refresh, 1, 7);
 
-    int column = 0;
-    int row = 1;
+		int column = 0;
+		int row = 1;
 
-    try {
-      setGameList(client.requestAllGames());
-    } catch (IOException e1) {
-      System.err.println("Didn't receive game room list");
-    }
+		// REQUEST UPDATED GAME ROOM LIST //
+		try {
+			setGameList(client.requestAllGames());
+		} catch (IOException e1) {
+			System.err.println("Didn't receive game room list");
+		}
 
-    for (int i = 0; i < gameRoomList.size(); i++) {
+		// DISPLAY OPTIONS //
+		for (int i = 0; i < gameRoomList.size(); i++) {
 
-      GameRoom gameRoom = gameRoomList.get(i);
-      String roomName = gameRoom.getName();
-      MenuButton btnRoom = new MenuButton(roomName, 350, 70, 30);
-      this.add(btnRoom, column, row);
-      row++;
+			GameRoom gameRoom = gameRoomList.get(i);
+			String roomName = gameRoom.getName();
+			MenuButton btnRoom = new MenuButton(roomName, 350, 70, 30);
+			this.add(btnRoom, column, row);
+			row++;
 
-      btnRoom.setOnMouseClicked(event -> {
+			btnRoom.setOnMouseClicked(event -> {
 
-        gameRoomData.getChildren().clear();
+				gameRoomData.getChildren().clear();
 
-        String joinedText = "CURRENTLY " + gameRoom.getPlayers().size() + " OUT OF "
-            + gameRoom.getNoPlayers() + " PLAYERS JOINED";
-        TextStyle joinedPlayers = new TextStyle(joinedText, 25);
-        Text joinedPlayersStyled = joinedPlayers.getTextStyled();
+				String joinedText = "CURRENTLY " + gameRoom.getPlayers().size() + " OUT OF " + gameRoom.getNoPlayers()
+						+ " PLAYERS JOINED";
+				TextStyle joinedPlayers = new TextStyle(joinedText, 25);
+				Text joinedPlayersStyled = joinedPlayers.getTextStyled();
 
-        String seed = gameRoom.getSeed();
+				String seed = gameRoom.getSeed();
 
-        Map track = new Map(seed);
+				Map track = new Map(seed);
 
-        MenuButton selectGR = new MenuButton("SELECT THIS GAME ROOM", 320, 60, 30);
-        selectGR.setOnMouseClicked(ev -> {
+				MenuButton selectGR = new MenuButton("SELECT THIS GAME ROOM", 320, 60, 30);
+				selectGR.setOnMouseClicked(ev -> {
 
-          setChosenGRId(gameRoom.id);
+					setChosenGRId(gameRoom.id);
 
-        });
+				});
 
-        gameRoomData.getChildren().addAll(joinedPlayersStyled, track, selectGR);
+				gameRoomData.getChildren().addAll(joinedPlayersStyled, track, selectGR);
 
-        if (!getChildren().contains(gameRoomData)) {
+				if (!getChildren().contains(gameRoomData)) {
 
-          add(gameRoomData, 1, 0);
-        }
-        GridPane.setRowSpan(gameRoomData, 6);
+					add(gameRoomData, 1, 0);
+				}
+				GridPane.setRowSpan(gameRoomData, 6);
 
-      });
-    }
+			});
+		}
 
-  }
+	}
 
-  public void setClient(Client client) {
+	/**
+	 * Sets the client to be the current connected client that needs to be
+	 * accessed in this class.
+	 * 
+	 * @param client
+	 *            The connected client.
+	 */
+	public void setClient(Client client) {
 
-    this.client = client;
-  }
+		this.client = client;
+	}
 
-  public void setGameList(ArrayList<GameRoom> gameRoomList) {
+	/**
+	 * Sets the game room list to be an updated game room list, received from
+	 * the server.
+	 * 
+	 * @param gameRoomList
+	 *            The updated game room list.
+	 */
+	public void setGameList(ArrayList<GameRoom> gameRoomList) {
 
-    this.gameRoomList = gameRoomList;
-  }
+		this.gameRoomList = gameRoomList;
+	}
 
-  public void setChosenGRId(int chosenGRid) {
+	/**
+	 * Sets the game room id after the user has selected a certain game room
+	 * from the available game room list.
+	 * 
+	 * @param chosenGRid
+	 *            The chosen game room id.
+	 */
+	public void setChosenGRId(int chosenGRid) {
 
-    this.chosenGRid = chosenGRid;
+		this.chosenGRid = chosenGRid;
 
-  }
+	}
 
-  public int getChosenGRid() {
+	/**
+	 * Get method for the chosen game room id.
+	 * 
+	 * @return The chosen game room id.
+	 */
+	public int getChosenGRid() {
 
-    return this.chosenGRid;
+		return this.chosenGRid;
 
-  }
+	}
 
 }

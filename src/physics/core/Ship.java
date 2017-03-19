@@ -77,6 +77,7 @@ public abstract class Ship extends Entity {
 
 	private byte id;
 	private boolean started;
+	private boolean finished;
 
 	long lastPrint = 0;
 	double deltaSum = 0;
@@ -97,6 +98,7 @@ public abstract class Ship extends Entity {
 		this.otherShips = new ArrayList<Ship>();
 
 		this.started = false;
+		this.finished = false;
 	}
 
 	/** Adds ships to the list of ships this one can collide with */
@@ -159,8 +161,7 @@ public abstract class Ship extends Entity {
 
 	/** Changes the velocity to account for a collision with a different ship */
 	private void collideWith(Ship ship) {
-		// System.out.println("COLLISION! " + ship + " vs " + this);
-		// if (collisionListener != null) collisionListener.addCollision(this, ship); // TODO get Tudor to fix collision sounds
+		// if (collisionListener != null) collisionListener.addCollision(this, ship); // TODO fix sounds
 		Vector3 pos = ship.getInternalPosition().copy();
 		float expectedDistance = ship.getSize() + this.getSize();
 		// Apply momentum
@@ -177,12 +178,13 @@ public abstract class Ship extends Entity {
 	/** Apply the forces of the air cushion (also bounce off ground if it ever
 	 * happens) */
 	private void airCushion(float delta) {
+		float modifier = finished ? 3f : 1f;
 		float distance = ground.distanceToGround(position, rotation) / VERTICAL_SCALE;
 		if (distance <= 0 && velocity.getY() < 0) {
 			position.changeY(y -> y - distance + 1); // Get above ground
 			velocity.changeY(y -> -.3 * y); // Change velocity to upward
 		} else if (distance > 0)
-			velocity.changeY(y -> y + delta * AIR_CUSHION * VERTICAL_SCALE / Math.pow(Math.max(distance, 1), CUSHION_SCALE));
+			velocity.changeY(y -> y + delta * modifier * AIR_CUSHION * VERTICAL_SCALE / Math.pow(Math.max(distance, 1), CUSHION_SCALE));
 	}
 
 	/** Handles collisions with the track edges */
@@ -219,6 +221,12 @@ public abstract class Ship extends Entity {
 		else return (float) (-2 * Math.PI + angle);
 	}
 
+	/** Steers the ships, telling it exactly what to do. All parameters (except for delta) should be between -1 and 1.
+	 * 
+	 * @param thrust How fast should the ship accelerate. Negative values do breaking insted.
+	 * @param turn How fast (and in which direction) should the ship turn. Positive values turn right, negative turn left.
+	 * @param strafe How fast should the ship strafe; positive values strafe right.
+	 * @param brokenDelta Time in seconds since the last call of this method. TODO brokenDelta */
 	protected void steer(float thrust, float turn, float strafe, float brokenDelta) {
 		steer(Math.max(0, thrust), -thrust, turn, strafe, brokenDelta);
 	}
@@ -226,7 +234,7 @@ public abstract class Ship extends Entity {
 	protected void steer(float thrust, float breaking, float turn, float strafe, float brokenDelta) {
 		if (!started) return; // Don't allow input until the race has started
 		float delta = (float) 1 / 60; // TODO fix deltas
-		// Checking parameters - TODO probably remove this for production code
+		// Checking parameters
 		if (Math.abs(thrust) > 1 || Math.abs(turn) > 1 || Math.abs(strafe) > 1 || Math.abs(breaking) > 1) {
 			throw new IllegalArgumentException(
 				"Ship's steer method called with bad parameters. Only values between -1 and 1 are accepted.");
@@ -283,6 +291,11 @@ public abstract class Ship extends Entity {
 	 * starts. */
 	public void start() {
 		this.started = true;
+	}
+
+	/** Finished the race for this ship, causing it to move up and not interfere with ships that are still racing */
+	public void finish() {
+		this.finished = true;
 	}
 
 	public void resetTo(Vector3f checkpoint, Vector3f facing) {
@@ -349,8 +362,7 @@ public abstract class Ship extends Entity {
 	 * decisions what to do for AIship. Excluding RemoteShip, this method also
 	 * updates physics.
 	 * 
-	 * @param delta
-	 *        Time since last call of this function (TODO specify units) */
+	 * @param delta Time since last call of this function in seconds */
 	public abstract void update(float delta);
 
 	@Override
