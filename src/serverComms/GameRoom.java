@@ -22,9 +22,10 @@ import trackDesign.TrackPoint;
  * @author simon mostly, specified where not */
 public class GameRoom {
 
-	private static final long TIME_TO_START = 10L * 1000000000L; // Time to start
-																	// race
-	// in nanoseconds
+	// Time between sending the RaceSetupData and start of the race, in nanoseconds
+	// TODO It's currently low for easy resting, might increase it for the actual game
+	private static final long TIME_TO_START = 3L * 1000000000L;
+
 	private static final int SIDE_DISTANCES = 10;
 	private static final int FORWARD_DISTANCES = 10;
 	private static final int STARTING_HEIGHT = 10;
@@ -361,6 +362,7 @@ public class GameRoom {
 	 *        who already finished */
 	public void sendFinishData(byte id, byte[] data) {
 		table.getQueue(players.get(id)).offer(new ByteArrayByte(data, ServerComm.FINISH_DATA));
+		System.out.println("Finish data send to " + id);
 	}
 
 	/** Returns the number of laps in this race
