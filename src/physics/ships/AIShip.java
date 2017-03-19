@@ -135,7 +135,7 @@ public class AIShip extends Ship {
 							 * dirToPoint + " dir: " + dirVec */);
 
 		// Steer and update ship
-		super.steer(thrust * 2, turn, strafe, jump, delta); // TODO temporary thing
+		super.steer(thrust * 2, turn, strafe, delta); // TODO temporary thing
 		super.updatePhysics(delta);
 
 		if (dist < 100) {
