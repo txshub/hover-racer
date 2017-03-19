@@ -61,6 +61,6 @@ public class SeedTrack {
 	}
 
 	public Vector3f getStart() {
-		return new Vector3f(track.get(1).x, 0f, track.get(1).y);
+		return new Vector3f(track.get(0).x, 0f, track.get(0).y);
 	}
 }
