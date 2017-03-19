@@ -40,7 +40,6 @@ import physics.network.RaceSetupData;
 import physics.placeholders.FlatGroundProvider;
 import physics.ships.MultiplayerShipManager;
 import serverComms.ServerComm;
-import serverLogic.GameLogic;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
@@ -51,12 +50,10 @@ import uiToolkit.UIRenderer;
 import uiToolkit.fontMeshCreator.FontType;
 import uiToolkit.fontRendering.TextMaster;
 
-/**
- * Main game class
+/** Main game class
  * 
  * @author Reece Bennett
- * @author rtm592
- */
+ * @author rtm592 */
 public class MultiplayerGame {
 
 	// Set this to print debug messages
@@ -80,9 +77,11 @@ public class MultiplayerGame {
 	private boolean running;
 
 	// Tudor
-	private GameLogic logic;
-	int ranking;
-	int currentLap;
+	private int ranking;
+	private int currentLap;
+	private boolean finished;
+	private List<String> nicknames;
+	private ArrayList<String> leaderboard;
 
 	// UI Globals
 	private Container menu;
@@ -96,6 +95,8 @@ public class MultiplayerGame {
 	private String currentMenu = "none";
 	private Container finishContainer;
 	private Label finishText;
+
+
 
 	public MultiplayerGame(RaceSetupData data, Client client) {
 		init(data, client);
@@ -115,8 +116,7 @@ public class MultiplayerGame {
 		entities = new ArrayList<Entity>();
 		TextMaster.init(loader);
 
-		if (debug)
-			System.out.println("Screen size: " + Display.getWidth() + " x " + Display.getHeight());
+		if (debug) System.out.println("Screen size: " + Display.getWidth() + " x " + Display.getHeight());
 
 		// Terrain
 		TerrainTexture background = new TerrainTexture(loader.loadTexture("new/GridTexture"));
@@ -131,8 +131,8 @@ public class MultiplayerGame {
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("new/GridTexture"));
 
 		terrains = new ArrayList<Terrain>();
-		terrains.add(new Terrain((int) (-SkyboxRenderer.SIZE * 2f), (int) (-SkyboxRenderer.SIZE * 2f), loader,
-				texturePack, blendMap, "new/FlatHeightMap"));
+		terrains.add(new Terrain((int) (-SkyboxRenderer.SIZE * 2f), (int) (-SkyboxRenderer.SIZE * 2f), loader, texturePack, blendMap,
+			"new/FlatHeightMap"));
 
 		// Track
 		trackSeed = data.getTrackSeed();
@@ -148,12 +148,11 @@ public class MultiplayerGame {
 		entities.add(track);
 
 		// Finish Line
-		TexturedModel finishLineModel = new TexturedModel(getModel("finishLineUpdated", loader),
-				new ModelTexture(loader.loadTexture("new/finishLineTextureUpdated")));
+		TexturedModel finishLineModel =
+			new TexturedModel(getModel("finishLineUpdated", loader), new ModelTexture(loader.loadTexture("new/finishLineTextureUpdated")));
 		Vector3f firstPoint = new Vector3f(st.getStart());
 		firstPoint.y = 1.05f;
-		Entity finishLine = new Entity(finishLineModel, firstPoint, data.startingOrientation,
-				st.getTrack().get(0).getWidth() * 0.7f);
+		Entity finishLine = new Entity(finishLineModel, firstPoint, data.startingOrientation, st.getTrack().get(0).getWidth() * 0.7f);
 		entities.add(finishLine);
 
 		// Lighting
@@ -175,6 +174,10 @@ public class MultiplayerGame {
 		// Renderers
 		renderer = new MasterRenderer(loader);
 		uiRenderer = new UIRenderer(loader);
+
+		// Store player nicknames
+		nicknames = data.getNicknames();
+		leaderboard = new ArrayList<>(nicknames.size());
 
 		AudioMaster.playInGameMusic();
 		try {
@@ -207,36 +210,31 @@ public class MultiplayerGame {
 
 		// Check for audio controls
 		/** @author Tudor */
-		if (input.wasPressed(Action.MUSIC_UP) > 0.5f)
-			AudioMaster.increaseMusicVolume();
-		if (input.wasPressed(Action.MUSIC_DOWN) > 0.5f)
-			AudioMaster.decreaseMusicVolume();
-		if (input.wasPressed(Action.MUSIC_SKIP) > 0.5f)
-			AudioMaster.skipInGameMusic();
-		if (input.wasPressed(Action.SFX_UP) > 0.5f)
-			AudioMaster.increaseSFXVolume();
-		if (input.wasPressed(Action.SFX_DOWN) > 0.5f)
-			AudioMaster.decreaseSFXVolume();
+		if (input.wasPressed(Action.MUSIC_UP) > 0.5f) AudioMaster.increaseMusicVolume();
+		if (input.wasPressed(Action.MUSIC_DOWN) > 0.5f) AudioMaster.decreaseMusicVolume();
+		if (input.wasPressed(Action.MUSIC_SKIP) > 0.5f) AudioMaster.skipInGameMusic();
+		if (input.wasPressed(Action.SFX_UP) > 0.5f) AudioMaster.increaseSFXVolume();
+		if (input.wasPressed(Action.SFX_DOWN) > 0.5f) AudioMaster.decreaseSFXVolume();
 
-		if (System.nanoTime() > startsAt)
-			ships.getPlayerShip().start();
+		// Allow inputs iff the race has started
+		if (System.nanoTime() > startsAt) ships.getPlayerShip().start();
 
 		ships.updateShips(delta);
 		try {
 			client.sendByteMessage(ships.getShipPacket(), ServerComm.SENDPLAYERDATA);
-		} catch (IOException e) {
-		}
+		} catch (IOException e) {}
 		for (Container c : containers) {
 			c.update();
 		}
 
 		// Update UI Stuff
-    lapCurrent.setText(Integer.toString(currentLap));
-    posCurrent.setText(Integer.toString(ranking));
-    
-    if (finishText == null && logic.raceFinished()) {
-      
-    }
+		lapCurrent.setText(Integer.toString(currentLap));
+		posCurrent.setText(Integer.toString(ranking));
+		// TODO display the leaderboard, currently printing to console
+		if (finished) {
+			System.out.println("You finished! GUI is in progress, but here is the leaderboard:");
+			leaderboard.forEach(System.out::println);
+		}
 
 		camera.move();
 
@@ -283,13 +281,11 @@ public class MultiplayerGame {
 		return data;
 	}
 
-	/**
-	 * Setup the UIs
+	/** Setup the UIs
 	 * 
 	 * @param data
-	 *            RaceSetupData including total laps and total players
-	 * @author Reece Bennett
-	 */
+	 *        RaceSetupData including total laps and total players
+	 * @author Reece Bennett */
 	private void setupUI(RaceSetupData data) {
 		containers = new ArrayList<>();
 
@@ -465,23 +461,21 @@ public class MultiplayerGame {
 		lapTotal = new Label(loader, Integer.toString(data.laps), font, 2.8f, true, new Vector2f(95, 2), 50);
 		lapTotal.setParent(lapDisplay);
 		lapTotal.setColour(1, 1, 1);
-		
+
 		finishContainer = new Container(loader, "ui/menuBackground", new Vector2f(448, 120));
 		containers.add(finishContainer);
-		
+
 		finishText = new Label(loader, "You finished!", font, 3f, true, new Vector2f(0, 100), 384);
 		finishText.setColour(colour);
 		finishText.setParent(finishContainer);
-		
+
 		finishContainer.setVisibility(false);
 	}
 
-	/**
-	 * Create a track model
+	/** Create a track model
 	 * 
 	 * @return
-	 * @author Reece Bennett
-	 */
+	 * @author Reece Bennett */
 	private TexturedModel createTrackModel(SeedTrack st) {
 		float trackHeight = SeedTrack.getTrackHeight();
 		float barrierHeight = SeedTrack.getBarrierHeight();
@@ -624,7 +618,7 @@ public class MultiplayerGame {
 		}
 
 		return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
-				new ModelTexture(loader.loadTexture("new/trackTexture")));
+			new ModelTexture(loader.loadTexture("new/trackTexture")));
 	}
 
 	private void addToArray(Vector3f vector, float[] array, int offset) {
@@ -653,5 +647,15 @@ public class MultiplayerGame {
 	public void updateLogic(int ranking, boolean finished, int currentLap) {
 		this.currentLap = currentLap;
 		this.ranking = ranking;
+		this.finished = finished;
+	}
+
+	public void updateFinishData(byte[] msg) {
+		System.out.println("Received finish data");
+		for (int i = 0; i < msg.length; i++) {
+			leaderboard.set(i, nicknames.get(msg[i]));
+			if (i == ships.getPlayerShip().getId()) ships.getPlayerShip().finish();
+		}
+
 	}
 }

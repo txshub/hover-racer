@@ -1,20 +1,22 @@
-package audioEngine;
+package audioEngine.junit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+
+import audioEngine.AudioMaster;
+import audioEngine.Sounds;
+import audioEngine.Source;
 
 /**
  * JUnit tests for the subsystem
  * 
  * @author Tudor Suruceanu
  */
-public class JUTests {
+public class AudioEngineTests {
 
   private Source source1, source2;
 

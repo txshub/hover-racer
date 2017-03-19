@@ -140,17 +140,26 @@ public class TestClientTable {
   public void testJoinGame() {
 	  Lobby lobby = new Lobby(1129);
     ClientTable table = new ClientTable(lobby);
-    String name = "Testing";
-    table.add(name);
-    if (table.getGameID(name) != -1)
+    String name1 = "Testing";
+    String name2 = "Name";
+    table.add(name1);
+    if (table.getGameID(name1) != -1)
       fail("Game ID didn't initialise as -1");
-    if (table.joinGame(0, DataGenerator.basicShipSetup(name)))
+    if (table.joinGame(0, DataGenerator.basicShipSetup(name1)))
       fail("Game was present before being made");
-    table.addGame(new GameSettings("0", 1, 0, "lobby", DataGenerator.basicShipSetup(name)));
-    if (!table.joinGame(0, DataGenerator.basicShipSetup(name)))
-      fail("Game wasn't present after being made");
-    if (table.getGameID(name) == -1)
+    if(!table.addGame(new GameSettings("0", 1, 2, "lobby", DataGenerator.basicShipSetup(name1)))) fail("Game wasn't present after being made for player 1");
+    if(!table.addGame(new GameSettings("0", 1, 2, "lobby", DataGenerator.basicShipSetup(name2)))) fail("game wasn't present after being made for player 2");
+    if (table.getGameID(name1) == -1)
       fail("Couldn't get Game ID after being made");
+  }
+  
+  @Test
+  public void testGetQueues() {
+	  Lobby lobby = new Lobby(1130);
+	  ClientTable table = new ClientTable(lobby);
+	  if(table.getQueues().size() != 0) fail("Expected size 0 queues");
+	  table.add("Testing");
+	  if(table.getQueues().size() != 1) fail("Expected size 1 queues");
   }
 
 }

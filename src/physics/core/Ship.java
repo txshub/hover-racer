@@ -77,6 +77,7 @@ public abstract class Ship extends Entity {
 
 	private byte id;
 	private boolean started;
+	private boolean finished;
 
 	long lastPrint = 0;
 	double deltaSum = 0;
@@ -97,13 +98,16 @@ public abstract class Ship extends Entity {
 		this.otherShips = new ArrayList<Ship>();
 
 		this.started = false;
+		this.finished = false;
 	}
 
+	/** Adds ships to the list of ships this one can collide with */
 	public void addOtherShips(Collection<Ship> ships) {
 		if (ships == null) return;
 		ships.forEach(this::addOtherShip);
 	}
 
+	/** Adds another ship to the list of ships this one can collide with */
 	public void addOtherShip(Ship ship) {
 		if (ship.getId() != id) otherShips.add(ship);
 	}
@@ -112,6 +116,9 @@ public abstract class Ship extends Entity {
 		this.barriers = new Barriers(barrierPoints);
 	}
 
+	/** Sets the listener for this ship colliding with other ships. Used for the sound engine to make collision sounds.
+	 * 
+	 * @param collisionListener Listener to be called whenever a collision with another ship happens */
 	public void setCollisionListener(CollisionListener collisionListener) {
 		this.collisionListener = collisionListener;
 	}
@@ -141,6 +148,28 @@ public abstract class Ship extends Entity {
 		velocity.forEach(v -> Math.signum(v) * Math.max(0, (Math.abs(v) - delta * Math.sqrt(Math.abs(v) * AIR_RESISTANCE))));
 	}
 
+	/** Handle colliding with other ships */
+	private void shipCollisions() {
+		otherShips.stream().filter(ship -> ship.getInternalPosition().distanceTo(this.position) <= ship.getSize() + this.size)
+			.forEach(s -> collideWith(s));
+	}
+
+	/** @return The Ship's position as Vector3 instead of Vector3f. Used for internal collision logic */
+	protected Vector3 getInternalPosition() {
+		return position.copy();
+	}
+
+	/** Changes the velocity to account for a collision with a different ship */
+	private void collideWith(Ship ship) {
+		// if (collisionListener != null) collisionListener.addCollision(this, ship); // TODO fix sounds
+		Vector3 pos = ship.getInternalPosition().copy();
+		float expectedDistance = ship.getSize() + this.getSize();
+		// Apply momentum
+		velocity.add(ship.getVelocity().sub(this.velocity).mul(ship.getMass()).mul(1 / this.getMass()).mul(SHIP_COLLISION_ELASTICITY));
+		// Get out of collision zone
+		position.add(this.position.copy().sub(pos).mul((expectedDistance - position.distance(pos)) / expectedDistance));
+	}
+
 	/** Apply the force of gravity */
 	private void gravity(float delta) {
 		velocity.changeY(y -> y - GRAVITY * delta * VERTICAL_SCALE);
@@ -149,22 +178,32 @@ public abstract class Ship extends Entity {
 	/** Apply the forces of the air cushion (also bounce off ground if it ever
 	 * happens) */
 	private void airCushion(float delta) {
+		float modifier = finished ? 3f : 1f;
 		float distance = ground.distanceToGround(position, rotation) / VERTICAL_SCALE;
 		if (distance <= 0 && velocity.getY() < 0) {
 			position.changeY(y -> y - distance + 1); // Get above ground
 			velocity.changeY(y -> -.3 * y); // Change velocity to upward
 		} else if (distance > 0)
-			velocity.changeY(y -> y + delta * AIR_CUSHION * VERTICAL_SCALE / Math.pow(Math.max(distance, 1), CUSHION_SCALE));
+			velocity.changeY(y -> y + delta * modifier * AIR_CUSHION * VERTICAL_SCALE / Math.pow(Math.max(distance, 1), CUSHION_SCALE));
 	}
+
+	/** Handles collisions with the track edges */
+	private void trackCollision() {
+		barriers.allCollisions(this).forEach(v -> velocity.bounceOff(v, WALL_ELASTICITY));
+	}
+
+
 
 	/** Changes the position by given velocity
 	 * 
-	 * @param delta
-	 *        Time in seconds that passed since the last call of this function */
+	 * @param delta Time in seconds that passed since the last call of this function */
 	private void updatePosition(float delta) {
 		position.add(velocity.copy().multiply(delta));
 	}
 
+	/** Updates the ships's rotation -
+	 * 
+	 * @param delta */
 	private void updateRotation(float delta) {
 		// Add momentum (doing it first to be more responsive)
 		rotation.forEach(rotationalVelocity, (rot, vel) -> correctAngle(rot + delta * vel));
@@ -182,23 +221,15 @@ public abstract class Ship extends Entity {
 		else return (float) (-2 * Math.PI + angle);
 	}
 
-	protected void steer(float thrust, float turn, float brokenDelta) {
-		steer(Math.max(0, thrust), -thrust, turn, 0f, 0f, brokenDelta);
-	}
-
 	protected void steer(float thrust, float turn, float strafe, float brokenDelta) {
-		steer(Math.max(0, thrust), -thrust, turn, strafe, 0f, brokenDelta);
+		steer(Math.max(0, thrust), -thrust, turn, strafe, brokenDelta);
 	}
 
-	protected void steer(float thrust, float turn, float strafe, float jump, float brokenDelta) {
-		steer(Math.max(0, thrust), -thrust, turn, strafe, jump, brokenDelta);
-	}
-
-	protected void steer(float thrust, float breaking, float turn, float strafe, float jump, float brokenDelta) {
+	protected void steer(float thrust, float breaking, float turn, float strafe, float brokenDelta) {
 		if (!started) return; // Don't allow input until the race has started
 		float delta = (float) 1 / 60; // TODO fix deltas
-		// Checking parameters - TODO probably remove this for production code
-		if (Math.abs(thrust) > 1 || Math.abs(turn) > 1 || Math.abs(strafe) > 1 || Math.abs(jump) > 1) {
+		// Checking parameters
+		if (Math.abs(thrust) > 1 || Math.abs(turn) > 1 || Math.abs(strafe) > 1 || Math.abs(breaking) > 1) {
 			throw new IllegalArgumentException(
 				"Ship's steer method called with bad parameters. Only values between -1 and 1 are accepted.");
 		}
@@ -213,31 +244,8 @@ public abstract class Ship extends Entity {
 		if (breaking > 0) airResistance(delta * breaking * BREAK_POWER);
 		// Strafing TODO change to an instant boost (?)
 		if (strafe != 0) accelerate2d(delta * strafe * ACCELERATION, (float) Math.PI);
-		// Jumping
-		if (jump != 0) velocity.changeY(y -> y + delta * jump * JUMP_POWER * VERTICAL_SCALE);
 	}
 
-	private void shipCollisions() {
-		otherShips.stream().filter(ship -> ship.getInternalPosition().distanceTo(this.position) <= ship.getSize() + this.size)
-			.forEach(s -> collideWith(s));
-	}
-
-	protected Vector3 getInternalPosition() {
-		return position.copy();
-	}
-
-	/** Changes the velocity to account for a collision with a different ship */
-	private void collideWith(Ship ship) {
-		// System.out.println("COLLISION! " + ship + " vs " + this);
-		// if (collisionListener != null) collisionListener.addCollision(this,
-		// ship); // TODO get Tudor to fix collision sounds
-		Vector3 pos = ship.getInternalPosition().copy();
-		float expectedDistance = ship.getSize() + this.getSize();
-		// Apply momentum
-		velocity.add(ship.getVelocity().sub(this.velocity).mul(ship.getMass()).mul(1 / this.getMass()).mul(SHIP_COLLISION_ELASTICITY));
-		// Get out of collision zone
-		position.add(this.position.copy().sub(pos).mul((expectedDistance - position.distance(pos)) / expectedDistance));
-	}
 
 	/** Corrects an angle to fit between 0 and 2pi (e.g. 7.13pi->1.13pi,
 	 * -0.13pi->1.87pi) */
@@ -273,14 +281,15 @@ public abstract class Ship extends Entity {
 		super.setRotation(this.rotation.copy().forEach(r -> Math.toDegrees(r)));
 	}
 
-	private void trackCollision() {
-		barriers.allCollisions(this).forEach(v -> velocity.bounceOff(v, WALL_ELASTICITY));
-	}
-
 	/** Allows the player to control the ship from now on. Call when the race
 	 * starts. */
 	public void start() {
 		this.started = true;
+	}
+
+	/** Finished the race for this ship, causing it to move up and not interfere with ships that are still racing */
+	public void finish() {
+		this.finished = true;
 	}
 
 	public void resetTo(Vector3f checkpoint, Vector3f facing) {
@@ -304,10 +313,15 @@ public abstract class Ship extends Entity {
 		this.velocity.set(remote.getVelocity());
 		this.rotation.set(remote.getRotation());
 		this.rotationalVelocity.set(remote.getRotationalVelocity());
+		// if (this.getId() == 1) System.out.println("got: " + rotation.y);
 	}
 
 	public byte[] export() {
+		if (this.getId() == 1) {
+			// System.out.println("Sending data: " + rotation.y);
+		}
 		return new ExportedShip(id, position, velocity, rotation, rotationalVelocity).toNumbers();
+
 	}
 
 	/** @return This ship's current velocities, separately in all dimensions */
@@ -342,8 +356,7 @@ public abstract class Ship extends Entity {
 	 * decisions what to do for AIship. Excluding RemoteShip, this method also
 	 * updates physics.
 	 * 
-	 * @param delta
-	 *        Time since last call of this function (TODO specify units) */
+	 * @param delta Time since last call of this function in seconds */
 	public abstract void update(float delta);
 
 	@Override

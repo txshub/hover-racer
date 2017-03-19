@@ -1,4 +1,4 @@
-package audioEngine;
+package audioEngine.junit;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -10,7 +10,7 @@ import org.junit.runners.Suite.SuiteClasses;
  * @author Tudor Suruceanu
  */
 @RunWith(Suite.class)
-@SuiteClasses({ JUTests.class })
+@SuiteClasses({ AudioEngineTests.class })
 public class AllTests {
 
 }

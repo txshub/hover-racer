@@ -10,7 +10,11 @@ import org.joml.Vector3f;
 import serverComms.GameRoom;
 import trackDesign.TrackPoint;
 
-/** @author Tudor Suruceanu */
+/**
+ * Class implementing the game logic
+ * 
+ * @author Tudor Suruceanu
+ */
 public class GameLogic {
 
 	private ArrayList<ShipLogicData> players;
@@ -22,13 +26,27 @@ public class GameLogic {
 	private int finished;
 	private GameRoom gameRoom;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param players
+	 *            All the players in the race
+	 * @param trackPoints
+	 *            The track
+	 * @param laps
+	 *            The number of laps of the race
+	 * @param amountOfPlayers
+	 *            The number of non-AI players
+	 * @param gameRoom
+	 *            The game room
+	 */
 	public GameLogic(ArrayList<ShipLogicData> players, ArrayList<TrackPoint> trackPoints, int laps, int amountOfPlayers,
 			GameRoom gameRoom) {
 		if (players == null || trackPoints == null || laps == 0 || gameRoom == null)
 			throw new IllegalArgumentException();
 		this.players = players;
 		this.laps = Math.max(laps, 1);
-		this.amountOfPlayers = amountOfPlayers; // Number of non-AI players
+		this.amountOfPlayers = amountOfPlayers;
 		this.gameRoom = gameRoom;
 		this.trackPoints = trackPoints;
 		pointsDist = new HashMap<TrackPoint, Float>();
@@ -43,6 +61,7 @@ public class GameLogic {
 		}
 	}
 
+	/** Calculate the position in the race for every player */
 	private void updateRankings() {
 		ArrayList<ShipLogicData> racingPlayers = new ArrayList<ShipLogicData>();
 		for (ShipLogicData player : players) {
@@ -67,6 +86,7 @@ public class GameLogic {
 		}
 	}
 
+	/** Calculate the distance between track points */
 	private void calculatePointsDist() {
 		float distance = 0f;
 		for (int i = 1; i < trackPoints.size(); i++) {
@@ -83,23 +103,27 @@ public class GameLogic {
 		}
 	}
 
+	/**
+	 * Update the last track point a player surpassed and do the logic
+	 * 
+	 * @param player
+	 *            A specific player
+	 */
 	private void updateLastPoint(ShipLogicData player) {
 		int lastTrackPoint = lastTrackPoints.get(player);
 		int currentLap = player.getCurrentLap();
 		Vector3f playerPos = player.getPosition();
 		int previous = lastTrackPoints.get(player);
-		
+
 		for (int i = 0; i < trackPoints.size(); i++) {
 			TrackPoint tp = trackPoints.get(i);
 			float pointWidth = tp.getWidth() / 2f;
 			float distanceToNext = tp.distance(playerPos.x, playerPos.z);
-
 			if (distanceToNext <= pointWidth && previous != i) {
 				lastTrackPoint = i;
 				lastTrackPoints.put(player, lastTrackPoint);
 			}
 		}
-
 		if (previous == trackPoints.size() - 1 && lastTrackPoint == 0) {
 			if (currentLap == laps) {
 				System.out.println("PLAYER " + player.getId() + " FINISHED THE RACE");
@@ -114,9 +138,17 @@ public class GameLogic {
 					player.setCurrentLap(currentLap - 1);
 			}
 		}
-		
+
 	}
 
+	/**
+	 * Calculate the distance on the track a player has travelled from the
+	 * begining of the race
+	 * 
+	 * @param player
+	 *            A specific player
+	 * @return The distance it has travelled
+	 */
 	private float getPlayerDist(ShipLogicData player) {
 		float distance;
 		int lastTrackPoint = lastTrackPoints.get(player);
@@ -142,33 +174,56 @@ public class GameLogic {
 		return distance;
 	}
 
+	/**
+	 * Method called every frame, updating the ranking and sending the data to
+	 * clients
+	 */
 	public void update() {
 		for (ShipLogicData player : players) {
 			updateLastPoint(player);
 		}
 		updateRankings();
-
+		
 		for (ShipLogicData player : players) {
 			if (player.getId() < amountOfPlayers)
 				gameRoom.sendLogicUpdate(player.getId(), player.getRanking(), player.finished(),
 						player.getCurrentLap());
+			if (player.finished())
+				gameRoom.sendFinishData(player.getId(), getRanking());
 		}
 	}
 
+	/**
+	 * Get the total number of laps of the race
+	 * 
+	 * @return The total number of laps of the race
+	 */
 	public int getTotalLaps() {
 		return laps;
 	}
 
+	/**
+	 * Check if the race has finished
+	 * 
+	 * @return Whether the race has finished
+	 */
 	public boolean raceFinished() {
 		return finished == players.size();
 	}
 
-	public ShipLogicData getWinner() {
+	/**
+	 * Get the ranking of the players that finished the race as data to be sent
+	 * to clients
+	 * 
+	 * @return The ranking of the players that finished the race
+	 */
+	private byte[] getRanking() {
+		byte[] ranking = new byte[finished];
 		for (ShipLogicData player : players) {
-			if (player.getRanking() == 1 && player.finished())
-				return player;
+			if (player.finished()) {
+				ranking[player.getRanking()] = player.getId();
+			}
 		}
-		return null;
+		return ranking;
 	}
-
 }

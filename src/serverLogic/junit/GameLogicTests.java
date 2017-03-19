@@ -1,4 +1,4 @@
-package serverLogic;
+package serverLogic.junit;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,9 +11,12 @@ import org.junit.Test;
 import physics.core.Ship;
 import physics.ships.DummyShip;
 import serverComms.GameRoom;
+import serverLogic.DummyGameRoom;
+import serverLogic.GameLogic;
+import serverLogic.ShipLogicData;
 import trackDesign.TrackPoint;
 
-public class JUTests {
+public class GameLogicTests {
 
 	private GameLogic logic;
 	private ArrayList<Ship> ships;
