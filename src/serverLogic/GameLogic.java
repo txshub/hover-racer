@@ -115,7 +115,7 @@ public class GameLogic {
 			}
 		}
 		if (previous == trackPoints.size() - 1 && lastTrackPoint == 0) {
-			if (currentLap == laps) {
+			if (currentLap == laps && !player.finished()) {
 				System.out.println("PLAYER " + player.getId() + " FINISHED THE RACE");
 				player.setFinished(true);
 				finished++;
@@ -166,8 +166,7 @@ public class GameLogic {
 		for (ShipLogicData player : players) {
 			if (player.getId() < amountOfPlayers) {
 				gameRoom.sendLogicUpdate(player.getId(), player.getRanking(), player.finished(), player.getCurrentLap());
-				if (player.finished())
-					gameRoom.sendFinishData(player.getId(), getRanking());
+				if (player.finished()) gameRoom.sendFinishData(player.getId(), getRanking());
 			}
 		}
 	}
