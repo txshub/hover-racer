@@ -13,6 +13,7 @@ public class Source {
   private float initVolume;
   private float currentVolume;
 
+  /** Constructor */
   public Source() {
 
     sourceId = AL10.alGenSources();
