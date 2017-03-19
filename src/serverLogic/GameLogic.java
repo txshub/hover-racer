@@ -119,12 +119,11 @@ public class GameLogic {
 			TrackPoint tp = trackPoints.get(i);
 			float pointWidth = tp.getWidth() / 2f;
 			float distanceToNext = tp.distance(playerPos.x, playerPos.z);
-
 			if (distanceToNext <= pointWidth && previous != i) {
-				lastTrackPoints.put(player, i);
+				lastTrackPoint = i;
+				lastTrackPoints.put(player, lastTrackPoint);
 			}
 		}
-
 		if (previous == trackPoints.size() - 1 && lastTrackPoint == 0) {
 			if (currentLap == laps) {
 				System.out.println("PLAYER " + player.getId() + " FINISHED THE RACE");
@@ -184,7 +183,7 @@ public class GameLogic {
 			updateLastPoint(player);
 		}
 		updateRankings();
-
+		
 		for (ShipLogicData player : players) {
 			if (player.getId() < amountOfPlayers)
 				gameRoom.sendLogicUpdate(player.getId(), player.getRanking(), player.finished(),

@@ -236,7 +236,6 @@ public class MultiplayerGame {
 			leaderboard.forEach(System.out::println);
 		}
 
-
 		camera.move();
 
 		// Move terrain with the player so it seems infinite
