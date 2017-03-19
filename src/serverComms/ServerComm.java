@@ -66,6 +66,8 @@ public class ServerComm extends Thread {
   public static final byte ROOMCLOSED = Byte.parseByte("19");
   // Server->Client Updating rank, current lap and whether the game has finished
   public static final byte LOGIC_UPDATE = Byte.parseByte("20");
+  // Server->Client Sending the leaderboard after the game has finished
+  public static final byte FINISH_DATA = Byte.parseByte("21");
 
   /**
    * Creates a Server object

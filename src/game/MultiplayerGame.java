@@ -80,6 +80,8 @@ public class MultiplayerGame {
 	private int ranking;
 	private int currentLap;
 	private boolean finished;
+	private List<String> nicknames;
+	private ArrayList<String> leaderboard;
 
 	// UI Globals
 	private Container menu;
@@ -172,6 +174,10 @@ public class MultiplayerGame {
 		// Renderers
 		renderer = new MasterRenderer(loader);
 		uiRenderer = new UIRenderer(loader);
+
+		// Store player nicknames
+		nicknames = data.getNicknames();
+		leaderboard = new ArrayList<>(nicknames.size());
 
 		AudioMaster.playInGameMusic();
 		try {
@@ -636,5 +642,12 @@ public class MultiplayerGame {
 		this.currentLap = currentLap;
 		this.ranking = ranking;
 		this.finished = finished;
+	}
+
+	public void updateFinishData(byte[] msg) {
+		for (int i = 0; i < msg.length; i++) {
+			leaderboard.set(i, nicknames.get(msg[i]));
+		}
+
 	}
 }

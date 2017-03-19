@@ -23,7 +23,7 @@ import trackDesign.TrackPoint;
 public class GameRoom {
 
 	private static final long TIME_TO_START = 10L * 1000000000L; // Time to start
-																// race
+																	// race
 	// in nanoseconds
 	private static final int SIDE_DISTANCES = 10;
 	private static final int FORWARD_DISTANCES = 10;
@@ -285,22 +285,22 @@ public class GameRoom {
 
 	// TODO finish this
 	private Map<Byte, Vector3f> generateStartingPositions(Vector2f startDirection) {
-	  float offset = 40;
+		float offset = 40;
 		Map<Byte, Vector3f> res = new HashMap<>();
-		
+
 		for (int i = 0; i < maxPlayers; i++) {
-		  float xOffset = (i % 4 - 2) * offset;
-		  float yOffset = (float) (Math.floor(i / 4)) * offset;
-		  
-		  Vector2f forward = new Vector2f(trackPoints.get(0)).sub(trackPoints.get(trackPoints.size()-1)).normalize();
-		  Vector2f left = new Vector2f(-forward.y, forward.x).normalize();
-		  
-		  left.mul(xOffset);
-		  forward.mul(-yOffset);
-		  
-		  Vector2f combined = new Vector2f(left).add(forward);
-		  
-	    res.put((byte) i, new Vector3f(trackPoints.get(0).x + combined.x, 5, trackPoints.get(0).y + combined.y));
+			float xOffset = (i % 4 - 2) * offset;
+			float yOffset = (float) (Math.floor(i / 4)) * offset;
+
+			Vector2f forward = new Vector2f(trackPoints.get(0)).sub(trackPoints.get(trackPoints.size() - 1)).normalize();
+			Vector2f left = new Vector2f(-forward.y, forward.x).normalize();
+
+			left.mul(xOffset);
+			forward.mul(-yOffset);
+
+			Vector2f combined = new Vector2f(left).add(forward);
+
+			res.put((byte) i, new Vector3f(trackPoints.get(0).x + combined.x, 5, trackPoints.get(0).y + combined.y));
 		}
 		return res;
 	}
@@ -345,15 +345,22 @@ public class GameRoom {
 		logic.update();
 	}
 
-	/** 
-	 * @author Mac
-	 * Sends a game logic update to a single client
-	 * 
+	/** @author Mac
+	 *         Sends a game logic update to a single client
 	 * @param id
 	 *        Client's (and ship's) id */
 	public void sendLogicUpdate(byte id, int ranking, boolean finished, int currrentLap) {
 		table.getQueue(players.get(id))
 			.offer(new ByteArrayByte(Converter.buildLogicData(ranking, finished, currrentLap), ServerComm.LOGIC_UPDATE));
+	}
+
+	/** Sends information about player who finished the race (i.e. the leaderboard) to players who already finished to race.
+	 * 
+	 * @param id Id of the client to send the message to
+	 * @param data Data being sent - an array of IDs in the order of finishing (index 0 is first place). Should only contain IDs of players
+	 *        who already finished */
+	public void sendFinishData(byte id, byte[] data) {
+		table.getQueue(players.get(id)).offer(new ByteArrayByte(data, ServerComm.FINISH_DATA));
 	}
 
 	/** Returns the number of laps in this race
