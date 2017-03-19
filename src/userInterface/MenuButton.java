@@ -1,9 +1,5 @@
 package userInterface;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
 import audioEngine.AudioMaster;
 import audioEngine.Sounds;
 import audioEngine.Source;
@@ -14,14 +10,12 @@ import javafx.scene.effect.Glow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
  * 
- * @author Andreea Gheorghe
- * Class that implements the customised design of a menu button,
- * which will be used throughout the User Interface.
+ * @author Andreea Gheorghe Class that implements the customised design of a
+ *         menu button, which will be used throughout the User Interface.
  *
  */
 public class MenuButton extends StackPane {
@@ -33,12 +27,17 @@ public class MenuButton extends StackPane {
   private Source audioSource;
 
   /**
-   * Constructor for the MenuButton class that creates a menu button,
-   * according to the given style settings.
-   * @param name 		The text that will be displayed on the button.
-   * @param width 		The width of the button.
-   * @param height 		The height of the button.
-   * @param fontSize	The chosen font size.
+   * Constructor for the MenuButton class that creates a menu button, according
+   * to the given style settings.
+   * 
+   * @param name
+   *          The text that will be displayed on the button.
+   * @param width
+   *          The width of the button.
+   * @param height
+   *          The height of the button.
+   * @param fontSize
+   *          The chosen font size.
    */
   public MenuButton(String name, int width, int height, int fontSize) {
 
@@ -47,10 +46,10 @@ public class MenuButton extends StackPane {
 
     TextStyle button = new TextStyle(name, fontSize);
     Text buttonText = button.getTextStyled();
-    
+
     // Create button shape
     bg = new Rectangle(width, height);
-    bg.setOpacity(0.7);
+    bg.setOpacity(0.8);
     bg.setFill(Color.BLACK);
 
     // Blur the button colour
@@ -67,25 +66,25 @@ public class MenuButton extends StackPane {
 
     // Hover over button
     this.setOnMouseEntered(event -> {
-    	
-    	bg.setTranslateX(6);
-    	buttonText.setTranslateX(6);
-    	bg.setFill(Color.DIMGRAY);
-    	buttonText.setFill(Color.WHITE);
 
-    	// Tudor - play sound
-    	audioSource.play(Sounds.BUTTON_HOVER);
-      
+      bg.setTranslateX(6);
+      buttonText.setTranslateX(6);
+      bg.setFill(Color.DIMGRAY);
+      buttonText.setFill(Color.WHITE);
+
+      // Tudor - play sound
+      audioSource.play(Sounds.BUTTON_HOVER);
+
     });
 
     // Stop hovering over button
     this.setOnMouseExited(event -> {
-    	
-    	bg.setTranslateX(0);
-    	buttonText.setTranslateX(0);
-    	bg.setFill(Color.BLACK);
-    	buttonText.setFill(Color.WHITE);
-    	
+
+      bg.setTranslateX(0);
+      buttonText.setTranslateX(0);
+      bg.setFill(Color.BLACK);
+      buttonText.setFill(Color.WHITE);
+
     });
 
     // Create glow effect to let user know they have clicked a button
@@ -94,16 +93,16 @@ public class MenuButton extends StackPane {
 
     // Clicked on button
     this.setOnMousePressed(event -> {
-      
-    	setEffect(effect);
-    	// Tudor - play sound
-    	audioSource.play(Sounds.BUTTON_CLICK);
-    	
+
+      setEffect(effect);
+      // Tudor - play sound
+      audioSource.play(Sounds.BUTTON_CLICK);
+
     });
 
     // Release button and remove effect
     this.setOnMouseReleased(event -> {
-    	setEffect(null);
+      setEffect(null);
     });
 
   }

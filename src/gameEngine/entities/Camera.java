@@ -9,7 +9,7 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public class Camera {
 
-  private float distanceFromPlayer = 100;
+  private float distanceFromPlayer = 50;
   private float angleAroundPlayer = 0;
   private long aagTimer = System.currentTimeMillis(), pTimer = System.currentTimeMillis();
   private int defaultPitch = 10, defaultangle = 0;

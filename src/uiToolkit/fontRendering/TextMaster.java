@@ -19,7 +19,7 @@ public class TextMaster {
     loader = _loader;
     renderer = new FontRenderer();
   }
-  
+
   public static void render() {
     renderer.render(texts);
   }

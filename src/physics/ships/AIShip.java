@@ -40,7 +40,9 @@ public class AIShip extends Ship {
 		this.track = track;
 		nextPointIndex = 1;
 
-		System.out.println("AI " + id + "  debug information:"); // Added to not make the output confusing
+		if (debug) System.out.println("AI " + id + "  debug information:"); // Added to not
+		// make the output
+		// confusing
 		for (int i = 0; i < track.size(); i++) {
 			TrackPoint nextPoint = track.get(i);
 			TrackPoint nextNextPoint = i + 1 >= track.size() ? track.get(0) : track.get(i + 1);
@@ -56,9 +58,9 @@ public class AIShip extends Ship {
 
 			speed = (float) Math.max(0.1, speed);
 
-			System.out.println(segAngle + " - " + speed);
+			if (debug) System.out.println(segAngle + " - " + speed);
 		}
-		System.out.println();
+		if (debug) System.out.println();
 	}
 
 	@Override
@@ -69,7 +71,8 @@ public class AIShip extends Ship {
 		float rot = getRotation().y;
 
 		TrackPoint nextPoint = track.get(nextPointIndex);
-		// System.out.println("AI " + getId() + " nextPoint " + nextPointIndex + " : " + nextPoint);
+		// System.out.println("AI " + getId() + " nextPoint " + nextPointIndex + " :
+		// " + nextPoint);
 		Vector2f dirToPoint = new Vector2f(nextPoint).sub(pos);
 		Vector2f dirVec = new Vector2f((float) Math.sin(Math.toRadians(rot)), (float) Math.cos(Math.toRadians(rot)));
 
@@ -132,7 +135,7 @@ public class AIShip extends Ship {
 							 * dirToPoint + " dir: " + dirVec */);
 
 		// Steer and update ship
-		super.steer(thrust, turn, strafe, jump, delta);
+		super.steer(thrust * 2, turn, strafe, jump, delta); // TODO temporary thing
 		super.updatePhysics(delta);
 
 		if (dist < 100) {

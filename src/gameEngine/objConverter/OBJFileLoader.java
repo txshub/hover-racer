@@ -56,15 +56,18 @@ public class OBJFileLoader {
           break;
         }
       }
-      while (line != null && line.startsWith("f ")) {
-        String[] currentLine = line.split(" ");
-        String[] vertex1 = currentLine[1].split("/");
-        String[] vertex2 = currentLine[2].split("/");
-        String[] vertex3 = currentLine[3].split("/");
-        Vertex v0 = processVertex(vertex1, vertices, indices);
-        Vertex v1 = processVertex(vertex2, vertices, indices);
-        Vertex v2 = processVertex(vertex3, vertices, indices);
-        calculateTangents(v0, v1, v2, textures);
+      while (line != null) {
+        if (!line.startsWith("f ")) {
+        } else {
+          String[] currentLine = line.split(" ");
+          String[] vertex1 = currentLine[1].split("/");
+          String[] vertex2 = currentLine[2].split("/");
+          String[] vertex3 = currentLine[3].split("/");
+          Vertex v0 = processVertex(vertex1, vertices, indices);
+          Vertex v1 = processVertex(vertex2, vertices, indices);
+          Vertex v2 = processVertex(vertex3, vertices, indices);
+          calculateTangents(v0, v1, v2, textures);
+        }
         line = reader.readLine();
       }
       reader.close();

@@ -1,4 +1,5 @@
 package serverComms;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
@@ -9,6 +10,7 @@ import java.net.Socket;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+
 /**
  * The server to handle a game
  * 
@@ -62,6 +64,9 @@ public class ServerComm extends Thread {
   public static final byte REFRESHROOM = Byte.parseByte("18");
   // Server->Client Host has left the game so room closed
   public static final byte ROOMCLOSED = Byte.parseByte("19");
+  // Server->Client Updating rank, current lap and whether the game has finished
+  public static final byte LOGIC_UPDATE = Byte.parseByte("20");
+
   /**
    * Creates a Server object
    * 
@@ -72,6 +77,7 @@ public class ServerComm extends Thread {
     this.portNumber = portNumber;
     this.lobby = lobby;
   }
+
   /**
    * Runs the server
    */
@@ -124,7 +130,7 @@ public class ServerComm extends Thread {
                 .offer(new ByteArrayByte(("Valid").getBytes(charset), ACCEPTEDUSER));
             if (DEBUG)
               System.out.println("Sent Accepted User to client");
-            ServerReceiver receiver = new ServerReceiver(socket, name, fromClient, lobby);
+            ServerReceiver receiver = new ServerReceiver(name, fromClient, lobby);
             lobby.clientTable.addReceiver(name, receiver);
             receiver.start();
             ArrayList<GameRoom> rooms = new ArrayList<GameRoom>();
@@ -145,6 +151,19 @@ public class ServerComm extends Thread {
       System.err.println("IO error: " + e.getMessage());
     }
   }
+
+  /**
+   * Sends a byte message to the specified output stream
+   * 
+   * @param msg
+   *          The message being sent
+   * @param type
+   *          The type of message
+   * @param client
+   *          The outputstream to send the message to
+   * @throws IOException
+   *           If there is a problem with writing
+   */
   public static void writeByteMessage(byte[] msg, byte type, DataOutputStream client)
       throws IOException {
     client.writeInt(msg.length + 1);

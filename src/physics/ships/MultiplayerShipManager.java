@@ -61,6 +61,7 @@ public class MultiplayerShipManager implements ServerShipProvider {
 		// Finally create the player
 		this.player = new PlayerShip(playerId, models.get(playerId), startingPositions.get(playerId), remotes, ground, stats.get(playerId),
 			track, input);
+		player.setRotation(startingOrientation);
 		remotes.forEach(r -> r.addOtherShip(player));
 		// Create sounds
 		sounds = new ShipSounds(player, remotes);
@@ -101,7 +102,8 @@ public class MultiplayerShipManager implements ServerShipProvider {
 		return player;
 	}
 
-	/** Starts the race, allowing input through. This is when racing actually starts, so probably a few seconds after the game is loaded. */
+	/** Starts the race, allowing input through. This is when racing actually
+	 * starts, so probably a few seconds after the game is loaded. */
 	public void startRace() {
 		player.start();
 		remotes.forEach(r -> r.start());
@@ -112,7 +114,8 @@ public class MultiplayerShipManager implements ServerShipProvider {
 	 * The server won't know about it, but it will collide with things. Call
 	 * before addShipsTo(entities) or it won't be rendered.
 	 * 
-	 * @param aiShip The AIShip to be added */
+	 * @param aiShip
+	 *        The AIShip to be added */
 	public void addAI(AIShip aiShip) {
 		remotes.forEach(r -> r.addOtherShip(aiShip));
 		player.addOtherShip(aiShip);
@@ -155,5 +158,13 @@ public class MultiplayerShipManager implements ServerShipProvider {
 	private static TexturedModel makeModel(String model, String texture, Loader loader) {
 		return new TexturedModel(OBJFileLoader.loadOBJ("newShip", loader), new ModelTexture(loader.loadTexture("newShipTexture")));
 	}
+
+public void addBarrier(ArrayList<Vector3f> barrierPoints) {
+	
+	player.addBarrier(barrierPoints);
+	for(Ship ship: remotes){
+		ship.addBarrier(barrierPoints);
+	}
+}
 
 }

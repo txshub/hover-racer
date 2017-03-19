@@ -5,6 +5,7 @@ import physics.placeholders.DataGenerator;
 
 /**
  * Container for a user's ID and their ship data
+ * 
  * @author simon
  *
  */
@@ -15,8 +16,11 @@ public class IDShipData {
 
   /**
    * Creates an IDShipData object
-   * @param id The user's ID
-   * @param data The user's ship data
+   * 
+   * @param id
+   *          The user's ID
+   * @param data
+   *          The user's ship data
    */
   public IDShipData(int id, ShipSetupData data) {
     this.id = id;
@@ -25,7 +29,9 @@ public class IDShipData {
 
   /**
    * Creates the object from a string passed over the network
-   * @param in The string passed over the network
+   * 
+   * @param in
+   *          The string passed over the network
    */
   public IDShipData(String in) {
     String collected = "";
@@ -48,6 +54,7 @@ public class IDShipData {
 
   /**
    * Returns a byte array of the toString() method
+   * 
    * @return A byte array of the toString() method
    */
   public byte[] toByteArray() {

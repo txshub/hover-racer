@@ -19,7 +19,7 @@ import upgrades.ShipTemplate;
  * -Applying air resistance -Applying accelerations based on user's input
  * -Keeping track of rotation -Handles gravity and forces of the air cushion, on
  * flat terrain only (so far) -Detecting and reacting to collision with other
- * ships (untested!) Can also export itself to an array of floats and update
+ * ships. Can also export itself to an array of floats and update
  * itself with such an array received from server (used for ships controlled by
  * other players/server's AIs)
  * 
@@ -34,7 +34,8 @@ public abstract class Ship extends Entity {
 	private static final float BREAK_POWER = 5;
 	// How fast does it turn
 	private static final float TURN_SPEED = 4f;
-	// How fast do ships slow down (this and acceleration determines the max speed)
+	// How fast do ships slow down (this and acceleration determines the max
+	// speed)
 	private static final float AIR_RESISTANCE = 10;
 	// How fast does rotating slow down
 	private static final float ROTATIONAL_RESISTANCE = 5;
@@ -45,6 +46,10 @@ public abstract class Ship extends Entity {
 	private static final double CUSHION_SCALE = 0.8f;
 	// Jumping, for science! (testing vertical stuff)
 	private static final float JUMP_POWER = 30 * SCALE;
+	// How much speed is retained during a wall collision
+	private static final float WALL_ELASTICITY = 0.35f;
+	// How much energy is retained during ship collisions
+	private static final float SHIP_COLLISION_ELASTICITY = 0.8f;
 
 	// 15, 100, 2, 30: magnet-like
 	// 15, 50, 0.8, 30: nicely cushiony
@@ -53,7 +58,8 @@ public abstract class Ship extends Entity {
 	private static final float SPEED_OF_ROTATION_WHILE_TURNING = 1.25f;
 	// Used for the sound engine
 	private static final float MAX_SPEED = ACCELERATION * ACCELERATION / AIR_RESISTANCE;
-	// Whether the ship actually breaks when braking (and not accelerates backwards)
+	// Whether the ship actually breaks when braking (and not accelerates
+	// backwards)
 	private static boolean ACTUALLY_BREAK = true;
 
 	private StatManager stats;
@@ -72,10 +78,6 @@ public abstract class Ship extends Entity {
 	private byte id;
 	private boolean started;
 
-	// Game logic data
-	private int lap;
-	private float distance;
-
 	long lastPrint = 0;
 	double deltaSum = 0;
 
@@ -91,7 +93,7 @@ public abstract class Ship extends Entity {
 		this.rotationalVelocity = new Vector3(0, 0, 0);
 		this.stats = new StatManager(stats);
 		this.ground = ground;
-		this.barriers = new Barriers(track);
+		// this.barriers = new Barriers(track);
 		this.otherShips = new ArrayList<Ship>();
 
 		this.started = false;
@@ -104,6 +106,10 @@ public abstract class Ship extends Entity {
 
 	public void addOtherShip(Ship ship) {
 		if (ship.getId() != id) otherShips.add(ship);
+	}
+
+	public void addBarrier(ArrayList<Vector3f> barrierPoints) {
+		this.barriers = new Barriers(barrierPoints);
 	}
 
 	public void setCollisionListener(CollisionListener collisionListener) {
@@ -121,11 +127,10 @@ public abstract class Ship extends Entity {
 	 *        Direction of the acceleration in standard notation: 0 is right,
 	 *        0.5pi it forward etc. */
 	public void accelerate2d(float force, float angle) {
-		final float angle2 = correctAngle(rotation.y + angle); // Adjust the angle
-																// for ship's own
-																// rotation
-		velocity.changeX(x -> x + force * Math.cos(angle2));
-		velocity.changeZ(z -> z - force * Math.sin(angle2));
+		final float relativeAngle = correctAngle(rotation.y + angle);
+
+		velocity.changeX(x -> x + force * Math.cos(relativeAngle));
+		velocity.changeZ(z -> z - force * Math.sin(relativeAngle));
 	}
 
 	/** Applies air resistance, i.e. slows down velocities
@@ -178,14 +183,18 @@ public abstract class Ship extends Entity {
 	}
 
 	protected void steer(float thrust, float turn, float brokenDelta) {
-		steer(thrust, turn, 0f, 0f, brokenDelta);
+		steer(Math.max(0, thrust), -thrust, turn, 0f, 0f, brokenDelta);
 	}
 
 	protected void steer(float thrust, float turn, float strafe, float brokenDelta) {
-		steer(thrust, turn, strafe, 0f, brokenDelta);
+		steer(Math.max(0, thrust), -thrust, turn, strafe, 0f, brokenDelta);
 	}
 
 	protected void steer(float thrust, float turn, float strafe, float jump, float brokenDelta) {
+		steer(Math.max(0, thrust), -thrust, turn, strafe, jump, brokenDelta);
+	}
+
+	protected void steer(float thrust, float breaking, float turn, float strafe, float jump, float brokenDelta) {
 		if (!started) return; // Don't allow input until the race has started
 		float delta = (float) 1 / 60; // TODO fix deltas
 		// Checking parameters - TODO probably remove this for production code
@@ -198,12 +207,11 @@ public abstract class Ship extends Entity {
 			rotationalVelocity.changeY(y -> y - delta * turn * TURN_SPEED);
 			rotationalVelocity.changeZ(z -> z + delta * turn * TURN_SPEED * SPEED_OF_ROTATION_WHILE_TURNING);
 		}
-		// Accelerating/breaking
-		if (!ACTUALLY_BREAK && thrust != 0) accelerate2d(delta * thrust * ACCELERATION, (float) Math.PI * 1.5f);
-		else if (ACTUALLY_BREAK && thrust > 0) accelerate2d(delta * thrust * ACCELERATION, (float) Math.PI * 1.5f);
-		else if (ACTUALLY_BREAK && thrust < 0) airResistance(-delta * thrust * BREAK_POWER);
-		// Strafing
-		// TODO change to an instant boost (?)
+		// Accelerating
+		accelerate2d(delta * thrust * ACCELERATION, (float) Math.PI * 1.5f);
+		// Breaking
+		if (breaking > 0) airResistance(delta * breaking * BREAK_POWER);
+		// Strafing TODO change to an instant boost (?)
 		if (strafe != 0) accelerate2d(delta * strafe * ACCELERATION, (float) Math.PI);
 		// Jumping
 		if (jump != 0) velocity.changeY(y -> y + delta * jump * JUMP_POWER * VERTICAL_SCALE);
@@ -221,11 +229,12 @@ public abstract class Ship extends Entity {
 	/** Changes the velocity to account for a collision with a different ship */
 	private void collideWith(Ship ship) {
 		// System.out.println("COLLISION! " + ship + " vs " + this);
-		// if (collisionListener != null) collisionListener.addCollision(this, ship); // TODO get Tudor to fix collision sounds
+		// if (collisionListener != null) collisionListener.addCollision(this,
+		// ship); // TODO get Tudor to fix collision sounds
 		Vector3 pos = ship.getInternalPosition().copy();
 		float expectedDistance = ship.getSize() + this.getSize();
 		// Apply momentum
-		velocity.add(ship.getVelocity().sub(this.velocity).mul(ship.getMass()).mul(1 / this.getMass()).mul(1.5f));
+		velocity.add(ship.getVelocity().sub(this.velocity).mul(ship.getMass()).mul(1 / this.getMass()).mul(SHIP_COLLISION_ELASTICITY));
 		// Get out of collision zone
 		position.add(this.position.copy().sub(pos).mul((expectedDistance - position.distance(pos)) / expectedDistance));
 	}
@@ -261,11 +270,11 @@ public abstract class Ship extends Entity {
 		updatePosition(delta);
 
 		// Update parent
-		super.setRotation(rotation.copy().forEach(r -> Math.toDegrees(r)));
+		super.setRotation(this.rotation.copy().forEach(r -> Math.toDegrees(r)));
 	}
 
 	private void trackCollision() {
-		barriers.allCollisions(this).forEach(v -> velocity.bounceOff(v, 1)); // TODO TEST TES TEST TEST IT
+		barriers.allCollisions(this).forEach(v -> velocity.bounceOff(v, WALL_ELASTICITY));
 	}
 
 	/** Allows the player to control the ship from now on. Call when the race
@@ -283,10 +292,10 @@ public abstract class Ship extends Entity {
 	}
 
 	@Override
-	public void setRotation(Vector3f v) {
-		this.rotation.set(v);
-		this.rotation.forEach(Math::toRadians);
-		super.setRotation(v);
+	public void setRotation(Vector3f rot) {
+		this.rotation.set(rot);
+		this.rotation.forEach(Math::toRadians).forEach(this::correctAngle);
+		super.setRotation(rotation.copy().forEach(r -> Math.toDegrees(r)));
 	}
 
 	public void updateFromPacket(byte[] bytes) {
@@ -336,21 +345,6 @@ public abstract class Ship extends Entity {
 	 * @param delta
 	 *        Time since last call of this function (TODO specify units) */
 	public abstract void update(float delta);
-
-
-	// Game logic data
-	public int getLap() {
-		return lap;
-	}
-	public void setLap(int lap) {
-		this.lap = lap;
-	}
-	public float getDistance() {
-		return distance;
-	}
-	public void setDistance(float distance) {
-		this.distance = distance;
-	}
 
 	@Override
 	public String toString() {

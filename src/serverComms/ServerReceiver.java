@@ -2,9 +2,15 @@ package serverComms;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * Class to read any incoming messages from the client and branch it out as
+ * required
+ * 
+ * @author simon
+ *
+ */
 public class ServerReceiver extends Thread {
   private DetectTimeout detect;
   private String clientName;
@@ -12,11 +18,27 @@ public class ServerReceiver extends Thread {
   private Lobby lobby;
   private GameRoom gameRoom = null;
   private int gameNum = -1;
-  public ServerReceiver(Socket socket, String clientName, DataInputStream client, Lobby lobby) {
+
+  /**
+   * Creates a ServerReceiver object
+   * 
+   * @param clientName
+   *          The client's name
+   * @param client
+   *          The stream to read from
+   * @param lobby
+   *          The lobby in use
+   */
+  public ServerReceiver(String clientName, DataInputStream client, Lobby lobby) {
     this.clientName = clientName;
     this.client = client;
     this.lobby = lobby;
+    detect = new DetectTimeout(lobby.clientTable, clientName);
   }
+
+  /**
+   * Runs the receiver (Called by ServerReceiver.start())
+   */
   public void run() {
     try {
       while (true) {
@@ -42,13 +64,13 @@ public class ServerReceiver extends Thread {
         } else if (fullMsg.getType() == ServerComm.SENDALLGAMES) {
           ArrayList<GameRoom> rooms = new ArrayList<GameRoom>();
           for (GameRoom room : lobby.games) {
-        	  if (!room.isBusy()) {
-        		  rooms.add(room);
-        	  }
+            if (!room.isBusy()) {
+              rooms.add(room);
+            }
           }
           String out = "";
           for (GameRoom r : rooms) {
-        	  out += r.toString() + System.lineSeparator();
+            out += r.toString() + System.lineSeparator();
           }
           lobby.clientTable.getQueue(clientName)
               .offer(new ByteArrayByte(out.getBytes(ServerComm.charset), ServerComm.SENDALLGAMES));
@@ -70,7 +92,7 @@ public class ServerReceiver extends Thread {
           }
         } else if (fullMsg.getType() == ServerComm.SENDPLAYERDATA) {
           if (gameRoom != null) {
-        	  gameRoom.updateUser(gameNum, fullMsg.getMsg());
+            gameRoom.updateUser(gameNum, fullMsg.getMsg());
           }
         } else if (fullMsg.getType() == ServerComm.STARTGAME) {
           int gameID = lobby.clientTable.getGameID(clientName);
@@ -100,6 +122,15 @@ public class ServerReceiver extends Thread {
       // What to do?
     }
   }
+
+  /**
+   * Sets the gameroom for this client and the client's ID within that room
+   * 
+   * @param gameRoom
+   *          The GameRoom
+   * @param gameNum
+   *          The client's ID within that room
+   */
   public void setGame(GameRoom gameRoom, int gameNum) {
     this.gameRoom = gameRoom;
     this.gameNum = gameNum;

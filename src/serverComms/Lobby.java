@@ -22,14 +22,4 @@ public class Lobby {
   public void remove(String clientName) {
     clientTable.remove(clientName);
   }
-
-  /**
-   * Creates a server object and starts it
-   * 
-   * @param args
-   *          Any program arguments to subsequently be ignored
-   */
-  public static void main(String[] args) {
-    Lobby l = new Lobby(4444);
-  }
 }
