@@ -221,6 +221,12 @@ public abstract class Ship extends Entity {
 		else return (float) (-2 * Math.PI + angle);
 	}
 
+	/** Steers the ships, telling it exactly what to do. All parameters (except for delta) should be between -1 and 1.
+	 * 
+	 * @param thrust How fast should the ship accelerate. Negative values do breaking insted.
+	 * @param turn How fast (and in which direction) should the ship turn. Positive values turn right, negative turn left.
+	 * @param strafe How fast should the ship strafe; positive values strafe right.
+	 * @param brokenDelta Time in seconds since the last call of this method. TODO brokenDelta */
 	protected void steer(float thrust, float turn, float strafe, float brokenDelta) {
 		steer(Math.max(0, thrust), -thrust, turn, strafe, brokenDelta);
 	}

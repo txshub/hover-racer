@@ -362,7 +362,6 @@ public class GameRoom {
 	 *        who already finished */
 	public void sendFinishData(byte id, byte[] data) {
 		table.getQueue(players.get(id)).offer(new ByteArrayByte(data, ServerComm.FINISH_DATA));
-		System.out.println("Finish data send to " + id);
 	}
 
 	/** Returns the number of laps in this race
