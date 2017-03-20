@@ -214,13 +214,14 @@ public class GameRoom {
 		if (clientName.equals(hostName)) {
 			inGame = true;
 			RaceSetupData setupData = setupRace();
-			shipManager = new ServerShipManager(setupData, players.size(), maxPlayers - players.size(), trackPoints);
+			shipManager =
+				new ServerShipManager(setupData, players.size(), maxPlayers - players.size(), trackPoints, setupData.startingOrientation);
 			logic = new GameLogic(shipManager.getShipsLogics(), trackPoints, lapCount, players.size(), this);
 			ArrayList<CommQueue> allQueues = new ArrayList<CommQueue>();
 			for (int i = 0; i < players.size(); i++) {
 				table.getReceiver(players.get(i)).setGame(this, i);
-				sendMessage((byte) i, Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA);
-				// table.getQueue(players.get(i)).offer(new ByteArrayByte(Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA));
+				// sendMessage((byte) i, Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA);
+				table.getQueue(players.get(i)).offer(new ByteArrayByte(Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA));
 				allQueues.add(table.getQueue(players.get(i)));
 			}
 			raceStartsAt = System.nanoTime() + TIME_TO_START;
@@ -348,7 +349,7 @@ public class GameRoom {
 		if (raceStartsAt == -1) throw new IllegalStateException("Update called before the race was started");
 		if (System.nanoTime() >= raceStartsAt) shipManager.startRace();
 		if (raceEndsAt != -1 && (logic.raceFinished() || System.nanoTime() >= raceEndsAt)) {
-			for (byte i = 0; i < maxPlayers; i++) {
+			for (byte i = 0; i < players.size(); i++) {
 				sendMessage(i, logic.getRanking(), ServerComm.END_GAME);
 			}
 			System.out.println("RACE ENDED");

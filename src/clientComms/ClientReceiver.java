@@ -70,11 +70,16 @@ public class ClientReceiver extends Thread {
 					RaceSetupData data = Converter.receiveRaceData(fullMsg.getMsg());
 					AudioMaster.stopMusic();
 					AudioMaster.cleanUp();
-					Platform.runLater(new Runnable() {	
-						public void run() {
-							MainMenu.hideScene();
-						}
-					});
+					try {
+						Platform.runLater(new Runnable() {
+
+							public void run() {
+								MainMenu.hideScene();
+							}
+						});
+					} catch (IllegalStateException e) {
+						System.out.println("Game created without GUI");
+					}
 					MainGameLoop.startMultiplayerGame(data, client);
 				} else if (fullMsg.getType() == ServerComm.FULLPOSITIONUPDATE) {
 					if (client.getManager() == null)

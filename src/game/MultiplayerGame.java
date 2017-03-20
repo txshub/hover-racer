@@ -50,7 +50,6 @@ import uiToolkit.Label;
 import uiToolkit.UIRenderer;
 import uiToolkit.fontMeshCreator.FontType;
 import uiToolkit.fontRendering.TextMaster;
-import userInterface.GameMenu;
 import userInterface.MainMenu;
 
 /** Main game class
@@ -99,7 +98,9 @@ public class MultiplayerGame {
 	private String currentMenu = "none";
 	private Container finishContainer;
 	private Label finishText;
-
+	private Vector3f textColour;
+	private FontType font;
+	private ArrayList<Label> leaderboardTexts;
 
 
 	public MultiplayerGame(RaceSetupData data, Client client) {
@@ -123,10 +124,10 @@ public class MultiplayerGame {
 		if (debug) System.out.println("Screen size: " + Display.getWidth() + " x " + Display.getHeight());
 
 		// Terrain
-		TerrainTexture background = new TerrainTexture(loader.loadTexture("new/GridTexture"));
-		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("new/GridTexture"));
-		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("new/GridTexture"));
-		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("new/GridTexture"));
+		TerrainTexture background = new TerrainTexture(loader.loadMipmappedTexture("new/GridTexture",-2.5f));
+		TerrainTexture rTexture = new TerrainTexture(loader.loadMipmappedTexture("new/GridTexture",-2.5f));
+		TerrainTexture gTexture = new TerrainTexture(loader.loadMipmappedTexture("new/GridTexture",-2.5f));
+		TerrainTexture bTexture = new TerrainTexture(loader.loadMipmappedTexture("new/GridTexture",-2.5f));
 		TerrainTexturePack texturePack = new TerrainTexturePack(background, rTexture, gTexture, bTexture);
 
 		// TerrainTexture blendMap = new
@@ -153,7 +154,7 @@ public class MultiplayerGame {
 
 		// Finish Line
 		TexturedModel finishLineModel =
-			new TexturedModel(getModel("finishLineUpdated", loader), new ModelTexture(loader.loadTexture("new/finishLineTextureUpdated")));
+			new TexturedModel(getModel("finishLineUpdated", loader), new ModelTexture(loader.loadMipmappedTexture("new/finishLineTextureUpdated",-1f)));
 		Vector3f firstPoint = new Vector3f(st.getStart());
 		firstPoint.y = 1.05f;
 		Entity finishLine = new Entity(finishLineModel, firstPoint, data.startingOrientation, st.getTrack().get(0).getWidth() * 0.7f);
@@ -173,8 +174,6 @@ public class MultiplayerGame {
 		// Player following camera
 		camera = new Camera(ships.getPlayerShip());
 
-		setupUI(data);
-
 		// Renderers
 		renderer = new MasterRenderer(loader);
 		uiRenderer = new UIRenderer(loader);
@@ -187,6 +186,7 @@ public class MultiplayerGame {
 			leaderboard.add("-----------");
 		}
 
+    setupUI(data);
 
 		AudioMaster.playInGameMusic();
 		try {
@@ -239,12 +239,16 @@ public class MultiplayerGame {
 		// Update UI Stuff
 		lapCurrent.setText(Integer.toString(currentLap));
 		posCurrent.setText(Integer.toString(ranking));
-		// TODO display the leaderboard, currently printing to console
-		if (finished && changed) {
-			System.out.println("You finished! GUI is in progress, but here is the leaderboard:");
-			leaderboard.forEach(System.out::println);
-			changed = false;
+		
+		if (!finishContainer.isVisible() && finished) {
+			finishContainer.setVisibility(true);
+		} else if (finished) {
+		  for (int i = 0; i < leaderboard.size(); i++) {
+		    String text = "\n" + (i+1) + " : " + leaderboard.get(i);
+		    leaderboardTexts.get(i).setText(text);
+		  }
 		}
+		
 
 		camera.move();
 
@@ -299,8 +303,8 @@ public class MultiplayerGame {
 	private void setupUI(RaceSetupData data) {
 		containers = new ArrayList<>();
 
-		Vector3f colour = new Vector3f(0.0275f, 0.6510f, 0.9412f);
-		FontType font = new FontType(loader.loadFontTexture("ui/calibri"), new File("src/resources/ui/calibri.fnt"));
+		textColour = new Vector3f(0.0275f, 0.6510f, 0.9412f);
+		font = new FontType(loader.loadFontTexture("ui/calibri"), new File("src/resources/ui/calibri.fnt"));
 
 		// Main pause menu
 		menu = new Container(loader, "ui/MenuBackground", new Vector2f(448, 120));
@@ -319,7 +323,7 @@ public class MultiplayerGame {
 		});
 		Label resumeText = new Label(loader, "RESUME", font, 2.5f, true, new Vector2f(0, 8), 266);
 		resumeText.setParent(resumeButton);
-		resumeText.setColour(colour);
+		resumeText.setColour(textColour);
 
 		Button optionsButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 160));
 		optionsButton.setParent(menu);
@@ -335,7 +339,7 @@ public class MultiplayerGame {
 		});
 		Label optionsText = new Label(loader, "OPTIONS", font, 2.5f, true, new Vector2f(0, 8), 266);
 		optionsText.setParent(optionsButton);
-		optionsText.setColour(colour);
+		optionsText.setColour(textColour);
 
 		Button menuButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 256));
 		menuButton.setParent(menu);
@@ -343,8 +347,7 @@ public class MultiplayerGame {
 
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Exiting to the menu");
-				Platform.runLater(new Runnable() {
-					
+				Platform.runLater(new Runnable() {					
 					public void run(){
 						try {
 							MainMenu.reloadScene();
@@ -352,12 +355,12 @@ public class MultiplayerGame {
 							System.err.println("reloading the scene doesn't work");
 						}	
 					}
-				});	
+				});
 			}
 		});
 		Label menuText = new Label(loader, "MENU", font, 2.5f, true, new Vector2f(0, 8), 266);
 		menuText.setParent(menuButton);
-		menuText.setColour(colour);
+		menuText.setColour(textColour);
 
 		Button exitButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 352));
 		exitButton.setParent(menu);
@@ -372,7 +375,7 @@ public class MultiplayerGame {
 		});
 		Label exitText = new Label(loader, "EXIT", font, 2.5f, true, new Vector2f(0, 8), 266);
 		exitText.setParent(exitButton);
-		exitText.setColour(colour);
+		exitText.setColour(textColour);
 
 		menu.setVisibility(false);
 
@@ -382,11 +385,11 @@ public class MultiplayerGame {
 
 		Label musicText = new Label(loader, "MUSIC VOLUME", font, 2f, true, new Vector2f(0, 67), 384);
 		musicText.setParent(optionsMenu);
-		musicText.setColour(colour);
+		musicText.setColour(textColour);
 
 		Label musicVolume = new Label(loader, "-1%", font, 2.5f, true, new Vector2f(128, 114), 120);
 		musicVolume.setParent(optionsMenu);
-		musicVolume.setColour(colour);
+		musicVolume.setColour(textColour);
 		musicVolume.setText(Float.toString(AudioMaster.getMusicVolume()));
 
 		Button musicMinusButton = new Button(loader, "ui/minusButton", new Vector2f(58, 114));
@@ -415,11 +418,11 @@ public class MultiplayerGame {
 
 		Label sfxText = new Label(loader, "SFX VOLUME", font, 2f, true, new Vector2f(0, 208), 384);
 		sfxText.setParent(optionsMenu);
-		sfxText.setColour(colour);
+		sfxText.setColour(textColour);
 
 		Label sfxVolume = new Label(loader, "-1%", font, 2.5f, true, new Vector2f(128, 255), 120);
 		sfxVolume.setParent(optionsMenu);
-		sfxVolume.setColour(colour);
+		sfxVolume.setColour(textColour);
 		sfxVolume.setText(Float.toString(AudioMaster.getSFXVolume()));
 
 		Button sfxMinusButton = new Button(loader, "ui/minusButton", new Vector2f(58, 255));
@@ -444,6 +447,155 @@ public class MultiplayerGame {
 					sfxVolume.setText(Float.toString(AudioMaster.getSFXVolume()));
 				}
 			}
+
+      /** Create a track model
+       * 
+       * @return
+       * @author Reece Bennett */
+      private TexturedModel createTrackModel(SeedTrack st) {
+      	float trackHeight = SeedTrack.getTrackHeight();
+      	float barrierHeight = SeedTrack.getBarrierHeight();
+      	float barrierWidth = SeedTrack.getBarrierWidth();
+      	barrierPoints = new ArrayList<>();
+      
+      	// 6 vertices for each track point, 3 components for each vertex
+      	float[] vertices = new float[(trackPoints.size() + 1) * 6 * 3];
+      	// 10 triangles for each track point, 3 vertices per triangle
+      	int[] indices = new int[(trackPoints.size() + 1) * 10 * 3];
+      	float[] texCoords = new float[(trackPoints.size() + 1) * 6 * 2];
+      	float[] normals = new float[vertices.length];
+      
+      	// We can pre-calculate some stuff for normals
+      	Vector3f normTop = new Vector3f(0, 1, 0);
+      	Vector3f normLeftOuter2D = new Vector3f(-barrierHeight, barrierWidth, 0).normalize();
+      	Vector3f normRightOuter2D = new Vector3f(barrierHeight, barrierWidth, 0).normalize();
+      
+      	// Populate vertex and normal arrays
+      	for (int i = 0; i <= trackPoints.size(); i++) {
+      		TrackPoint curPoint = null;
+      		TrackPoint prevPoint = null;
+      		TrackPoint nextPoint = null;
+      		if (i < trackPoints.size()) {
+      			curPoint = trackPoints.get(i);
+      			// If we are at the first point the previous is the last point
+      			int prev = (i == 0) ? trackPoints.size() - 1 : i - 1;
+      			prevPoint = trackPoints.get(prev);
+      
+      			// If we are at the last point the next is the first point
+      			int next = (i == trackPoints.size() - 1) ? 0 : i + 1;
+      			nextPoint = trackPoints.get(next);
+      		} else {
+      			curPoint = trackPoints.get(0);
+      			prevPoint = trackPoints.get(trackPoints.size() - 1);
+      			nextPoint = trackPoints.get(1);
+      		}
+      
+      		// Find the line between previous and next point for direction of
+      		// this
+      		// slice
+      		Vector2f dirVec = new Vector2f(nextPoint).sub(prevPoint).normalize();
+      
+      		// Calculate the perpendicular normal vectors
+      		Vector2f left = new Vector2f(dirVec.y, -dirVec.x).normalize();
+      		Vector2f right = new Vector2f(-dirVec.y, dirVec.x).normalize();
+      
+      		// Apply the offsets to the center point
+      		float w = curPoint.getWidth() / 2;
+      		Vector3f centerPoint = new Vector3f(curPoint.x, trackHeight, curPoint.y);
+      		Vector3f leftPoint = new Vector3f(centerPoint).add(left.x * w, 0, left.y * w);
+      		Vector3f rightPoint = new Vector3f(centerPoint).add(right.x * w, 0, right.y * w);
+      
+      		// Create barrier points
+      		float b = barrierWidth;
+      		Vector3f lBarrierT = new Vector3f(leftPoint).add(0, barrierHeight, 0);
+      		Vector3f rBarrierT = new Vector3f(rightPoint).add(0, barrierHeight, 0);
+      		Vector3f lBarrierB = new Vector3f(leftPoint).add(left.x * b, -trackHeight, left.y * b);
+      		Vector3f rBarrierB = new Vector3f(rightPoint).add(right.x * b, -trackHeight, right.y * b);
+      		barrierPoints.add(leftPoint);
+      		barrierPoints.add(rightPoint);
+      
+      		addToArray(lBarrierB, vertices, i * 18 + 0);
+      		addToArray(lBarrierT, vertices, i * 18 + 3);
+      		addToArray(leftPoint, vertices, i * 18 + 6);
+      		addToArray(rightPoint, vertices, i * 18 + 9);
+      		addToArray(rBarrierT, vertices, i * 18 + 12);
+      		addToArray(rBarrierB, vertices, i * 18 + 15);
+      
+      		// Define the texture coordinates
+      		int n = i * 6 * 2;
+      
+      		texCoords[n + 0] = 0f;
+      		texCoords[n + 1] = i;
+      
+      		texCoords[n + 2] = 0.15f;
+      		texCoords[n + 3] = i;
+      
+      		texCoords[n + 4] = 0.3f;
+      		texCoords[n + 5] = i;
+      
+      		texCoords[n + 6] = 0.7f;
+      		texCoords[n + 7] = i;
+      
+      		texCoords[n + 8] = 0.85f;
+      		texCoords[n + 9] = i;
+      
+      		texCoords[n + 10] = 1f;
+      		texCoords[n + 11] = i;
+      
+      		// First calculate surface normals (technically edge normals as we
+      		// are
+      		// working in a slice but whatever)
+      
+      		// Get Quaternions for rotation to align with left and right vectors
+      		Vector3f normLeft = new Vector3f(left.x, 0, left.y);
+      		Vector3f normRight = new Vector3f(right.x, 0, right.y);
+      
+      		Quaternionf rotationLeft = new Vector3f(-1, 0, 0).rotationTo(normLeft, new Quaternionf());
+      		Quaternionf rotationRight = new Vector3f(1, 0, 0).rotationTo(normRight, new Quaternionf());
+      
+      		Vector3f normLeftOuter = new Vector3f(normLeftOuter2D).rotate(rotationLeft);
+      		Vector3f normRightOuter = new Vector3f(normRightOuter2D).rotate(rotationRight);
+      
+      		// Calculate the vertex normals from the surface normals
+      		Vector3f normLBarrierB = new Vector3f(normLeftOuter).add(normTop).normalize();
+      		Vector3f normLBarrierT = new Vector3f(normLeftOuter).add(normRight).normalize();
+      		Vector3f normLPoint = new Vector3f(normRight).add(normTop).normalize();
+      		Vector3f normRPoint = new Vector3f(normTop).add(normLeft).normalize();
+      		Vector3f normRBarrierT = new Vector3f(normLeft).add(normRightOuter).normalize();
+      		Vector3f normRBarrierB = new Vector3f(normRightOuter).add(normTop).normalize();
+      
+      		addToArray(normLBarrierB, normals, i * 18 + 0);
+      		addToArray(normLBarrierT, normals, i * 18 + 3);
+      		addToArray(normLPoint, normals, i * 18 + 6);
+      		addToArray(normRPoint, normals, i * 18 + 9);
+      		addToArray(normRBarrierT, normals, i * 18 + 12);
+      		addToArray(normRBarrierB, normals, i * 18 + 15);
+      	}
+      
+      	// Populate indices
+      	for (int i = 0; i < trackPoints.size(); i++) {
+      		int n = i * 6;
+      		int offset = i * 30;
+      
+      		addToArray(n, n + 7, n + 6, indices, offset);
+      		addToArray(n, n + 1, n + 7, indices, offset + 3);
+      
+      		addToArray(n + 1, n + 8, n + 7, indices, offset + 6);
+      		addToArray(n + 1, n + 2, n + 8, indices, offset + 9);
+      
+      		addToArray(n + 2, n + 9, n + 8, indices, offset + 12);
+      		addToArray(n + 2, n + 3, n + 9, indices, offset + 15);
+      
+      		addToArray(n + 3, n + 10, n + 9, indices, offset + 18);
+      		addToArray(n + 3, n + 4, n + 10, indices, offset + 21);
+      
+      		addToArray(n + 4, n + 11, n + 10, indices, offset + 24);
+      		addToArray(n + 4, n + 5, n + 11, indices, offset + 27);
+      	}
+      
+      	return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
+      		new ModelTexture(loader.loadTexture("new/trackTexture")));
+      }
 		});
 
 		Button backButton = new Button(loader, "ui/ButtonBackground", new Vector2f(58, 349));
@@ -458,7 +610,7 @@ public class MultiplayerGame {
 		});
 		Label backText = new Label(loader, "BACK", font, 2.5f, true, new Vector2f(0, 6), 266);
 		backText.setParent(backButton);
-		backText.setColour(colour);
+		backText.setColour(textColour);
 
 		optionsMenu.setVisibility(false);
 
@@ -484,9 +636,19 @@ public class MultiplayerGame {
 		finishContainer = new Container(loader, "ui/menuBackground", new Vector2f(448, 120));
 		containers.add(finishContainer);
 
-		finishText = new Label(loader, "You finished!", font, 3f, true, new Vector2f(0, 100), 384);
-		finishText.setColour(colour);
+		finishText = new Label(loader, "You finished!", font, 3f, true, new Vector2f(0, 50), 384);
+		finishText.setColour(textColour);
 		finishText.setParent(finishContainer);
+		
+		leaderboardTexts = new ArrayList<>();
+		
+		for (int i = 0; i < nicknames.size(); i++) {
+		  String text = "\n" + (i+1) + " : " + leaderboard.get(i);
+      Label posText = new Label(loader, text, font, 2.5f, true, new Vector2f(0, 100 + i*40), 384);
+      posText.setParent(finishContainer);
+      posText.setColour(textColour);
+      leaderboardTexts.add(posText);
+		}
 
 		finishContainer.setVisibility(false);
 	}
@@ -637,7 +799,7 @@ public class MultiplayerGame {
 		}
 
 		return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
-			new ModelTexture(loader.loadTexture("new/trackTexture")));
+			new ModelTexture(loader.loadMipmappedTexture("new/trackTexture",-3f)));
 	}
 
 	private void addToArray(Vector3f vector, float[] array, int offset) {
@@ -679,6 +841,6 @@ public class MultiplayerGame {
 	}
 
 	public void endGame() {
-		// TODO End the game here
+		System.out.println("THE GAME HAS ENDED");
 	}
 }
