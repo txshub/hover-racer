@@ -69,7 +69,7 @@ public class ClientReceiver extends Thread {
 				} else if (fullMsg.getType() == ServerComm.RACESETUPDATA) {
 					RaceSetupData data = Converter.receiveRaceData(fullMsg.getMsg());
 					AudioMaster.stopMusic();
-					Platform.setImplicitExit(false);
+					AudioMaster.cleanUp();
 					Platform.runLater(new Runnable() {	
 						public void run() {
 							MainMenu.hideScene();
@@ -88,6 +88,11 @@ public class ClientReceiver extends Thread {
 							Converter.receiveFinished(fullMsg.getMsg()), Converter.receiveCurrentLap(fullMsg.getMsg()));
 				} else if (fullMsg.getType() == ServerComm.FINISH_DATA) {
 					if (client.multiplayerGame != null) client.multiplayerGame.updateFinishData(fullMsg.getMsg());
+				} else if (fullMsg.getType() == ServerComm.END_GAME) {
+					if (client.multiplayerGame != null) {
+						client.multiplayerGame.updateFinishData(fullMsg.getMsg());
+						client.multiplayerGame.endGame();
+					}
 				}
 			}
 		} catch (IOException e) {
