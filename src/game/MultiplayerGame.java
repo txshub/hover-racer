@@ -346,7 +346,11 @@ public class MultiplayerGame {
 				Platform.runLater(new Runnable() {
 					
 					public void run(){
-						MainMenu.reloadScene();	
+						try {
+							MainMenu.reloadScene();
+						} catch (IOException e) {
+							System.err.println("reloading the scene doesn't work");
+						}	
 					}
 				});	
 			}
