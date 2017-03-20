@@ -124,10 +124,10 @@ public class MultiplayerGame {
 		if (debug) System.out.println("Screen size: " + Display.getWidth() + " x " + Display.getHeight());
 
 		// Terrain
-		TerrainTexture background = new TerrainTexture(loader.loadTexture("new/GridTexture"));
-		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("new/GridTexture"));
-		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("new/GridTexture"));
-		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("new/GridTexture"));
+		TerrainTexture background = new TerrainTexture(loader.loadMipmappedTexture("new/GridTexture",-2.5f));
+		TerrainTexture rTexture = new TerrainTexture(loader.loadMipmappedTexture("new/GridTexture",-2.5f));
+		TerrainTexture gTexture = new TerrainTexture(loader.loadMipmappedTexture("new/GridTexture",-2.5f));
+		TerrainTexture bTexture = new TerrainTexture(loader.loadMipmappedTexture("new/GridTexture",-2.5f));
 		TerrainTexturePack texturePack = new TerrainTexturePack(background, rTexture, gTexture, bTexture);
 
 		// TerrainTexture blendMap = new
@@ -154,7 +154,7 @@ public class MultiplayerGame {
 
 		// Finish Line
 		TexturedModel finishLineModel =
-			new TexturedModel(getModel("finishLineUpdated", loader), new ModelTexture(loader.loadTexture("new/finishLineTextureUpdated")));
+			new TexturedModel(getModel("finishLineUpdated", loader), new ModelTexture(loader.loadMipmappedTexture("new/finishLineTextureUpdated",-1f)));
 		Vector3f firstPoint = new Vector3f(st.getStart());
 		firstPoint.y = 1.05f;
 		Entity finishLine = new Entity(finishLineModel, firstPoint, data.startingOrientation, st.getTrack().get(0).getWidth() * 0.7f);
@@ -347,10 +347,13 @@ public class MultiplayerGame {
 
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Exiting to the menu");
-				Platform.runLater(new Runnable() {
-
-					public void run() {
-						MainMenu.reloadScene();
+				Platform.runLater(new Runnable() {					
+					public void run(){
+						try {
+							MainMenu.reloadScene();
+						} catch (IOException e) {
+							System.err.println("reloading the scene doesn't work");
+						}	
 					}
 				});
 			}
@@ -796,7 +799,7 @@ public class MultiplayerGame {
 		}
 
 		return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
-			new ModelTexture(loader.loadTexture("new/trackTexture")));
+			new ModelTexture(loader.loadMipmappedTexture("new/trackTexture",-3f)));
 	}
 
 	private void addToArray(Vector3f vector, float[] array, int offset) {
