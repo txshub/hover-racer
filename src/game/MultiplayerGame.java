@@ -665,4 +665,8 @@ public class MultiplayerGame {
 		}
 
 	}
+
+	public void endGame() {
+		// TODO End the game here
+	}
 }

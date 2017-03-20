@@ -26,6 +26,9 @@ public class GameRoom {
 	// TODO It's currently low for easy resting, might increase it for the actual game
 	private static final long TIME_TO_START = 3L * 1000000000L;
 
+	// Time between the first player finishing the race and the race ending, in nanoseconds.
+	private static final long TIME_TO_END = 30L * 1000000000L;
+
 	private static final int SIDE_DISTANCES = 10;
 	private static final int FORWARD_DISTANCES = 10;
 	private static final int STARTING_HEIGHT = 10;
@@ -44,6 +47,7 @@ public class GameRoom {
 	private GameLogic logic;
 	private UpdateAllUsers updatedUsers;
 	private long raceStartsAt = -1;
+	private long raceEndsAt = -1;
 
 	/** Makes a GameRoom object
 	 * 
@@ -215,7 +219,8 @@ public class GameRoom {
 			ArrayList<CommQueue> allQueues = new ArrayList<CommQueue>();
 			for (int i = 0; i < players.size(); i++) {
 				table.getReceiver(players.get(i)).setGame(this, i);
-				table.getQueue(players.get(i)).offer(new ByteArrayByte(Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA));
+				sendMessage((byte) i, Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA);
+				// table.getQueue(players.get(i)).offer(new ByteArrayByte(Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA));
 				allQueues.add(table.getQueue(players.get(i)));
 			}
 			raceStartsAt = System.nanoTime() + TIME_TO_START;
@@ -342,17 +347,23 @@ public class GameRoom {
 	public void update(float delta) {
 		if (raceStartsAt == -1) throw new IllegalStateException("Update called before the race was started");
 		if (System.nanoTime() >= raceStartsAt) shipManager.startRace();
+		if (raceEndsAt != -1 && (logic.raceFinished() || System.nanoTime() >= raceEndsAt)) {
+			for (byte i = 0; i < maxPlayers; i++) {
+				sendMessage(i, logic.getRanking(), ServerComm.END_GAME);
+			}
+			System.out.println("RACE ENDED");
+		}
 		shipManager.update(delta);
 		logic.update();
 	}
 
 	/** @author Mac
 	 *         Sends a game logic update to a single client
-	 * @param id
-	 *        Client's (and ship's) id */
+	 * @param id Client's (and ship's) id */
 	public void sendLogicUpdate(byte id, int ranking, boolean finished, int currrentLap) {
-		table.getQueue(players.get(id))
-			.offer(new ByteArrayByte(Converter.buildLogicData(ranking, finished, currrentLap), ServerComm.LOGIC_UPDATE));
+		sendMessage(id, Converter.buildLogicData(ranking, finished, currrentLap), ServerComm.LOGIC_UPDATE);
+		// table.getQueue(players.get(id))
+		// .offer(new ByteArrayByte(Converter.buildLogicData(ranking, finished, currrentLap), ServerComm.LOGIC_UPDATE));
 	}
 
 	/** Sends information about player who finished the race (i.e. the leaderboard) to players who already finished to race.
@@ -361,7 +372,14 @@ public class GameRoom {
 	 * @param data Data being sent - an array of IDs in the order of finishing (index 0 is first place). Should only contain IDs of players
 	 *        who already finished */
 	public void sendFinishData(byte id, byte[] data) {
-		table.getQueue(players.get(id)).offer(new ByteArrayByte(data, ServerComm.FINISH_DATA));
+		sendMessage(id, data, ServerComm.FINISH_DATA);
+		// table.getQueue(players.get(id)).offer(new ByteArrayByte(data, ServerComm.FINISH_DATA));
+		// Sending this message means someone has finished the race
+		if (raceEndsAt == -1) raceEndsAt = System.nanoTime() + TIME_TO_END;
+	}
+
+	private void sendMessage(byte id, byte[] message, byte type) {
+		table.getQueue(players.get(id)).offer(new ByteArrayByte(message, type));
 	}
 
 	/** Returns the number of laps in this race

@@ -189,7 +189,7 @@ public class GameLogic {
 	 * to clients
 	 * 
 	 * @return The ranking of the players that finished the race */
-	private byte[] getRanking() {
+	public byte[] getRanking() {
 		byte[] ranking = new byte[finished];
 		for (ShipLogicData player : players) {
 			if (player.finished()) {

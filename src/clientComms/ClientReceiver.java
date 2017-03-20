@@ -83,6 +83,11 @@ public class ClientReceiver extends Thread {
 							Converter.receiveFinished(fullMsg.getMsg()), Converter.receiveCurrentLap(fullMsg.getMsg()));
 				} else if (fullMsg.getType() == ServerComm.FINISH_DATA) {
 					if (client.multiplayerGame != null) client.multiplayerGame.updateFinishData(fullMsg.getMsg());
+				} else if (fullMsg.getType() == ServerComm.END_GAME) {
+					if (client.multiplayerGame != null) {
+						client.multiplayerGame.updateFinishData(fullMsg.getMsg());
+						client.multiplayerGame.endGame();
+					}
 				}
 			}
 		} catch (IOException e) {
