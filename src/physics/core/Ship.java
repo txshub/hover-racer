@@ -277,7 +277,7 @@ public abstract class Ship extends Entity {
 		// Do physics
 		airResistance(delta);
 		shipCollisions();
-		trackCollision();
+		if (!finished) trackCollision();
 		gravity(delta);
 		airCushion(delta);
 		updateRotation(delta);
