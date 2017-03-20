@@ -42,6 +42,9 @@ public class MainGameLoop extends Thread {
     long timer = System.currentTimeMillis();
 
     while (!game.shouldClose()) {
+    	if(ups == 0){
+    		System.gc();
+    	}
       curTime = System.nanoTime();
       diff = curTime - lastTime;
       deltaUPS += diff / updateDur;
