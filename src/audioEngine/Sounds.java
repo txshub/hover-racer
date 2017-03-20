@@ -56,7 +56,8 @@ public class Sounds {
     map.put(BUTTON_CLICK, AudioMaster.loadSound(BUTTON_CLICK));
     map.put(BUTTON_HOVER, AudioMaster.loadSound(BUTTON_HOVER));
     map.put(BACKGROUND_NOISE, AudioMaster.loadSound(BACKGROUND_NOISE));
-
+    map.put(COLLISION, AudioMaster.loadSound(COLLISION));
+    
   }
 
   /**

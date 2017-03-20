@@ -109,6 +109,8 @@ public class MainMenu extends Application {
 			newMenu = new GameMenu();
 			root.getChildren().add(newMenu);
 			root.setVisible(true);
+			AudioMaster.init();
+			AudioMaster.playMusic();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
