@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 
 import audioEngine.AudioMaster;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -72,6 +73,8 @@ public class MainMenu extends Application {
 
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		
+		Platform.setImplicitExit(false);
 
 		// Handle closing the window by pressing 'X'
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -110,6 +113,7 @@ public class MainMenu extends Application {
 			e.printStackTrace();
 		}
 		primaryStage.show();
+		
 
 	}
 	public static void main(String[] args) {

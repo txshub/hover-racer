@@ -69,7 +69,6 @@ public class ClientReceiver extends Thread {
 				} else if (fullMsg.getType() == ServerComm.RACESETUPDATA) {
 					RaceSetupData data = Converter.receiveRaceData(fullMsg.getMsg());
 					AudioMaster.stopMusic();
-					Platform.setImplicitExit(false);
 					Platform.runLater(new Runnable() {	
 						public void run() {
 							MainMenu.hideScene();
