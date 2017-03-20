@@ -24,10 +24,10 @@ public class GameRoom {
 
 	// Time between sending the RaceSetupData and start of the race, in nanoseconds
 	// TODO It's currently low for easy resting, might increase it for the actual game
-	private static final long TIME_TO_START = 3L * 1000000000L;
+	private static final long TIME_TO_START = 3L * 1000000000L; // 3 sec
 
-	// Time between the first player finishing the race and the race ending, in nanoseconds.
-	private static final long TIME_TO_END = 30L * 1000000000L;
+	// Time between the first player (not AI) finishing the race and the race ending, in nanoseconds.
+	private static final long TIME_TO_END = 30L * 1000000000L; // 30 sec
 
 	private static final int SIDE_DISTANCES = 10;
 	private static final int FORWARD_DISTANCES = 10;
