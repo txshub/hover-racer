@@ -91,7 +91,6 @@ public class CreateGameRoom extends GridPane {
 
 				localClient.startSinglePlayerGame(getSeed(), getMaxAIs(), getNoLaps(),
 						DataGenerator.basicShipSetup(getUsername()));
-				Platform.exit();
 
 			} catch (InvalidPlayerNumberException ex) {
 

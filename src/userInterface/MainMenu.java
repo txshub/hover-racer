@@ -103,19 +103,7 @@ public class MainMenu extends Application {
 
 	public static void reloadScene(){
 		
-		root.getChildren().clear();
-		GameMenu newMenu;
-		try {
-			newMenu = new GameMenu();
-			root.getChildren().add(newMenu);
-			root.setVisible(true);
-			AudioMaster.init();
-			AudioMaster.playMusic();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		primaryStage.show();
-		
 
 	}
 	public static void main(String[] args) {
