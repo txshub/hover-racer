@@ -7,12 +7,12 @@ import upgrades.ShipTemplate;
 
 public class DataGenerator {
 
-  public static ShipSetupData basicShipSetup(String nickname) {
-    return new ShipSetupData(nickname, "hovercraft", "hover2Texture", new ShipTemplate());
-  }
+	public static ShipSetupData basicShipSetup(String nickname) {
+		return new ShipSetupData(nickname, "hovercraft", "hover2Texture", new ShipTemplate());
+	}
 
-  public static ShipSetupData fromJson(String json) {
-    return (new Gson()).fromJson(json, ShipSetupData.class);
-  }
+	public static ShipSetupData fromJson(String json) {
+		return (new Gson()).fromJson(json, ShipSetupData.class);
+	}
 
 }

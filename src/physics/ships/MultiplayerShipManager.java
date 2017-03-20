@@ -156,15 +156,16 @@ public class MultiplayerShipManager implements ServerShipProvider {
 	}
 
 	private static TexturedModel makeModel(String model, String texture, Loader loader) {
-		return new TexturedModel(OBJFileLoader.loadOBJ("hovercraft", loader), new ModelTexture(loader.loadTexture("hover2Texture")));
+		// return new TexturedModel(OBJFileLoader.loadOBJ("hovercraft", loader), new ModelTexture(loader.loadTexture("hover2Texture")));
+		return new TexturedModel(OBJFileLoader.loadOBJ(model, loader), new ModelTexture(loader.loadTexture(texture)));
 	}
 
-public void addBarrier(ArrayList<Vector3f> barrierPoints) {
-	
-	player.addBarrier(barrierPoints);
-	for(Ship ship: remotes){
-		ship.addBarrier(barrierPoints);
+	public void addBarrier(ArrayList<Vector3f> barrierPoints) {
+
+		player.addBarrier(barrierPoints);
+		for (Ship ship : remotes) {
+			ship.addBarrier(barrierPoints);
+		}
 	}
-}
 
 }
