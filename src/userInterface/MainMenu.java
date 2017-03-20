@@ -1,13 +1,17 @@
 
 package userInterface;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import audioEngine.AudioMaster;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,68 +28,88 @@ import javafx.stage.WindowEvent;
  */
 public class MainMenu extends Application {
 
-  public GameMenu gameMenu;
-  public Scene scene;
+	public GameMenu gameMenu;
+	public Scene scene;
+	public static Pane root;
+	public static Stage primaryStage;
+	/**
+	 * Method that initializes the primary stage and the current scene.
+	 * 
+	 * @param primaryStage
+	 *            The primary JavaFX stage.
+	 */
+	public void start(Stage primaryStage) throws Exception {
 
-  /**
-   * Method that initializes the primary stage and the current scene.
-   * 
-   * @param primaryStage
-   *          The primary JavaFX stage.
-   */
-  public void start(Stage primaryStage) throws Exception {
+		// Tudor - start the audio engine
+		AudioMaster.init();
+		
+		root = new Pane();
+		root.setPrefSize(1000, 600);
+		
+		this.primaryStage = primaryStage;
 
-    // Tudor - start the audio engine
-    AudioMaster.init();
+		// get file from path
+		InputStream is = Files.newInputStream(Paths.get("src/resources/img/hover-racer.jpg"));
+		Image background = new Image(is);
+		is.close();
 
-    Pane root = new Pane();
-    root.setPrefSize(1000, 600);
+		ImageView imgView = new ImageView(background);
+		imgView.setFitWidth(1000);
+		imgView.setFitHeight(600);
 
-    // get file from path
-    InputStream is = Files.newInputStream(Paths.get("src/resources/img/hover-racer.jpg"));
-    Image background = new Image(is);
-    is.close();
+		gameMenu = new GameMenu();
+		gameMenu.setVisible(true);
 
-    ImageView imgView = new ImageView(background);
-    imgView.setFitWidth(1000);
-    imgView.setFitHeight(600);
+		Rectangle bg = new Rectangle(1000, 600);
+		bg.setOpacity(0.5);
+		bg.setFill(Color.BLACK);
 
-    gameMenu = new GameMenu();
-    gameMenu.setVisible(true);
+		root.getChildren().addAll(imgView, bg, gameMenu);
 
-    Rectangle bg = new Rectangle(1000, 600);
-    bg.setOpacity(0.5);
-    bg.setFill(Color.BLACK);
+		scene = new Scene(root);
 
-    root.getChildren().addAll(imgView, bg, gameMenu);
+		primaryStage.setResizable(false);
+		primaryStage.sizeToScene();
 
-    scene = new Scene(root);
+		primaryStage.setScene(scene);
+		primaryStage.show();
+		
+		Platform.setImplicitExit(false);
 
-    primaryStage.setResizable(false);
-    primaryStage.sizeToScene();
+		// Handle closing the window by pressing 'X'
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 
-    primaryStage.setScene(scene);
-    primaryStage.show();
+			public void handle(WindowEvent we) {
+				AudioMaster.stopMusic();
+				AudioMaster.cleanUp();
+				System.exit(0);
+			}
+		});
 
-    // Handle closing the window by pressing 'X'
-    primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		// Tudor - start the music
+		AudioMaster.playMusic();
 
-      public void handle(WindowEvent we) {
-        AudioMaster.stopMusic();
-        AudioMaster.cleanUp();
-        System.exit(0);
-      }
-    });
+	}
+	
+	public static ObservableList<Node> getMenuChildren(){
+		return root.getChildren();
+	}
+	
+	public static void hideScene(){
+		
+		primaryStage.hide();
+		
+	}
 
-    // Tudor - start the music
-    AudioMaster.playMusic();
+	public static void reloadScene(){
+		
+		primaryStage.show();
 
-  }
+	}
+	public static void main(String[] args) {
 
-  public static void main(String[] args) {
+		launch(args);
 
-    launch(args);
-
-  }
+	}
 
 }

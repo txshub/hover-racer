@@ -6,7 +6,6 @@ import clientComms.Client;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -16,124 +15,197 @@ import serverComms.Lobby;
 
 /**
  * 
- * @author Andreea Gheorghe
+ * @author Andreea Gheorghe Class that implements the design and functionality
+ *         of the single player mode window.
  *
  */
 
 public class CreateGameRoom extends GridPane {
 
-  public CreateGameRoom() {
+	private String gameRoomSeed;
+	private int maxAIs;
+	private int lapNo;
+	private String username;
+	private TextField usernameInput;
+	private TextField seedInput;
+	private TextField noAIsInput;
+	private TextField noLapsInput;
 
-    this.setAlignment(Pos.CENTER);
-    this.setHgap(40);
-    this.setVgap(3);
-    this.setPadding(new Insets(20, 10, 0, 30));
+	/**
+	 * Constructor for the CreateGameRoom class.
+	 */
+	public CreateGameRoom() {
 
-    VBox box6 = new VBox(10);
-    GridPane.setRowSpan(box6, 2);
-    box6.setAlignment(Pos.CENTER);
+		this.setAlignment(Pos.CENTER);
+		this.setHgap(40);
+		this.setVgap(3);
+		this.setPadding(new Insets(20, 10, 0, 30));
 
-    TextStyle username = new TextStyle("CHOOSE A USERNAME", 25);
-    Text usernameText = username.getTextStyled();
+		VBox mapBox = new VBox(10);
+		GridPane.setRowSpan(mapBox, 2);
+		mapBox.setAlignment(Pos.CENTER);
 
-    TextStyle seed = new TextStyle("CHOOSE A SEED", 25);
-    Text seedText = seed.getTextStyled();
+		TextStyle username = new TextStyle("CHOOSE A USERNAME", 25);
+		Text usernameText = username.getTextStyled();
 
-    TextStyle noAIs = new TextStyle("CHOOSE THE NUMBER OF AI'S", 25);
-    Text noAIsText = noAIs.getTextStyled();
+		TextStyle seed = new TextStyle("CHOOSE A SEED", 25);
+		Text seedText = seed.getTextStyled();
 
-    TextStyle noLaps = new TextStyle("CHOOSE THE NUMBER OF LAPS", 25);
-    Text noLapsText = noLaps.getTextStyled();
+		TextStyle noAIs = new TextStyle("CHOOSE THE NUMBER OF AI'S", 25);
+		Text noAIsText = noAIs.getTextStyled();
 
-    TextField usernameInput = new TextField();
-    TextField seedInput = new TextField();
-    TextField noAIsInput = new TextField();
-    TextField noLapsInput = new TextField();
+		TextStyle noLaps = new TextStyle("CHOOSE THE NUMBER OF LAPS", 25);
+		Text noLapsText = noLaps.getTextStyled();
 
-    MenuButton generateTrack = new MenuButton("PREVIEW THIS TRACK", 350, 70, 30);
+		usernameInput = new TextField();
+		seedInput = new TextField();
+		noAIsInput = new TextField();
+		noLapsInput = new TextField();
 
-    generateTrack.setOnMouseClicked(event -> {
+		MenuButton generateTrack = new MenuButton("PREVIEW THIS TRACK", 350, 70, 30);
+		generateTrack.setOnMouseClicked(event -> {
 
-      if (box6.getChildren().size() > 0) {
+			if (mapBox.getChildren().size() > 0) {
 
-        box6.getChildren().remove(0);
-      }
+				mapBox.getChildren().remove(0);
+			}
 
-      Map track = null;
-      try {
+			setSeed();
+			Map track = new Map(getSeed());
+			mapBox.getChildren().add(track);
 
-        track = new Map(seedInput.getText());
-        box6.getChildren().add(track);
-      } catch (Exception e) {
-        try {
-          PopUpWindow.display("NULL SEED");
-        } catch (IOException ex1) {
-          ex1.printStackTrace();
-          System.err.println("POP UP NOT WORKING");
-        }
-      }
-    });
+		});
 
-    MenuButton createGameRoom = new MenuButton("START GAME", 350, 70, 30);
+		MenuButton createGameRoom = new MenuButton("START GAME", 350, 70, 30);
+		createGameRoom.setOnMouseClicked(event -> {
 
-    createGameRoom.setOnMouseClicked(event -> {
+			try {
+				setSettings();
 
-      // CREATE LOCAL SERVER //
+				// CREATE LOCAL SERVER //
+				Lobby localLobby = new Lobby(4445);
 
-      Lobby localLobby = new Lobby(4445);
+				// CREATE SINGLE PLAYER CLIENT //
+				Client localClient = new Client(getUsername(), 4445, "localhost");
+				localClient.start();
 
-      // CREATE SINGLE PLAYER CLIENT //
+				localClient.startSinglePlayerGame(getSeed(), getMaxAIs(), getNoLaps(),
+						DataGenerator.basicShipSetup(getUsername()));
 
-      Client localClient = new Client(usernameInput.getText(), 4445, "localhost");
-      localClient.start();
+			} catch (InvalidPlayerNumberException ex) {
 
-      // START SINGLE PLAYER GAME //
+				try {
+					PopUpWindow.display("CHOOSE A NUMBER BETWEEN 1 AND 8");
+				} catch (Exception e) {
+					System.err.println("POP UP NOT WORKING");
+				}
+			} catch (NullPointerException exp) {
 
-      try {
+				try {
+					PopUpWindow.display("NULL INPUT");
+				} catch (Exception e) {
+					System.err.println("POP UP NOT WORKING");
+				}
 
-        localClient.startSinglePlayerGame(seedInput.getText(),
-            Integer.valueOf(noAIsInput.getText()), Integer.valueOf(noLapsInput.getText()),
-            DataGenerator.basicShipSetup(usernameInput.getText()));
-        Platform.exit();
+			} catch (IOException e) {
 
-      } catch (NumberFormatException e) {
+				System.err.println("SINGLE PLAYER MODE DOES NOT WORK");
+			}
 
-        int num = 0;
-        for (int i = 0; i < seedInput.getText().length(); i++) {
-          num *= (int) seedInput.getText().charAt(i);
-        }
+		});
 
-      } catch (IOException exp) {
+		// GRID LAYOUT //
 
-        exp.printStackTrace();
-      }
-      ((Node) event.getSource()).getScene().getWindow().hide();
+		add(usernameText, 0, 1);
+		add(usernameInput, 0, 2);
 
-    });
+		add(seedText, 0, 3);
+		add(seedInput, 0, 4);
 
-    add(usernameText, 0, 1);
-    add(usernameInput, 0, 2);
+		add(noAIsText, 1, 1);
+		add(noAIsInput, 1, 2);
 
-    add(seedText, 0, 3);
-    add(seedInput, 0, 4);
+		add(noLapsText, 1, 3);
+		add(noLapsInput, 1, 4);
 
-    add(noAIsText, 1, 1);
-    add(noAIsInput, 1, 2);
+		add(mapBox, 0, 5);
 
-    add(noLapsText, 1, 3);
-    add(noLapsInput, 1, 4);
+		add(generateTrack, 0, 7);
+		add(createGameRoom, 1, 7);
 
-    add(box6, 0, 5);
+		GridPane.setMargin(usernameInput, new Insets(0, 0, 20, 0));
+		GridPane.setMargin(seedInput, new Insets(0, 0, 20, 0));
+		GridPane.setMargin(noAIsInput, new Insets(0, 0, 20, 0));
+		GridPane.setMargin(generateTrack, new Insets(0, 0, 20, 0));
+		GridPane.setMargin(createGameRoom, new Insets(0, 0, 20, 0));
 
-    add(generateTrack, 0, 7);
-    add(createGameRoom, 1, 7);
+	}
 
-    GridPane.setMargin(usernameInput, new Insets(0, 0, 20, 0));
-    GridPane.setMargin(seedInput, new Insets(0, 0, 20, 0));
-    GridPane.setMargin(noAIsInput, new Insets(0, 0, 20, 0));
-    GridPane.setMargin(generateTrack, new Insets(0, 0, 20, 0));
-    GridPane.setMargin(createGameRoom, new Insets(0, 0, 20, 0));
+	/**
+	 * Sets the seed that is used to preview the track.
+	 */
+	public void setSeed() {
 
-  }
+		this.gameRoomSeed = seedInput.getText();
+	}
+
+	/**
+	 * Sets the seed, maximum number of AIs, number of laps and username by
+	 * taking the input of the user.
+	 * 
+	 * @throws InvalidPlayerNumberException
+	 */
+	public void setSettings() throws InvalidPlayerNumberException {
+
+		if (usernameInput.getText().isEmpty() || noAIsInput.getText().isEmpty() || noLapsInput.getText().isEmpty()) {
+			throw new NullPointerException();
+		}
+
+		this.gameRoomSeed = seedInput.getText();
+		this.maxAIs = Integer.valueOf(noAIsInput.getText());
+		this.lapNo = Integer.valueOf(noLapsInput.getText());
+		this.username = usernameInput.getText();
+
+		if (this.maxAIs < 1 || this.maxAIs > 8) {
+			throw new InvalidPlayerNumberException();
+		}
+
+	}
+
+	/**
+	 * Get method for the game room seed.
+	 * 
+	 * @return The game room seed.
+	 */
+	public String getSeed() {
+		return this.gameRoomSeed;
+	}
+
+	/**
+	 * Get method for the maximum number of AI players.
+	 * 
+	 * @return The maximum number of AI players.
+	 */
+	public int getMaxAIs() {
+		return this.maxAIs;
+	}
+
+	/**
+	 * Get method for the username.
+	 * 
+	 * @return The chosen username.
+	 */
+	public String getUsername() {
+		return this.username;
+	}
+
+	/**
+	 * Get method for the number of laps.
+	 * 
+	 * @return The number of laps.
+	 */
+	public int getNoLaps() {
+		return this.lapNo;
+	}
 
 }

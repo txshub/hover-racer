@@ -13,6 +13,7 @@ import serverComms.ByteArrayByte;
 import serverComms.GameRoom;
 import serverComms.ServerComm;
 import serverLogic.Converter;
+import userInterface.MainMenu;
 
 /** Thread to receive any messages passed from the server
  * 
@@ -69,7 +70,16 @@ public class ClientReceiver extends Thread {
 					RaceSetupData data = Converter.receiveRaceData(fullMsg.getMsg());
 					AudioMaster.stopMusic();
 					AudioMaster.cleanUp();
-					Platform.exit();
+					try {
+						Platform.runLater(new Runnable() {
+
+							public void run() {
+								MainMenu.hideScene();
+							}
+						});
+					} catch (IllegalStateException e) {
+						System.out.println("Game created without GUI");
+					}
 					MainGameLoop.startMultiplayerGame(data, client);
 				} else if (fullMsg.getType() == ServerComm.FULLPOSITIONUPDATE) {
 					if (client.getManager() == null)
@@ -83,6 +93,11 @@ public class ClientReceiver extends Thread {
 							Converter.receiveFinished(fullMsg.getMsg()), Converter.receiveCurrentLap(fullMsg.getMsg()));
 				} else if (fullMsg.getType() == ServerComm.FINISH_DATA) {
 					if (client.multiplayerGame != null) client.multiplayerGame.updateFinishData(fullMsg.getMsg());
+				} else if (fullMsg.getType() == ServerComm.END_GAME) {
+					if (client.multiplayerGame != null) {
+						client.multiplayerGame.updateFinishData(fullMsg.getMsg());
+						client.multiplayerGame.endGame();
+					}
 				}
 			}
 		} catch (IOException e) {

@@ -62,8 +62,6 @@ public abstract class Ship extends Entity {
 	// backwards)
 	private static boolean ACTUALLY_BREAK = true;
 
-	private StatManager stats;
-
 	transient private Vector3 position;
 	private Vector3 rotation;
 	private Vector3 velocity;
@@ -73,6 +71,7 @@ public abstract class Ship extends Entity {
 	private Collection<Ship> otherShips;
 	private GroundProvider ground;
 	private Barriers barriers;
+	private StatManager stats;
 	private CollisionListener collisionListener;
 
 	private byte id;
@@ -145,7 +144,7 @@ public abstract class Ship extends Entity {
 	 * @param delta
 	 *        Time in seconds that passed since the last call of this function */
 	private void airResistance(float delta) {
-		velocity.forEach(v -> Math.signum(v) * Math.max(0, (Math.abs(v) - delta * Math.sqrt(Math.abs(v) * AIR_RESISTANCE))));
+		velocity.forEach(v -> Math.signum(v) * Math.max(0, (Math.abs(v) - delta * Math.sqrt(Math.abs(v) * stats.AIR_RESISTANCE))));
 	}
 
 	/** Handle colliding with other ships */
@@ -161,7 +160,7 @@ public abstract class Ship extends Entity {
 
 	/** Changes the velocity to account for a collision with a different ship */
 	private void collideWith(Ship ship) {
-		// if (collisionListener != null) collisionListener.addCollision(this, ship); // TODO fix sounds
+		if (collisionListener != null) collisionListener.addCollision(this, ship); // TODO fix sounds
 		Vector3 pos = ship.getInternalPosition().copy();
 		float expectedDistance = ship.getSize() + this.getSize();
 		// Apply momentum
@@ -172,7 +171,7 @@ public abstract class Ship extends Entity {
 
 	/** Apply the force of gravity */
 	private void gravity(float delta) {
-		velocity.changeY(y -> y - GRAVITY * delta * VERTICAL_SCALE);
+		velocity.changeY(y -> y - stats.GRAVITY * delta * VERTICAL_SCALE);
 	}
 
 	/** Apply the forces of the air cushion (also bounce off ground if it ever
@@ -184,7 +183,8 @@ public abstract class Ship extends Entity {
 			position.changeY(y -> y - distance + 1); // Get above ground
 			velocity.changeY(y -> -.3 * y); // Change velocity to upward
 		} else if (distance > 0)
-			velocity.changeY(y -> y + delta * modifier * AIR_CUSHION * VERTICAL_SCALE / Math.pow(Math.max(distance, 1), CUSHION_SCALE));
+			velocity.changeY(
+				y -> y + delta * modifier * stats.AIR_CUSHION * VERTICAL_SCALE / Math.pow(Math.max(distance, 1), stats.CUSHION_SCALE));
 	}
 
 	/** Handles collisions with the track edges */
@@ -221,6 +221,12 @@ public abstract class Ship extends Entity {
 		else return (float) (-2 * Math.PI + angle);
 	}
 
+	/** Steers the ships, telling it exactly what to do. All parameters (except for delta) should be between -1 and 1.
+	 * 
+	 * @param thrust How fast should the ship accelerate. Negative values do breaking insted.
+	 * @param turn How fast (and in which direction) should the ship turn. Positive values turn right, negative turn left.
+	 * @param strafe How fast should the ship strafe; positive values strafe right.
+	 * @param brokenDelta Time in seconds since the last call of this method. TODO brokenDelta */
 	protected void steer(float thrust, float turn, float strafe, float brokenDelta) {
 		steer(Math.max(0, thrust), -thrust, turn, strafe, brokenDelta);
 	}
@@ -235,15 +241,15 @@ public abstract class Ship extends Entity {
 		}
 		// Turning
 		if (turn != 0) {
-			rotationalVelocity.changeY(y -> y - delta * turn * TURN_SPEED);
-			rotationalVelocity.changeZ(z -> z + delta * turn * TURN_SPEED * SPEED_OF_ROTATION_WHILE_TURNING);
+			rotationalVelocity.changeY(y -> y - delta * turn * stats.TURN_SPEED);
+			rotationalVelocity.changeZ(z -> z + delta * turn * stats.TURN_SPEED * SPEED_OF_ROTATION_WHILE_TURNING);
 		}
 		// Accelerating
-		accelerate2d(delta * thrust * ACCELERATION, (float) Math.PI * 1.5f);
+		accelerate2d(delta * thrust * stats.ACCELERATION, (float) Math.PI * 1.5f);
 		// Breaking
-		if (breaking > 0) airResistance(delta * breaking * BREAK_POWER);
+		if (breaking > 0) airResistance(delta * breaking * stats.BREAK_POWER);
 		// Strafing TODO change to an instant boost (?)
-		if (strafe != 0) accelerate2d(delta * strafe * ACCELERATION, (float) Math.PI);
+		if (strafe != 0) accelerate2d(delta * strafe * stats.ACCELERATION, (float) Math.PI);
 	}
 
 
@@ -348,7 +354,7 @@ public abstract class Ship extends Entity {
 	 *         acceleration would average out. Actual speed might be more due to
 	 *         other factors. Currently only used by the sound engine. */
 	public float getMaxSpeed() {
-		return MAX_SPEED;
+		return stats.MAX_SPEED;
 	}
 
 	/** Updates this ship. This includes receiving packets from server for
