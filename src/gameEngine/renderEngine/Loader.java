@@ -118,25 +118,12 @@ public class Loader {
 	/**
 	 * @param fileName
 	 *            the texture file
-	 * @return the texture id
-	 */
-	public int loadTexture(String fileName) {
-		return loadRawTexture(fileName).getTextureID();
-	}
-
-	/**
-	 * @param fileName
-	 *            the texture file
 	 * @return the texture
 	 */
 	public Texture loadRawTexture(String fileName) {
 		Texture texture = null;
 		try {
 			texture = TextureLoader.getTexture("PNG", new FileInputStream("src/resources/" + fileName + ".png"));
-			// mipmapping
-			GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
-			GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, -1f);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println("Tried to load texture " + fileName + ".png , didn't work");
@@ -149,15 +136,59 @@ public class Loader {
 	/**
 	 * @param fileName
 	 *            the texture file
+	 * @return the texture
+	 */
+	public int loadTexture(String fileName) {
+		Texture texture = null;
+		try {
+			texture = TextureLoader.getTexture("PNG", new FileInputStream("src/resources/" + fileName + ".png"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Tried to load texture " + fileName + ".png , didn't work");
+			System.exit(-1);
+		}
+		textures.add(texture.getTextureID());
+		return texture.getTextureID();
+	}
+
+	/**
+	 * @param fileName
+	 *            the texture file
+	 * @param the
+	 *            mipmapping value to use on the texture
+	 * @return the texture
+	 */
+	public int loadMipmappedTexture(String fileName, float mipmappingValue) {
+		Texture texture = null;
+		try {
+			texture = TextureLoader.getTexture("PNG", new FileInputStream("src/resources/" + fileName + ".png"));
+			// mipmapping
+			GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
+			GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, mipmappingValue);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Tried to load texture " + fileName + ".png , didn't work");
+			System.exit(-1);
+		}
+		textures.add(texture.getTextureID());
+		return texture.getTextureID();
+	}
+
+	/**
+	 * @param fileName
+	 *            the texture file
 	 * @return the texture id
 	 */
 	public int loadFontTexture(String fileName) {
 		Texture texture = null;
 		try {
 			texture = TextureLoader.getTexture("PNG", new FileInputStream("src/resources/" + fileName + ".png"));
-			GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
-			GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0f);
+			// GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+			// GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
+			// GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
+			// GL11.glTexParameterf(GL11.GL_TEXTURE_2D,
+			// GL14.GL_TEXTURE_LOD_BIAS, 0f);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println("Tried to load texture " + fileName + ".png , didn't work");
