@@ -30,19 +30,28 @@ public class DetectTimeout extends Thread {
    * Runs the DetectTimeout object (Called with DetectTimeout.start())
    */
   public void run() {
-    try {
-      Thread.sleep(20000); // Sleep for 20s
-      if (!messageReceived) { // If no message is received
-        if (ServerComm.DEBUG)
-          System.out.println("Client " + user + " disconnected"); // If debug is
-                                                                  // on, print a
-                                                                  // disconnect
-                                                                  // message
-        table.remove(user); // Remove the user from the server
-      }
-    } catch (InterruptedException e) {
-
-    }
+//    try {
+//      Thread.sleep(20000); // Sleep for 20s
+//      if (!messageReceived) { // If no message is received
+//        if (ServerComm.DEBUG)
+//          System.out.println("Client " + user + " disconnected"); // If debug is
+//                                                                  // on, print a
+//                                                                  // disconnect
+//                                                                  // message
+//        table.remove(user); // Remove the user from the server
+//      }
+//    } catch (InterruptedException e) {
+//
+//    }
+	  try {
+		  while(messageReceived) {
+			  messageReceived = false;
+			  Thread.sleep(10000); //Sleep for 10s
+		  }
+		  table.remove(user);
+	  } catch (InterruptedException e) {
+		  
+	  }
 
   }
 

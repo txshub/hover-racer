@@ -114,9 +114,6 @@ public class ServerReceiver extends Thread {
         } else {
           System.out.println("Unknown Message Type: " + fullMsg.getType());
         }
-        detect.interrupt();
-        detect = new DetectTimeout(lobby.clientTable, clientName);
-        detect.start();
       }
     } catch (IOException e) {
       // What to do?

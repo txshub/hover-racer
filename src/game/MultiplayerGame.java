@@ -347,10 +347,13 @@ public class MultiplayerGame {
 
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Exiting to the menu");
-				Platform.runLater(new Runnable() {
-
-					public void run() {
-						MainMenu.reloadScene();
+				Platform.runLater(new Runnable() {					
+					public void run(){
+						try {
+							MainMenu.reloadScene();
+						} catch (IOException e) {
+							System.err.println("reloading the scene doesn't work");
+						}	
 					}
 				});
 			}

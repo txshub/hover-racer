@@ -193,7 +193,13 @@ public class GameLogic {
 		byte[] ranking = new byte[finished];
 		for (ShipLogicData player : players) {
 			if (player.finished()) {
-				ranking[player.getRanking() - 1] = player.getId();
+				try {
+					// TODO actually fix whatever is causeing it
+					ranking[player.getRanking() - 1] = player.getId();
+				} catch (ArrayIndexOutOfBoundsException e) {
+					System.err.println(e.getMessage());
+				}
+
 			}
 		}
 		return ranking;

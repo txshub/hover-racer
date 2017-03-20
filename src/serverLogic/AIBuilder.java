@@ -13,7 +13,11 @@ public class AIBuilder {
 	}
 
 	public static ShipSetupData fakeAIData() {
-		return new ShipSetupData("Bot" + (int) (Math.random() * 100), "newShip", "newShipTexture", makeBasicStats());
+		if (Math.random() > .5) {
+			return new ShipSetupData("Small bot" + (int) (Math.random() * 100), "newShip", "newShipTexture", makeBasicStats());
+		} else {
+			return new ShipSetupData("Fat bot" + (int) (Math.random() * 100), "hovercraft", "hover2Texture", makeBasicStats());
+		}
 	}
 
 }

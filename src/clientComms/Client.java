@@ -62,9 +62,7 @@ public class Client extends Thread {
       toServer = new DataOutputStream(new BufferedOutputStream(testConn.getOutputStream()));
       sendByteMessage(new byte[0], ServerComm.TESTCONN);
       testConn.close();
-    } catch (UnknownHostException e) {
-      serverOn = false;
-    } catch (IOException e) {
+    } catch (Exception e) {
       serverOn = false;
     }
   }
@@ -80,12 +78,11 @@ public class Client extends Thread {
       server = new Socket(machineName, portNumber);
       toServer = new DataOutputStream(new BufferedOutputStream(server.getOutputStream()));
       fromServer = new DataInputStream(new BufferedInputStream(server.getInputStream()));
-    } catch (UnknownHostException e) {
-      System.err.println("Unknown host: " + machineName);
+    } catch (Exception e) {
       serverOn = false;
-    } catch (IOException e) {
-      serverOn = false;
+      return;
     }
+    System.out.println("Proceeded");
     ClientReceiver receiver = new ClientReceiver(fromServer, this);
     receiver.start();
     try {

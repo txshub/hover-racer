@@ -32,6 +32,8 @@ public class MainMenu extends Application {
 	public Scene scene;
 	public static Pane root;
 	public static Stage primaryStage;
+    public static ImageView imgView;
+    public static Rectangle bg;
 	/**
 	 * Method that initializes the primary stage and the current scene.
 	 * 
@@ -53,14 +55,14 @@ public class MainMenu extends Application {
 		Image background = new Image(is);
 		is.close();
 
-		ImageView imgView = new ImageView(background);
+		imgView = new ImageView(background);
 		imgView.setFitWidth(1000);
 		imgView.setFitHeight(600);
 
 		gameMenu = new GameMenu();
 		gameMenu.setVisible(true);
 
-		Rectangle bg = new Rectangle(1000, 600);
+		bg = new Rectangle(1000, 600);
 		bg.setOpacity(0.5);
 		bg.setFill(Color.BLACK);
 
@@ -100,11 +102,20 @@ public class MainMenu extends Application {
 		primaryStage.hide();
 		
 	}
-
-	public static void reloadScene(){
+	
+	
+	public static void reloadScene() throws IOException {
+		
+		for(int i=0; i< root.getChildren().size(); i++){
+			if(!root.getChildren().get(i).equals(imgView) && !root.getChildren().get(i).equals(bg)){
+				root.getChildren().remove(i);
+			}
+		}
+		
+		GameMenu newMenu = new GameMenu();
+		root.getChildren().add(newMenu);
 		
 		primaryStage.show();
-
 	}
 	public static void main(String[] args) {
 
