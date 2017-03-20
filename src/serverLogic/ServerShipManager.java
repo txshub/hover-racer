@@ -27,7 +27,7 @@ public class ServerShipManager implements ServerShipProvider {
 	private Map<Byte, byte[]> packets;
 	private GroundProvider ground;
 
-	public ServerShipManager(RaceSetupData data, int players, int ais, ArrayList<TrackPoint> trackPoints) {
+	public ServerShipManager(RaceSetupData data, int players, int ais, ArrayList<TrackPoint> trackPoints, Vector3f startingOrientation) {
 		System.out.println("Server generated race data:");
 		System.out.println(data.toString());
 
@@ -51,6 +51,7 @@ public class ServerShipManager implements ServerShipProvider {
 					.add(new AIShip((byte) i, null, data.getStartingPositions().get(i), null, ground, trackPoints, data.getStats().get(i)));
 		}
 		ships.forEach(s -> s.addOtherShips(ships));
+		ships.forEach(ship -> ship.setRotation(startingOrientation));
 
 		for (Ship ship : ships) {
 			ship.addBarrier(makeBarrierPoints(trackPoints));

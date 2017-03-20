@@ -50,7 +50,6 @@ import uiToolkit.Label;
 import uiToolkit.UIRenderer;
 import uiToolkit.fontMeshCreator.FontType;
 import uiToolkit.fontRendering.TextMaster;
-import userInterface.GameMenu;
 import userInterface.MainMenu;
 
 /** Main game class
@@ -344,11 +343,11 @@ public class MultiplayerGame {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Exiting to the menu");
 				Platform.runLater(new Runnable() {
-					
-					public void run(){
-						MainMenu.reloadScene();	
+
+					public void run() {
+						MainMenu.reloadScene();
 					}
-				});	
+				});
 			}
 		});
 		Label menuText = new Label(loader, "MENU", font, 2.5f, true, new Vector2f(0, 8), 266);
@@ -675,6 +674,6 @@ public class MultiplayerGame {
 	}
 
 	public void endGame() {
-		// TODO End the game here
+		System.out.println("THE GAME HAS ENDED");
 	}
 }
