@@ -9,6 +9,7 @@ import javafx.scene.CacheHint;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 
 /**
  * 
@@ -28,6 +29,9 @@ public class CustomisationOptions extends GridPane {
 
 		// default id - ship type 1
 		setTypeId(1);
+		
+		TextStyle select = new TextStyle("SELECT A SHIP", 45);
+		Text selectText = select.getTextStyled();
 		
 		// get file from path
 		InputStream is = Files.newInputStream(Paths.get("src/resources/img/ship1.png"));
@@ -64,10 +68,10 @@ public class CustomisationOptions extends GridPane {
 		});
 		
 		// add them to grid pane
-		
-		add(ship1Button, 0, 0);
-		add(ship2Button, 1, 0);
-		add(ship3Button, 2, 0);
+		add(selectText, 0, 0);
+		add(ship1Button, 0, 1);
+		add(ship2Button, 1, 1);
+		add(ship3Button, 2, 1);
 		
 		setHgap(20);
 		
