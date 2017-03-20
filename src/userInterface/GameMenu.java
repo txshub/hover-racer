@@ -35,10 +35,11 @@ import serverComms.ServerComm;
 public class GameMenu extends Parent {
 
 	private GridPane initialWindow, settingsWindow, connectMultiWindow, hostGameRoomWindow, joinGameRoomWindow,
-			gameRoomLobbyWindow, creditsWindow, keyBindingsWindow;
+			gameRoomLobbyWindow, creditsWindow, keyBindingsWindow, shipCustomisationWindow;
 	private VBox multiOptionsWindow, singleGameWindow;
-	private MenuButton btnPlayGame, btnPlayAI, btnOptions, btnExit, btnCredits, btnKeyBindings, btnBackKeyBindings,
-			btnBackCredits, btnBackSettings, btnBackMulti, btnBackSingle, btnBackHost, btnBackMultiOptions, btnBackJoin;
+	private MenuButton btnPlayGame, btnPlayAI, btnOptions, btnExit, btnCredits, btnKeyBindings, btnNextSingle,
+			btnNextMulti, btnBackKeyBindings, btnBackCustomisationSingle, btnBackCustomisationMulti, btnBackCredits,
+			btnBackSettings, btnBackMulti, btnBackSingle, btnBackHost, btnBackMultiOptions, btnBackJoin;
 	private SoundSlider soundSlider;
 	private MusicSlider musicSlider;
 	private Credits credits;
@@ -50,6 +51,7 @@ public class GameMenu extends Parent {
 	public static String usr;
 	public Client client;
 	private final int OFFSET = 600;
+	private CustomisationOptions customisations;
 
 	/**
 	 * Constructor for the GameMenu class.
@@ -62,6 +64,7 @@ public class GameMenu extends Parent {
 		settingsWindow = new GridPane();
 		creditsWindow = new GridPane();
 		keyBindingsWindow = new GridPane();
+		shipCustomisationWindow = new GridPane();
 		connectMultiWindow = new GridPane();
 		multiOptionsWindow = new VBox(15);
 		hostGameRoomWindow = new GridPane();
@@ -75,6 +78,8 @@ public class GameMenu extends Parent {
 
 		hostGameRoom = new HostGameRoom();
 		createGameRoom = new CreateGameRoom();
+		
+		customisations = new CustomisationOptions();
 
 		// BUILD THE WINDOWS //
 
@@ -82,6 +87,7 @@ public class GameMenu extends Parent {
 		buildSettingsWindow();
 		buildCreditsWindow();
 		buildKeyBindingsWindow();
+		buildShipCustomisationWindow();
 		buildConnectMultiWindow();
 		buildMultiOptionsWindow();
 		buildSingleGameWindow();
@@ -107,16 +113,15 @@ public class GameMenu extends Parent {
 		captionText.setY(450);
 
 		// LOAD TUTORIAL IMAGE //
-		
+
 		InputStream is = Files.newInputStream(Paths.get("src/resources/ui/keybindingsInGame.png"));
 		Image keyBindings = new Image(is);
 		is.close();
 
 		ImageView tutorial = new ImageView(keyBindings);
-		tutorial.setFitWidth(700);
-		tutorial.setFitHeight(400);
+		tutorial.setFitWidth(800);
+		tutorial.setFitHeight(420);
 
-		
 		// BUTTON FUNCTIONALITY //
 
 		btnPlayGame = new MenuButton("MULTIPLAYER", 350, 70, 30);
@@ -153,17 +158,18 @@ public class GameMenu extends Parent {
 		btnPlayAI = new MenuButton("SINGLE PLAYER", 350, 70, 30);
 		btnPlayAI.setOnMouseClicked(event -> {
 
-			// SINGLE PLAYER MODE
+			// SHIP CUSTOMISATION IN SINGLE PLAYER MODE
 			// Enter the game with the computer-controlled players
+			// Choose a ship for the single player
 			try {
-				getChildren().add(singleGameWindow);
+				getChildren().add(shipCustomisationWindow);
 				getChildren().removeAll(hoverText, racerText, captionText);
 
 				TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), initialWindow);
 				trans.setToX(initialWindow.getTranslateX() - OFFSET);
 
-				TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), singleGameWindow);
-				trans1.setToX(singleGameWindow.getTranslateX() - OFFSET);
+				TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), shipCustomisationWindow);
+				trans1.setToX(shipCustomisationWindow.getTranslateX() - OFFSET);
 
 				trans.play();
 				trans1.play();
@@ -285,6 +291,37 @@ public class GameMenu extends Parent {
 			System.exit(0);
 		});
 
+		btnNextSingle = new MenuButton("NEXT", 350, 70, 30);
+		btnNextSingle.setOnMouseClicked(event -> {
+
+			// SINGLE PLAYER MODE
+			// Enter the game with the computer-controlled players
+			try {
+				getChildren().add(singleGameWindow);
+				getChildren().removeAll(hoverText, racerText, captionText);
+
+				TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), shipCustomisationWindow);
+				trans.setToX(shipCustomisationWindow.getTranslateX() - OFFSET);
+
+				TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), singleGameWindow);
+				trans1.setToX(singleGameWindow.getTranslateX() - OFFSET);
+
+				trans.play();
+				trans1.play();
+				trans.setOnFinished(evt -> {
+					getChildren().remove(shipCustomisationWindow);
+				});
+			} catch (IllegalArgumentException e) {
+
+				try {
+					PopUpWindow.display("LOADING");
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+
+		});
+
 		btnBackSettings = new MenuButton("BACK", 350, 70, 30);
 		btnBackSettings.setOnMouseClicked(event -> {
 
@@ -361,6 +398,29 @@ public class GameMenu extends Parent {
 			});
 		});
 
+		btnBackCustomisationSingle = new MenuButton("BACK", 350, 70, 30);
+		btnBackCustomisationSingle.setOnMouseClicked(event -> {
+
+			// BACK TO MAIN MENU FROM SHIP CUSTOMISATION WINDOW
+			// IN SINGLE PLAYER MODE
+			// Transition to the initial window
+
+			getChildren().add(initialWindow);
+
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), shipCustomisationWindow);
+			trans.setToX(shipCustomisationWindow.getTranslateX() + OFFSET);
+
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), initialWindow);
+			trans1.setToX(shipCustomisationWindow.getTranslateX());
+
+			trans.play();
+			trans1.play();
+			trans.setOnFinished(evt -> {
+				getChildren().remove(shipCustomisationWindow);
+				getChildren().addAll(hoverText, racerText, captionText);
+			});
+		});
+
 		btnBackMulti = new MenuButton("BACK", 350, 70, 30);
 		btnBackMulti.setOnMouseClicked(event -> {
 
@@ -386,23 +446,21 @@ public class GameMenu extends Parent {
 		btnBackSingle = new MenuButton("BACK", 350, 70, 30);
 		btnBackSingle.setOnMouseClicked(event -> {
 
-			// BACK TO MAIN MENU FROM SINGLE PLAYER WINDOW
-			// Transition to the initial window
+			// BACK TO SHIP CUSTOMISATION FROM SINGLE PLAYER WINDOW
+			// Transition to the ship customisation window
 
-			getChildren().add(initialWindow);
+			getChildren().add(shipCustomisationWindow);
 
 			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), singleGameWindow);
 			trans.setToX(singleGameWindow.getTranslateX() + OFFSET);
 
-			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), initialWindow);
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), shipCustomisationWindow);
 			trans1.setToX(singleGameWindow.getTranslateX());
 
 			trans.play();
 			trans1.play();
 			trans.setOnFinished(evt -> {
 				getChildren().remove(singleGameWindow);
-				getChildren().addAll(hoverText, racerText, captionText);
-
 			});
 		});
 
@@ -791,11 +849,17 @@ public class GameMenu extends Parent {
 
 		creditsWindow.add(credits, 0, 0);
 		creditsWindow.add(btnBackCredits, 0, 1);
-		
+
 		// KEY BINDINGS CHILDREN //
-		
+
 		keyBindingsWindow.add(tutorial, 0, 0);
 		keyBindingsWindow.add(btnBackKeyBindings, 0, 1);
+
+		// SHIP CUSTOMISATION SINGLE CHILDREN //
+
+		shipCustomisationWindow.add(customisations, 0, 0);
+		shipCustomisationWindow.add(btnNextSingle, 0, 1);
+		shipCustomisationWindow.add(btnBackCustomisationSingle, 0, 2);
 
 		// CONNECT IN MULTIPLAYER MODE CHILDREN //
 
@@ -897,10 +961,18 @@ public class GameMenu extends Parent {
 	public void buildKeyBindingsWindow() {
 
 		keyBindingsWindow.setTranslateX(700);
-		keyBindingsWindow.setTranslateY(80);
-		keyBindingsWindow.setPadding(new Insets(0,70,0,0));
-		keyBindingsWindow.setAlignment(Pos.CENTER);
+		keyBindingsWindow.setTranslateY(60);
+		keyBindingsWindow.setPadding(new Insets(0, 70, 0, 0));
 		keyBindingsWindow.setVgap(20);
+
+	}
+
+	public void buildShipCustomisationWindow() {
+
+		shipCustomisationWindow.setTranslateX(700);
+		shipCustomisationWindow.setTranslateY(100);
+		shipCustomisationWindow.setVgap(10);
+		shipCustomisationWindow.setHgap(10);
 
 	}
 
