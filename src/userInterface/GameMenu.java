@@ -1,6 +1,9 @@
 package userInterface;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import audioEngine.AudioMaster;
@@ -12,6 +15,8 @@ import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -30,10 +35,10 @@ import serverComms.ServerComm;
 public class GameMenu extends Parent {
 
 	private GridPane initialWindow, settingsWindow, connectMultiWindow, hostGameRoomWindow, joinGameRoomWindow,
-			gameRoomLobbyWindow, creditsWindow;
+			gameRoomLobbyWindow, creditsWindow, keyBindingsWindow;
 	private VBox multiOptionsWindow, singleGameWindow;
-	private MenuButton btnPlayGame, btnPlayAI, btnOptions, btnExit, btnCredits, btnBackCredits, btnBackSettings,
-			btnBackMulti, btnBackSingle, btnBackHost, btnBackMultiOptions, btnBackJoin;
+	private MenuButton btnPlayGame, btnPlayAI, btnOptions, btnExit, btnCredits, btnKeyBindings, btnBackKeyBindings,
+			btnBackCredits, btnBackSettings, btnBackMulti, btnBackSingle, btnBackHost, btnBackMultiOptions, btnBackJoin;
 	private SoundSlider soundSlider;
 	private MusicSlider musicSlider;
 	private Credits credits;
@@ -56,6 +61,7 @@ public class GameMenu extends Parent {
 		initialWindow = new GridPane();
 		settingsWindow = new GridPane();
 		creditsWindow = new GridPane();
+		keyBindingsWindow = new GridPane();
 		connectMultiWindow = new GridPane();
 		multiOptionsWindow = new VBox(15);
 		hostGameRoomWindow = new GridPane();
@@ -75,6 +81,7 @@ public class GameMenu extends Parent {
 		buildInitialWindow();
 		buildSettingsWindow();
 		buildCreditsWindow();
+		buildKeyBindingsWindow();
 		buildConnectMultiWindow();
 		buildMultiOptionsWindow();
 		buildSingleGameWindow();
@@ -99,6 +106,17 @@ public class GameMenu extends Parent {
 		captionText.setX(650);
 		captionText.setY(450);
 
+		// LOAD TUTORIAL IMAGE //
+		
+		InputStream is = Files.newInputStream(Paths.get("src/resources/ui/keybindingsInGame.png"));
+		Image keyBindings = new Image(is);
+		is.close();
+
+		ImageView tutorial = new ImageView(keyBindings);
+		tutorial.setFitWidth(700);
+		tutorial.setFitHeight(400);
+
+		
 		// BUTTON FUNCTIONALITY //
 
 		btnPlayGame = new MenuButton("MULTIPLAYER", 350, 70, 30);
@@ -223,6 +241,38 @@ public class GameMenu extends Parent {
 			}
 		});
 
+		btnKeyBindings = new MenuButton("KEY BINDINGS", 350, 70, 30);
+		btnKeyBindings.setOnMouseClicked(event -> {
+
+			// GAME TUTORIAL
+			// Transition to the key bindings window
+			try {
+				getChildren().add(keyBindingsWindow);
+				getChildren().removeAll(hoverText, racerText, captionText);
+
+				TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), initialWindow);
+				trans.setToX(initialWindow.getTranslateX() - OFFSET);
+
+				TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), keyBindingsWindow);
+				trans1.setToX(keyBindingsWindow.getTranslateX() - OFFSET);
+
+				trans.play();
+				trans1.play();
+				trans.setOnFinished(evt -> {
+					getChildren().remove(initialWindow);
+				});
+
+			} catch (IllegalArgumentException e) {
+
+				try {
+					PopUpWindow.display("LOADING");
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+
+		});
+
 		btnExit = new MenuButton("EXIT", 350, 70, 30);
 		btnExit.setOnMouseClicked(event -> {
 
@@ -285,6 +335,28 @@ public class GameMenu extends Parent {
 			trans1.play();
 			trans.setOnFinished(evt -> {
 				getChildren().remove(creditsWindow);
+				getChildren().addAll(hoverText, racerText, captionText);
+			});
+		});
+
+		btnBackKeyBindings = new MenuButton("BACK", 350, 70, 30);
+		btnBackKeyBindings.setOnMouseClicked(event -> {
+
+			// BACK TO MAIN MENU FROM KEY BINDINGS WINDOW
+			// Transition to the initial window
+
+			getChildren().add(initialWindow);
+
+			TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), keyBindingsWindow);
+			trans.setToX(keyBindingsWindow.getTranslateX() + OFFSET);
+
+			TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), initialWindow);
+			trans1.setToX(keyBindingsWindow.getTranslateX());
+
+			trans.play();
+			trans1.play();
+			trans.setOnFinished(evt -> {
+				getChildren().remove(keyBindingsWindow);
 				getChildren().addAll(hoverText, racerText, captionText);
 			});
 		});
@@ -704,8 +776,9 @@ public class GameMenu extends Parent {
 		initialWindow.add(btnPlayGame, 0, 1);
 		initialWindow.add(btnPlayAI, 0, 2);
 		initialWindow.add(btnOptions, 0, 3);
-		initialWindow.add(btnCredits, 0, 4);
-		initialWindow.add(btnExit, 0, 5);
+		initialWindow.add(btnKeyBindings, 0, 4);
+		initialWindow.add(btnCredits, 0, 5);
+		initialWindow.add(btnExit, 0, 6);
 
 		// SETTINGS WINDOW CHILDREN //
 
@@ -718,6 +791,11 @@ public class GameMenu extends Parent {
 
 		creditsWindow.add(credits, 0, 0);
 		creditsWindow.add(btnBackCredits, 0, 1);
+		
+		// KEY BINDINGS CHILDREN //
+		
+		keyBindingsWindow.add(tutorial, 0, 0);
+		keyBindingsWindow.add(btnBackKeyBindings, 0, 1);
 
 		// CONNECT IN MULTIPLAYER MODE CHILDREN //
 
@@ -779,10 +857,10 @@ public class GameMenu extends Parent {
 	public void buildInitialWindow() {
 
 		initialWindow.setTranslateX(100);
-		initialWindow.setTranslateY(150);
+		initialWindow.setTranslateY(110);
 		initialWindow.setAlignment(Pos.CENTER);
 		initialWindow.setHgap(10);
-		initialWindow.setVgap(10);
+		initialWindow.setVgap(6);
 
 	}
 
@@ -801,7 +879,7 @@ public class GameMenu extends Parent {
 	}
 
 	/**
-	 * Sets the design of the creditswindow.
+	 * Sets the design of the credits window.
 	 */
 	public void buildCreditsWindow() {
 
@@ -809,6 +887,20 @@ public class GameMenu extends Parent {
 		creditsWindow.setTranslateY(100);
 		creditsWindow.setAlignment(Pos.CENTER);
 		creditsWindow.setVgap(20);
+
+	}
+
+	/**
+	 * Sets the design of the key bindings window, where the user can access a
+	 * tutorial of the controls used in the game.
+	 */
+	public void buildKeyBindingsWindow() {
+
+		keyBindingsWindow.setTranslateX(700);
+		keyBindingsWindow.setTranslateY(80);
+		keyBindingsWindow.setPadding(new Insets(0,70,0,0));
+		keyBindingsWindow.setAlignment(Pos.CENTER);
+		keyBindingsWindow.setVgap(20);
 
 	}
 
