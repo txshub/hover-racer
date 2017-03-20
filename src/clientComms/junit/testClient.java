@@ -22,6 +22,7 @@ public class testClient {
 
 	@Test
 	public void testServerOff() {
+		System.out.println("-----Start testServerOff method-----");
 		String name = "Bob";
 		int port = 1111;
 		Client test = new Client(name, port, local);
@@ -29,10 +30,15 @@ public class testClient {
 			fail("Name given not equal to actual name");
 		if (test.serverOn)
 			fail("Server reported on when it was off");
+		test.serverOn = true;
+		test.start();
+		try {Thread.sleep(2000);} catch(Exception e){}
+		if(test.serverOn) fail("Server reported on when it was off");
 	}
 
 	@Test
 	public void testServerOnConnect() {
+		System.out.println("-----Start testServerOnConnect method-----");
 		int port = 1112;
 		Lobby lobby = new Lobby(port);
 		String name = "Mike";
@@ -53,6 +59,7 @@ public class testClient {
 
 	@Test
 	public void testCreateGameRequestAllGames() {
+		System.out.println("-----Start testCreateGameRequestAllGames method-----");
 		int port = 1113;
 		Lobby lobby = new Lobby(port);
 		String name = "Pablo";
@@ -90,6 +97,7 @@ public class testClient {
 
 	@Test
 	public void testJoinGame() {
+		System.out.println("-----Start testJoinGame method-----");
 		int port = 1114;
 		Lobby lobby = new Lobby(port);
 		String name1 = "George";
