@@ -13,6 +13,7 @@ import serverComms.ByteArrayByte;
 import serverComms.GameRoom;
 import serverComms.ServerComm;
 import serverLogic.Converter;
+import userInterface.MainMenu;
 
 /** Thread to receive any messages passed from the server
  * 
@@ -69,7 +70,11 @@ public class ClientReceiver extends Thread {
 					RaceSetupData data = Converter.receiveRaceData(fullMsg.getMsg());
 					AudioMaster.stopMusic();
 					AudioMaster.cleanUp();
-					Platform.exit();
+					Platform.runLater(new Runnable() {	
+						public void run() {
+							MainMenu.hideScene();
+						}
+					});
 					MainGameLoop.startMultiplayerGame(data, client);
 				} else if (fullMsg.getType() == ServerComm.FULLPOSITIONUPDATE) {
 					if (client.getManager() == null)

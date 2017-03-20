@@ -1,13 +1,17 @@
 
 package userInterface;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import audioEngine.AudioMaster;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,7 +30,8 @@ public class MainMenu extends Application {
 
 	public GameMenu gameMenu;
 	public Scene scene;
-
+	public static Pane root;
+	public static Stage primaryStage;
 	/**
 	 * Method that initializes the primary stage and the current scene.
 	 * 
@@ -37,9 +42,11 @@ public class MainMenu extends Application {
 
 		// Tudor - start the audio engine
 		AudioMaster.init();
-
-		Pane root = new Pane();
+		
+		root = new Pane();
 		root.setPrefSize(1000, 600);
+		
+		this.primaryStage = primaryStage;
 
 		// get file from path
 		InputStream is = Files.newInputStream(Paths.get("src/resources/img/hover-racer.jpg"));
@@ -66,6 +73,8 @@ public class MainMenu extends Application {
 
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		
+		Platform.setImplicitExit(false);
 
 		// Handle closing the window by pressing 'X'
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -81,7 +90,34 @@ public class MainMenu extends Application {
 		AudioMaster.playMusic();
 
 	}
+	
+	public static ObservableList<Node> getMenuChildren(){
+		return root.getChildren();
+	}
+	
+	public static void hideScene(){
+		
+		primaryStage.hide();
+		
+	}
 
+	public static void reloadScene(){
+		
+		root.getChildren().clear();
+		GameMenu newMenu;
+		try {
+			newMenu = new GameMenu();
+			root.getChildren().add(newMenu);
+			root.setVisible(true);
+			AudioMaster.init();
+			AudioMaster.playMusic();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		primaryStage.show();
+		
+
+	}
 	public static void main(String[] args) {
 
 		launch(args);
