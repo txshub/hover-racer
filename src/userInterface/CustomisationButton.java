@@ -1,7 +1,7 @@
 package userInterface;
 
-import audioEngine.Sounds;
 import javafx.geometry.Pos;
+import javafx.scene.CacheHint;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 /**
  * 
@@ -21,10 +22,43 @@ import javafx.scene.text.Text;
 
 public class CustomisationButton extends StackPane {
 
-	public CustomisationButton(String description, int width, int height, int fontSize, ImageView image) {
+	/**
+	 * Constructor for the CustomisationButton class.
+	 * 
+	 * @param shipType
+	 *            The type of the ship from the three available models.
+	 * @param width
+	 *            The width of the button.
+	 * @param height
+	 *            The height of the button.
+	 * @param fontSize
+	 *            The font size of the description text.
+	 * @param image
+	 *            The ship image.
+	 */
+	public CustomisationButton(int shipType, int width, int height, int fontSize, ImageView image) {
 
-		TextStyle descriptionText = new TextStyle(description, fontSize);
-		Text descriptionStyled = descriptionText.getTextStyled();
+		TextStyle descriptionText;
+		Text descriptionStyled = null;
+
+		if (shipType == 1) {
+
+			String description = "GOOD ACCELERATION \n POWERFUL BRAKES";
+			descriptionText = new TextStyle(description, fontSize);
+			descriptionStyled = descriptionText.getTextStyled();
+
+		} else if (shipType == 2) {
+
+			String description = "MAXIMUM SPEED \n HARD TO CONTROL";
+			descriptionText = new TextStyle(description, fontSize);
+			descriptionStyled = descriptionText.getTextStyled();
+
+		} else if (shipType == 3) {
+
+			String description = "LARGEST ACCELERATION \n NO BRAKES";
+			descriptionText = new TextStyle(description, fontSize);
+			descriptionStyled = descriptionText.getTextStyled();
+		}
 
 		Rectangle background = new Rectangle(width, height);
 		background.setOpacity(0.8);
@@ -34,6 +68,7 @@ public class CustomisationButton extends StackPane {
 		background.setEffect(blur);
 
 		VBox box = new VBox(10);
+		descriptionStyled.setTextAlignment(TextAlignment.CENTER);
 		box.getChildren().addAll(image, descriptionStyled);
 		box.setAlignment(Pos.CENTER);
 
@@ -43,7 +78,7 @@ public class CustomisationButton extends StackPane {
 			box.setTranslateX(6);
 			background.setFill(Color.DIMGRAY);
 		});
-		
+
 		this.setOnMouseExited(event -> {
 
 			background.setTranslateX(0);
@@ -68,5 +103,9 @@ public class CustomisationButton extends StackPane {
 
 		getChildren().addAll(background, box);
 
+		this.setCache(true);
+		this.setCacheHint(CacheHint.SPEED);
+
 	}
+
 }

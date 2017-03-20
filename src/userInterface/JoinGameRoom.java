@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import clientComms.Client;
 import javafx.geometry.Pos;
+import javafx.scene.CacheHint;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -50,6 +51,9 @@ public class JoinGameRoom extends GridPane {
 			refresh();
 
 		});
+		
+		this.setCache(true);
+		this.setCacheHint(CacheHint.SPEED);
 
 	}
 

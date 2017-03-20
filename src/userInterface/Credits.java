@@ -1,6 +1,7 @@
 package userInterface;
 
 import javafx.geometry.HPos;
+import javafx.scene.CacheHint;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
@@ -137,6 +138,9 @@ public class Credits extends GridPane {
 		add(btn4, 1, 3);
 		add(btn5, 0, 5);
 		add(btn6, 1, 5);
+		
+		this.setCache(true);
+		this.setCacheHint(CacheHint.SPEED);
 
 	}
 }

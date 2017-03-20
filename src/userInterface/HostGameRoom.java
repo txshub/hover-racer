@@ -5,6 +5,7 @@ import java.io.IOException;
 import clientComms.Client;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.CacheHint;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
@@ -79,6 +80,9 @@ public class HostGameRoom extends GridPane {
 		GridPane.setMargin(nameInput, new Insets(0, 0, 20, 0));
 		GridPane.setMargin(seedInput, new Insets(0, 0, 20, 0));
 		GridPane.setMargin(noPlayersInput, new Insets(0, 0, 20, 0));
+		
+		this.setCache(true);
+		this.setCacheHint(CacheHint.SPEED);
 
 	}
 

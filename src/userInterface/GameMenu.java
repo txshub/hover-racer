@@ -970,7 +970,7 @@ public class GameMenu extends Parent {
 	public void buildShipCustomisationWindow() {
 
 		shipCustomisationWindow.setTranslateX(700);
-		shipCustomisationWindow.setTranslateY(100);
+		shipCustomisationWindow.setTranslateY(80);
 		shipCustomisationWindow.setVgap(10);
 		shipCustomisationWindow.setHgap(10);
 

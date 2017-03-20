@@ -4,6 +4,7 @@ import audioEngine.AudioMaster;
 import audioEngine.Sounds;
 import audioEngine.Source;
 import javafx.geometry.Pos;
+import javafx.scene.CacheHint;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
@@ -104,6 +105,9 @@ public class MenuButton extends StackPane {
 		this.setOnMouseReleased(event -> {
 			setEffect(null);
 		});
+		
+		this.setCache(true);
+		this.setCacheHint(CacheHint.SPEED);
 
 	}
 
