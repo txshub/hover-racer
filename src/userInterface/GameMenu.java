@@ -114,7 +114,7 @@ public class GameMenu extends Parent {
 
 		// LOAD TUTORIAL IMAGE //
 
-		InputStream is = Files.newInputStream(Paths.get("src/resources/ui/keybindingsInGame.png"));
+		InputStream is = Files.newInputStream(Paths.get("src/resources/ui/keybindings.png"));
 		Image keyBindings = new Image(is);
 		is.close();
 
