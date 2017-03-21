@@ -200,7 +200,7 @@ public class MultiplayerGame {
     setupUI(data);
     
     // Create the count down source
-    countDown = AudioMaster.createSFXSource();
+    countDown = AudioMaster.createSFXSource(1f);
 
     AudioMaster.playInGameMusic();
     try {
@@ -242,9 +242,13 @@ public class MultiplayerGame {
         containers.remove(startLights);
         startLights = new Container(loader, "ui/lights" + (i + 1), new Vector2f(470, 40));
         containers.add(startLights);
-        countDown.stop();
-        countDown.play(Sounds.COUNTDOWN);
         lightState = i + 1;
+        countDown.stop();
+        if (lightState != 5) {
+          countDown.play(Sounds.BEEP_1);
+        } else {
+          countDown.play(Sounds.BEEP_2);
+        }   
       }
     }
 
