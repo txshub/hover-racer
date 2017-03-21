@@ -15,7 +15,7 @@ public class MultiplayerWithoutGUI {
 	private static final String SEED = "234";
 	private static final int MAX_PLAYERS = 10;
 	private static final int LAPS = 1;
-	private static final int SHIP_TYPE = 2;
+	private static final int SHIP_TYPE = 3;
 	private static final String LOBBY_NAME = "Testonium";
 
 	public static void main(String[] args) throws IOException, InterruptedException {
