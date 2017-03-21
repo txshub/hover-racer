@@ -42,7 +42,7 @@ public class MainGameLoop extends Thread {
     long timer = System.currentTimeMillis();
 
     while (!game.shouldClose()) {
-    	if(ups == 0){
+    	if(ups % 10 == 0){
     		System.gc();
     	}
       curTime = System.nanoTime();
