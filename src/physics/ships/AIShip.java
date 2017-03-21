@@ -26,7 +26,7 @@ public class AIShip extends Ship {
   private int nextPointIndex;
   private InputController input;
 
-  private boolean debug = true;
+  private boolean debug = false;
 
   private final float twoOverPi = (float) (2 / Math.PI);
   private final float piOverEight = (float) (Math.PI / 8);
