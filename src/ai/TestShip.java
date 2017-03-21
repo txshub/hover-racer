@@ -7,7 +7,7 @@ import org.joml.Vector2f;
  * @author Reece Bennett
  *
  */
-public class Ship {
+public class TestShip {
 
   protected Vector2f pos;
   protected Vector2f vel;
@@ -19,11 +19,11 @@ public class Ship {
   public static float maxAcceleration = 0.1f;
   public static float maxTurnSpeed = 5;
 
-  public Ship() {
+  public TestShip() {
     this(0, 0, 0);
   }
 
-  public Ship(float x, float y, float rot) {
+  public TestShip(float x, float y, float rot) {
     pos = new Vector2f(x, y);
     vel = new Vector2f();
     acl = new Vector2f();
