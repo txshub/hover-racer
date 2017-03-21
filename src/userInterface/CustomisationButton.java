@@ -22,6 +22,9 @@ import javafx.scene.text.TextAlignment;
 
 public class CustomisationButton extends StackPane {
 
+	Rectangle background;
+	boolean clicked;
+
 	/**
 	 * Constructor for the CustomisationButton class.
 	 * 
@@ -60,9 +63,9 @@ public class CustomisationButton extends StackPane {
 			descriptionStyled = descriptionText.getTextStyled();
 		}
 
-		Rectangle background = new Rectangle(width, height);
+		background = new Rectangle(width, height);
 		background.setOpacity(0.8);
-		background.setFill(Color.BLACK);
+		setSelectedEffect(Color.BLACK);
 
 		GaussianBlur blur = new GaussianBlur(3.6);
 		background.setEffect(blur);
@@ -76,15 +79,21 @@ public class CustomisationButton extends StackPane {
 
 			background.setTranslateX(6);
 			box.setTranslateX(6);
-			background.setFill(Color.DIMGRAY);
+			if (!this.clicked) {
+				setSelectedEffect(Color.DIMGRAY);
+			}
 		});
 
 		this.setOnMouseExited(event -> {
 
-			background.setTranslateX(0);
-			box.setTranslateX(0);
-			background.setFill(Color.BLACK);
-
+			if (!this.clicked) {
+				background.setTranslateX(0);
+				box.setTranslateX(0);
+				setSelectedEffect(Color.BLACK);
+			} else {
+				background.setTranslateX(0);
+				box.setTranslateX(0);
+			}
 		});
 
 		// Create glow effect to let user know they have clicked a button
@@ -105,7 +114,22 @@ public class CustomisationButton extends StackPane {
 
 		this.setCache(true);
 		this.setCacheHint(CacheHint.SPEED);
+	}
 
+	/**
+	 * Sets the colour of the button.
+	 * @param colour The chosen colour.
+	 */
+	public void setSelectedEffect(Color colour) {
+		background.setFill(colour);
+	}
+
+	/**
+	 * Sets the clicked status of the button.
+	 * @param clicked The clicked status.
+	 */
+	public void setClicked(boolean clicked) {
+		this.clicked = clicked;
 	}
 
 }
