@@ -28,6 +28,7 @@ public class Sounds {
   public static String BUTTON_HOVER = PATH + "button-hover.wav";
   public static String BACKGROUND_NOISE = PATH + "hover-craft.wav";
   public static String COLLISION = PATH + "collision.wav";
+  public static String COUNTDOWN = PATH + "countdown.wav";
 
   // The list of songs
   public static String[] songs = { MUSIC_1, MUSIC_2, MUSIC_3 };
@@ -57,6 +58,7 @@ public class Sounds {
     map.put(BUTTON_HOVER, AudioMaster.loadSound(BUTTON_HOVER));
     map.put(BACKGROUND_NOISE, AudioMaster.loadSound(BACKGROUND_NOISE));
     map.put(COLLISION, AudioMaster.loadSound(COLLISION));
+    map.put(COUNTDOWN, AudioMaster.loadSound(COUNTDOWN));
     
   }
 
