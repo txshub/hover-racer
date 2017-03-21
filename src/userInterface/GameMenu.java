@@ -46,7 +46,8 @@ public class GameMenu extends Parent {
 	public static String usr;
 	public Client client;
 	private final int OFFSET = 600;
-	private CustomisationOptions customisations, customisations1;
+	private static CustomisationOptions customisations;
+	private CustomisationOptions customisations1;
 	private MenuButton startServerMulti;
 	private MenuButton connectMulti;
 	private VBox box4Multi;
@@ -1098,6 +1099,10 @@ public class GameMenu extends Parent {
 		gameRoomLobbyWindow.setHgap(30);
 		gameRoomLobbyWindow.setPadding(new Insets(0, 40, 0, 0));
 
+	}
+	
+	public static int getTypeId() {
+		return customisations.getTypeId();
 	}
 
 }

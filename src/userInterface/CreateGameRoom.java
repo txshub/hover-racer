@@ -30,6 +30,7 @@ public class CreateGameRoom extends GridPane {
 	private TextField seedInput;
 	private TextField noAIsInput;
 	private TextField noLapsInput;
+	private int typeId;
 
 	/**
 	 * Constructor for the CreateGameRoom class.
@@ -89,8 +90,9 @@ public class CreateGameRoom extends GridPane {
 				Client localClient = new Client(getUsername(), 4445, "localhost");
 				localClient.start();
 
+				setTypeId(GameMenu.getTypeId());
 				localClient.startSinglePlayerGame(getSeed(), getMaxAIs(), getNoLaps(),
-						DataGenerator.basicShipSetup(getUsername()));
+						DataGenerator.basicShipSetup(getUsername(),typeId));
 
 			} catch (InvalidPlayerNumberException ex) {
 
@@ -208,4 +210,8 @@ public class CreateGameRoom extends GridPane {
 		return this.lapNo;
 	}
 
+	public void setTypeId(int typeId) {
+		this.typeId = typeId;
+	}
+	
 }
