@@ -102,6 +102,7 @@ public class JoinGameRoom extends GridPane {
 				selectGR.setOnMouseClicked(ev -> {
 
 					setChosenGRId(gameRoom.id);
+					selectGR.setClicked(true);
 
 				});
 

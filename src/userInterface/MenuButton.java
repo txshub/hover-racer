@@ -23,6 +23,7 @@ public class MenuButton extends StackPane {
 
 	private Text buttonText;
 	private Rectangle bg;
+	private boolean clicked;
 
 	// Tudor - audio source
 	private Source audioSource;
@@ -71,7 +72,6 @@ public class MenuButton extends StackPane {
 			bg.setTranslateX(6);
 			buttonText.setTranslateX(6);
 			bg.setFill(Color.DIMGRAY);
-			buttonText.setFill(Color.WHITE);
 
 			// Tudor - play sound
 			audioSource.play(Sounds.BUTTON_HOVER);
@@ -83,8 +83,11 @@ public class MenuButton extends StackPane {
 
 			bg.setTranslateX(0);
 			buttonText.setTranslateX(0);
-			bg.setFill(Color.BLACK);
-			buttonText.setFill(Color.WHITE);
+			if (!this.clicked) {
+				bg.setFill(Color.BLACK);
+			} else {
+				bg.setFill(Color.STEELBLUE);
+			}
 
 		});
 
@@ -105,10 +108,20 @@ public class MenuButton extends StackPane {
 		this.setOnMouseReleased(event -> {
 			setEffect(null);
 		});
-		
+
 		this.setCache(true);
 		this.setCacheHint(CacheHint.SPEED);
 
+	}
+
+	/**
+	 * Sets the clicked status of the button.
+	 * 
+	 * @param clicked
+	 *            The clicked status.
+	 */
+	public void setClicked(boolean clicked) {
+		this.clicked = clicked;
 	}
 
 }
