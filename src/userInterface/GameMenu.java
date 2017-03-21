@@ -486,7 +486,7 @@ public class GameMenu extends Parent {
 			trans.play();
 			trans1.play();
 			trans.setOnFinished(evt -> {
-				if(box4Multi.getChildren().contains(startServerMulti)){
+				if (box4Multi.getChildren().contains(startServerMulti)) {
 					box4Multi.getChildren().remove(startServerMulti);
 					box4Multi.getChildren().add(connectMulti);
 				}
@@ -756,7 +756,7 @@ public class GameMenu extends Parent {
 
 				} else {
 					GameRoom gameRoomChosen = client.joinGame(joinGameRoom.getChosenGRid(),
-						DataGenerator.basicShipSetup(GameMenu.usr, customisations.getTypeId()));
+						DataGenerator.basicShipSetup(GameMenu.usr, customisations1.getTypeId()));
 					// Create a game lobby of the chosen game room
 					// that is received from the server
 					gameRoomLobby = new GameRoomLobby(gameRoomChosen);
@@ -839,7 +839,7 @@ public class GameMenu extends Parent {
 				hostGameRoom.setSettings();
 
 				gameRoom = client.createGame(hostGameRoom.getSeed(), hostGameRoom.getMaxPlayers(), hostGameRoom.getNoLaps(),
-					hostGameRoom.getName(), DataGenerator.basicShipSetup(client.clientName));
+					hostGameRoom.getName(), DataGenerator.basicShipSetup(client.clientName, customisations1.getTypeId()));
 				// Create a game lobby of the game room
 				// that is received from the server
 				gameRoomLobby = new GameRoomLobby(gameRoom);

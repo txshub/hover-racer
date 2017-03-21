@@ -12,7 +12,7 @@ import upgrades.ShipTemplate;
 
 public class DataGenerator {
 
-	private static final String SETTINGS_PATH = "resources/data/";
+	private static final String SETTINGS_PATH = "src/resources/data/";
 	private static final String[] files = {"lightShip", "heavyShip", "turboShip"};
 
 	public static ShipSetupData basicShipSetup(String nickname) {
@@ -20,6 +20,7 @@ public class DataGenerator {
 	}
 
 	public static ShipSetupData basicShipSetup(String nickname, int typeId) {
+		System.out.println("Chosen ship " + typeId);
 		return loadData(files[typeId - 1]).setNickname(nickname);
 	}
 
@@ -34,6 +35,7 @@ public class DataGenerator {
 			String imported = scanner.useDelimiter("\\Z").next();
 			scanner.close();
 			Gson gson = new GsonBuilder().create();
+			System.out.println("To be sent to server: " + gson.fromJson(imported, ShipSetupData.class));
 			return gson.fromJson(imported, ShipSetupData.class);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -43,6 +45,10 @@ public class DataGenerator {
 
 	}
 
+
+	public static void main(String[] args) {
+		System.out.println(basicShipSetup("Mac", 1));
+	}
 
 
 }
