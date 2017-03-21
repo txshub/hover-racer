@@ -26,26 +26,9 @@ import upgrades.ShipTemplate;
  * @author Maciej Bogacki */
 public abstract class Ship extends Entity {
 
-	private static final float SCALE = 3;
 	private static final float VERTICAL_SCALE = 10;
-	// How fast does the ship accelerate
-	private static final float ACCELERATION = 50 * SCALE;
-	// How fast does it break
-	private static final float BREAK_POWER = 5;
-	// How fast does it turn
-	private static final float TURN_SPEED = 4f;
-	// How fast do ships slow down (this and acceleration determines the max
-	// speed)
-	private static final float AIR_RESISTANCE = 10;
 	// How fast does rotating slow down
 	private static final float ROTATIONAL_RESISTANCE = 5;
-	// The force of gravity affecting the ship
-	private static final float GRAVITY = 15 * SCALE;
-	// The base force of the air cushion keeping the hovercraft in the air
-	private static final float AIR_CUSHION = 15 * SCALE;
-	private static final double CUSHION_SCALE = 0.8f;
-	// Jumping, for science! (testing vertical stuff)
-	private static final float JUMP_POWER = 30 * SCALE;
 	// How much speed is retained during a wall collision
 	private static final float WALL_ELASTICITY = 0.35f;
 	// How much energy is retained during ship collisions
@@ -56,8 +39,7 @@ public abstract class Ship extends Entity {
 
 	private static final float LEVELLING_SPEED = 0.2f;
 	private static final float SPEED_OF_ROTATION_WHILE_TURNING = 1.25f;
-	// Used for the sound engine
-	private static final float MAX_SPEED = ACCELERATION * ACCELERATION / AIR_RESISTANCE;
+	private static final float SPEED_OF_ROTATION_WHILE_STRAFING = 0.75f;
 	// Whether the ship actually breaks when braking (and not accelerates
 	// backwards)
 	private static boolean ACTUALLY_BREAK = true;
@@ -249,7 +231,10 @@ public abstract class Ship extends Entity {
 		// Breaking
 		if (breaking > 0) airResistance(delta * breaking * stats.BREAK_POWER);
 		// Strafing TODO change to an instant boost (?)
-		if (strafe != 0) accelerate2d(delta * strafe * stats.ACCELERATION, (float) Math.PI);
+		if (strafe != 0) {
+			accelerate2d(delta * strafe * stats.ACCELERATION, (float) Math.PI);
+			rotationalVelocity.changeZ(z -> z + delta * strafe * stats.TURN_SPEED * SPEED_OF_ROTATION_WHILE_STRAFING);
+		}
 	}
 
 
@@ -318,6 +303,7 @@ public abstract class Ship extends Entity {
 		this.position.set(remote.getPosition());
 		this.velocity.set(remote.getVelocity());
 		this.rotation.set(remote.getRotation());
+		super.setRotation(rotation.copy().forEach(Math::toDegrees));
 		this.rotationalVelocity.set(remote.getRotationalVelocity());
 		// if (this.getId() == 1) System.out.println("got: " + rotation.y);
 	}

@@ -62,17 +62,23 @@ public class GameLogic {
 		for (ShipLogicData player : players) {
 			if (!player.finished()) racingPlayers.add(player);
 		}
-		racingPlayers.sort(new Comparator<ShipLogicData>() {
+		try {
+			racingPlayers.sort(new Comparator<ShipLogicData>() {
 
-			@Override
-			public int compare(ShipLogicData p1, ShipLogicData p2) {
-				float d1 = getPlayerDist(p1);
-				float d2 = getPlayerDist(p2);
-				if (d1 > d2) return -1;
-				if (d1 < d2) return 1;
-				return 0;
-			}
-		});
+				@Override
+				public int compare(ShipLogicData p1, ShipLogicData p2) {
+					float d1 = getPlayerDist(p1);
+					float d2 = getPlayerDist(p2);
+					if (d1 > d2) return -1;
+					if (d1 < d2) return 1;
+					return 0;
+				}
+			});
+
+		} catch (IllegalArgumentException e) {
+			System.err.println("*that* Game logic error happened, skipping a frame");
+			return; // This is so rare we can just ignore it
+		}
 		for (int i = 0; i < racingPlayers.size(); i++) {
 			racingPlayers.get(i).setRanking(finished + 1 + i);
 		}
@@ -197,7 +203,7 @@ public class GameLogic {
 					// TODO actually fix whatever is causeing it
 					ranking[player.getRanking() - 1] = player.getId();
 				} catch (ArrayIndexOutOfBoundsException e) {
-					System.err.println(e.getMessage());
+					System.err.println("Game logic says: " + e.getMessage());
 				}
 
 			}
