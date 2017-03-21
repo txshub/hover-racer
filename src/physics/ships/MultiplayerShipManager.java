@@ -142,8 +142,8 @@ public class MultiplayerShipManager implements ServerShipProvider {
   }
 
   private static TexturedModel makeModel(String model, String texture, Loader loader) {
-    return new TexturedModel(OBJFileLoader.loadOBJ("newShip", loader),
-        new ModelTexture(loader.loadTexture("newShipTexture")));
+    return new TexturedModel(OBJFileLoader.loadOBJ("borg", loader),
+        new ModelTexture(loader.loadTexture("borg")));
   }
 
 }

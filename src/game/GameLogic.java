@@ -101,6 +101,8 @@ public class GameLogic {
 				int left = laps - currentLap;
 				if (left > 1)
 					System.err.println((laps - currentLap) + " MORE LAPS!");
+				else if (left < 1)
+					System.out.println("Finished!!!!!");
 				else
 					System.err.println("1 MORE LAP!");
 				currentLap++;
