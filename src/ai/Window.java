@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import trackDesign.TrackComponent;
+import trackDesign.SeedTrack;
+import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
 
 /**
@@ -36,16 +37,16 @@ public class Window {
     track.add(new TrackPoint(120, 140));
     track.add(new TrackPoint(80, 200));
 
-    TrackComponent trackComponent = new TrackComponent();
-    track = trackComponent.getTrack();
+    SeedTrack seedTrack = TrackMaker.makeTrack();
+    track = seedTrack.getTrack();
 
-    ShipManager shipManager = new ShipManager();
-    AIShip player = new AIShip(track.get(0).getX(), track.get(0).getY(), 0, track);
+    ArrayList<TestShip> ships = new ArrayList<>();
+    TestAI player = new TestAI(track.get(0).getX(), track.get(0).getY(), 0, track);
     player.setRot(0);
     player.setAccel(0.001);
-    shipManager.addShip(player);
+    ships.add(player);
 
-    Visualisation visualisation = new Visualisation(shipManager, trackComponent, 2);
+    Visualisation visualisation = new Visualisation(ships, 2);
 
     JFrame frame = new JFrame();
     frame.setSize(800, 800);
@@ -90,7 +91,12 @@ public class Window {
         // player.setAccel(a);
         // player.setRotV(t);
 
-        shipManager.updateShips();
+        for (TestShip s : ships) {
+          if (s instanceof TestAI) {
+            ((TestAI) s).doNextInput();
+          }
+          s.updatePos();
+        }
 
         deltaUPS--;
       }

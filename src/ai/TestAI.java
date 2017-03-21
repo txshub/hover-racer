@@ -11,12 +11,12 @@ import trackDesign.TrackPoint;
  * @author Reece Bennett
  *
  */
-public class AIShip extends Ship {
+public class TestAI extends TestShip {
 
   private ArrayList<TrackPoint> track;
   private int nextPointIndex = 0;
 
-  public AIShip(float x, float y, float rot, ArrayList<TrackPoint> track) {
+  public TestAI(float x, float y, float rot, ArrayList<TrackPoint> track) {
     super(x, y, rot);
     this.track = track;
   }
@@ -35,9 +35,9 @@ public class AIShip extends Ship {
     float dTurn = 0;
 
     if (angle > 0) {
-      dTurn = -Ship.maxTurnSpeed;
+      dTurn = -TestShip.maxTurnSpeed;
     } else if (angle < 0) {
-      dTurn = Ship.maxTurnSpeed;
+      dTurn = TestShip.maxTurnSpeed;
     }
 
     setRotV(dTurn);

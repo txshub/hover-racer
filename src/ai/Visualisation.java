@@ -6,10 +6,9 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import javax.swing.JComponent;
-
-import trackDesign.TrackComponent;
 
 /**
  * 
@@ -20,18 +19,16 @@ public class Visualisation extends JComponent {
 
   private static final long serialVersionUID = 1L;
 
-  private ShipManager shipManager;
-  private TrackComponent trackComponent;
+  private ArrayList<TestShip> ships;
 
   private int scale;
 
   private final int shipWidth = 10;
   private final int shipLength = 20;
 
-  public Visualisation(ShipManager shipManager, TrackComponent trackComponent, int scale) {
+  public Visualisation(ArrayList<TestShip> ships, int scale) {
     super();
-    this.shipManager = shipManager;
-    this.trackComponent = trackComponent;
+    this.ships = ships;
     this.scale = scale;
   }
 
@@ -43,10 +40,10 @@ public class Visualisation extends JComponent {
     g2.clearRect(0, 0, getWidth(), getHeight());
 
     // Paint the track first
-    trackComponent.paintComponent(g);
+    // trackComponent.paintComponent(g);
 
     // Loop through ships and draw each of them
-    for (Ship s : shipManager.getShips()) {
+    for (TestShip s : ships) {
       Rectangle r = new Rectangle((int) (s.getPos().x - shipWidth / 2) * scale,
           (int) (s.getPos().y - shipLength / 2) * scale, shipWidth * scale, shipLength * scale);
 
