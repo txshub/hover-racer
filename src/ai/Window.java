@@ -1,5 +1,7 @@
 package ai;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -40,13 +42,11 @@ public class Window {
     SeedTrack seedTrack = TrackMaker.makeTrack();
     track = seedTrack.getTrack();
 
-    ArrayList<TestShip> ships = new ArrayList<>();
-    TestAI player = new TestAI(track.get(0).getX(), track.get(0).getY(), 0, track);
-    player.setRot(0);
-    player.setAccel(0.001);
-    ships.add(player);
+    TestAI ship = new TestAI(track.get(0).getX(), track.get(0).getY(), 0, track);
+    ship.setRot(0);
+    ship.setAccel(0.001);
 
-    Visualisation visualisation = new Visualisation(ships, track, 2);
+    Visualisation visualisation = new Visualisation(ship, track, 2);
 
     JFrame frame = new JFrame();
     frame.setSize(800, 800);
@@ -76,6 +76,10 @@ public class Window {
       deltaUPS += diff / updateDur;
       deltaFPS += diff / renderDur;
       lastTime = currTime;
+      
+      if (input.isKeyDown(KeyEvent.VK_ESCAPE)) {
+        running = false;
+      }
 
       while (deltaUPS >= 1) {
         // Update
@@ -91,12 +95,8 @@ public class Window {
         // player.setAccel(a);
         // player.setRotV(t);
 
-        for (TestShip s : ships) {
-          if (s instanceof TestAI) {
-            ((TestAI) s).doNextInput();
-          }
-          s.updatePos();
-        }
+        ship.doNextInput();
+        ship.updatePos();
 
         deltaUPS--;
       }
@@ -108,7 +108,9 @@ public class Window {
         deltaFPS--;
       }
     }
-
+    
+    // Close the JFrame
+    frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
   }
 
 }

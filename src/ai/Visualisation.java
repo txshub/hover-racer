@@ -21,17 +21,21 @@ public class Visualisation extends JComponent {
 
   private static final long serialVersionUID = 1L;
 
-  private ArrayList<TestShip> ships;
+  private TestAI ship;
   private ArrayList<TrackPoint> track;
 
   private int scale;
 
-  private final int shipWidth = 10;
-  private final int shipLength = 20;
+  // Drawing variables
+  private final int shipWidth = 5;
+  private final int shipLength = 10;
+  private final int pointSize = 6;
+  private final int xOffset = 20;
+  private final int yOffset = 50;
 
-  public Visualisation(ArrayList<TestShip> ships, ArrayList<TrackPoint> track, int scale) {
+  public Visualisation(TestAI ship, ArrayList<TrackPoint> track, int scale) {
     super();
-    this.ships = ships;
+    this.ship = ship;
     this.track = track;
     this.scale = scale;
   }
@@ -42,14 +46,21 @@ public class Visualisation extends JComponent {
 
     g2.setBackground(new Color(250, 250, 250));
     g2.clearRect(0, 0, getWidth(), getHeight());
+    
+    g2.translate(xOffset, yOffset);
 
     // Paint the track first
     for (int i = 0; i < track.size(); i++) {
       TrackPoint tp = track.get(i);
-      
-      g2.setColor(new Color(255, 0, 0));
-      g2.fillOval((int) tp.x * scale - 5, (int) tp.y * scale - 5, 10, 10);
-      
+
+      if (ship.getNextPointIndex() == i) {
+        g2.setColor(new Color(0, 255, 50));
+      } else {
+        g2.setColor(new Color(255, 0, 0));
+      }
+      g2.fillOval((int) tp.x * scale - pointSize / 2, (int) tp.y * scale - pointSize / 2, pointSize,
+          pointSize);
+
       g2.setColor(new Color(0, 50, 255));
       if (i > 0) {
         TrackPoint lp = track.get(i - 1);
@@ -58,25 +69,25 @@ public class Visualisation extends JComponent {
     }
 
     // Loop through ships and draw each of them
-    for (TestShip s : ships) {
-      Rectangle r = new Rectangle((int) (s.getPos().x - shipWidth / 2) * scale,
-          (int) (s.getPos().y - shipLength / 2) * scale, shipWidth * scale, shipLength * scale);
+    Rectangle r = new Rectangle((int) (ship.getPos().x - shipWidth / 2) * scale,
+        (int) (ship.getPos().y - shipLength / 2) * scale, shipWidth * scale, shipLength * scale);
 
-      AffineTransform trans = g2.getTransform();
+    AffineTransform trans = g2.getTransform();
 
-      g2.setColor(new Color(0, 0, 0));
-      g2.rotate(Math.toRadians(s.getRot()), r.getCenterX(), r.getCenterY());
-      g2.draw(r);
-      g2.fillRect((int) (s.getPos().x - shipWidth / 2) * scale,
-          (int) (s.getPos().y - shipLength / 2) * scale, shipWidth * scale, 10);
+    g2.setColor(new Color(0, 0, 0));
+    g2.rotate(Math.toRadians(ship.getRot()), r.getCenterX(), r.getCenterY());
+    g2.draw(r);
+    g2.fillRect((int) (ship.getPos().x - shipWidth / 2) * scale,
+        (int) (ship.getPos().y - shipLength / 2) * scale, shipWidth * scale, 10);
 
-      g2.setTransform(trans);
+    g2.setTransform(trans);
+    
+    g2.translate(-xOffset, -yOffset);
 
-      DecimalFormat df = new DecimalFormat("#.####");
-      g2.drawString("ax: " + df.format(s.getAcl().x) + " ay: " + df.format(s.getAcl().y) + " vx: "
-          + df.format(s.getVel().x) + " vy: " + df.format(s.getVel().y) + " px: "
-          + df.format(s.getPos().x) + " py: " + df.format(s.getPos().y), 10, 10);
-    }
+    DecimalFormat df = new DecimalFormat("#.####");
+    g2.drawString("ax: " + df.format(ship.getAcl().x) + " ay: " + df.format(ship.getAcl().y) + " vx: "
+        + df.format(ship.getVel().x) + " vy: " + df.format(ship.getVel().y) + " px: "
+        + df.format(ship.getPos().x) + " py: " + df.format(ship.getPos().y), 10, 10);
   }
 
 }
