@@ -48,6 +48,9 @@ public class CustomisationOptions extends GridPane {
 		Image ship1 = new Image(is);
 		
 		is = Files.newInputStream(Paths.get("src/resources/img/ship2.png"));
+		Image ship3 = new Image(is);
+		
+		is = Files.newInputStream(Paths.get("src/resources/img/ship3.png"));
 		Image ship2 = new Image(is);
 
 		is.close();
@@ -59,6 +62,10 @@ public class CustomisationOptions extends GridPane {
 		ImageView ship2Image = new ImageView(ship2);
 		ship2Image.setFitWidth(230);
 		ship2Image.setFitHeight(200);
+		
+		ImageView ship3Image = new ImageView(ship3);
+		ship3Image.setFitWidth(230);
+		ship3Image.setFitHeight(200);
 
 		// create buttons
 		
@@ -96,7 +103,7 @@ public class CustomisationOptions extends GridPane {
 			ship2Button.setSelectedEffect(Color.STEELBLUE);
 		});
 		
-		ship3Button = new CustomisationButton(3, 250, 320, 25, ship2Image);
+		ship3Button = new CustomisationButton(3, 250, 320, 25, ship3Image);
 		ship3Button.setOnMouseClicked(event -> {
 			clicked3 = true;
 			ship3Button.setClicked(true);
