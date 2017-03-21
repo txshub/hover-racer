@@ -1,6 +1,6 @@
 {
-  "model": "hovercraft",
-  "texture": "hover2Texture",
+  "model": "borg",
+  "texture": "borg",
   "stats": {
     "stats": {
       "JUMP_POWER": 30.0,
