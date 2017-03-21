@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
+import trackDesign.TrackPoint;
+
 /**
  * 
  * @author Reece Bennett
@@ -20,15 +22,17 @@ public class Visualisation extends JComponent {
   private static final long serialVersionUID = 1L;
 
   private ArrayList<TestShip> ships;
+  private ArrayList<TrackPoint> track;
 
   private int scale;
 
   private final int shipWidth = 10;
   private final int shipLength = 20;
 
-  public Visualisation(ArrayList<TestShip> ships, int scale) {
+  public Visualisation(ArrayList<TestShip> ships, ArrayList<TrackPoint> track, int scale) {
     super();
     this.ships = ships;
+    this.track = track;
     this.scale = scale;
   }
 
@@ -40,7 +44,18 @@ public class Visualisation extends JComponent {
     g2.clearRect(0, 0, getWidth(), getHeight());
 
     // Paint the track first
-    // trackComponent.paintComponent(g);
+    for (int i = 0; i < track.size(); i++) {
+      TrackPoint tp = track.get(i);
+      
+      g2.setColor(new Color(255, 0, 0));
+      g2.fillOval((int) tp.x * scale - 5, (int) tp.y * scale - 5, 10, 10);
+      
+      g2.setColor(new Color(0, 50, 255));
+      if (i > 0) {
+        TrackPoint lp = track.get(i - 1);
+        g2.drawLine((int) lp.x * scale, (int) lp.y * scale, (int) tp.x * scale, (int) tp.y * scale);
+      }
+    }
 
     // Loop through ships and draw each of them
     for (TestShip s : ships) {

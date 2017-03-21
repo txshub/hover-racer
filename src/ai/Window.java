@@ -46,7 +46,7 @@ public class Window {
     player.setAccel(0.001);
     ships.add(player);
 
-    Visualisation visualisation = new Visualisation(ships, 2);
+    Visualisation visualisation = new Visualisation(ships, track, 2);
 
     JFrame frame = new JFrame();
     frame.setSize(800, 800);
