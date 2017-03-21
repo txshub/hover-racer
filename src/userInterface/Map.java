@@ -49,6 +49,9 @@ public class Map extends Canvas {
 
 		SeedTrack st = TrackMaker.makeTrack(seed);
 		track = st.getTrack();
+		for(TrackPoint tp: track) {
+			tp.mul(1f/20f);
+		}
 
 		// Go through each track point, connect them
 		// Resize so that it will fit in the canvas size

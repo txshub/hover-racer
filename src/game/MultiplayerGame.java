@@ -143,9 +143,6 @@ public class MultiplayerGame {
 		trackSeed = data.getTrackSeed();
 		SeedTrack st = TrackMaker.makeTrack(trackSeed);
 		// Scale up the track so it isn't so tiny
-		for (TrackPoint tp : st.getTrack()) {
-			tp.mul(20);
-		}
 		trackPoints = st.getTrack();
 
 		TexturedModel trackModel = createTrackModel(st);

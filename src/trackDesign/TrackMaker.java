@@ -22,7 +22,7 @@ import trackDesign.catmullrom.SplineUtils;
 public class TrackMaker {
 
 	public static SeedTrack makeTrack() {
-		return makeTrack(10, 20, 30, 1, 30, 40, 4, 120, 260);
+		return makeTrack(10, 20, 30, 1, 30, 40, 3, 120, 260);
 	}
 
 	public static SeedTrack makeTrack(String seed) {
@@ -30,14 +30,7 @@ public class TrackMaker {
 		for (char c : seed.toCharArray()) {
 			hash = 36L * hash + c;
 		}
-		return makeTrack(hash, 10, 20, 20, 3, 30, 40, 5, 200, 260);
-	}
-
-	public static SeedTrack makeStraightTrack(float length) {
-		ArrayList<TrackPoint> out = new ArrayList<TrackPoint>();
-		out.add(new TrackPoint(0, 0));
-		out.add(new TrackPoint(0, length));
-		return new SeedTrack(0, out);
+		return makeTrack(hash, 10, 20, 30, 3, 30, 40, 6, 200, 260);
 	}
 
 	/**
@@ -145,7 +138,10 @@ public class TrackMaker {
 		// Centre the track so it doesn't go off screen at all
 		centreTrack(finalCircuit);
 		// Return this final track after smoothing and centring
-		ArrayList<Vector2f> outer = new ArrayList<Vector2f>();
+		for(TrackPoint tp: finalCircuit) {
+			tp.mul(20);
+		}
+			ArrayList<Vector2f> outer = new ArrayList<Vector2f>();
 		ArrayList<Vector2f> inner = new ArrayList<Vector2f>();
 
 		for (int i = 0; i < finalCircuit.size(); i++) {
@@ -213,7 +209,10 @@ public class TrackMaker {
 				Vector2f l2b = line.get((j+1)%line.size());
 				Line2D l1 = new Line2D.Float(l1a.x, l1a.y, l1b.x, l1b.y);
 				Line2D l2 = new Line2D.Float(l2a.x, l2a.y, l2b.x, l2b.y);
-				if(l1.intersectsLine(l2)) return true;
+				if(l1.intersectsLine(l2))  {
+					System.out.println("Track intersects");
+					return true;
+				}
 			}
 		}
 			return false;
