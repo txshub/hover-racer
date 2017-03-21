@@ -31,7 +31,7 @@ public class Vector3 extends Vector3f {
 
 	/** Subtracts another vector from this one */
 	public Vector3 substract(Vector3f v) {
-		add(v.mul(-1));
+		super.sub(v);
 		return this;
 	}
 

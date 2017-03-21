@@ -46,8 +46,8 @@ public class ShipTemplate {
 		stats.put(stat, stats.get(stat) + value);
 	}
 
-	// TODO make it read content from JSON
 	private void setDefault() {
+		System.err.println("Default ship config called. This shouldn't happen anymore");
 		stats.put(Stat.ACCELERATION, 50f);
 		stats.put(Stat.BREAK_POWER, 5f);
 		stats.put(Stat.SIZE, 1f);
