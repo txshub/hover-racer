@@ -23,7 +23,6 @@ public class ShipSetupData {
 	}
 
 	public String getNickname() {
-		System.err.println("Somebody wanted the nickname");
 		return nickname;
 	}
 
