@@ -9,47 +9,84 @@ import org.joml.Vector3f;
 
 import physics.network.RaceSetupData;
 import physics.network.ShipSetupData;
+import serverLogic.AIBuilder;
+import serverLogic.Converter;
+import serverLogic.GameLogic;
+import serverLogic.ServerShipManager;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
 
+/** The GameRoom clients can join
+ * 
+ * @author simon mostly, specified where not */
 public class GameRoom {
 
-	private static final long TIME_TO_START = 3000000000L; // Time to start race
-															// in nanoseconds
+	// Time between sending the RaceSetupData and start of the race, in nanoseconds
+	// TODO It's currently low for easy resting, might increase it for the actual game
+	private static final long TIME_TO_START = 3L * 1000000000L; // 3 sec
+
+	// Time between the first player (not AI) finishing the race and the race ending, in nanoseconds.
+	private static final long TIME_TO_END = 30L * 1000000000L; // 30 sec
+
 	private static final int SIDE_DISTANCES = 10;
 	private static final int FORWARD_DISTANCES = 10;
 	private static final int STARTING_HEIGHT = 10;
 	ArrayList<String> players = new ArrayList<String>();
 	ArrayList<ShipSetupData> ships;
-
 	String name;
 	public final int id;
-	private long seed;
+	private String seed;
 	private int maxPlayers;
 	private boolean inGame = false;
 	private String hostName;
+	private int lapCount;
 	private ClientTable table;
 	private ArrayList<TrackPoint> trackPoints;
-
 	private ServerShipManager shipManager;
+	private GameLogic logic;
 	private UpdateAllUsers updatedUsers;
-	private boolean isSinglePlayer;
+	private long raceStartsAt = -1;
+	private long raceEndsAt = -1;
 
-	public GameRoom(int id, String name, long seed, int maxPlayers, String hostName, ClientTable table, boolean isSinglePlayer) {
+	/** Makes a GameRoom object
+	 * 
+	 * @param id
+	 *        The GameRoom's id
+	 * @param name
+	 *        The GameRoom's name
+	 * @param seed
+	 *        The seed to make the track with
+	 * @param maxPlayers
+	 *        The max number of players
+	 * @param hostName
+	 *        The host's name
+	 * @param lapCount
+	 *        The number of laps to complete
+	 * @param table
+	 *        The client table for communications */
+	public GameRoom(int id, String name, String seed, int maxPlayers, String hostName, int lapCount, ClientTable table) {
+		System.out.println(hostName + " created a game room " + name + " with id " + id + " and seed " + seed);
 		this.id = id;
 		this.name = name;
 		this.seed = seed;
 		this.maxPlayers = maxPlayers;
 		this.hostName = hostName;
+		this.lapCount = lapCount;
 		this.table = table;
 		this.ships = new ArrayList<ShipSetupData>(maxPlayers);
-		this.isSinglePlayer = isSinglePlayer;
 		// Generate the track
-		SeedTrack st = TrackMaker.makeTrack(seed, 10, 20, 30, 1, 40, 40, 4);
+		SeedTrack st = TrackMaker.makeTrack(seed);
+		for (TrackPoint tp : st.getTrack()) {
+			tp.mul(20);
+		}
 		trackPoints = st.getTrack();
 	}
 
+	/** Reconstructs a server from a GameRoom string sent across the network
+	 * 
+	 * @param in
+	 *        The GameRoom string */
 	public GameRoom(String in) {
 		String collected = "";
 		while (in.charAt(0) != '|') {
@@ -70,7 +107,7 @@ public class GameRoom {
 			collected += in.charAt(0);
 			in = in.substring(1);
 		}
-		seed = Long.parseLong(collected);
+		seed = collected;
 		collected = "";
 		in = in.substring(1);
 		while (in.charAt(0) != '|') {
@@ -87,6 +124,13 @@ public class GameRoom {
 		hostName = collected;
 		collected = "";
 		in = in.substring(1);
+		while (in.charAt(0) != '|') {
+			collected += in.charAt(0);
+			in = in.substring(1);
+		}
+		lapCount = Integer.parseInt(collected);
+		collected = "";
+		in = in.substring(1);
 		players = new ArrayList<String>();
 		while (in.length() > 0) {
 			while (in.charAt(0) != '|') {
@@ -99,157 +143,250 @@ public class GameRoom {
 		}
 	}
 
+	/** Returns whether the room is currently busy (max players or in a game)
+	 * 
+	 * @return Whether the room is currently busy */
 	public boolean isBusy() {
 		return (players.size() >= maxPlayers || inGame);
 	}
 
+	/** Gets the name of the lobby
+	 * 
+	 * @return The name of the lobby */
 	public String getName() {
 		return name;
 	}
 
+	/** Gets the ID of the lobby
+	 * 
+	 * @return The ID of the lobby */
 	public int getId() {
 		return id;
 	}
 
+	/** Removes a user from the lobby
+	 * 
+	 * @param name
+	 *        The user to remove */
 	public void remove(String name) {
 		players.remove(name);
 		// Add in method to replace with AI?
-
 	}
 
-	public long getSeed() {
+	/** Gets the seed for track generation
+	 * 
+	 * @return The seed for track generation */
+	public String getSeed() {
 		return seed;
 	}
 
+	/** Adds a player to the lobby
+	 * 
+	 * @param data
+	 *        The ship data for the user */
 	public void addPlayer(ShipSetupData data) {
 		if (data == null) throw new IllegalArgumentException("ShipSetupData cannot be null");
 		ships.add(data);
 		players.add(data.getNickname());
 	}
 
-	public void addPlayer(String username) {
-		players.add(username);
-	}
-
+	/** Gets a list of all connected players
+	 * 
+	 * @return A list of all connected players */
 	public ArrayList<String> getPlayers() {
 		return players;
 	}
 
+	/** Gets the name of the host
+	 * 
+	 * @return The host's name */
 	public String getHostName() {
 		return hostName;
 	}
 
+	/** @author Mac Starts the game
+	 * @param clientName
+	 *        The name of the caller (to check it is the host calling this) */
 	public void startGame(String clientName) {
 		if (players.size() == 0) throw new IllegalStateException("Tried starting game with no players");
 		if (ships.size() != players.size())
 			throw new IllegalStateException("Mismatch between amount of ships and players when staring game.");
-
 		if (clientName.equals(hostName)) {
 			inGame = true;
 			RaceSetupData setupData = setupRace();
-			shipManager = new ServerShipManager(setupData, players.size(), maxPlayers - players.size(), trackPoints);
+			shipManager =
+				new ServerShipManager(setupData, players.size(), maxPlayers - players.size(), trackPoints, setupData.startingOrientation);
+			logic = new GameLogic(shipManager.getShipsLogics(), trackPoints, lapCount, players.size(), this);
 			ArrayList<CommQueue> allQueues = new ArrayList<CommQueue>();
 			for (int i = 0; i < players.size(); i++) {
 				table.getReceiver(players.get(i)).setGame(this, i);
+				// sendMessage((byte) i, Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA);
 				table.getQueue(players.get(i)).offer(new ByteArrayByte(Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA));
 				allQueues.add(table.getQueue(players.get(i)));
 			}
+			raceStartsAt = System.nanoTime() + TIME_TO_START;
 			updatedUsers = new UpdateAllUsers(allQueues, this);
 			updatedUsers.start();
 		}
 	}
 
-	public void endGame() {
-		inGame = false;
-	}
 
+	/** @author Mac Called when the game ends */
+	// public void endGame() {
+	// //inGame = false;
+	// // If the host is still in the room, don't end the game
+	// if (players.contains(hostName)) return;
+	// // Otherwise send the closed methods to all currently connected clients
+	// for (int i = 0; i < players.size(); i++) {
+	// table.getQueue(players.get(i)).offer(new ByteArrayByte(new byte[0],
+	// ServerComm.ROOMCLOSED));
+	// }
+	// }
+
+	/** @author Mac
+	 * @param gameNum
+	 *        The user's ID
+	 * @param msg
+	 *        The msg to update with */
 	public void updateUser(int gameNum, byte[] msg) {
 		shipManager.addPacket(msg);
 	}
 
+	/** @author Mac Gets all the ship positions
+	 * @return all the ship positions */
 	public byte[] getShipPositions() {
 		return shipManager.getPositionMessage();
 	}
 
+	/** @author Mac Adds setupdata for a user
+	 * @param gameNum
+	 *        The user's ID
+	 * @param msg
+	 *        The msg to update with */
 	public void addSetupData(int gameNum, byte[] msg) {
 		ships.set(gameNum, Converter.buildShipData(msg));
 	}
 
+	/** @author Mac Adds setupdata for a user
+	 * @param gameNum
+	 *        The user's ID
+	 * @param msg
+	 *        The msg to update with */
 	public void addSetupData(int gameNum, String msg) {
 		ships.set(gameNum, Converter.buildShipData(msg));
 	}
 
+	/** @author Mac Returns the setup data for a race
+	 * @return The setup data for a race */
 	public RaceSetupData setupRace() {
 		HashMap<Byte, ShipSetupData> resShips = new HashMap<Byte, ShipSetupData>();
 		for (int i = 0; i < maxPlayers; i++) {
 			if (i < ships.size()) resShips.put((byte) i, ships.get(i)); // Players
 			else resShips.put((byte) i, AIBuilder.fakeAIData()); // AIs
 		}
-		Vector2f startDirection = trackPoints.get(0).sub(trackPoints.get(1));
-		return new RaceSetupData(resShips, generateStartingPositions(startDirection),
-			new Vector3f(0, (float) Math.atan2(startDirection.x, startDirection.y), 0), seed, TIME_TO_START);
+		Vector2f startDirection = new Vector2f(trackPoints.get(1)).sub(trackPoints.get(0));
+		float facingAngle = (float) Math.toDegrees(Math.atan2(startDirection.x, startDirection.y));
+		return new RaceSetupData(resShips, generateStartingPositions(startDirection), new Vector3f(0, facingAngle, 0), seed, TIME_TO_START,
+			lapCount);
 	}
 
 	// TODO finish this
 	private Map<Byte, Vector3f> generateStartingPositions(Vector2f startDirection) {
-		// Map<Byte, Vector2f> res = new HashMap<Byte, Vector2f>();
-		// float width = trackPoints.get(0).getWidth();
-		// int shipsInRow = (int) width / SIDE_DISTANCES;
-		// float sidePadding = (width - shipsInRow * SIDE_DISTANCES) / 2;
-		// int shipsLeft = maxPlayers;
-		// int currentRow = 0;
-		// float startAngle = (float) Math.atan2(startDirection.x, startDirection.y);
-		// float sin = (float) Math.cos(startAngle);
-		// float cos = (float) Math.cos(startAngle);
-		// Vector2f firstShip = new Vector2f((float) (trackPoints.get(0).x + cos * trackPoints.get(0).getWidth() / 2),
-		// (float) (trackPoints.get(0).y + sin * trackPoints.get(0).getWidth() / 2));
-		// while (shipsLeft > shipsInRow) {
-		// for (int i = 0; i < shipsInRow; i++) {
-		// res.put((byte) (maxPlayers - shipsLeft), new Vector2f(firstShip).add(SIDE_DISTANCES * i * cos, SIDE_DISTANCES * i * sin))
-		// .add(FORWARD_DISTANCES * currentRow * sin, FORWARD_DISTANCES * currentRow * cos);
-		// }
-		// currentRow++;
-		// }
-		// float extraPadding = shipsLeft % 2 == 0 ? 0.5f : 0f;
-		// if (shipsLeft % 2 == 0) {
-		// float padding = (width - sidePadding * 2) / shipsLeft;
-		// for (int i = 0; i < shipsLeft; i++) {
-		// res.put((byte) (maxPlayers - shipsLeft),
-		// new Vector2f(firstShip).add(padding * (i + extraPadding) * cos, padding * (i + extraPadding) * sin))
-		// .add(FORWARD_DISTANCES * currentRow * sin, FORWARD_DISTANCES * currentRow * cos);
-		// }
-		// }
-		// return res.entrySet().stream()
-		// .collect(Collectors.toMap(e -> e.getKey(), e -> new Vector3f(e.getValue().x, STARTING_HEIGHT, e.getValue().y)));
-
-		// TODO temporary thing here:
+		float offset = 40;
 		Map<Byte, Vector3f> res = new HashMap<>();
+
 		for (int i = 0; i < maxPlayers; i++) {
-			res.put((byte) i, new Vector3f(trackPoints.get(0).x, i * 10 + 5, trackPoints.get(0).y));
+			float xOffset = (i % 4 - 2) * offset;
+			float yOffset = (float) (Math.floor(i / 4)) * offset;
+
+			Vector2f forward = new Vector2f(trackPoints.get(0)).sub(trackPoints.get(trackPoints.size() - 1)).normalize();
+			Vector2f left = new Vector2f(-forward.y, forward.x).normalize();
+
+			left.mul(xOffset);
+			forward.mul(-yOffset);
+
+			Vector2f combined = new Vector2f(left).add(forward);
+
+			res.put((byte) i, new Vector3f(trackPoints.get(0).x + combined.x, 5, trackPoints.get(0).y + combined.y));
 		}
 		return res;
 	}
 
+	/** @author Mac Returns the direction the track starts in
+	 * @return The direction the track starts in */
 	private float getTrackDirection() {
 		Vector2f relative = trackPoints.get(0).sub(trackPoints.get(1));
 		return (float) Math.atan2(relative.x, relative.y);
 	}
 
+	/** Returns a string representing this room */
 	public String toString() {
-		String out = name + "|" + id + "|" + seed + "|" + maxPlayers + "|" + hostName + "|";
+		String out = name + "|" + id + "|" + seed + "|" + maxPlayers + "|" + hostName + "|" + lapCount + "|";
 		for (String p : players) {
 			out += p + "|";
 		}
 		return out;
 	}
 
+	/** Returns a byte array formed by toString()
+	 * 
+	 * @return a byte array formed by toString() */
 	public byte[] toByteArray() {
 		return toString().getBytes(ServerComm.charset);
 	}
 
+	/** Returns the max number of players
+	 * 
+	 * @return The max number of players */
 	public int getNoPlayers() {
 		return maxPlayers;
 	}
 
+	/** @author Mac Updates all users
+	 * @param delta
+	 *        The time passed since the last update */
+	public void update(float delta) {
+		if (raceStartsAt == -1) throw new IllegalStateException("Update called before the race was started");
+		if (System.nanoTime() >= raceStartsAt) shipManager.startRace();
+		if (raceEndsAt != -1 && (logic.raceFinished() || System.nanoTime() >= raceEndsAt)) {
+			for (byte i = 0; i < players.size(); i++) {
+				sendMessage(i, logic.getRanking(), ServerComm.END_GAME);
+			}
+			System.out.println("RACE ENDED");
+		}
+		shipManager.update(delta);
+		logic.update();
+	}
 
+	/** @author Mac
+	 *         Sends a game logic update to a single client
+	 * @param id Client's (and ship's) id */
+	public void sendLogicUpdate(byte id, int ranking, boolean finished, int currrentLap) {
+		sendMessage(id, Converter.buildLogicData(ranking, finished, currrentLap), ServerComm.LOGIC_UPDATE);
+		// table.getQueue(players.get(id))
+		// .offer(new ByteArrayByte(Converter.buildLogicData(ranking, finished, currrentLap), ServerComm.LOGIC_UPDATE));
+	}
+
+	/** Sends information about player who finished the race (i.e. the leaderboard) to players who already finished to race.
+	 * 
+	 * @param id Id of the client to send the message to
+	 * @param data Data being sent - an array of IDs in the order of finishing (index 0 is first place). Should only contain IDs of players
+	 *        who already finished */
+	public void sendFinishData(byte id, byte[] data) {
+		sendMessage(id, data, ServerComm.FINISH_DATA);
+		// table.getQueue(players.get(id)).offer(new ByteArrayByte(data, ServerComm.FINISH_DATA));
+		// Sending this message means someone has finished the race
+		if (raceEndsAt == -1) raceEndsAt = System.nanoTime() + TIME_TO_END;
+	}
+
+	private void sendMessage(byte id, byte[] message, byte type) {
+		table.getQueue(players.get(id)).offer(new ByteArrayByte(message, type));
+	}
+
+	/** Returns the number of laps in this race
+	 * 
+	 * @return The number of laps in this race */
+	public int getLaps() {
+		return lapCount;
+	}
 }

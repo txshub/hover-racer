@@ -10,7 +10,6 @@ import java.net.Socket;
 import clientComms.Client;
 import clientComms.ClientReceiver;
 import serverComms.ServerComm;
-import userInterface.GameMenu;
 
 public class DummyClient extends Client {
 
@@ -18,8 +17,8 @@ public class DummyClient extends Client {
   String clientName;
   boolean testsPassed = false;
 
-  public DummyClient(String clientName, int portNumber, String machineName, GameMenu gameMenu) {
-    super(clientName, portNumber, machineName, gameMenu);
+  public DummyClient(String clientName, int portNumber, String machineName) {
+    super(clientName, portNumber, machineName);
     this.clientName = clientName;
   }
 
@@ -36,12 +35,14 @@ public class DummyClient extends Client {
       super.sendByteMessage(clientName.getBytes(ServerComm.charset), ServerComm.USERSENDING);
       Thread.sleep(1000);
       testsPassed = ((DummyReceiver) receiver).testsPassed;
-    } catch (IOException e) {
-
-    } catch (InterruptedException e) {
-
-    }
-
+      server = new Socket("localhost", 5153);
+      toServer = new DataOutputStream(new BufferedOutputStream(server.getOutputStream()));
+      fromServer = new DataInputStream(new BufferedInputStream(server.getInputStream()));
+      receiver = new DummyReceiverFail(fromServer, this);
+      receiver.start();
+      super.sendByteMessage(clientName.getBytes(ServerComm.charset), ServerComm.USERSENDING);
+      Thread.sleep(1000);
+      testsPassed = testsPassed && ((DummyReceiverFail) receiver).testsPassed;
+    } catch (Exception e) {}
   }
-
 }

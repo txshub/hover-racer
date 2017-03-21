@@ -31,15 +31,14 @@ public abstract class InputController {
   protected HashMap<Integer, Action> getDefaultSettings() {
     HashMap<Integer, Action> res = new HashMap<>();
     res.put(Keyboard.KEY_W, Action.FORWARD); // w
-    res.put(Keyboard.KEY_S, Action.BREAK); // s
+    res.put(Keyboard.KEY_S, Action.BACKWARD); // s
     res.put(Keyboard.KEY_A, Action.STRAFE_LEFT); // a
     res.put(Keyboard.KEY_D, Action.STRAFE_RIGHT); // d
     res.put(Keyboard.KEY_RIGHT, Action.TURN_RIGHT); // right arrow
     res.put(Keyboard.KEY_LEFT, Action.TURN_LEFT); // left arrow
-    res.put(Keyboard.KEY_SPACE, Action.JUMP); // space
+    res.put(Keyboard.KEY_SPACE, Action.BREAK); // space
 
-    res.put(Keyboard.KEY_ESCAPE, Action.EXIT);
-    res.put(Keyboard.KEY_P, Action.MENU);
+    res.put(Keyboard.KEY_ESCAPE, Action.MENU);
 
     res.put(Keyboard.KEY_M, Action.MUSIC_UP);
     res.put(Keyboard.KEY_N, Action.MUSIC_DOWN);
@@ -124,5 +123,4 @@ public abstract class InputController {
      * System.out.println(key + " -> " + value); }
      */
   }
-
 }

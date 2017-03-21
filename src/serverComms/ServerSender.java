@@ -7,14 +7,13 @@ import java.io.IOException;
  * Class to send
  * 
  * @author simon
- *
  */
 public class ServerSender extends Thread {
 
   private DataOutputStream toClient;
   private CommQueue queue;
   public volatile boolean continueSending = true; // Set to false when the
-                                                  // thread should stop
+  // thread should stop
 
   /**
    * Creates a ServerSender object
@@ -30,7 +29,7 @@ public class ServerSender extends Thread {
   }
 
   /**
-   * Runs the sender
+   * Runs the sender (Called via ServerSender.start())
    */
   public void run() {
     while (continueSending) {

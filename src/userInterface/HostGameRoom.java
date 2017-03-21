@@ -1,145 +1,177 @@
 package userInterface;
 
 import java.io.IOException;
+import java.util.Random;
 
 import clientComms.Client;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.CacheHint;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import serverComms.GameRoom;
-import physics.placeholders.DataGenerator;
 
 /**
  * 
- * @author Andreea Gheorghe
+ * @author Andreea Gheorghe Class that implements the design and functionality
+ *         of hosting a game room, option that is provided in the multiplayer
+ *         mode options.
  *
  */
 
 public class HostGameRoom extends GridPane {
 
-  private Client client;
-  private int gameRoomSeed;
-  private int maxPlayers;
-  private int lapNo;
-  private String gameRoomName;
-  private TextField seedInput;
-  private TextField noPlayersInput;
-  private TextField noLapsInput;
-  private TextField nameInput;
-  
+	private Client client;
+	private String gameRoomSeed;
+	private int maxPlayers;
+	private int lapNo;
+	private String gameRoomName;
+	private TextField seedInput;
+	private TextField noPlayersInput;
+	private TextField noLapsInput;
+	private TextField nameInput;
 
-  public HostGameRoom() {
-	  
-    this.setAlignment(Pos.CENTER);
-    this.setHgap(30);
-    this.setVgap(3);
-    this.setPadding(new Insets(20, 10, 0, 10));
+	/**
+	 * Constructor for the HostGameRoom class.
+	 */
+	public HostGameRoom() {
 
-    VBox box6 = new VBox(10);
-    GridPane.setRowSpan(box6, 2);
-    box6.setAlignment(Pos.CENTER);
+		this.setAlignment(Pos.CENTER);
+		this.setVgap(5);
+		this.setPadding(new Insets(20, 10, 0, 10));
 
-    TextStyle name = new TextStyle("CHOOSE GAME NAME", 25);
-    Text nameText = name.getTextStyled();
+		TextStyle name = new TextStyle("CHOOSE THE GAME NAME", 25);
+		Text nameText = name.getTextStyled();
 
-    TextStyle seed = new TextStyle("CHOOSE TRACK SEED", 25);
-    Text seedText = seed.getTextStyled();
+		TextStyle seed = new TextStyle("CHOOSE THE TRACK SEED", 25);
+		Text seedText = seed.getTextStyled();
 
-    TextStyle noPlayers = new TextStyle("CHOOSE NR OF PLAYERS", 25);
-    Text noPlayersText = noPlayers.getTextStyled();
+		TextStyle noPlayers = new TextStyle("CHOOSE NUMBER OF PLAYERS", 25);
+		Text noPlayersText = noPlayers.getTextStyled();
 
-    TextStyle noLaps = new TextStyle("CHOOSE NR OF LAPS", 25);
-    Text noLapsText = noLaps.getTextStyled();
+		TextStyle noLaps = new TextStyle("CHOOSE NUMBER OF LAPS", 25);
+		Text noLapsText = noLaps.getTextStyled();
 
-    nameInput = new TextField();
-    seedInput = new TextField();
-    noPlayersInput = new TextField();
-    noLapsInput = new TextField();
+		nameInput = new TextField();
+		nameInput.setPrefSize(300, 20);
 
-    MenuButton generateTrack = new MenuButton("PREVIEW TRACK", 200, 50, 20);
+		seedInput = new TextField();
+		seedInput.setPrefSize(300, 20);
 
-    generateTrack.setOnMouseClicked(event -> {
+		noPlayersInput = new TextField();
+		noPlayersInput.setPrefSize(300, 20);
 
-      if (box6.getChildren().size() > 0) {
+		noLapsInput = new TextField();
+		noLapsInput.setPrefSize(300, 20);
 
-        box6.getChildren().remove(0);
-      }
+		// GRID LAYOUT //
 
-      Map track = new Map(Integer.valueOf(seedInput.getText()));
-      box6.getChildren().add(track);
+		add(nameText, 0, 1);
+		add(nameInput, 0, 2);
 
-    });
+		add(seedText, 0, 3);
+		add(seedInput, 0, 4);
 
-    
-    add(nameText, 0, 1);
-    add(nameInput, 0, 2);
+		add(noPlayersText, 0, 5);
+		add(noPlayersInput, 0, 6);
 
-    add(seedText, 0, 3);
-    add(seedInput, 0, 4);
+		add(noLapsText, 0, 7);
+		add(noLapsInput, 0, 8);
 
-    add(noPlayersText, 1, 1);
-    add(noPlayersInput, 1, 2);
+		GridPane.setMargin(nameInput, new Insets(0, 0, 20, 0));
+		GridPane.setMargin(seedInput, new Insets(0, 0, 20, 0));
+		GridPane.setMargin(noPlayersInput, new Insets(0, 0, 20, 0));
+		
+		this.setCache(true);
+		this.setCacheHint(CacheHint.SPEED);
 
-    add(noLapsText, 1, 3);
-    add(noLapsInput, 1, 4);
+	}
 
-    add(box6, 0, 5);
+	/**
+	 * Sets the client to be the current connected client that needs to be
+	 * accessed in this class.
+	 * 
+	 * @param client
+	 *            The connected client.
+	 */
+	public void setClient(Client client) {
 
-    add(generateTrack, 0, 8);
+		this.client = client;
 
-    GridPane.setMargin(nameInput, new Insets(0, 0, 20, 0));
-    GridPane.setMargin(seedInput, new Insets(0, 0, 20, 0));
-    GridPane.setMargin(noPlayersInput, new Insets(0, 0, 20, 0));
-    GridPane.setMargin(generateTrack, new Insets(0, 0, 20, 0));
+	}
 
-  }
+	/**
+	 * Sets the seed, maximum number of players, number of laps and game room
+	 * name by taking the input of the user.
+	 */
 
-  public void setClient(Client client) {
+	public void setSettings() throws InvalidPlayerNumberException {
 
-    this.client = client;
+		if (nameInput.getText().isEmpty() || noPlayersInput.getText().isEmpty() || noLapsInput.getText().isEmpty()) {
+			throw new NullPointerException();
+		}
 
-  }
-  
-  public void setSeed(){
-	  
-	  this.gameRoomSeed = Integer.valueOf(seedInput.getText());
-  }
-  
-  public void setMaxPlayers(){
-	  
-	  this.maxPlayers = Integer.valueOf(noPlayersInput.getText());
-  }
-  
-  public void setNoLaps(){
-	  
-	  this.lapNo = Integer.valueOf(noLapsInput.getText());
-  }
-  
-  public void setName(){
-	  
-	  this.gameRoomName = nameInput.getText();
-  }
-  
-  public int getSeed(){
-	  
-	  return this.gameRoomSeed;
-  }
-  
-  public int getMaxPlayers(){
-	  
-	 return this.maxPlayers; 
-  }
-  
-  public int getNoLaps(){
-	  
-	 return this.lapNo;
-  }
-  
-  public String getName(){
-	  
-	 return this.gameRoomName;
-  }
+		if(!seedInput.getText().isEmpty()) {
+			this.gameRoomSeed = seedInput.getText();
+		} else if(gameRoomSeed == null) {
+			this.gameRoomSeed = String.valueOf((new Random()).nextLong());
+		}
+		this.maxPlayers = Integer.valueOf(noPlayersInput.getText());
+		this.lapNo = Integer.valueOf(noLapsInput.getText());
+		this.gameRoomName = nameInput.getText();
+
+		if (this.maxPlayers < 1 || this.maxPlayers > 8) {
+			throw new InvalidPlayerNumberException();
+		}
+
+	}
+
+	/**
+	 * Sets the seed that is used to preview the track.
+	 */
+	public void setSeed() {
+		if(seedInput.getText().isEmpty() && gameRoomSeed == null) {
+			this.gameRoomSeed = String.valueOf((new Random()).nextLong());
+		} else if(gameRoomSeed == null) {
+			this.gameRoomSeed = seedInput.getText();
+		}
+
+	}
+
+	/**
+	 * Get method for the game room seed.
+	 * 
+	 * @return The game room seed.
+	 */
+	public String getSeed() {
+		return this.gameRoomSeed;
+	}
+
+	/**
+	 * Get method for the maximum number of players.
+	 * 
+	 * @return The maximum number of players.
+	 */
+	public int getMaxPlayers() {
+		return this.maxPlayers;
+	}
+
+	/**
+	 * Get method for the number of laps.
+	 * 
+	 * @return The number of laps.
+	 */
+	public int getNoLaps() {
+		return this.lapNo;
+	}
+
+	/**
+	 * Get method for the game room name.
+	 * 
+	 * @return The game room name.
+	 */
+	public String getName() {
+		return this.gameRoomName;
+	}
+
 }

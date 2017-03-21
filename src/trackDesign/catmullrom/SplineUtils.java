@@ -9,6 +9,15 @@ import trackDesign.TrackPoint;
  */
 public class SplineUtils {
 
+  /**
+   * Returns all points after smoothing
+   * 
+   * @param points
+   *          The points before
+   * @param divisionCount
+   *          Number of points to put between each point before
+   * @return All points after smoothing
+   */
   public static ArrayList<TrackPoint> dividePoints(ArrayList<TrackPoint> points,
       int divisionCount) {
     ArrayList<TrackPoint> subPoints = new ArrayList<TrackPoint>();

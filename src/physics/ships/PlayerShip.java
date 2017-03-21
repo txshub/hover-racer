@@ -1,7 +1,7 @@
 package physics.ships;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.joml.Vector3f;
 
@@ -10,33 +10,34 @@ import input.Action;
 import input.InputController;
 import physics.core.Ship;
 import physics.support.GroundProvider;
-import physics.support.ShipSounds;
+import trackDesign.TrackPoint;
+import upgrades.ShipTemplate;
 
-/**
- * Represents a Ship controlled with inputs from the Player
+/** Represents a Ship controlled with inputs from the Player
  * 
- * @author Maciej Bogacki
- */
+ * @author Maciej Bogacki */
 public class PlayerShip extends Ship {
 
 	InputController input;
-	ShipSounds sound;
+	// ShipSounds sound;
 
-	public PlayerShip(byte id, TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips,
-			GroundProvider ground, InputController input) {
-		super(id, model, startingPosition, ground);
+	public PlayerShip(byte id, TexturedModel model, Vector3f startingPosition, Collection<Ship> otherShips, GroundProvider ground,
+		ShipTemplate stats, List<TrackPoint> track, InputController input) {
+		super(id, model, startingPosition, ground, stats, track);
 		super.addOtherShips(otherShips);
 		this.input = input; // Deal with input
-		this.sound = new ShipSounds(this, otherShips != null ? otherShips : new ArrayList<Ship>()); // Create
-																									// ShipSounds
+		// this.sound = new ShipSounds(this, otherShips != null ? otherShips : new
+		// ArrayList<Ship>()); // Create
+		// ShipSounds
 	}
 
 	@Override
 	public void update(float delta) {
-		float thrust = 0f, turn = 0f, strafe = 0f, jump = 0f;
+		float thrust = 0f, breaking = 0f, turn = 0f, strafe = 0f, jump = 0f;
 		// Handle inputs
 		thrust += input.isDown(Action.FORWARD);
-		thrust -= input.isDown(Action.BREAK);
+		thrust -= input.isDown(Action.BACKWARD);
+		breaking += input.isDown(Action.BREAK);
 		turn += input.isDown(Action.TURN_RIGHT);
 		turn -= input.isDown(Action.TURN_LEFT);
 		strafe += input.isDown(Action.STRAFE_RIGHT);
@@ -44,13 +45,9 @@ public class PlayerShip extends Ship {
 		jump += input.isDown(Action.JUMP);
 		// System.out.println(thrust +", "+turn+", "+strafe);
 		// Steer and update ship
-		super.steer(thrust, turn, strafe, jump, delta);
+		super.steer(thrust, breaking, turn, strafe, delta);
 		super.updatePhysics(delta);
-		sound.update(delta);
-	}
-
-	public void cleanUp() {
-		// sound.cleanUp();
+		// sound.update(delta);
 	}
 
 }

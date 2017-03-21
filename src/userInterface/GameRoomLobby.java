@@ -9,95 +9,142 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import serverComms.GameRoom;
 
+/**
+ * 
+ * @author Andreea Gheorghe Class that implements the design and functionality
+ *         of the game room waiting lobby, where the user will await the start
+ *         of the game, which is decided by the host of the game room.
+ *
+ */
+
 public class GameRoomLobby extends GridPane {
 
-  private GameRoom gameRoom;
-  private Client client;
+	private GameRoom gameRoom;
+	private Client client;
+	private int maxPlayers;
+	private ArrayList<String> playerNames;
+	private VBox playerNamesBox;
+	private MenuButton refresh;
+	private MenuButton startGame;
 
-  public GameRoomLobby(GameRoom gameRoom) {
-	
-	this.setHgap(30);
-	this.setVgap(15);
-	
-	this.setTranslateX(700);
+	/**
+	 * Constructor for the GameRoomLobby class.
+	 * 
+	 * @param gameRoom
+	 *            The current gameRoom.
+	 */
+	public GameRoomLobby(GameRoom gameRoom) {
 
-    this.gameRoom = gameRoom;
-    
-    int maxPlayers = gameRoom.getNoPlayers();
-    int k = 0;
+		this.setHgap(30);
+		this.setVgap(15);
 
-    ArrayList<String> playerNames = gameRoom.getPlayers();
+		this.gameRoom = gameRoom;
+		maxPlayers = gameRoom.getNoPlayers();
 
-    VBox playerNamesBox = new VBox(10);
+		playerNamesBox = new VBox(10);
 
-    for (int i = 0; i < playerNames.size(); i++) {
+		refresh = new MenuButton("REFRESH", 350, 70, 30);
+		refresh.setOnMouseClicked(e -> {
 
-      TextStyle player = new TextStyle(playerNames.get(i), 25);
-      Text playerText = player.getTextStyled();
+			refresh();
 
-      playerNamesBox.getChildren().add(playerText);
-      k++;
-    }
-    
-    for (int i=k; i<= maxPlayers; i++){
-    	
-    	TextStyle placeholder = new TextStyle("....................................", 25);
-    	Text placeholderText = placeholder.getTextStyled();
-    	
-    	playerNamesBox.getChildren().add(placeholderText);
-    }
+		});
 
-    MenuButton startGame = new MenuButton("START GAME", 350, 70, 30);
+		// START THE GAME IF THE CLIENT IS THE HOST //
 
-    System.out.println(GameMenu.usr);
-    System.out.println(gameRoom.getHostName());
-    
-    if (!GameMenu.usr.equals(gameRoom.getHostName())) {
+		startGame = new MenuButton("START GAME", 350, 70, 30);
 
-      startGame.setVisible(false);
-
-    }
-
-    startGame.setOnMouseClicked(event -> {
-
-    	try {
-    		
-			client.startGame();
-			
-		} catch (IOException e) {
-			
-			System.err.println("GAME WASN'T STARTED");
-			
+		if (!GameMenu.usr.equals(gameRoom.getHostName())) {
+			startGame.setVisible(false);
 		}
-      
-    });
 
-    MenuButton leaveRoom = new MenuButton("EXIT GAME ROOM", 350, 70, 30);
-    leaveRoom.setVisible(false);
-    
-    if (!GameMenu.usr.equals(gameRoom.getHostName())) {
+		startGame.setOnMouseClicked(event -> {
 
-      leaveRoom.setVisible(true);
-    }
+			try {
+				client.startGame();
+			} catch (IOException e) {
+				System.err.println("GAME WASN'T STARTED");
+			}
 
-    leaveRoom.setOnMouseClicked(event -> {
+		});
 
-      // transition to joinGameRoom
+		// GRID LAYOUT //
+		add(refresh, 1, 2);
+		add(startGame, 1, 3);
 
-    });
+	}
 
-    // implement timer and timer task to refresh automatically
+	/**
+	 * Method that refreshes the game room lobby, by receiving an updated list
+	 * of connected players from the server.
+	 */
+	public void refresh() {
 
-    add(playerNamesBox, 0, 1);
-    GridPane.setRowSpan(playerNamesBox, REMAINING);
+		getChildren().clear();
+		add(refresh, 1, 2);
+		add(startGame, 1, 3);
 
-    add(startGame, 2, 3);
-    add(leaveRoom, 2, 4);
-  }
-  
-  public void setClient(Client client){
-	  
-	  this.client = client;
-  }
+		try {
+
+			gameRoom = client.getUpdatedRoom();
+
+		} catch (IOException e) {
+
+			System.err.println("DID NOT RECEIVE UPDATED GAME ROOM");
+		}
+
+		int k = 0;
+		playerNames = gameRoom.getPlayers();
+		System.out.println(playerNames.size());
+
+		playerNamesBox.getChildren().clear();
+
+		for (int i = 0; i < playerNames.size(); i++) {
+
+			TextStyle player = new TextStyle(playerNames.get(i) + "                  ", 30);
+			Text playerText = player.getTextStyled();
+
+			playerNamesBox.getChildren().add(playerText);
+			k++;
+
+		}
+
+		for (int i = k; i < maxPlayers; i++) {
+
+			TextStyle placeholder = new TextStyle("........................................", 30);
+			Text placeholderText = placeholder.getTextStyled();
+
+			playerNamesBox.getChildren().add(placeholderText);
+		}
+
+		if (!getChildren().contains(playerNamesBox)) {
+
+			add(playerNamesBox, 0, 1);
+		}
+		GridPane.setRowSpan(playerNamesBox, 6);
+
+	}
+
+	/**
+	 * Sets the client to be the current connected client that needs to be
+	 * accessed in this class.
+	 * 
+	 * @param client
+	 *            The connected client.
+	 */
+	public void setClient(Client client) {
+
+		this.client = client;
+	}
+
+	/**
+	 * Get method for the current game room.
+	 * 
+	 * @return The current game room.
+	 */
+	public GameRoom getGameRoom() {
+
+		return this.gameRoom;
+	}
 
 }

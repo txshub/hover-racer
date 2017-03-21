@@ -1,13 +1,17 @@
 
 package userInterface;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import audioEngine.AudioMaster;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,66 +23,104 @@ import javafx.stage.WindowEvent;
 
 /**
  * 
- * @author Andreea Gheorghe
+ * @author Andreea Gheorghe Class for launching the User Interface.
  *
  */
 public class MainMenu extends Application {
 
-  private GameMenu gameMenu;
+	public GameMenu gameMenu;
+	public Scene scene;
+	public static Pane root;
+	public static Stage primaryStage;
+    public static ImageView imgView;
+    public static Rectangle bg;
+	/**
+	 * Method that initializes the primary stage and the current scene.
+	 * 
+	 * @param primaryStage
+	 *            The primary JavaFX stage.
+	 */
+	public void start(Stage primaryStage) throws Exception {
 
-  @Override
-  public void start(Stage primaryStage) throws Exception {
+		// Tudor - start the audio engine
+		AudioMaster.init();
+		
+		root = new Pane();
+		root.setPrefSize(1000, 600);
+		
+		this.primaryStage = primaryStage;
 
-    // Tudor - start the audio engine
-    AudioMaster.init();
+		// get file from path
+		InputStream is = Files.newInputStream(Paths.get("src/resources/img/hover-racer.jpg"));
+		Image background = new Image(is);
+		is.close();
 
-    Pane root = new Pane();
-    root.setPrefSize(1000, 600);
+		imgView = new ImageView(background);
+		imgView.setFitWidth(1000);
+		imgView.setFitHeight(600);
 
-    // get file from path
-    InputStream is = Files.newInputStream(Paths.get("src/resources/img/hover-racerNew.jpg"));
-    Image background = new Image(is);
-    is.close();
+		gameMenu = new GameMenu();
+		gameMenu.setVisible(true);
 
-    ImageView imgView = new ImageView(background);
-    imgView.setFitWidth(1000);
-    imgView.setFitHeight(600);
+		bg = new Rectangle(1000, 600);
+		bg.setOpacity(0.5);
+		bg.setFill(Color.BLACK);
 
-    gameMenu = new GameMenu();
-    gameMenu.setVisible(true);
+		root.getChildren().addAll(imgView, bg, gameMenu);
 
-    Rectangle bg = new Rectangle(1000, 600);
-    bg.setOpacity(0.5);
-    bg.setFill(Color.BLACK);
+		scene = new Scene(root);
 
-    root.getChildren().addAll(imgView, bg, gameMenu);
+		primaryStage.setResizable(false);
+		primaryStage.sizeToScene();
 
-    // create a scene
-    Scene scene = new Scene(root);
+		primaryStage.setScene(scene);
+		primaryStage.show();
+		
+		Platform.setImplicitExit(false);
 
-    primaryStage.setResizable(false);
-    primaryStage.sizeToScene();
+		// Handle closing the window by pressing 'X'
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 
-    primaryStage.setScene(scene);
-    primaryStage.show();
+			public void handle(WindowEvent we) {
+				AudioMaster.stopMusic();
+				AudioMaster.cleanUp();
+				System.exit(0);
+			}
+		});
 
-    primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		// Tudor - start the music
+		AudioMaster.playMusic();
 
-      public void handle(WindowEvent we) {
-        AudioMaster.stopMusic();
-        AudioMaster.cleanUp();
-        System.exit(0);
-      }
-    });
+	}
+	
+	public static ObservableList<Node> getMenuChildren(){
+		return root.getChildren();
+	}
+	
+	public static void hideScene(){
+		
+		primaryStage.hide();
+		
+	}
+	
+	
+	public static void reloadScene() throws IOException {
+		
+		for(int i=0; i< root.getChildren().size(); i++){
+			if(!root.getChildren().get(i).equals(imgView) && !root.getChildren().get(i).equals(bg)){
+				root.getChildren().remove(i);
+			}
+		}
+		
+		GameMenu newMenu = new GameMenu();
+		root.getChildren().add(newMenu);
+		
+		primaryStage.show();
+	}
+	public static void main(String[] args) {
 
-    // Tudor - start the music
-    AudioMaster.playMusic();
+		launch(args);
 
-  }
+	}
 
-  public static void main(String[] args) {
-
-    launch(args);
-
-  }
 }

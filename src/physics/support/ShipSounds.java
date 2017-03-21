@@ -21,7 +21,7 @@ import physics.core.Ship;
  * @author Maciej Bogacki
  * @author Tudor Suruceanu
  */
-public class ShipSounds {
+public class ShipSounds implements CollisionListener {
 
   private Ship player;
   private Source playerSource;
@@ -91,12 +91,13 @@ public class ShipSounds {
    * @param second
    *          Second ship involved
    */
-  public void collision(Ship first, Ship second) {
+  @Override
+  public void addCollision(Ship first, Ship second) {
     Vector3f position = new Vector3f(first.getPosition()).sub(player.getPosition()).div(2);
     float force = new Vector3f(first.getVelocity()).sub(second.getVelocity()).length();
 
     // Set initial volume
-    Source collisionSource = AudioMaster.createSFXSource();
+    Source collisionSource = AudioMaster.createSFXSource(1f);
     Vector3f sourcePos = getRelativePosition(position);
     collisionSource.setPosition(sourcePos.x(), sourcePos.y(), sourcePos.z());
 

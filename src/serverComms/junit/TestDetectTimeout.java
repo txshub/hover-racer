@@ -6,12 +6,13 @@ import org.junit.Test;
 
 import serverComms.ClientTable;
 import serverComms.DetectTimeout;
+import serverComms.Lobby;
 
 public class TestDetectTimeout {
 
   @Test
   public void test() {
-    ClientTable table = new ClientTable();
+    ClientTable table = new ClientTable(new Lobby(1234));
     String name = "Testing";
     table.add(name);
     DetectTimeout test = new DetectTimeout(table, name);
@@ -19,12 +20,12 @@ public class TestDetectTimeout {
     if (!table.userExists(name))
       fail("Didn't wait to delete user");
     try {
-      Thread.sleep(6000);
+      Thread.sleep(21000);
     } catch (InterruptedException e) {
       fail("Time Out");
     }
     if (table.userExists(name))
-      fail("Name wasn't deleted after 5s");
+      fail("Name wasn't deleted after 20s");
   }
 
 }

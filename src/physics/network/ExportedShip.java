@@ -2,7 +2,11 @@ package physics.network;
 
 import java.nio.ByteBuffer;
 
+import org.joml.Vector3f;
+
+import physics.core.Ship;
 import physics.core.Vector3;
+import physics.ships.RemoteShip;
 
 /**
  * An object representing a Ship entity, exported for transmission over the
@@ -39,7 +43,7 @@ public class ExportedShip {
 
   public byte[] toNumbers() {
     ByteBuffer buffer = ByteBuffer.allocate(49); // (4 per float)*(3 per
-                                                 // vector)*(4 vectors)
+    // vector)*(4 vectors)
     buffer.put(id);
     addVector(position, buffer);
     addVector(velocity, buffer);
@@ -81,6 +85,25 @@ public class ExportedShip {
     // System.out.println(numbers[6]);
     // System.out.println(first);
     System.out.println(new ExportedShip(numbers));
+
+    Ship testShip = new RemoteShip((byte) 2, null, new Vector3f(12, 7, 82), null, null, null, null);
+    byte[] second = testShip.export();
+    Ship receiver = new RemoteShip((byte) 2, null, new Vector3f(3, 4, 45), null, null, null, null);
+    receiver.updateFromPacket(second);
+    System.out.println(receiver.getPosition());
+  }
+
+  public static void printPacket(byte[] packet) {
+    if (packet.length == 49)
+      System.out.println(new ExportedShip(packet));
+    else if (packet.length % 49 == 0) {
+      for (int i = 0; i < packet.length / 49; i++) {
+        byte[] nextOne = new byte[49];
+        System.arraycopy(packet, 49 * i, nextOne, 0, 49);
+        System.out.println(new ExportedShip(nextOne));
+      }
+    } else
+      System.err.println("Invalid packet length: " + packet.length);
   }
 
   @Override
