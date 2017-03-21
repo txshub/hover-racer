@@ -78,6 +78,9 @@ public class MainGameLoop extends Thread {
     }
 
     game.cleanUp();
+    
+    // TODO THIS IS REALLY BAD!!!!!
+    System.exit(0);
   }
 
   public static void startMultiplayerGame(RaceSetupData data, Client client) {
