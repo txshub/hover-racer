@@ -1,5 +1,8 @@
 package userInterface;
 
+import audioEngine.AudioMaster;
+import audioEngine.Sounds;
+import audioEngine.Source;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.effect.DropShadow;
@@ -24,6 +27,7 @@ public class CustomisationButton extends StackPane {
 
 	Rectangle background;
 	boolean clicked;
+	Source audioSource;
 
 	/**
 	 * Constructor for the CustomisationButton class.
@@ -43,6 +47,8 @@ public class CustomisationButton extends StackPane {
 
 		TextStyle descriptionText;
 		Text descriptionStyled = null;
+		
+		audioSource = AudioMaster.createSFXSource();
 
 		if (shipType == 1) {
 
@@ -94,6 +100,8 @@ public class CustomisationButton extends StackPane {
 				background.setTranslateX(0);
 				box.setTranslateX(0);
 			}
+			
+			audioSource.play(Sounds.BUTTON_HOVER);
 		});
 
 		// Create glow effect to let user know they have clicked a button
@@ -103,6 +111,7 @@ public class CustomisationButton extends StackPane {
 		// Clicked on button
 		this.setOnMousePressed(event -> {
 			setEffect(effect);
+			audioSource.play(Sounds.BUTTON_CLICK);
 		});
 
 		// Release button and remove effect
