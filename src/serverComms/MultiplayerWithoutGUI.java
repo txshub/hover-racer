@@ -13,8 +13,9 @@ public class MultiplayerWithoutGUI {
 	private static GameRoom gameRoom;
 	private static final int GAME_ID = 0;
 	private static final String SEED = "234";
-	private static final int MAX_PLAYERS = 8;
+	private static final int MAX_PLAYERS = 10;
 	private static final int LAPS = 1;
+	private static final int SHIP_TYPE = 2;
 	private static final String LOBBY_NAME = "Testonium";
 
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -33,7 +34,7 @@ public class MultiplayerWithoutGUI {
 		client.start();
 
 		// Create a game room
-		gameRoom = client.createGame(SEED, MAX_PLAYERS, LAPS, LOBBY_NAME, DataGenerator.basicShipSetup(client.clientName));
+		gameRoom = client.createGame(SEED, MAX_PLAYERS, LAPS, LOBBY_NAME, DataGenerator.basicShipSetup(client.clientName, SHIP_TYPE));
 
 		// Create another user
 		Client bob = new Client("Bob", PORT, MACHINE_NAME);
