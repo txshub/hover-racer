@@ -53,6 +53,9 @@ public class GameMenu extends Parent {
 	public Client client;
 	private final int OFFSET = 600;
 	private CustomisationOptions customisations, customisations1;
+	private MenuButton startServerMulti;
+	private MenuButton connectMulti;
+	private VBox box4Multi;
 
 	/**
 	 * Constructor for the GameMenu class.
@@ -494,6 +497,10 @@ public class GameMenu extends Parent {
 			trans.play();
 			trans1.play();
 			trans.setOnFinished(evt -> {
+				if(box4Multi.getChildren().contains(startServerMulti)){
+					box4Multi.getChildren().remove(startServerMulti);
+					box4Multi.getChildren().add(connectMulti);
+				}
 				getChildren().remove(connectMultiWindow);
 				getChildren().addAll(hoverText, racerText, captionText);
 			});
@@ -613,32 +620,27 @@ public class GameMenu extends Parent {
 
 		TextField usernameInputMulti = new TextField();
 
-		TextStyle portM = new TextStyle("PORT", 30);
-		Text portTextM = portM.getTextStyled();
-
-		TextField portInputMulti = new TextField();
-
 		TextStyle machineM = new TextStyle("MACHINE NAME", 30);
 		Text machineTextM = machineM.getTextStyled();
 
 		TextField machineInputMulti = new TextField();
 
-		VBox box4Multi = new VBox(10);
+		box4Multi = new VBox(10);
 		box4Multi.setPadding(new Insets(0, 0, 5, 0));
 
-		MenuButton startServerMulti = new MenuButton("START A SERVER", 350, 70, 30);
+		startServerMulti = new MenuButton("START A SERVER", 350, 70, 30);
 
 		// If the server is already running, you connect with the settings
 		// <username, portNumber, machineName>
 		// If the server is not running, add startServerMulti button.
 
-		MenuButton connectMulti = new MenuButton("CONNECT TO THE LOBBY", 350, 70, 30);
+		connectMulti = new MenuButton("CONNECT TO THE LOBBY", 350, 70, 30);
 		connectMulti.setOnMouseClicked(event -> {
 
 			try {
 
 				usr = usernameInputMulti.getText();
-				int portNo = Integer.valueOf(portInputMulti.getText());
+				int portNo = 4444;
 				String machineName = machineInputMulti.getText();
 
 				client = new Client(usr, portNo, machineName);
@@ -689,7 +691,7 @@ public class GameMenu extends Parent {
 			// server.start();
 
 			usr = usernameInputMulti.getText();
-			int portNo = Integer.valueOf(portInputMulti.getText());
+			int portNo = 4444;
 			String machineName = machineInputMulti.getText();
 
 			client = new Client(usr, portNo, machineName);
@@ -939,10 +941,6 @@ public class GameMenu extends Parent {
 		connectMultiWindow.add(usernameInputMulti, 0, 2);
 		GridPane.setMargin(usernameInputMulti, new Insets(0, 0, 10, 0));
 
-		connectMultiWindow.add(portTextM, 0, 3);
-		connectMultiWindow.add(portInputMulti, 0, 4);
-		GridPane.setMargin(portInputMulti, new Insets(0, 0, 10, 0));
-
 		connectMultiWindow.add(machineTextM, 0, 5);
 		connectMultiWindow.add(machineInputMulti, 0, 6);
 		GridPane.setMargin(machineInputMulti, new Insets(0, 0, 10, 0));
@@ -951,7 +949,6 @@ public class GameMenu extends Parent {
 		connectMultiWindow.add(btnBackMulti, 0, 8);
 
 		GridPane.setHalignment(usernameTextM, HPos.CENTER);
-		GridPane.setHalignment(portTextM, HPos.CENTER);
 		GridPane.setHalignment(machineTextM, HPos.CENTER);
 
 		// MULTIPLAYER OPTIONS WINDOW CHILDREN //
