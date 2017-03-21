@@ -1,6 +1,7 @@
 package userInterface;
 
 import java.io.IOException;
+import java.util.Random;
 
 import clientComms.Client;
 import javafx.geometry.Insets;
@@ -110,7 +111,11 @@ public class HostGameRoom extends GridPane {
 			throw new NullPointerException();
 		}
 
-		this.gameRoomSeed = seedInput.getText();
+		if(!seedInput.getText().isEmpty()) {
+			this.gameRoomSeed = seedInput.getText();
+		} else if(gameRoomSeed == null) {
+			this.gameRoomSeed = String.valueOf((new Random()).nextLong());
+		}
 		this.maxPlayers = Integer.valueOf(noPlayersInput.getText());
 		this.lapNo = Integer.valueOf(noLapsInput.getText());
 		this.gameRoomName = nameInput.getText();
@@ -125,7 +130,11 @@ public class HostGameRoom extends GridPane {
 	 * Sets the seed that is used to preview the track.
 	 */
 	public void setSeed() {
-		this.gameRoomSeed = seedInput.getText();
+		if(seedInput.getText().isEmpty() && gameRoomSeed == null) {
+			this.gameRoomSeed = String.valueOf((new Random()).nextLong());
+		} else if(gameRoomSeed == null) {
+			this.gameRoomSeed = seedInput.getText();
+		}
 
 	}
 

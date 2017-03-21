@@ -1,6 +1,7 @@
 package userInterface;
 
 import java.io.IOException;
+import java.util.Random;
 
 import clientComms.Client;
 import javafx.application.Platform;
@@ -146,7 +147,11 @@ public class CreateGameRoom extends GridPane {
 	 */
 	public void setSeed() {
 
-		this.gameRoomSeed = seedInput.getText();
+		if(seedInput.getText().isEmpty()) {
+			this.gameRoomSeed = String.valueOf((new Random()).nextLong());
+		} else {
+			this.gameRoomSeed = seedInput.getText();
+		}
 	}
 
 	/**
@@ -160,8 +165,12 @@ public class CreateGameRoom extends GridPane {
 		if (usernameInput.getText().isEmpty() || noAIsInput.getText().isEmpty() || noLapsInput.getText().isEmpty()) {
 			throw new NullPointerException();
 		}
-
-		this.gameRoomSeed = seedInput.getText();
+		
+		if(!seedInput.getText().isEmpty()) {
+			this.gameRoomSeed = seedInput.getText();
+		} else if(gameRoomSeed==null) {
+			this.gameRoomSeed = String.valueOf((new Random()).nextLong());
+		}
 		this.maxAIs = Integer.valueOf(noAIsInput.getText());
 		this.lapNo = Integer.valueOf(noLapsInput.getText());
 		this.username = usernameInput.getText();
