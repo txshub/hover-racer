@@ -18,6 +18,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
 import audioEngine.AudioMaster;
+import audioEngine.Sounds;
+import audioEngine.Source;
 import clientComms.Client;
 import gameEngine.entities.Camera;
 import gameEngine.entities.Entity;
@@ -106,6 +108,7 @@ public class MultiplayerGame {
   private Container controlsScreen;
   private Container startLights;
   private int lightState = 0;
+  private Source countDown;
 
   public MultiplayerGame(RaceSetupData data, Client client) {
     init(data, client);
@@ -195,6 +198,9 @@ public class MultiplayerGame {
     }
 
     setupUI(data);
+    
+    // Create the count down source
+    countDown = AudioMaster.createSFXSource();
 
     AudioMaster.playInGameMusic();
     try {
@@ -236,6 +242,9 @@ public class MultiplayerGame {
         containers.remove(startLights);
         startLights = new Container(loader, "ui/lights" + (i + 1), new Vector2f(470, 40));
         containers.add(startLights);
+        countDown.stop();
+        countDown.play(Sounds.COUNTDOWN);
+        lightState = i + 1;
       }
     }
 
