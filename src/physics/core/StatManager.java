@@ -26,6 +26,9 @@ public class StatManager {
 		this.JUMP_POWER = stats.get(Stat.JUMP_POWER);
 		this.SIZE = stats.get(Stat.SIZE);
 
+		if (stats.get(Stat.WALL_ELASTICITY) != null) this.WALL_ELASTICITY = stats.get(Stat.WALL_ELASTICITY);
+		if (stats.get(Stat.SHIP_ELASTICITY) != null) this.SHIP_COLLISION_ELASTICITY = stats.get(Stat.SHIP_ELASTICITY);
+
 		this.ROTATIONAL_RESISTANCE = AIR_RESISTANCE / 2;
 		this.MAX_SPEED = ACCELERATION * ACCELERATION / AIR_RESISTANCE;
 		// this = stats.get(Stat.);
@@ -49,5 +52,10 @@ public class StatManager {
 	public final float MAX_SPEED; // Used for the sound engine
 	public final float MASS;
 	public final float SIZE;
+
+	// How much energy is retained during ship-wall collisions
+	public static float WALL_ELASTICITY = 0.35f;
+	// How much energy is retained during ship-ship collisions
+	public static float SHIP_COLLISION_ELASTICITY = 0.8f;
 
 }
