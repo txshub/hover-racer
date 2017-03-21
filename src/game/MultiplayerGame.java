@@ -18,6 +18,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
 import audioEngine.AudioMaster;
+import audioEngine.Sounds;
+import audioEngine.Source;
 import clientComms.Client;
 import gameEngine.entities.Camera;
 import gameEngine.entities.Entity;
@@ -106,6 +108,7 @@ public class MultiplayerGame {
   private Container controlsScreen;
   private Container startLights;
   private int lightState = 0;
+  private Source countDown;
 
   public MultiplayerGame(RaceSetupData data, Client client) {
     init(data, client);
@@ -130,24 +133,24 @@ public class MultiplayerGame {
 
     // Terrain
     TerrainTexture background = new TerrainTexture(
-        loader.loadMipmappedTexture("new/GridTexture", -2.5f));
+        loader.loadMipmappedTexture("gridTexture", -2.5f));
     TerrainTexture rTexture = new TerrainTexture(
-        loader.loadMipmappedTexture("new/GridTexture", -2.5f));
+        loader.loadMipmappedTexture("gridTexture", -2.5f));
     TerrainTexture gTexture = new TerrainTexture(
-        loader.loadMipmappedTexture("new/GridTexture", -2.5f));
+        loader.loadMipmappedTexture("gridTexture", -2.5f));
     TerrainTexture bTexture = new TerrainTexture(
-        loader.loadMipmappedTexture("new/GridTexture", -2.5f));
+        loader.loadMipmappedTexture("gridTexture", -2.5f));
     TerrainTexturePack texturePack = new TerrainTexturePack(background, rTexture, gTexture,
         bTexture);
 
     // TerrainTexture blendMap = new
     // TerrainTexture(loader.loadTexture("blendMap"));
 
-    TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("new/GridTexture"));
+    TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("gridTexture"));
 
     terrains = new ArrayList<Terrain>();
     terrains.add(new Terrain((int) (-SkyboxRenderer.SIZE * 2f), (int) (-SkyboxRenderer.SIZE * 2f),
-        loader, texturePack, blendMap, "new/FlatHeightMap"));
+        loader, texturePack, blendMap, "flatHeightMap"));
 
     // Track
     trackSeed = data.getTrackSeed();
@@ -160,8 +163,8 @@ public class MultiplayerGame {
     entities.add(track);
 
     // Finish Line
-    TexturedModel finishLineModel = new TexturedModel(getModel("finishLineUpdated", loader),
-        new ModelTexture(loader.loadMipmappedTexture("new/finishLineTextureUpdated", -1f)));
+    TexturedModel finishLineModel = new TexturedModel(getModel("finishLine", loader),
+        new ModelTexture(loader.loadMipmappedTexture("finishLineTexture", -1f)));
     Vector3f firstPoint = new Vector3f(st.getStart());
     firstPoint.y = 1.05f;
     Entity finishLine = new Entity(finishLineModel, firstPoint, data.startingOrientation,
@@ -195,6 +198,9 @@ public class MultiplayerGame {
     }
 
     setupUI(data);
+    
+    // Create the count down source
+    countDown = AudioMaster.createSFXSource();
 
     AudioMaster.playInGameMusic();
     try {
@@ -236,6 +242,9 @@ public class MultiplayerGame {
         containers.remove(startLights);
         startLights = new Container(loader, "ui/lights" + (i + 1), new Vector2f(470, 40));
         containers.add(startLights);
+        countDown.stop();
+        countDown.play(Sounds.COUNTDOWN);
+        lightState = i + 1;
       }
     }
 
@@ -728,7 +737,7 @@ public class MultiplayerGame {
     }
 
     return new TexturedModel(loader.loadToVAO(vertices, texCoords, normals, indices),
-        new ModelTexture(loader.loadMipmappedTexture("new/trackTexture", -3f)));
+        new ModelTexture(loader.loadMipmappedTexture("trackTexture", -3f)));
   }
 
   private void addToArray(Vector3f vector, float[] array, int offset) {

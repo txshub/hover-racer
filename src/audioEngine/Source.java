@@ -82,7 +82,9 @@ public class Source {
    * Stop the sound
    */
   public void stop() {
-    AL10.alSourceStop(sourceId);
+    if (isPlaying()) {
+      AL10.alSourceStop(sourceId);
+    }
   }
 
   /**

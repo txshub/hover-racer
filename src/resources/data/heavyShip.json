@@ -1,6 +1,6 @@
 {
-  "model": "borg",
-  "texture": "borg",
+  "model": "ship1",
+  "texture": "ship1Texture",
   "stats": {
     "stats": {
       "JUMP_POWER": 30.0,
