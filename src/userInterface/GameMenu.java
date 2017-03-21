@@ -24,23 +24,17 @@ import javafx.util.Duration;
 import physics.placeholders.DataGenerator;
 import serverComms.GameRoom;
 import serverComms.Lobby;
-import serverComms.ServerComm;
 
-/**
- * 
- * @author Andreea Gheorghe Main class that manages the functionality of the
- *         game menu and the translations between the different windows.
- *
- */
+/** @author Andreea Gheorghe Main class that manages the functionality of the
+ *         game menu and the translations between the different windows. */
 public class GameMenu extends Parent {
 
-	private GridPane initialWindow, settingsWindow, connectMultiWindow, hostGameRoomWindow, joinGameRoomWindow,
-			gameRoomLobbyWindow, creditsWindow, keyBindingsWindow, shipCustomisationWindowSingle,
-			shipCustomisationWindowMulti;
+	private GridPane initialWindow, settingsWindow, connectMultiWindow, hostGameRoomWindow, joinGameRoomWindow, gameRoomLobbyWindow,
+		creditsWindow, keyBindingsWindow, shipCustomisationWindowSingle, shipCustomisationWindowMulti;
 	private VBox multiOptionsWindow, singleGameWindow;
-	private MenuButton btnPlayGame, btnPlayAI, btnOptions, btnExit, btnCredits, btnKeyBindings, btnNextSingle,
-			btnNextMulti, btnBackKeyBindings, btnBackCustomisationSingle, btnBackCustomisationMulti, btnBackCredits,
-			btnBackSettings, btnBackMulti, btnBackSingle, btnBackHost, btnBackMultiOptions, btnBackJoin;
+	private MenuButton btnPlayGame, btnPlayAI, btnOptions, btnExit, btnCredits, btnKeyBindings, btnNextSingle, btnNextMulti,
+		btnBackKeyBindings, btnBackCustomisationSingle, btnBackCustomisationMulti, btnBackCredits, btnBackSettings, btnBackMulti,
+		btnBackSingle, btnBackHost, btnBackMultiOptions, btnBackJoin;
 	private SoundSlider soundSlider;
 	private MusicSlider musicSlider;
 	private Credits credits;
@@ -54,11 +48,9 @@ public class GameMenu extends Parent {
 	private final int OFFSET = 600;
 	private CustomisationOptions customisations, customisations1;
 
-	/**
-	 * Constructor for the GameMenu class.
+	/** Constructor for the GameMenu class.
 	 * 
-	 * @throws IOException
-	 */
+	 * @throws IOException */
 	public GameMenu() throws IOException {
 
 		initialWindow = new GridPane();
@@ -172,8 +164,7 @@ public class GameMenu extends Parent {
 				TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), initialWindow);
 				trans.setToX(initialWindow.getTranslateX() - OFFSET);
 
-				TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25),
-						shipCustomisationWindowSingle);
+				TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), shipCustomisationWindowSingle);
 				trans1.setToX(shipCustomisationWindowSingle.getTranslateX() - OFFSET);
 
 				trans.play();
@@ -305,8 +296,7 @@ public class GameMenu extends Parent {
 				getChildren().add(singleGameWindow);
 				getChildren().removeAll(hoverText, racerText, captionText);
 
-				TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25),
-						shipCustomisationWindowSingle);
+				TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), shipCustomisationWindowSingle);
 				trans.setToX(shipCustomisationWindowSingle.getTranslateX() - OFFSET);
 
 				TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), singleGameWindow);
@@ -336,8 +326,7 @@ public class GameMenu extends Parent {
 			try {
 				getChildren().add(multiOptionsWindow);
 
-				TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25),
-						shipCustomisationWindowMulti);
+				TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), shipCustomisationWindowMulti);
 				trans.setToX(shipCustomisationWindowMulti.getTranslateX() - OFFSET);
 
 				TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), multiOptionsWindow);
@@ -531,8 +520,7 @@ public class GameMenu extends Parent {
 				TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), multiOptionsWindow);
 				trans.setToX(multiOptionsWindow.getTranslateX() + OFFSET);
 
-				TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25),
-						shipCustomisationWindowMulti);
+				TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), shipCustomisationWindowMulti);
 				trans1.setToX(multiOptionsWindow.getTranslateX());
 
 				trans.play();
@@ -652,8 +640,7 @@ public class GameMenu extends Parent {
 					TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25), connectMultiWindow);
 					trans.setToX(connectMultiWindow.getTranslateX() - OFFSET);
 
-					TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25),
-							shipCustomisationWindowMulti);
+					TranslateTransition trans1 = new TranslateTransition(Duration.seconds(0.25), shipCustomisationWindowMulti);
 					trans1.setToX(shipCustomisationWindowMulti.getTranslateX() - OFFSET);
 
 					trans.play();
@@ -767,7 +754,7 @@ public class GameMenu extends Parent {
 
 				} else {
 					GameRoom gameRoomChosen = client.joinGame(joinGameRoom.getChosenGRid(),
-							DataGenerator.basicShipSetup(GameMenu.usr));
+						DataGenerator.basicShipSetup(GameMenu.usr, customisations.getTypeId()));
 					// Create a game lobby of the chosen game room
 					// that is received from the server
 					gameRoomLobby = new GameRoomLobby(gameRoomChosen);
@@ -849,9 +836,8 @@ public class GameMenu extends Parent {
 
 				hostGameRoom.setSettings();
 
-				gameRoom = client.createGame(hostGameRoom.getSeed(), hostGameRoom.getMaxPlayers(),
-						hostGameRoom.getNoLaps(), hostGameRoom.getName(),
-						DataGenerator.basicShipSetup(client.clientName));
+				gameRoom = client.createGame(hostGameRoom.getSeed(), hostGameRoom.getMaxPlayers(), hostGameRoom.getNoLaps(),
+					hostGameRoom.getName(), DataGenerator.basicShipSetup(client.clientName));
 				// Create a game lobby of the game room
 				// that is received from the server
 				gameRoomLobby = new GameRoomLobby(gameRoom);
@@ -987,9 +973,7 @@ public class GameMenu extends Parent {
 		this.setCacheHint(CacheHint.SPEED);
 	}
 
-	/**
-	 * Sets the design of the initial game menu window.
-	 */
+	/** Sets the design of the initial game menu window. */
 	public void buildInitialWindow() {
 
 		initialWindow.setTranslateX(100);
@@ -1000,9 +984,7 @@ public class GameMenu extends Parent {
 
 	}
 
-	/**
-	 * Sets the design of the settings window.
-	 */
+	/** Sets the design of the settings window. */
 	public void buildSettingsWindow() {
 
 		settingsWindow.setTranslateX(700);
@@ -1014,9 +996,7 @@ public class GameMenu extends Parent {
 
 	}
 
-	/**
-	 * Sets the design of the credits window.
-	 */
+	/** Sets the design of the credits window. */
 	public void buildCreditsWindow() {
 
 		creditsWindow.setTranslateX(700);
@@ -1026,10 +1006,8 @@ public class GameMenu extends Parent {
 
 	}
 
-	/**
-	 * Sets the design of the key bindings window, where the user can access a
-	 * tutorial of the controls used in the game.
-	 */
+	/** Sets the design of the key bindings window, where the user can access a
+	 * tutorial of the controls used in the game. */
 	public void buildKeyBindingsWindow() {
 
 		keyBindingsWindow.setTranslateX(700);
@@ -1039,9 +1017,7 @@ public class GameMenu extends Parent {
 
 	}
 
-	/**
-	 * Sets the design of the ship customisation window in single player mode.
-	 */
+	/** Sets the design of the ship customisation window in single player mode. */
 	public void buildShipCustomisationWindowSingle() {
 
 		shipCustomisationWindowSingle.setTranslateX(700);
@@ -1051,9 +1027,7 @@ public class GameMenu extends Parent {
 
 	}
 
-	/**
-	 * Sets the design of the ship customisation window in multiplayer mode.
-	 */
+	/** Sets the design of the ship customisation window in multiplayer mode. */
 	public void buildShipCustomisationWindowMulti() {
 
 		shipCustomisationWindowMulti.setTranslateX(700);
@@ -1063,10 +1037,8 @@ public class GameMenu extends Parent {
 
 	}
 
-	/**
-	 * Sets the design of the window where the user connects to the lobby in
-	 * multiplayer mode.
-	 */
+	/** Sets the design of the window where the user connects to the lobby in
+	 * multiplayer mode. */
 	public void buildConnectMultiWindow() {
 
 		connectMultiWindow.setTranslateX(700);
@@ -1078,10 +1050,8 @@ public class GameMenu extends Parent {
 
 	}
 
-	/**
-	 * Sets the design of the window that provides options for the multiplayer
-	 * mode - (host a game, join a game).
-	 */
+	/** Sets the design of the window that provides options for the multiplayer
+	 * mode - (host a game, join a game). */
 	public void buildMultiOptionsWindow() {
 
 		multiOptionsWindow.setTranslateX(700);
@@ -1089,9 +1059,7 @@ public class GameMenu extends Parent {
 
 	}
 
-	/**
-	 * Sets the design for the single player mode window.
-	 */
+	/** Sets the design for the single player mode window. */
 	public void buildSingleGameWindow() {
 
 		singleGameWindow.setTranslateX(700);
@@ -1099,10 +1067,8 @@ public class GameMenu extends Parent {
 
 	}
 
-	/**
-	 * Sets the design for the host game room window, where the user inputs the
-	 * game settings.
-	 */
+	/** Sets the design for the host game room window, where the user inputs the
+	 * game settings. */
 	private void buildHostGameRoomWindow() {
 
 		hostGameRoomWindow.setTranslateX(700);
@@ -1113,10 +1079,8 @@ public class GameMenu extends Parent {
 
 	}
 
-	/**
-	 * Sets the design for the join game room window, where the user can join an
-	 * existing game room.
-	 */
+	/** Sets the design for the join game room window, where the user can join an
+	 * existing game room. */
 	private void buildJoinGameRoomWindow() {
 
 		joinGameRoomWindow.setTranslateX(700);
@@ -1126,11 +1090,9 @@ public class GameMenu extends Parent {
 
 	}
 
-	/**
-	 * Sets the design for the game room lobby window, where the user can see
+	/** Sets the design for the game room lobby window, where the user can see
 	 * who is currently connected to the game room and the host can start the
-	 * game at any point.
-	 */
+	 * game at any point. */
 	private void buildGameRoomLobbyWindow() {
 
 		gameRoomLobbyWindow.setTranslateX(700);
