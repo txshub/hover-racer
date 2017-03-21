@@ -44,4 +44,9 @@ public class ShipSetupData {
 		return (new Gson()).toJson(this);
 	}
 
+	public ShipSetupData setNickname(String nickname) {
+		this.nickname = nickname;
+		return this;
+	}
+
 }

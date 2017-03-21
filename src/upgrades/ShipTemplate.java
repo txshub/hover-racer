@@ -3,6 +3,11 @@ package upgrades;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import physics.network.ShipSetupData;
+
 public class ShipTemplate {
 
 	Map<Stat, Float> stats;
@@ -66,6 +71,11 @@ public class ShipTemplate {
 
 	public Map<UpgradeType, Integer> getUpgrades() {
 		return upgrades;
+	}
+
+	public static void main(String[] args) {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		System.out.println(gson.toJson(new ShipSetupData("xxxx", "newShip", "newShipTexture", getDefault())));
 	}
 
 }
