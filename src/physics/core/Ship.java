@@ -29,10 +29,6 @@ public abstract class Ship extends Entity {
 	private static final float VERTICAL_SCALE = 10;
 	// How fast does rotating slow down
 	private static final float ROTATIONAL_RESISTANCE = 5;
-	// How much speed is retained during a wall collision
-	private static final float WALL_ELASTICITY = 0.35f;
-	// How much energy is retained during ship collisions
-	private static final float SHIP_COLLISION_ELASTICITY = 0.8f;
 
 	// 15, 100, 2, 30: magnet-like
 	// 15, 50, 0.8, 30: nicely cushiony
@@ -40,9 +36,6 @@ public abstract class Ship extends Entity {
 	private static final float LEVELLING_SPEED = 0.2f;
 	private static final float SPEED_OF_ROTATION_WHILE_TURNING = 1.25f;
 	private static final float SPEED_OF_ROTATION_WHILE_STRAFING = 0.75f;
-	// Whether the ship actually breaks when braking (and not accelerates
-	// backwards)
-	private static boolean ACTUALLY_BREAK = true;
 
 	transient private Vector3 position;
 	private Vector3 rotation;
@@ -146,7 +139,8 @@ public abstract class Ship extends Entity {
 		Vector3 pos = ship.getInternalPosition().copy();
 		float expectedDistance = ship.getSize() + this.getSize();
 		// Apply momentum
-		velocity.add(ship.getVelocity().sub(this.velocity).mul(ship.getMass()).mul(1 / this.getMass()).mul(SHIP_COLLISION_ELASTICITY));
+		velocity
+			.add(ship.getVelocity().sub(this.velocity).mul(ship.getMass()).mul(1 / this.getMass()).mul(stats.SHIP_COLLISION_ELASTICITY));
 		// Get out of collision zone
 		position.add(this.position.copy().sub(pos).mul((expectedDistance - position.distance(pos)) / expectedDistance));
 	}
@@ -171,7 +165,7 @@ public abstract class Ship extends Entity {
 
 	/** Handles collisions with the track edges */
 	private void trackCollision() {
-		barriers.allCollisions(this).forEach(v -> velocity.bounceOff(v, WALL_ELASTICITY));
+		barriers.allCollisions(this).forEach(v -> velocity.bounceOff(v, stats.WALL_ELASTICITY));
 	}
 
 

@@ -218,15 +218,10 @@ public class MultiplayerGame {
         && System.nanoTime() < startsAt) {
       controlsScreen.setVisibility(false);
     }
-    
-    long[] stage = new long[] {
-        startsAt - 4 * 1000000000L,
-        startsAt - 3 * 1000000000L,
-        startsAt - 2 * 1000000000L,
-        startsAt - 1 * 1000000000L,
-        startsAt,
-        startsAt + 2 * 1000000000L
-    };
+
+    long[] stage = new long[] { startsAt - 4 * 1000000000L, startsAt - 3 * 1000000000L,
+        startsAt - 2 * 1000000000L, startsAt - 1 * 1000000000L, startsAt,
+        startsAt + 2 * 1000000000L };
 
     // Display the count-down
     if (!startLights.isVisible() && System.nanoTime() > controlsTill
@@ -235,11 +230,11 @@ public class MultiplayerGame {
     } else if (startLights.isVisible() && System.nanoTime() > stage[5]) {
       startLights.setVisibility(false);
     }
-    
+
     for (int i = 0; i < 5; i++) {
-      if (lightState != i+1 && System.nanoTime() > stage[i] && System.nanoTime() < stage[i+1]) {
+      if (lightState != i + 1 && System.nanoTime() > stage[i] && System.nanoTime() < stage[i + 1]) {
         containers.remove(startLights);
-        startLights = new Container(loader, "ui/lights" + (i+1), new Vector2f(470, 40));
+        startLights = new Container(loader, "ui/lights" + (i + 1), new Vector2f(470, 40));
         containers.add(startLights);
       }
     }
@@ -770,7 +765,7 @@ public class MultiplayerGame {
       if (!nicknames.get(msg[i]).equals(leaderboard.get(i)))
         changed = true;
       leaderboard.set(i, nicknames.get(msg[i]));
-      if (i == ships.getPlayerShip().getId())
+      if (msg[i] == ships.getPlayerShip().getId())
         ships.getPlayerShip().finish();
     }
 
