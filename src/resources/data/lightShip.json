@@ -1,6 +1,6 @@
 {
   "model": "ship3",
-  "texture": "newShipTexture",
+  "texture": "ship3Texture",
   "stats": {
     "stats": {
       "JUMP_POWER": 30.0,
