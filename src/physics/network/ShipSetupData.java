@@ -10,7 +10,7 @@ import upgrades.ShipTemplate;
  * @author Maciej Bogacki */
 public class ShipSetupData {
 
-	public transient String nickname;
+	public String nickname;
 	public String model;
 	public String texture;
 	public ShipTemplate stats;
