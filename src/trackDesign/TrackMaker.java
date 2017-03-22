@@ -202,7 +202,8 @@ public class TrackMaker {
 
 	private static boolean intersects(ArrayList<Vector2f> line) {
 		for(int i = 0; i < line.size(); i++) {
-			for(int j = i+2; j < line.size() - 1; j++) {
+			for(int j = i+2; j < line.size(); j++) {
+				if(i == 0 && j == line.size() - 1) continue;
 				Vector2f l1a = line.get(i);
 				Vector2f l1b = line.get((i+1)%line.size());
 				Vector2f l2a = line.get(j);

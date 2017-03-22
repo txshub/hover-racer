@@ -140,6 +140,13 @@ public class ServerComm extends Thread {
 			}
 		} catch (IOException e) {
 			System.err.println("IO error: " + e.getMessage());
+		} finally {
+			if(serverSocket != null)
+				try {
+					serverSocket.close();
+				} catch (IOException e) {
+				}
+			
 		}
 	}
 
