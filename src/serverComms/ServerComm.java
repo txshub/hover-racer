@@ -5,6 +5,7 @@ import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
@@ -157,10 +158,23 @@ public class ServerComm extends Thread {
 
 	private String getIP() {
 		try {
-			return InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {
+			Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+			while(interfaces.hasMoreElements()) {
+				NetworkInterface i = interfaces.nextElement();
+				if(i.isLoopback() || !i.isUp()) continue;
+				
+				Enumeration<InetAddress> addresses = i.getInetAddresses();
+				while(addresses.hasMoreElements()) {
+					InetAddress a = addresses.nextElement();
+					
+					if(a instanceof Inet6Address) continue;
+					return a.getHostAddress();
+				}
+			}
+		} catch (SocketException e) {
+			
 		}
-		return "Unknown";		
+		return "Unknown";
 	}
 
 	/** Sends a byte message to the specified output stream

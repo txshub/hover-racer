@@ -106,6 +106,8 @@ private String currentIP;
     	try {
 			sendByteMessage(new byte[0], ServerComm.CLIENTDISCONNECT);
 		} catch (IOException e) {
+			System.err.println("Closing due to server disconnection");
+			System.exit(1);
 		}
     }
   }
