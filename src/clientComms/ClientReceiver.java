@@ -49,9 +49,9 @@ public class ClientReceiver extends Thread {
 				ByteArrayByte fullMsg = new ByteArrayByte(msg);
 				if (fullMsg.getType() == ServerComm.BADUSER) {
 					System.out.println("Username not valid, please pick another");
-					System.exit(1);
+					client.setIP(null);
 				} else if (fullMsg.getType() == ServerComm.ACCEPTEDUSER) {
-					System.out.println("Username valid. Now connected to the server");
+					client.setIP(new String(fullMsg.getMsg(), ServerComm.charset));
 				} else if (fullMsg.getType() == ServerComm.BADPACKET) {
 					System.out.println("Need To Reconnect");
 				} else if (fullMsg.getType() == ServerComm.SENDALLGAMES) {

@@ -5,11 +5,15 @@ import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 import userInterface.MainMenu;
 
@@ -120,7 +124,7 @@ public class ServerComm extends Thread {
 						ServerSender sender = new ServerSender(lobby.clientTable.getQueue(name), toClient);
 						sender.start();
 						MainMenu.allThreads.add(0, sender);
-						lobby.clientTable.getQueue(name).offer(new ByteArrayByte(("Valid").getBytes(charset), ACCEPTEDUSER));
+						lobby.clientTable.getQueue(name).offer(new ByteArrayByte(getIP().getBytes(charset), ACCEPTEDUSER));
 						if (DEBUG) System.out.println("Sent Accepted User to client");
 						ServerReceiver receiver = new ServerReceiver(name, fromClient, lobby);
 						lobby.clientTable.addReceiver(name, receiver);
@@ -148,6 +152,28 @@ public class ServerComm extends Thread {
 				}
 			
 		}
+	}
+
+	private String getIP() {
+		try {
+			String lastIP = "";
+			String thisIP = "";
+			Enumeration e = NetworkInterface.getNetworkInterfaces();
+			while(e.hasMoreElements()) {
+				NetworkInterface n = (NetworkInterface) e.nextElement();
+				Enumeration ee = n.getInetAddresses();
+				while(ee.hasMoreElements()) {
+					InetAddress i = (InetAddress) ee.nextElement();
+					lastIP = thisIP;
+					thisIP = i.getHostAddress();
+				}
+			}
+			return lastIP;
+		} catch (SocketException e) {
+			
+		}
+		return "Unknown";
+		
 	}
 
 	/** Sends a byte message to the specified output stream

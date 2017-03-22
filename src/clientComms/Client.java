@@ -38,6 +38,8 @@ public class Client extends Thread {
   public volatile boolean alreadyAccessedRoom = true;
   private GameRoom currentRoom;
   public MultiplayerGame multiplayerGame;
+private boolean alreadyAccessedIP = true;
+private String currentIP;
 
   /**
    * Creates a client object and connects to a given server on a given port
@@ -209,6 +211,16 @@ public class Client extends Thread {
     sendByteMessage(new byte[0], ServerComm.REFRESHROOM);
     return waitForRoom();
   }
+  
+  public String waitForIP() {
+	  while(alreadyAccessedIP) {
+		  try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+		}
+	  }
+	  return currentIP;
+  }
 
   /**
    * Returns the gameroom object when it is received from the server
@@ -325,4 +337,9 @@ public class Client extends Thread {
     this.multiplayerGame = multiplayerGame;
 
   }
+
+	public void setIP(String ip) {
+		this.currentIP = ip;
+		alreadyAccessedIP = false;
+	}
 }
