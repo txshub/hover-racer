@@ -12,8 +12,8 @@ public class MultiplayerWithoutGUI {
 	private static Client client;
 	private static GameRoom gameRoom;
 	private static final int GAME_ID = 0;
-	private static final String SEED = "234";
-	private static final int MAX_PLAYERS = 10;
+	private static final String SEED = "12983";
+	private static final int MAX_PLAYERS = 8;
 	private static final int LAPS = 1;
 	private static final int SHIP_TYPE = 1;
 	private static final String LOBBY_NAME = "Testonium";
