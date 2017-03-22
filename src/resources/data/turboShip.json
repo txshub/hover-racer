@@ -14,7 +14,7 @@
       "COLLISION_NEGATION": 0.0,
       "MASS": 1.0,
       "SIZE": 1.0,
-      "WALL_ELASTICITY": 0.27
+      "WALL_ELASTICITY": 0.20
     },
     "upgrades": {}
   }
