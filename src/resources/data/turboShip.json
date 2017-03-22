@@ -5,9 +5,9 @@
     "stats": {
       "JUMP_POWER": 30.0,
       "BOOST_COLLECTION": 100.0,
-      "DRAG": 25.0,
-      "ACCELERATION": 65.0,
-      "BREAK_POWER": 0.0,
+      "DRAG": 15.0,
+      "ACCELERATION": 60.0,
+      "BREAK_POWER": 1.0,
       "BOOST_GENERATION": 0.0,
       "TURN_SPEED": 3.0,
       "BOOST_CAPACITY": 100.0,
