@@ -27,7 +27,7 @@ public class ServerComm extends Thread {
 	public final static Charset charset = StandardCharsets.UTF_8;
 	private int portNumber;
 	private Lobby lobby;
-	public final static boolean DEBUG = true;
+	public final static boolean DEBUG = false;
 	public volatile boolean runThread = true;
 	// BADPACKET: Error while sending, to be ignored
 	public static final byte BADPACKET = Byte.parseByte("0");
@@ -166,8 +166,7 @@ public class ServerComm extends Thread {
 				Enumeration<InetAddress> addresses = i.getInetAddresses();
 				while(addresses.hasMoreElements()) {
 					InetAddress a = addresses.nextElement();
-					System.out.println(a.getHostAddress());
-					if(a.getHostAddress().startsWith("10")) return a.getHostAddress();
+					if(a.getHostAddress().split("\\.").length == 4) return a.getHostAddress();
 				}
 			}
 		} catch (SocketException e) {

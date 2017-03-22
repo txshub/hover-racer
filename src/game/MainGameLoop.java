@@ -14,7 +14,7 @@ public class MainGameLoop extends Thread {
 
   public void main(MultiplayerGame game) {
     
-    boolean debug = true;
+    boolean debug = false;
 
     // Set the FPS and UPS caps
     int frameCap = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()

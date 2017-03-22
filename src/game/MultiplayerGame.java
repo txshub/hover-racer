@@ -63,7 +63,7 @@ import userInterface.MainMenu;
 public class MultiplayerGame {
 
   // Set this to print debug messages
-  public static boolean debug = true;
+  public static boolean debug = false;
 
   private Loader loader;
   private ArrayList<Entity> entities;
