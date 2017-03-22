@@ -206,6 +206,7 @@ public class GameLogic {
 					ranking[player.getRanking() - 1] = player.getId();
 				} catch (ArrayIndexOutOfBoundsException e) {
 					System.err.println("Game logic says: " + e.getMessage());
+					
 				}
 
 			}

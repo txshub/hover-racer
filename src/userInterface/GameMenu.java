@@ -637,6 +637,7 @@ public class GameMenu extends Parent {
 				if (client.serverOn) {
 
 					client.start();
+					MainMenu.allThreads.add(0, client);
 
 					getChildren().add(shipCustomisationWindowMulti);
 
@@ -684,6 +685,7 @@ public class GameMenu extends Parent {
 
 			client = new Client(usr, portNo, machineName);
 			client.start();
+			MainMenu.allThreads.add(0, client);
 
 			getChildren().add(shipCustomisationWindowMulti);
 

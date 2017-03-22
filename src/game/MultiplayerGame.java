@@ -346,7 +346,7 @@ public class MultiplayerGame {
     renderer.cleanUp();
     loader.cleanUp();
     InputController.close = true;
-    AudioMaster.cleanUp();
+    AudioMaster.stopInGameMusic();
     DisplayManager.closeDisplay();
   }
 
@@ -788,6 +788,7 @@ public class MultiplayerGame {
   }
 
   public void endGame() {
+	  this.running = false;
     System.out.println("THE GAME HAS ENDED");
   }
 

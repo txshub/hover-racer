@@ -205,6 +205,7 @@ public class Loader {
 		for (int vao : vaos) {
 			GL30.glDeleteVertexArrays(vao);
 		}
+		System.out.println(vbos.size());
 		for (int vbo : vbos) {
 			GL15.glDeleteBuffers(vbo);
 		}

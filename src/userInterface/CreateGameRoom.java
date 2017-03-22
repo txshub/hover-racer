@@ -90,6 +90,7 @@ public class CreateGameRoom extends GridPane {
 				// CREATE SINGLE PLAYER CLIENT //
 				Client localClient = new Client(getUsername(), 4445, "localhost");
 				localClient.start();
+				MainMenu.allThreads.add(0, localClient);
 
 				setTypeId(GameMenu.getTypeId());
 				localClient.startSinglePlayerGame(getSeed(), getMaxAIs(), getNoLaps(),

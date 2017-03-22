@@ -16,6 +16,7 @@ import serverComms.GameRoom;
 import serverComms.GameSettings;
 import serverComms.IDShipData;
 import serverComms.ServerComm;
+import userInterface.MainMenu;
 
 /**
  * Main client class for client/server communications
@@ -85,10 +86,12 @@ public class Client extends Thread {
     System.out.println("Proceeded");
     ClientReceiver receiver = new ClientReceiver(fromServer, this);
     receiver.start();
+    MainMenu.allThreads.add(0, receiver);
     try {
       sendByteMessage(clientName.getBytes(ServerComm.charset), ServerComm.USERSENDING);
       serverStop = new StopDisconnect(this);
       serverStop.start();
+      MainMenu.allThreads.add(0, serverStop);
       receiver.join();
       toServer.close();
       fromServer.close();
@@ -97,7 +100,6 @@ public class Client extends Thread {
       System.err.println("Something wrong: " + e.getMessage());
       // What to do here?
     } catch (InterruptedException e) {
-      System.err.println("Unexpected interruption: " + e.getMessage());
       // What to do here?
     }
   }

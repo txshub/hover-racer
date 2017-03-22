@@ -39,7 +39,7 @@ public class ClientReceiver extends Thread {
 	@Override
 	public void run() {
 		try {
-			while (true) {
+			while (!this.isInterrupted()) {
 				byte[] msg = new byte[server.readInt()];
 				server.readFully(msg);
 				if (msg == null || msg.length == 0) {
@@ -94,7 +94,9 @@ public class ClientReceiver extends Thread {
 				} else if (fullMsg.getType() == ServerComm.FINISH_DATA) {
 					if (client.multiplayerGame != null) client.multiplayerGame.updateFinishData(fullMsg.getMsg());
 				} else if (fullMsg.getType() == ServerComm.END_GAME) {
+					System.out.println("End Game Received");
 					if (client.multiplayerGame != null) {
+						System.out.println("Not Null");
 						client.multiplayerGame.updateFinishData(fullMsg.getMsg());
 						client.multiplayerGame.endGame();
 					}

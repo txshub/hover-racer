@@ -11,6 +11,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+import userInterface.MainMenu;
+
 /** The server to handle a game
  * 
  * @author simon */
@@ -91,7 +93,7 @@ public class ServerComm extends Thread {
 		}
 		if (runThread && DEBUG) System.out.println("Now listening on port " + portNumber);
 		try {
-			while (runThread) {
+			while (runThread && !this.isInterrupted()) {
 				// Wait for a client to connect
 				Socket socket = serverSocket.accept();
 				if (DEBUG) System.out.println("Socket Accepted");
@@ -117,11 +119,13 @@ public class ServerComm extends Thread {
 						DataOutputStream toClient = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 						ServerSender sender = new ServerSender(lobby.clientTable.getQueue(name), toClient);
 						sender.start();
+						MainMenu.allThreads.add(0, sender);
 						lobby.clientTable.getQueue(name).offer(new ByteArrayByte(("Valid").getBytes(charset), ACCEPTEDUSER));
 						if (DEBUG) System.out.println("Sent Accepted User to client");
 						ServerReceiver receiver = new ServerReceiver(name, fromClient, lobby);
 						lobby.clientTable.addReceiver(name, receiver);
 						receiver.start();
+						MainMenu.allThreads.add(0, receiver);
 						ArrayList<GameRoom> rooms = new ArrayList<GameRoom>();
 						for (GameRoom room : lobby.games) {
 							if (!room.isBusy()) rooms.add(room);

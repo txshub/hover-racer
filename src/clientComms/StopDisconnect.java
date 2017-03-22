@@ -29,7 +29,7 @@ public class StopDisconnect extends Thread {
    */
   public void run() {
     try {
-      while (true) {
+      while (!this.isInterrupted()) {
         try {
           client.sendByteMessage(new byte[0], ServerComm.DONTDISCONNECT);
           Thread.sleep(1000);
