@@ -165,7 +165,9 @@ public class GameLogic {
 	 * clients */
 	public void update() {
 		for (ShipLogicData player : players) {
-			updateLastPoint(player);
+			if (!player.finished()) {
+				updateLastPoint(player);
+			}
 		}
 		updateRankings();
 
