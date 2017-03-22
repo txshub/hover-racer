@@ -255,6 +255,7 @@ public class MultiplayerGame {
     // Check for menu
     if (input.wasPressed(Action.MENU) > 0.5f) {
       if (currentMenu.equals("none")) {
+    	finishContainer.setVisibility(false);
         menu.setVisibility(true);
         currentMenu = "main";
       } else if (currentMenu.equals("main")) {
@@ -301,13 +302,15 @@ public class MultiplayerGame {
     lapCurrent.setText(Integer.toString(currentLap));
     posCurrent.setText(Integer.toString(ranking));
 
-    if (!finishContainer.isVisible() && finished) {
-      finishContainer.setVisibility(true);
-    } else if (finished) {
-      for (int i = 0; i < leaderboard.size(); i++) {
-        String text = "\n" + (i + 1) + " : " + leaderboard.get(i);
-        leaderboardTexts.get(i).setText(text);
-      }
+    if (currentMenu.equals("none")) {
+	  if (!finishContainer.isVisible() && finished) {
+	    finishContainer.setVisibility(true);
+	  } else if (finished) {
+	    for (int i = 0; i < leaderboard.size(); i++) {
+	      String text = "\n" + (i + 1) + " : " + leaderboard.get(i);
+	      leaderboardTexts.get(i).setText(text);
+	    }
+	  }
     }
 
     camera.move();
