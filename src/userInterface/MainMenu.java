@@ -43,7 +43,7 @@ public class MainMenu extends Application {
 	 * @param primaryStage
 	 *            The primary JavaFX stage.
 	 */
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) {
 
 		// Tudor - start the audio engine
 		AudioMaster.init();
@@ -54,15 +54,24 @@ public class MainMenu extends Application {
 		this.primaryStage = primaryStage;
 
 		// get file from path
-		InputStream is = Files.newInputStream(Paths.get("src/resources/img/hover-racer.jpg"));
-		Image background = new Image(is);
-		is.close();
+		try {
+    		InputStream is = Files.newInputStream(Paths.get("src/resources/img/hover-racer.jpg"));
+    		Image background = new Image(is);
+  		is.close();
 
-		imgView = new ImageView(background);
-		imgView.setFitWidth(1000);
-		imgView.setFitHeight(600);
+  		imgView = new ImageView(background);
+  		imgView.setFitWidth(1000);
+  		imgView.setFitHeight(600);
+		} catch (Exception e) {
+		  e.printStackTrace();
+		}
 
-		gameMenu = new GameMenu();
+		try {
+      gameMenu = new GameMenu();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 		gameMenu.setVisible(true);
 
 		bg = new Rectangle(1000, 600);
