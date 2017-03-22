@@ -1,5 +1,8 @@
 package userInterface;
 
+import audioEngine.AudioMaster;
+import audioEngine.Sounds;
+import audioEngine.Source;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.effect.DropShadow;
@@ -22,6 +25,10 @@ import javafx.scene.text.TextAlignment;
 
 public class CustomisationButton extends StackPane {
 
+	Rectangle background;
+	boolean clicked;
+	Source audioSource;
+
 	/**
 	 * Constructor for the CustomisationButton class.
 	 * 
@@ -40,6 +47,8 @@ public class CustomisationButton extends StackPane {
 
 		TextStyle descriptionText;
 		Text descriptionStyled = null;
+		
+		audioSource = AudioMaster.createSFXSource();
 
 		if (shipType == 1) {
 
@@ -60,9 +69,9 @@ public class CustomisationButton extends StackPane {
 			descriptionStyled = descriptionText.getTextStyled();
 		}
 
-		Rectangle background = new Rectangle(width, height);
+		background = new Rectangle(width, height);
 		background.setOpacity(0.8);
-		background.setFill(Color.BLACK);
+		setSelectedEffect(Color.BLACK);
 
 		GaussianBlur blur = new GaussianBlur(3.6);
 		background.setEffect(blur);
@@ -76,15 +85,23 @@ public class CustomisationButton extends StackPane {
 
 			background.setTranslateX(6);
 			box.setTranslateX(6);
-			background.setFill(Color.DIMGRAY);
+			if (!this.clicked) {
+				setSelectedEffect(Color.DIMGRAY);
+			}
 		});
 
 		this.setOnMouseExited(event -> {
 
-			background.setTranslateX(0);
-			box.setTranslateX(0);
-			background.setFill(Color.BLACK);
-
+			if (!this.clicked) {
+				background.setTranslateX(0);
+				box.setTranslateX(0);
+				setSelectedEffect(Color.BLACK);
+			} else {
+				background.setTranslateX(0);
+				box.setTranslateX(0);
+			}
+			
+			audioSource.play(Sounds.BUTTON_HOVER);
 		});
 
 		// Create glow effect to let user know they have clicked a button
@@ -94,6 +111,7 @@ public class CustomisationButton extends StackPane {
 		// Clicked on button
 		this.setOnMousePressed(event -> {
 			setEffect(effect);
+			audioSource.play(Sounds.BUTTON_CLICK);
 		});
 
 		// Release button and remove effect
@@ -105,7 +123,22 @@ public class CustomisationButton extends StackPane {
 
 		this.setCache(true);
 		this.setCacheHint(CacheHint.SPEED);
+	}
 
+	/**
+	 * Sets the colour of the button.
+	 * @param colour The chosen colour.
+	 */
+	public void setSelectedEffect(Color colour) {
+		background.setFill(colour);
+	}
+
+	/**
+	 * Sets the clicked status of the button.
+	 * @param clicked The clicked status.
+	 */
+	public void setClicked(boolean clicked) {
+		this.clicked = clicked;
 	}
 
 }

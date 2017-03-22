@@ -48,28 +48,28 @@ public class AIShip extends Ship {
 
     if (debug)
       System.out.println("AI " + id + "  debug information:");
-    for (int i = 0; i < track.size(); i++) {
-      TrackPoint nextPoint = track.get(i);
-      TrackPoint nextNextPoint = i + 1 >= track.size() ? track.get(0) : track.get(i + 1);
-      TrackPoint prevPoint = i == 0 ? track.get(track.size() - 1) : track.get(i - 1);
-
-      Vector2f currTrackVec = new Vector2f(nextPoint).sub(prevPoint);
-      Vector2f nextTrackVec = new Vector2f(nextNextPoint).sub(nextPoint);
-      float segAngle = Math.abs(currTrackVec.angle(nextTrackVec));
-
-      float speed = 0;
-      if (segAngle <= piOverEight)
-        speed = (float) (-(4 / Math.PI) * segAngle + 1);
-      if (segAngle > piOverEight)
-        speed = (float) (-(4 / (3 * Math.PI)) * segAngle + 2 / 3);
-
-      speed = (float) Math.max(0.1, speed);
-
-      if (debug)
-        System.out.println(segAngle + " - " + speed);
-    }
-    if (debug)
-      System.out.println();
+//    for (int i = 0; i < track.size(); i++) {
+//      TrackPoint nextPoint = track.get(i);
+//      TrackPoint nextNextPoint = i + 1 >= track.size() ? track.get(0) : track.get(i + 1);
+//      TrackPoint prevPoint = i == 0 ? track.get(track.size() - 1) : track.get(i - 1);
+//
+//      Vector2f currTrackVec = new Vector2f(nextPoint).sub(prevPoint);
+//      Vector2f nextTrackVec = new Vector2f(nextNextPoint).sub(nextPoint);
+//      float segAngle = Math.abs(currTrackVec.angle(nextTrackVec));
+//
+//      float speed = 0;
+//      if (segAngle <= piOverEight)
+//        speed = (float) (-(4 / Math.PI) * segAngle + 1);
+//      if (segAngle > piOverEight)
+//        speed = (float) (-(4 / (3 * Math.PI)) * segAngle + 2 / 3);
+//
+//      speed = (float) Math.max(0.1, speed);
+//
+//      if (debug)
+//        System.out.println(segAngle + " - " + speed);
+//    }
+//    if (debug)
+//      System.out.println();
   }
 
   @Override
@@ -148,10 +148,7 @@ public class AIShip extends Ship {
     if (debug)
       System.out
           .println("Point: " + nextPointIndex + " - " + nextPoint + " Angle: " + angle + " Dist: "
-              + dist + " Thrust: " + thrust /*
-                                             * + " Pos: " + pos + " TPoint: " +
-                                             * dirToPoint + " dir: " + dirVec
-                                             */);
+              + dist + " Thrust: " + thrust + " Turn: " + turn);
 
     // Steer and update ship
     super.steer(thrust * 2, turn, strafe, delta); // TODO temporary thing
