@@ -386,7 +386,9 @@ public class GameRoom {
 	}
 
 	private void sendMessage(byte id, byte[] message, byte type) {
-		table.getQueue(players.get(id)).offer(new ByteArrayByte(message, type));
+		try {
+			table.getQueue(players.get(id)).offer(new ByteArrayByte(message, type));
+		} catch(Exception e) {}
 	}
 
 	/** Returns the number of laps in this race
