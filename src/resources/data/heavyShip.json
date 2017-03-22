@@ -9,11 +9,12 @@
       "ACCELERATION": 40.0,
       "BREAK_POWER": 4.0,
       "BOOST_GENERATION": 0.0,
-      "TURN_SPEED": 2.5,
+      "TURN_SPEED": 2.7,
       "BOOST_CAPACITY": 100.0,
       "COLLISION_NEGATION": 0.0,
       "MASS": 1.0,
-      "SIZE": 1.0
+      "SIZE": 1.0,
+      "WALL_ELASTICITY": 0.3
     },
     "upgrades": {}
   }
