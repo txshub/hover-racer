@@ -337,4 +337,16 @@ public class Loader {
 		return buffer;
 	}
 
+  public List<Integer> getVaos() {
+    return vaos;
+  }
+
+  public List<Integer> getVbos() {
+    return vbos;
+  }
+
+  public List<Integer> getTextures() {
+    return textures;
+  }
+
 }

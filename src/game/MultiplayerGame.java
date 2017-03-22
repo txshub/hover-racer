@@ -109,6 +109,7 @@ public class MultiplayerGame {
   private Container startLights;
   private int lightState = 0;
   private Source countDown;
+  private long[] countdownStage;
 
   public MultiplayerGame(RaceSetupData data, Client client) {
     init(data, client);
@@ -117,6 +118,10 @@ public class MultiplayerGame {
   private void init(RaceSetupData data, Client client) {
     running = true;
     startsAt = System.nanoTime() + data.getTimeToStart();
+
+    countdownStage = new long[] { startsAt - 4 * 1000000000L, startsAt - 3 * 1000000000L,
+        startsAt - 2 * 1000000000L, startsAt - 1 * 1000000000L, startsAt,
+        startsAt + 2 * 1000000000L };
 
     this.client = client;
     client.setMultiplayerGame(this);
@@ -134,12 +139,9 @@ public class MultiplayerGame {
     // Terrain
     TerrainTexture background = new TerrainTexture(
         loader.loadMipmappedTexture("gridTexture", -2.5f));
-    TerrainTexture rTexture = new TerrainTexture(
-        loader.loadMipmappedTexture("gridTexture", -2.5f));
-    TerrainTexture gTexture = new TerrainTexture(
-        loader.loadMipmappedTexture("gridTexture", -2.5f));
-    TerrainTexture bTexture = new TerrainTexture(
-        loader.loadMipmappedTexture("gridTexture", -2.5f));
+    TerrainTexture rTexture = new TerrainTexture(loader.loadMipmappedTexture("gridTexture", -2.5f));
+    TerrainTexture gTexture = new TerrainTexture(loader.loadMipmappedTexture("gridTexture", -2.5f));
+    TerrainTexture bTexture = new TerrainTexture(loader.loadMipmappedTexture("gridTexture", -2.5f));
     TerrainTexturePack texturePack = new TerrainTexturePack(background, rTexture, gTexture,
         bTexture);
 
@@ -198,7 +200,7 @@ public class MultiplayerGame {
     }
 
     setupUI(data);
-    
+
     // Create the count down source
     countDown = AudioMaster.createSFXSource(1f);
 
@@ -225,20 +227,17 @@ public class MultiplayerGame {
       controlsScreen.setVisibility(false);
     }
 
-    long[] stage = new long[] { startsAt - 4 * 1000000000L, startsAt - 3 * 1000000000L,
-        startsAt - 2 * 1000000000L, startsAt - 1 * 1000000000L, startsAt,
-        startsAt + 2 * 1000000000L };
-
     // Display the count-down
     if (!startLights.isVisible() && System.nanoTime() > controlsTill
         && System.nanoTime() < startsAt) {
       startLights.setVisibility(true);
-    } else if (startLights.isVisible() && System.nanoTime() > stage[5]) {
+    } else if (startLights.isVisible() && System.nanoTime() > countdownStage[5]) {
       startLights.setVisibility(false);
     }
 
     for (int i = 0; i < 5; i++) {
-      if (lightState != i + 1 && System.nanoTime() > stage[i] && System.nanoTime() < stage[i + 1]) {
+      if (lightState != i + 1 && System.nanoTime() > countdownStage[i]
+          && System.nanoTime() < countdownStage[i + 1]) {
         containers.remove(startLights);
         startLights = new Container(loader, "ui/lights" + (i + 1), new Vector2f(470, 40));
         containers.add(startLights);
@@ -248,14 +247,14 @@ public class MultiplayerGame {
           countDown.play(Sounds.BEEP_1);
         } else {
           countDown.play(Sounds.BEEP_2);
-        }   
+        }
       }
     }
 
     // Check for menu
     if (input.wasPressed(Action.MENU) > 0.5f) {
       if (currentMenu.equals("none")) {
-    	finishContainer.setVisibility(false);
+        finishContainer.setVisibility(false);
         menu.setVisibility(true);
         currentMenu = "main";
       } else if (currentMenu.equals("main")) {
@@ -303,14 +302,18 @@ public class MultiplayerGame {
     posCurrent.setText(Integer.toString(ranking));
 
     if (currentMenu.equals("none")) {
-	  if (!finishContainer.isVisible() && finished) {
-	    finishContainer.setVisibility(true);
-	  } else if (finished) {
-	    for (int i = 0; i < leaderboard.size(); i++) {
-	      String text = "\n" + (i + 1) + " : " + leaderboard.get(i);
-	      leaderboardTexts.get(i).setText(text);
-	    }
-	  }
+      if (!finishContainer.isVisible() && finished) {
+        finishContainer.setVisibility(true);
+      } else if (finished) {
+        for (int i = 0; i < leaderboard.size(); i++) {
+          String text = "\n" + (i + 1) + " : " + leaderboard.get(i);
+          leaderboardTexts.get(i).setText(text);
+        }
+      }
+    }
+
+    if (finishContainer.isVisible() && !finished) {
+      finishContainer.setVisibility(false);
     }
 
     camera.move();
@@ -774,7 +777,7 @@ public class MultiplayerGame {
   }
 
   public void endGame() {
-	  this.running = false;
+    this.running = false;
     System.out.println("THE GAME HAS ENDED");
   }
 

@@ -71,8 +71,10 @@ public class Label extends UIElement {
   }
 
   public void setText(String text) {
-    content = text;
-    createText();
+    if (!text.equals(content)) {
+      content = text;
+      createText();
+    }
   }
 
   private Vector2f toScreenSpace(Vector2f position) {
