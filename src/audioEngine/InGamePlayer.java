@@ -49,7 +49,7 @@ public class InGamePlayer {
    * Close the in-game music player
    */
   public void stop() {
-    s.delete();
+    s.stop();
   }
 
 }

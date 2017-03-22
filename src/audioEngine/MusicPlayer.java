@@ -23,6 +23,7 @@ public class MusicPlayer extends Thread {
   @Override
   public void run() {
 
+	running = true;
     int r = random.nextInt(Sounds.songs.length);
     int index = r;
     s.play(Sounds.songs[index]);

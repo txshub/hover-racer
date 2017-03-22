@@ -24,6 +24,7 @@ public class AudioMaster {
 	private static InGamePlayer inGame;
 
 	private static float sfxMaster;
+	private static float musicMaster;
 
 	private static boolean initialised = false;
 
@@ -47,6 +48,10 @@ public class AudioMaster {
 		inGame = new InGamePlayer();
 
 		sfxMaster = 0.5f;
+		musicMaster = 0.5f;
+		
+		setMusicVolume(musicMaster);
+		setSFXVolume(sfxMaster);
 
 		initialised = true;
 	}
@@ -101,6 +106,7 @@ public class AudioMaster {
 	 */
 	public static Source createMusicSource() {
 		Source s = new Source();
+		s.setVolume(musicMaster);
 		music.add(s);
 		sources.add(s);
 		return s;
@@ -113,6 +119,7 @@ public class AudioMaster {
 	 */
 	public static Source createSFXSource() {
 		Source s = new Source();
+		s.setVolume(sfxMaster);
 		sfx.add(s);
 		sources.add(s);
 		return s;
@@ -128,6 +135,7 @@ public class AudioMaster {
 	public static Source createSFXSource(float initialVolume) {
 		Source s = createSFXSource();
 		s.setInitialVolume(initialVolume);
+		s.setVolume(sfxMaster);
 		return s;
 	}
 
@@ -141,14 +149,12 @@ public class AudioMaster {
 		for (Source s : music) {
 			s.setVolume(master);
 		}
+		musicMaster = master;
 	}
 
 	// Not really
 	public static float getMusicVolume() {
-		for (Source s : music) {
-			return s.getCurrentVolume();
-		}
-		return -1;
+		return musicMaster;
 	}
 
 	/**
@@ -161,14 +167,12 @@ public class AudioMaster {
 		for (Source s : sfx) {
 			s.setVolume(master);
 		}
+		sfxMaster = master;
 	}
 
 	// Not really
 	public static float getSFXVolume() {
-		for (Source s : sfx) {
-			return s.getCurrentVolume();
-		}
-		return -1;
+		return sfxMaster;
 	}
 
 	/** Start the music player */
@@ -205,34 +209,38 @@ public class AudioMaster {
 
 	/** Increase the music volume */
 	public static void increaseMusicVolume() {
+		musicMaster += 0.1f;
+		musicMaster = Math.min(musicMaster, 1f);
 		for (Source s : music) {
-			s.setCurrentVolume(s.getCurrentVolume() + 0.1f);
+			s.setVolume(musicMaster);
 		}
 	}
 
 	/** Decrease the music volume */
 	public static void decreaseMusicVolume() {
+		musicMaster -= 0.1f;
+		musicMaster = Math.max(musicMaster, 0f);
 		for (Source s : music) {
-			s.setCurrentVolume(s.getCurrentVolume() - 0.1f);
+			s.setVolume(musicMaster);
 		}
 	}
 
 	/** Increase the sound effects volume */
 	public static void increaseSFXVolume() {
-		for (Source s : sfx) {
-			s.setCurrentVolume(s.getCurrentVolume() + 0.1f);
-		}
 		sfxMaster += 0.1f;
 		sfxMaster = Math.min(sfxMaster, 1f);
+		for (Source s : sfx) {
+			s.setVolume(sfxMaster);
+		}
 	}
 
 	/** Decrease the sound effects volume */
 	public static void decreaseSFXVolume() {
-		for (Source s : sfx) {
-			s.setCurrentVolume(s.getCurrentVolume() - 0.1f);
-		}
 		sfxMaster -= 0.1f;
 		sfxMaster = Math.max(sfxMaster, 0f);
+		for (Source s : sfx) {
+			s.setVolume(sfxMaster);
+		}
 	}
 
 }

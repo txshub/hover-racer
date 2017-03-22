@@ -20,7 +20,6 @@ public class Source {
     initVolume = 0.5f;
     currentVolume = 0.5f;
 
-    setCurrentVolume(0.5f * initVolume);
     setPitch(1);
     setPosition(0, 0, 0);
     setVelocity(0, 0, 0);
@@ -139,15 +138,6 @@ public class Source {
   }
 
   /**
-   * Get the current volume of a source
-   * 
-   * @return The current volume
-   */
-  public float getCurrentVolume() {
-    return currentVolume;
-  }
-
-  /**
    * Set the pitch / frequency of the sound
    * 
    * @param pitch
@@ -180,5 +170,13 @@ public class Source {
   public void setVolume(float master) {
     setCurrentVolume(master * initVolume);
   }
+
+	public float getCurrentVolume() {
+		return currentVolume;
+	}
+
+	public float getInitialVolume() {
+		return initVolume;
+	}
 
 }
