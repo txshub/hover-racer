@@ -99,7 +99,7 @@ public class CreateGameRoom extends GridPane {
 			} catch (InvalidPlayerNumberException ex) {
 
 				try {
-					PopUpWindow.display("CHOOSE A NUMBER BETWEEN 1 AND 8");
+					PopUpWindow.display("CHOOSE A NUMBER BETWEEN 0 AND 7");
 				} catch (Exception e) {
 					System.err.println("POP UP NOT WORKING");
 				}
@@ -178,7 +178,7 @@ public class CreateGameRoom extends GridPane {
 		this.lapNo = Integer.valueOf(noLapsInput.getText());
 		this.username = usernameInput.getText();
 
-		if (this.maxAIs < 1 || this.maxAIs > 8) {
+		if (this.maxAIs < 0 || this.maxAIs > 7) {
 			throw new InvalidPlayerNumberException();
 		}
 

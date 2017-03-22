@@ -641,14 +641,14 @@ public class GameMenu extends Parent {
 					client.start();
 					
 					String ipAddress = client.waitForIP();
-					System.out.println(ipAddress);
+					System.out.println("Test: " + ipAddress);
 					ip = new TextStyle("IP: " + ipAddress, 30);
 					ipStyled = ip.getTextStyled();
 					
 					ipStyled.setY(100);
-					ipStyled.setX(720);
+					ipStyled.setX(multiOptionsWindow.getLayoutX());
 					
-					connectMultiWindow.getChildren().add(ipStyled);
+					multiOptionsWindow.getChildren().add(ipStyled);
 					
 					MainMenu.allThreads.add(0, client);
 
@@ -698,14 +698,14 @@ public class GameMenu extends Parent {
 			client.start();
 			
 			String ipAddress = client.waitForIP();
-			System.out.println(ipAddress);
+			System.out.println("Test2: " + ipAddress);
 			ip = new TextStyle("IP: " + ipAddress, 25);
 			ipStyled = ip.getTextStyled();
 			
 			ipStyled.setY(100);
-			ipStyled.setX(720);
+			ipStyled.setX(multiOptionsWindow.getLayoutX());
 			
-			connectMultiWindow.getChildren().add(ipStyled);
+			multiOptionsWindow.getChildren().add(ipStyled);
 			
 			MainMenu.allThreads.add(0, client);
 
