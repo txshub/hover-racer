@@ -28,9 +28,6 @@ public class AIShip extends Ship {
 
   private boolean debug = false;
 
-  private final float twoOverPi = (float) (2 / Math.PI);
-  private final float piOverEight = (float) (Math.PI / 8);
-
   private final float turnMargin = 0.3f;
   private final float strafeMargin = 0.3f;
 
@@ -55,14 +52,14 @@ public class AIShip extends Ship {
     if (debug)
       System.out.print("AI: " + getId() + " ");
 
-    float thrust = 0, turn = 0, strafe = 0, jump = 0;
+    float thrust = 0, turn = 0, strafe = 0;
 
     Vector2f pos = new Vector2f(getPosition().x, getPosition().z);
     float rot = getRotation().y;
 
     TrackPoint nextPoint = track.get(nextPointIndex);
-    TrackPoint nextNextPoint = nextPointIndex + 1 >= track.size() ? track.get(0)
-        : track.get(nextPointIndex + 1);
+//    TrackPoint nextNextPoint = nextPointIndex + 1 >= track.size() ? track.get(0)
+//        : track.get(nextPointIndex + 1);
     TrackPoint prevPoint = nextPointIndex == 0 ? track.get(track.size() - 1)
         : track.get(nextPointIndex - 1);
 
@@ -116,7 +113,6 @@ public class AIShip extends Ship {
         turn -= input.isDown(Action.TURN_LEFT);
         strafe += input.isDown(Action.STRAFE_RIGHT);
         strafe -= input.isDown(Action.STRAFE_LEFT);
-        jump += input.isDown(Action.JUMP);
       }
 
     } catch (IllegalStateException e) {
