@@ -207,9 +207,8 @@ public abstract class Ship extends Entity {
 		steer(Math.max(0, thrust), -thrust, turn, strafe, brokenDelta);
 	}
 
-	protected void steer(float thrust, float breaking, float turn, float strafe, float brokenDelta) {
+	protected void steer(float thrust, float breaking, float turn, float strafe, float delta) {
 		if (!started) return; // Don't allow input until the race has started
-		float delta = (float) 1 / 60; // TODO fix deltas
 		// Checking parameters
 		if (Math.abs(thrust) > 1 || Math.abs(turn) > 1 || Math.abs(strafe) > 1 || Math.abs(breaking) > 1) {
 			throw new IllegalArgumentException(
