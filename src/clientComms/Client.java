@@ -83,7 +83,6 @@ public class Client extends Thread {
       serverOn = false;
       return;
     }
-    System.out.println("Proceeded");
     ClientReceiver receiver = new ClientReceiver(fromServer, this);
     receiver.start();
     MainMenu.allThreads.add(0, receiver);
@@ -101,6 +100,11 @@ public class Client extends Thread {
       // What to do here?
     } catch (InterruptedException e) {
       // What to do here?
+    } finally {
+    	try {
+			sendByteMessage(new byte[0], ServerComm.CLIENTDISCONNECT);
+		} catch (IOException e) {
+		}
     }
   }
 

@@ -19,7 +19,6 @@ public class Lobby {
     clientTable = new ClientTable(this);
     ServerComm comm = new ServerComm(port, this);
     comm.start();
-    MainMenu.allThreads.add(0, comm);
   }
 
   public void remove(String clientName) {
