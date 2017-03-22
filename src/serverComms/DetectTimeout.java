@@ -8,7 +8,7 @@ package serverComms;
  */
 public class DetectTimeout extends Thread {
 
-  public volatile boolean messageReceived = false;
+  public volatile boolean messageReceived = true;
   ClientTable table;
   String user;
 
