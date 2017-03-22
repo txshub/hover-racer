@@ -642,11 +642,13 @@ public class GameMenu extends Parent {
 					
 					String ipAddress = client.waitForIP();
 					System.out.println(ipAddress);
-					ip = new TextStyle(ipAddress, 30);
+					ip = new TextStyle("IP: " + ipAddress, 30);
 					ipStyled = ip.getTextStyled();
 					
 					ipStyled.setY(100);
 					ipStyled.setX(720);
+					
+					connectMultiWindow.getChildren().add(ipStyled);
 					
 					MainMenu.allThreads.add(0, client);
 
@@ -697,11 +699,13 @@ public class GameMenu extends Parent {
 			
 			String ipAddress = client.waitForIP();
 			System.out.println(ipAddress);
-			ip = new TextStyle(ipAddress, 25);
+			ip = new TextStyle("IP: " + ipAddress, 25);
 			ipStyled = ip.getTextStyled();
 			
 			ipStyled.setY(100);
 			ipStyled.setX(720);
+			
+			connectMultiWindow.getChildren().add(ipStyled);
 			
 			MainMenu.allThreads.add(0, client);
 
