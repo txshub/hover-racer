@@ -13,6 +13,7 @@ public class InGamePlayer {
   Random random;
   int index;
 
+  /** Constructor */
   public InGamePlayer() {
     s = AudioMaster.createMusicSource();
     s.setLooping(true);

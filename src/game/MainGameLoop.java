@@ -2,18 +2,14 @@ package game;
 
 import java.awt.GraphicsEnvironment;
 
-import org.lwjgl.input.Keyboard;
-
 import clientComms.Client;
 import gameEngine.renderEngine.DisplayManager;
 import physics.network.RaceSetupData;
-import physics.ships.MultiplayerShipManager;
 
-/** @author Reece Bennett */
-public class MainGameLoop {
+public class MainGameLoop extends Thread {
 
-  public void main(GameInt game) {
-    // TODO change to MultiplayerGame
+  public void main(MultiplayerGame game) {
+    
     boolean debug = true;
 
     // Set the FPS and UPS caps
@@ -46,6 +42,9 @@ public class MainGameLoop {
     long timer = System.currentTimeMillis();
 
     while (!game.shouldClose()) {
+    	if(ups % 10 == 0){
+    		System.gc();
+    	}
       curTime = System.nanoTime();
       diff = curTime - lastTime;
       deltaUPS += diff / updateDur;
@@ -54,7 +53,7 @@ public class MainGameLoop {
 
       // If updateDur has passed since the last update, do an update
       while (deltaUPS >= 1.0) {
-        game.update((float) deltaUPS);
+        game.update(1f / updateCap);
         ups++;
         deltaUPS--;
       }
@@ -76,25 +75,29 @@ public class MainGameLoop {
         fps = 0;
         ups = 0;
       }
-
-      if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-        break;
-      }
     }
 
     game.cleanUp();
+    
+    for(Thread t: Thread.getAllStackTraces().keySet()) {
+    	if(!t.equals(this)) t.interrupt();
+    }
   }
 
-  public static MultiplayerShipManager startMultiplayerGame(RaceSetupData data, Client client) {
-    MainGameLoop main = new MainGameLoop();
-    MultiplayerGame game = new MultiplayerGame(data, client);
-    main.main(game);
-    return game.getManager();
-  }
-
-  public static void main(String[] args) {
-    MainGameLoop main = new MainGameLoop();
-    main.main(new Game());
+  public static void startMultiplayerGame(RaceSetupData data, Client client) {
+    System.out.println("------STARTING GAME------");
+    // Start the game in a new thread - ensure all OpenGL stays in that thread
+    new Thread(() -> {
+      MainGameLoop main = new MainGameLoop();
+      MultiplayerGame game = new MultiplayerGame(data, client);
+      main.main(game);
+    }).start();
+    // Ensure setup is finished before proceeding
+    try {
+      while (client.getManager() == null)
+        Thread.sleep(10);
+    } catch (InterruptedException e) {
+    }
   }
 
 }

@@ -13,6 +13,7 @@ public class MusicPlayer extends Thread {
   private boolean running;
   Random random;
 
+  /** Constructor */
   public MusicPlayer() {
     s = AudioMaster.createMusicSource();
     running = true;

@@ -13,6 +13,7 @@ public class Source {
   private float initVolume;
   private float currentVolume;
 
+  /** Constructor */
   public Source() {
 
     sourceId = AL10.alGenSources();
@@ -38,6 +39,7 @@ public class Source {
    */
   public void setInitialVolume(float initVolume) {
     this.initVolume = initVolume;
+    setCurrentVolume(initVolume);
   }
 
   /**
@@ -59,7 +61,6 @@ public class Source {
    */
   public void delete() {
     stop();
-    // AudioMaster.deleteSource(this);
     AL10.alDeleteSources(sourceId);
   }
 
@@ -81,7 +82,9 @@ public class Source {
    * Stop the sound
    */
   public void stop() {
-    AL10.alSourceStop(sourceId);
+    if (isPlaying()) {
+      AL10.alSourceStop(sourceId);
+    }
   }
 
   /**

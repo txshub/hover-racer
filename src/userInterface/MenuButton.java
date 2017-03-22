@@ -1,119 +1,127 @@
 package userInterface;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
 import audioEngine.AudioMaster;
 import audioEngine.Sounds;
 import audioEngine.Source;
 import javafx.geometry.Pos;
+import javafx.scene.CacheHint;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /**
  * 
- * @author Andreea Gheorghe
+ * @author Andreea Gheorghe Class that implements the customised design of a
+ *         menu button, which will be used throughout the User Interface.
  *
  */
 public class MenuButton extends StackPane {
 
-  private Text buttonText;
-  private Rectangle bg;
+	private Text buttonText;
+	private Rectangle bg;
+	private boolean clicked;
 
-  // Tudor - audio source
-  private Source audioSource;
+	// Tudor - audio source
+	private Source audioSource;
 
-  /**
-   * Constructor for the MenuButton class that creates a menu button with a
-   * certain style, and with the given name as the label.
-   * 
-   * @param name
-   *          The name of the button.
-   */
-  public MenuButton(String name) {
+	/**
+	 * Constructor for the MenuButton class that creates a menu button,
+	 * according to the given style settings.
+	 * 
+	 * @param name
+	 *            The text that will be displayed on the button.
+	 * @param width
+	 *            The width of the button.
+	 * @param height
+	 *            The height of the button.
+	 * @param fontSize
+	 *            The chosen font size.
+	 */
+	public MenuButton(String name, int width, int height, int fontSize) {
 
-    buttonText = new Text(name);
+		// Tudor - initialize audio source
+		audioSource = AudioMaster.createSFXSource();
 
-    // Tudor - initialize source
-    audioSource = AudioMaster.createSFXSource();
+		TextStyle button = new TextStyle(name, fontSize);
+		Text buttonText = button.getTextStyled();
 
-    try {
-      Font f = Font.loadFont(new FileInputStream(new File("src/resources/fonts/War is Over.ttf")),
-          30);
-      buttonText.setFont(f);
+		// Create button shape
+		bg = new Rectangle(width, height);
+		bg.setOpacity(0.8);
+		bg.setFill(Color.BLACK);
 
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+		// Blur the button colour
+		GaussianBlur blur = new GaussianBlur(3.6);
+		bg.setEffect(blur);
 
-    // create button
-    bg = new Rectangle(350, 70);
-    bg.setOpacity(0.7);
-    bg.setFill(Color.BLACK);
+		buttonText.setFill(Color.WHITE);
 
-    // blur the button colour
-    GaussianBlur blur = new GaussianBlur(3.6);
-    bg.setEffect(blur);
+		// Customise text position
+		StackPane.setAlignment(buttonText, Pos.CENTER);
 
-    buttonText.setFill(Color.WHITE);
+		// Add button to stack with text over the background
+		getChildren().addAll(bg, buttonText);
 
-    // customise position
-    StackPane.setAlignment(buttonText, Pos.CENTER);
-    // setRotate(-0.8);
+		// Hover over button
+		this.setOnMouseEntered(event -> {
 
-    // add button to stack with text over the background
-    getChildren().addAll(bg, buttonText);
+			bg.setTranslateX(6);
+			buttonText.setTranslateX(6);
+			bg.setFill(Color.DIMGRAY);
 
-    // hover over button
-    this.setOnMouseEntered(event -> {
-      bg.setTranslateX(6);
-      buttonText.setTranslateX(6);
-      bg.setFill(Color.DIMGRAY);
-      buttonText.setFill(Color.WHITE);
+			// Tudor - play sound
+			audioSource.play(Sounds.BUTTON_HOVER);
 
-      // Tudor - play sound
-      audioSource.play(Sounds.BUTTON_HOVER);
+		});
 
-    });
+		// Stop hovering over button
+		this.setOnMouseExited(event -> {
 
-    // stop hovering over button
-    this.setOnMouseExited(event -> {
-      bg.setTranslateX(0);
-      buttonText.setTranslateX(0);
-      bg.setFill(Color.BLACK);
-      buttonText.setFill(Color.WHITE);
-    });
+			bg.setTranslateX(0);
+			buttonText.setTranslateX(0);
+			if (!this.clicked) {
+				bg.setFill(Color.BLACK);
+			} else {
+				bg.setFill(Color.STEELBLUE);
+			}
 
-    // create glow effect to let user know they have clicked a button
-    DropShadow effect = new DropShadow(50, Color.WHITE);
-    effect.setInput(new Glow());
+		});
 
-    // clicked on button
-    this.setOnMousePressed(event -> {
-      setEffect(effect);
-      // Tudor - play sound
-      audioSource.play(Sounds.BUTTON_CLICK);
-    });
+		// Create glow effect to let user know they have clicked a button
+		DropShadow effect = new DropShadow(50, Color.WHITE);
+		effect.setInput(new Glow());
 
-    // released button
-    this.setOnMouseReleased(event -> {
-      setEffect(null);
-    });
+		// Clicked on button
+		this.setOnMousePressed(event -> {
 
-  }
+			setEffect(effect);
+			// Tudor - play sound
+			audioSource.play(Sounds.BUTTON_CLICK);
 
-  public void setButtonText(String text) {
+		});
 
-    Text newText = new Text(text);
-    this.buttonText = newText;
+		// Release button and remove effect
+		this.setOnMouseReleased(event -> {
+			setEffect(null);
+		});
 
-  }
+		this.setCache(true);
+		this.setCacheHint(CacheHint.SPEED);
+
+	}
+
+	/**
+	 * Sets the clicked status of the button.
+	 * 
+	 * @param clicked
+	 *            The clicked status.
+	 */
+	public void setClicked(boolean clicked) {
+		this.clicked = clicked;
+	}
 
 }

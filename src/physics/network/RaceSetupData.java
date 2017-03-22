@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 
 import org.joml.Vector3f;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import upgrades.ShipTemplate;
 
 /**
@@ -21,27 +24,25 @@ public class RaceSetupData {
   public Map<Byte, ShipSetupData> shipData;
   public Map<Byte, Vector3f> startingPositions;
   public Vector3f startingOrientation;
-  public long trackSeed;
+  public String trackSeed;
   public long timeToStart;
+  public int laps;
 
   public RaceSetupData(Map<Byte, ShipSetupData> shipData, Map<Byte, Vector3f> startingPositions,
-      Vector3f startingOrientation, long trackSeed, long timeToStart) {
+      Vector3f startingOrientation, String trackSeed, long timeToStart, int laps) {
     this.shipData = shipData;
     this.startingPositions = startingPositions;
     this.startingOrientation = startingOrientation;
     this.trackSeed = trackSeed;
     this.timeToStart = timeToStart;
+    this.laps = laps;
   }
 
   public RaceSetupData(byte id, Map<Byte, ShipSetupData> shipData,
-      Map<Byte, Vector3f> startingPositions, Vector3f startingOrientation, long trackSeed,
-      long timeToStart) {
+      Map<Byte, Vector3f> startingPositions, Vector3f startingOrientation, String trackSeed,
+      long timeToStart, int laps) {
+    this(shipData, startingPositions, startingOrientation, trackSeed, timeToStart, laps);
     this.yourId = id;
-    this.shipData = shipData;
-    this.startingPositions = startingPositions;
-    this.startingOrientation = startingOrientation;
-    this.trackSeed = trackSeed;
-    this.timeToStart = timeToStart;
   }
 
   public RaceSetupData setId(byte id) {
@@ -77,7 +78,7 @@ public class RaceSetupData {
     return startingOrientation;
   }
 
-  public long getTrackSeed() {
+  public String getTrackSeed() {
     return trackSeed;
   }
 
@@ -92,6 +93,12 @@ public class RaceSetupData {
   private <T1, T2> List<T2> getSorted(Map<Byte, T1> map, Function<T1, T2> f) {
     return map.entrySet().stream().sorted((a, b) -> a.getKey().compareTo(b.getKey()))
         .map(e -> e.getValue()).map(f).collect(Collectors.toList());
+  }
+
+  @Override
+  public String toString() {
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    return gson.toJson(this);
   }
 
 }
