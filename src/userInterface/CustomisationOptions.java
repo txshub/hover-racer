@@ -44,13 +44,13 @@ public class CustomisationOptions extends GridPane {
 		Text selectText = select.getTextStyled();
 		
 		// get file from path
-		InputStream is = Files.newInputStream(Paths.get("src/resources/img/ship1.png"));
+		InputStream is = Files.newInputStream(Paths.get("src/resources/img/ship3.png"));
 		Image ship1 = new Image(is);
 		
 		is = Files.newInputStream(Paths.get("src/resources/img/ship2.png"));
 		Image ship3 = new Image(is);
 		
-		is = Files.newInputStream(Paths.get("src/resources/img/ship3.png"));
+		is = Files.newInputStream(Paths.get("src/resources/img/ship1.png"));
 		Image ship2 = new Image(is);
 
 		is.close();
