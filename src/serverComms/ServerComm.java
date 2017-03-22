@@ -67,7 +67,7 @@ public class ServerComm extends Thread {
 	// Server->Client Sending the leaderboard after the game has finished
 	public static final byte FINISH_DATA = Byte.parseByte("21");
 	// Server->Client Sent to all clients when the game ends
-	public static final byte END_GAME = Byte.parseByte("21");
+	public static final byte END_GAME = Byte.parseByte("22");
 
 	/** Creates a Server object
 	 * 

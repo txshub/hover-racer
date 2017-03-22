@@ -49,6 +49,8 @@ public class GameRoom {
 	private long raceStartsAt = -1;
 	private long raceEndsAt = -1;
 
+	private ArrayList<CommQueue> allQueues = null;
+
 	/** Makes a GameRoom object
 	 * 
 	 * @param id
@@ -214,7 +216,7 @@ public class GameRoom {
 			shipManager =
 				new ServerShipManager(setupData, players.size(), maxPlayers - players.size(), trackPoints, setupData.startingOrientation);
 			logic = new GameLogic(shipManager.getShipsLogics(), trackPoints, lapCount, players.size(), this);
-			ArrayList<CommQueue> allQueues = new ArrayList<CommQueue>();
+			allQueues  = new ArrayList<CommQueue>();
 			for (int i = 0; i < players.size(); i++) {
 				table.getReceiver(players.get(i)).setGame(this, i);
 				// sendMessage((byte) i, Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA);
@@ -346,8 +348,10 @@ public class GameRoom {
 		if (raceStartsAt == -1) throw new IllegalStateException("Update called before the race was started");
 		if (System.nanoTime() >= raceStartsAt) shipManager.startRace();
 		if (raceEndsAt != -1 && (logic.raceFinished() || System.nanoTime() >= raceEndsAt)) {
-			for (byte i = 0; i < players.size(); i++) {
-				sendMessage(i, logic.getRanking(), ServerComm.END_GAME);
+			updatedUsers.interrupt();
+			for(CommQueue queue: allQueues) {
+				queue.offer(new ByteArrayByte(logic.getRanking(), ServerComm.END_GAME));
+				System.out.println("Sent end race message");
 			}
 			System.out.println("RACE ENDED");
 		}

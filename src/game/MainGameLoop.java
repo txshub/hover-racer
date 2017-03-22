@@ -79,8 +79,9 @@ public class MainGameLoop extends Thread {
 
     game.cleanUp();
     
-    // TODO THIS IS REALLY BAD!!!!!
-    System.exit(0);
+    for(Thread t: Thread.getAllStackTraces().keySet()) {
+    	if(!t.equals(this)) t.interrupt();
+    }
   }
 
   public static void startMultiplayerGame(RaceSetupData data, Client client) {

@@ -130,9 +130,9 @@ public class HostGameRoom extends GridPane {
 	 * Sets the seed that is used to preview the track.
 	 */
 	public void setSeed() {
-		if(seedInput.getText().isEmpty() && gameRoomSeed == null) {
+		if(seedInput.getText().isEmpty()) {
 			this.gameRoomSeed = String.valueOf((new Random()).nextLong());
-		} else if(gameRoomSeed == null) {
+		} else {
 			this.gameRoomSeed = seedInput.getText();
 		}
 
