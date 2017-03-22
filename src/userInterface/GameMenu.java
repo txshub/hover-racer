@@ -51,6 +51,8 @@ public class GameMenu extends Parent {
 	private MenuButton startServerMulti;
 	private MenuButton connectMulti;
 	private VBox box4Multi;
+	private TextStyle ip;
+	private Text ipStyled;
 
 	/** Constructor for the GameMenu class.
 	 * 
@@ -633,10 +635,19 @@ public class GameMenu extends Parent {
 				String machineName = machineInputMulti.getText();
 
 				client = new Client(usr, portNo, machineName);
-
+				
 				if (client.serverOn) {
 
 					client.start();
+					
+					String ipAddress = client.waitForIP();
+					System.out.println(ipAddress);
+					ip = new TextStyle(ipAddress, 30);
+					ipStyled = ip.getTextStyled();
+					
+					ipStyled.setY(100);
+					ipStyled.setX(720);
+					
 					MainMenu.allThreads.add(0, client);
 
 					getChildren().add(shipCustomisationWindowMulti);
@@ -676,8 +687,6 @@ public class GameMenu extends Parent {
 		startServerMulti.setOnMouseClicked(event -> {
 
 			Lobby serverLobby = new Lobby(4444);
-			// ServerComm server = new ServerComm(4444, serverLobby);
-			// server.start();
 
 			usr = usernameInputMulti.getText();
 			int portNo = 4444;
@@ -685,6 +694,15 @@ public class GameMenu extends Parent {
 
 			client = new Client(usr, portNo, machineName);
 			client.start();
+			
+			String ipAddress = client.waitForIP();
+			System.out.println(ipAddress);
+			ip = new TextStyle(ipAddress, 25);
+			ipStyled = ip.getTextStyled();
+			
+			ipStyled.setY(100);
+			ipStyled.setX(720);
+			
 			MainMenu.allThreads.add(0, client);
 
 			getChildren().add(shipCustomisationWindowMulti);
