@@ -53,6 +53,7 @@ public class JoystickController extends InputController {
     axisMapping.put(0, Action.TURN_RIGHT);
     axisMapping.put(2, Action.STRAFE_RIGHT);
     mapping.put(1, Action.JUMP);
+    mapping.put(9, Action.BREAK);
 
     for (Action action : Action.values()) {
       keyStatus.put(action, 0f);
@@ -103,10 +104,10 @@ public class JoystickController extends InputController {
           if (thrust) {
             if (value < 0f) {
               keyStatus.put(Action.FORWARD, -value);
-              keyStatus.put(Action.BREAK, 0f);
+              keyStatus.put(Action.BACKWARD, 0f);
             } else {
               keyStatus.put(Action.FORWARD, 0f);
-              keyStatus.put(Action.BREAK, value);
+              keyStatus.put(Action.BACKWARD, value);
             }
           }
           break;

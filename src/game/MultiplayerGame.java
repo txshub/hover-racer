@@ -37,6 +37,7 @@ import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import input.Action;
 import input.InputController;
+import input.JoystickController;
 import input.KeyboardController;
 import javafx.application.Platform;
 import physics.network.RaceSetupData;
@@ -217,6 +218,11 @@ public class MultiplayerGame {
 
   public void update(float delta) {
     input.update();
+    if(Keyboard.isKeyDown(Keyboard.KEY_0)){
+        ships.getPlayerShip().setInput(new KeyboardController());
+    }else if(Keyboard.isKeyDown(Keyboard.KEY_9)){
+        ships.getPlayerShip().setInput(new JoystickController());
+    }
 
     // Display tutorial before race
     long controlsTill = startsAt - (5 * 1000000000L);

@@ -30,7 +30,7 @@ import upgrades.ShipTemplate;
 public class MultiplayerShipManager implements ServerShipProvider {
 
 	private static final int SHIP_PACKET_LENGTH = 49;
-	private Ship player;
+	private PlayerShip player;
 	private List<Ship> remotes;
 	private Map<Byte, byte[]> packets;
 	private ShipSounds sounds;
@@ -105,7 +105,7 @@ public class MultiplayerShipManager implements ServerShipProvider {
 		entities.add(player);
 	}
 
-	public Ship getPlayerShip() {
+	public PlayerShip getPlayerShip() {
 		return player;
 	}
 

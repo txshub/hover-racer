@@ -30,6 +30,10 @@ public class PlayerShip extends Ship {
 		// ArrayList<Ship>()); // Create
 		// ShipSounds
 	}
+	
+	public void setInput(InputController input){
+		this.input = input; // Deal with input
+	}
 
 	@Override
 	public void update(float delta) {
