@@ -166,9 +166,8 @@ public class ServerComm extends Thread {
 				Enumeration<InetAddress> addresses = i.getInetAddresses();
 				while(addresses.hasMoreElements()) {
 					InetAddress a = addresses.nextElement();
-					
-					if(a instanceof Inet6Address) continue;
-					return a.getHostAddress();
+					System.out.println(a.getHostAddress());
+					if(a.getHostAddress().startsWith("10")) return a.getHostAddress();
 				}
 			}
 		} catch (SocketException e) {
