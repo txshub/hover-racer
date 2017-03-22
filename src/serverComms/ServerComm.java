@@ -10,6 +10,7 @@ import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -156,24 +157,10 @@ public class ServerComm extends Thread {
 
 	private String getIP() {
 		try {
-			String lastIP = "";
-			String thisIP = "";
-			Enumeration e = NetworkInterface.getNetworkInterfaces();
-			while(e.hasMoreElements()) {
-				NetworkInterface n = (NetworkInterface) e.nextElement();
-				Enumeration ee = n.getInetAddresses();
-				while(ee.hasMoreElements()) {
-					InetAddress i = (InetAddress) ee.nextElement();
-					lastIP = thisIP;
-					thisIP = i.getHostAddress();
-				}
-			}
-			return lastIP;
-		} catch (SocketException e) {
-			
+			return InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
 		}
-		return "Unknown";
-		
+		return "Unknown";		
 	}
 
 	/** Sends a byte message to the specified output stream
