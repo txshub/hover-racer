@@ -90,8 +90,10 @@ public class Vector3 extends Vector3f {
 		ImVector2f res = current.add(scaledNormal.mul(2));
 
 		if (current.rotateTo(wall).getY() > 0) {
-			x = res.getX();
-			z = res.getY();
+			//x = res.getX();
+			//z = res.getY();
+			x += res.getX() * 2;
+			z += res.getY() * 2;
 			forEach(v -> v * elasticity);
 		}
 	}
