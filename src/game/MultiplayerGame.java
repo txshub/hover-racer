@@ -346,7 +346,7 @@ public class MultiplayerGame {
     renderer.cleanUp();
     loader.cleanUp();
     InputController.close = true;
-    AudioMaster.cleanUp();
+    AudioMaster.stopInGameMusic();
     DisplayManager.closeDisplay();
   }
 
@@ -450,31 +450,24 @@ public class MultiplayerGame {
     musicText.setParent(optionsMenu);
     musicText.setColour(textColour);
 
-    Label musicVolume = new Label(loader, "-1%", font, 2.5f, true, new Vector2f(128, 114), 120);
-    musicVolume.setParent(optionsMenu);
-    musicVolume.setColour(textColour);
-    musicVolume.setText(Float.toString(AudioMaster.getMusicVolume()));
-
-    Button musicMinusButton = new Button(loader, "ui/minusButton", new Vector2f(58, 114));
+    Button musicMinusButton = new Button(loader, "ui/minusButton", new Vector2f(98, 114));
     musicMinusButton.setParent(optionsMenu);
     musicMinusButton.addListener(new ActionListener() {
 
       public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("pressed")) {
           AudioMaster.decreaseMusicVolume();
-          musicVolume.setText(Float.toString(AudioMaster.getMusicVolume()));
         }
       }
     });
 
-    Button musicPlusButton = new Button(loader, "ui/plusButton", new Vector2f(260, 114));
+    Button musicPlusButton = new Button(loader, "ui/plusButton", new Vector2f(220, 114));
     musicPlusButton.setParent(optionsMenu);
     musicPlusButton.addListener(new ActionListener() {
 
       public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("pressed")) {
           AudioMaster.increaseMusicVolume();
-          musicVolume.setText(Float.toString(AudioMaster.getMusicVolume()));
         }
       }
     });
@@ -483,31 +476,24 @@ public class MultiplayerGame {
     sfxText.setParent(optionsMenu);
     sfxText.setColour(textColour);
 
-    Label sfxVolume = new Label(loader, "-1%", font, 2.5f, true, new Vector2f(128, 255), 120);
-    sfxVolume.setParent(optionsMenu);
-    sfxVolume.setColour(textColour);
-    sfxVolume.setText(Float.toString(AudioMaster.getSFXVolume()));
-
-    Button sfxMinusButton = new Button(loader, "ui/minusButton", new Vector2f(58, 255));
+    Button sfxMinusButton = new Button(loader, "ui/minusButton", new Vector2f(98, 255));
     sfxMinusButton.setParent(optionsMenu);
     sfxMinusButton.addListener(new ActionListener() {
 
       public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("pressed")) {
           AudioMaster.decreaseSFXVolume();
-          sfxVolume.setText(Float.toString(AudioMaster.getSFXVolume()));
         }
       }
     });
 
-    Button sfxPlusButton = new Button(loader, "ui/plusButton", new Vector2f(260, 255));
+    Button sfxPlusButton = new Button(loader, "ui/plusButton", new Vector2f(220, 255));
     sfxPlusButton.setParent(optionsMenu);
     sfxPlusButton.addListener(new ActionListener() {
 
       public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("pressed")) {
           AudioMaster.increaseSFXVolume();
-          sfxVolume.setText(Float.toString(AudioMaster.getSFXVolume()));
         }
       }
     });
@@ -788,6 +774,7 @@ public class MultiplayerGame {
   }
 
   public void endGame() {
+	  this.running = false;
     System.out.println("THE GAME HAS ENDED");
   }
 

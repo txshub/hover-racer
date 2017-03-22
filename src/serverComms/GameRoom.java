@@ -16,6 +16,7 @@ import serverLogic.ServerShipManager;
 import trackDesign.SeedTrack;
 import trackDesign.TrackMaker;
 import trackDesign.TrackPoint;
+import userInterface.MainMenu;
 
 /** The GameRoom clients can join
  * 
@@ -50,6 +51,8 @@ public class GameRoom {
 	private long raceEndsAt = -1;
 
 	private ArrayList<CommQueue> allQueues = null;
+
+	private boolean endGameSent = false;
 
 	/** Makes a GameRoom object
 	 * 
@@ -226,6 +229,7 @@ public class GameRoom {
 			raceStartsAt = System.nanoTime() + TIME_TO_START;
 			updatedUsers = new UpdateAllUsers(allQueues, this);
 			updatedUsers.start();
+			MainMenu.allThreads.add(0, updatedUsers);
 		}
 	}
 
@@ -348,12 +352,13 @@ public class GameRoom {
 		if (raceStartsAt == -1) throw new IllegalStateException("Update called before the race was started");
 		if (System.nanoTime() >= raceStartsAt) shipManager.startRace();
 		if (raceEndsAt != -1 && (logic.raceFinished() || System.nanoTime() >= raceEndsAt)) {
-			updatedUsers.interrupt();
-			for(CommQueue queue: allQueues) {
-				queue.offer(new ByteArrayByte(logic.getRanking(), ServerComm.END_GAME));
-				System.out.println("Sent end race message");
+			if(!endGameSent) {
+				updatedUsers.interrupt();
+				for(CommQueue queue: allQueues) {
+					queue.offer(new ByteArrayByte(logic.getRanking(), ServerComm.END_GAME));
+				}
+				endGameSent  = true;
 			}
-			System.out.println("RACE ENDED");
 		}
 		shipManager.update(delta);
 		logic.update();

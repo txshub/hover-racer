@@ -34,7 +34,7 @@ public class UpdateAllUsers extends Thread {
    * Runs the updater (Called via UpdateAllUsers.start())
    */
   public void run() {
-    while (run) {
+    while (run && !this.isInterrupted()) {
       long timeStarting = System.nanoTime();
       room.update(refreshRate);
       byte[] data = room.getShipPositions();

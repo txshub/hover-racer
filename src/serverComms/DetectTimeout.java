@@ -44,7 +44,7 @@ public class DetectTimeout extends Thread {
 //
 //    }
 	  try {
-		  while(messageReceived) {
+		  while(messageReceived && !this.isInterrupted()) {
 			  messageReceived = false;
 			  Thread.sleep(10000); //Sleep for 10s
 		  }

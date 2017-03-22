@@ -8,6 +8,8 @@ import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.util.WaveData;
 
+import userInterface.MainMenu;
+
 /**
  * Class managing the audio engine
  * 
@@ -178,6 +180,7 @@ public class AudioMaster {
 	/** Start the music player */
 	public static void playMusic() {
 		player.start();
+		MainMenu.allThreads.add(0, player);
 	}
 
 	/** Stop the music player */

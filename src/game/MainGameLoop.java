@@ -1,10 +1,14 @@
 package game;
 
 import java.awt.GraphicsEnvironment;
+import java.io.IOException;
 
 import clientComms.Client;
 import gameEngine.renderEngine.DisplayManager;
+import javafx.application.Platform;
 import physics.network.RaceSetupData;
+import serverComms.ServerSender;
+import userInterface.MainMenu;
 
 public class MainGameLoop extends Thread {
 
@@ -76,22 +80,34 @@ public class MainGameLoop extends Thread {
         ups = 0;
       }
     }
-
+    System.out.println("Game Closed");
     game.cleanUp();
-    
-    for(Thread t: Thread.getAllStackTraces().keySet()) {
-    	if(!t.equals(this)) t.interrupt();
+    System.out.println("Closing Threads");
+    for(Thread t: MainMenu.allThreads) {
+    	if(!t.equals(this) && !t.isInterrupted()) t.interrupt();
     }
+    MainMenu.allThreads.clear();
+    Platform.runLater(new Runnable() {
+    	public void run() {
+    		try {
+				MainMenu.reloadScene();
+			} catch (IOException e) {
+				System.out.println("Main Menu didn't reload");
+			}
+    	}
+    });
   }
 
   public static void startMultiplayerGame(RaceSetupData data, Client client) {
     System.out.println("------STARTING GAME------");
     // Start the game in a new thread - ensure all OpenGL stays in that thread
-    new Thread(() -> {
+    Thread newThread = new Thread(() -> {
       MainGameLoop main = new MainGameLoop();
       MultiplayerGame game = new MultiplayerGame(data, client);
       main.main(game);
-    }).start();
+    });
+    newThread.start();
+    MainMenu.allThreads.add(0, newThread);
     // Ensure setup is finished before proceeding
     try {
       while (client.getManager() == null)

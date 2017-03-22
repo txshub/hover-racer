@@ -12,6 +12,7 @@ import physics.network.ShipSetupData;
 import physics.placeholders.DataGenerator;
 import serverComms.GameRoom;
 import serverComms.Lobby;
+import userInterface.MainMenu;
 
 public class testClient {
 	static String local = "localhost";

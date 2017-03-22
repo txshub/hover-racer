@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import audioEngine.AudioMaster;
 import javafx.application.Application;
@@ -34,6 +35,8 @@ public class MainMenu extends Application {
 	public static Stage primaryStage;
     public static ImageView imgView;
     public static Rectangle bg;
+    
+    public static ArrayList<Thread> allThreads = new ArrayList<Thread>();
 	/**
 	 * Method that initializes the primary stage and the current scene.
 	 * 
@@ -106,6 +109,8 @@ public class MainMenu extends Application {
 	
 	public static void reloadScene() throws IOException {
 		
+		AudioMaster.init();
+		AudioMaster.playMusic();
 		for(int i=0; i< root.getChildren().size(); i++){
 			if(!root.getChildren().get(i).equals(imgView) && !root.getChildren().get(i).equals(bg)){
 				root.getChildren().remove(i);
