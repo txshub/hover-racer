@@ -22,6 +22,8 @@ public class DisplayManager {
   private static long delta;
 
   private static long secondTimer = 99l;
+  
+  private static boolean goFullscreen = false;
 
   /**
    * create a new display
@@ -31,9 +33,12 @@ public class DisplayManager {
         .withProfileCore(true);
 
     try {
-      Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
+      if (!goFullscreen) {
+        Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
+      } else {
+        Display.setFullscreen(true);
+      }
       Display.create(new PixelFormat(), attribs);
-      // Display.setFullscreen(true);
       Display.setVSyncEnabled(true);
       Display.setTitle("Our First Display!");
       GL11.glEnable(GL13.GL_MULTISAMPLE);
