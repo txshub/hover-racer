@@ -23,11 +23,12 @@ public class MusicPlayer extends Thread {
   @Override
   public void run() {
 
+    running = true;
     int r = random.nextInt(Sounds.songs.length);
     int index = r;
     s.play(Sounds.songs[index]);
 
-    while (running) {
+    while (running && !this.isInterrupted()) {
       if (!s.isPlaying()) {
         r = random.nextInt(Sounds.songs.length);
         if (r != index) {

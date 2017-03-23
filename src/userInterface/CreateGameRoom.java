@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Random;
 
 import clientComms.Client;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
@@ -23,204 +22,206 @@ import serverComms.Lobby;
 
 public class CreateGameRoom extends GridPane {
 
-	private String gameRoomSeed;
-	private int maxAIs;
-	private int lapNo;
-	private String username;
-	private TextField usernameInput;
-	private TextField seedInput;
-	private TextField noAIsInput;
-	private TextField noLapsInput;
-	private int typeId;
+  private String gameRoomSeed;
+  private int maxAIs;
+  private int lapNo;
+  private String username;
+  private TextField usernameInput;
+  private TextField seedInput;
+  private TextField noAIsInput;
+  private TextField noLapsInput;
+  private int typeId;
 
-	/**
-	 * Constructor for the CreateGameRoom class.
-	 */
-	public CreateGameRoom() {
+  /**
+   * Constructor for the CreateGameRoom class.
+   */
+  public CreateGameRoom() {
 
-		this.setAlignment(Pos.CENTER);
-		this.setHgap(40);
-		this.setVgap(3);
-		this.setPadding(new Insets(20, 10, 0, 30));
+    this.setAlignment(Pos.CENTER);
+    this.setHgap(40);
+    this.setVgap(3);
+    this.setPadding(new Insets(20, 10, 0, 30));
 
-		VBox mapBox = new VBox(10);
-		GridPane.setRowSpan(mapBox, 2);
-		mapBox.setAlignment(Pos.CENTER);
+    VBox mapBox = new VBox(10);
+    GridPane.setRowSpan(mapBox, 2);
+    mapBox.setAlignment(Pos.CENTER);
 
-		TextStyle username = new TextStyle("CHOOSE A USERNAME", 25);
-		Text usernameText = username.getTextStyled();
+    TextStyle username = new TextStyle("CHOOSE A USERNAME", 25);
+    Text usernameText = username.getTextStyled();
 
-		TextStyle seed = new TextStyle("CHOOSE A SEED", 25);
-		Text seedText = seed.getTextStyled();
+    TextStyle seed = new TextStyle("CHOOSE A SEED", 25);
+    Text seedText = seed.getTextStyled();
 
-		TextStyle noAIs = new TextStyle("CHOOSE THE NUMBER OF AI'S", 25);
-		Text noAIsText = noAIs.getTextStyled();
+    TextStyle noAIs = new TextStyle("CHOOSE THE NUMBER OF AI'S", 25);
+    Text noAIsText = noAIs.getTextStyled();
 
-		TextStyle noLaps = new TextStyle("CHOOSE THE NUMBER OF LAPS", 25);
-		Text noLapsText = noLaps.getTextStyled();
+    TextStyle noLaps = new TextStyle("CHOOSE THE NUMBER OF LAPS", 25);
+    Text noLapsText = noLaps.getTextStyled();
 
-		usernameInput = new TextField();
-		seedInput = new TextField();
-		noAIsInput = new TextField();
-		noLapsInput = new TextField();
+    usernameInput = new TextField();
+    seedInput = new TextField();
+    noAIsInput = new TextField();
+    noLapsInput = new TextField();
 
-		MenuButton generateTrack = new MenuButton("PREVIEW THIS TRACK", 350, 70, 30);
-		generateTrack.setOnMouseClicked(event -> {
+    MenuButton generateTrack = new MenuButton("PREVIEW THIS TRACK", 350, 70, 30);
+    generateTrack.setOnMouseClicked(event -> {
 
-			if (mapBox.getChildren().size() > 0) {
+      if (mapBox.getChildren().size() > 0) {
 
-				mapBox.getChildren().remove(0);
-			}
+        mapBox.getChildren().remove(0);
+      }
 
-			setSeed();
-			Map track = new Map(getSeed());
-			mapBox.getChildren().add(track);
+      setSeed();
+      Map track = new Map(getSeed());
+      mapBox.getChildren().add(track);
 
-		});
+    });
 
-		MenuButton createGameRoom = new MenuButton("START GAME", 350, 70, 30);
-		createGameRoom.setOnMouseClicked(event -> {
+    MenuButton createGameRoom = new MenuButton("START GAME", 350, 70, 30);
+    createGameRoom.setOnMouseClicked(event -> {
 
-			try {
-				setSettings();
+      try {
+        setSettings();
 
-				// CREATE LOCAL SERVER //
-				Lobby localLobby = new Lobby(4445);
+        // CREATE LOCAL SERVER //
+        new Lobby(4445);
 
-				// CREATE SINGLE PLAYER CLIENT //
-				Client localClient = new Client(getUsername(), 4445, "localhost");
-				localClient.start();
+        // CREATE SINGLE PLAYER CLIENT //
+        Client localClient = new Client(getUsername(), 4445, "localhost");
+        localClient.start();
+        MainMenu.allThreads.add(0, localClient);
 
-				setTypeId(GameMenu.getTypeId());
-				localClient.startSinglePlayerGame(getSeed(), getMaxAIs(), getNoLaps(),
-						DataGenerator.basicShipSetup(getUsername(),typeId));
+        setTypeId(GameMenu.getTypeId());
+        localClient.startSinglePlayerGame(getSeed(), getMaxAIs(), getNoLaps(),
+            DataGenerator.basicShipSetup(getUsername(), typeId));
 
-			} catch (InvalidPlayerNumberException ex) {
+      } catch (InvalidPlayerNumberException ex) {
 
-				try {
-					PopUpWindow.display("CHOOSE A NUMBER BETWEEN 1 AND 8");
-				} catch (Exception e) {
-					System.err.println("POP UP NOT WORKING");
-				}
-			} catch (NullPointerException exp) {
+        try {
+          PopUpWindow.display("CHOOSE A NUMBER BETWEEN 0 AND 7");
+        } catch (Exception e) {
+          System.err.println("POP UP NOT WORKING");
+        }
+      } catch (NullPointerException exp) {
 
-				try {
-					PopUpWindow.display("NULL INPUT");
-				} catch (Exception e) {
-					System.err.println("POP UP NOT WORKING");
-				}
+        try {
+          PopUpWindow.display("NULL INPUT");
+        } catch (Exception e) {
+          System.err.println("POP UP NOT WORKING");
+        }
 
-			} catch (IOException e) {
+      } catch (IOException e) {
 
-				System.err.println("SINGLE PLAYER MODE DOES NOT WORK");
-			}
+        System.err.println("SINGLE PLAYER MODE DOES NOT WORK");
+      }
 
-		});
+    });
 
-		// GRID LAYOUT //
+    // GRID LAYOUT //
 
-		add(usernameText, 0, 1);
-		add(usernameInput, 0, 2);
+    add(usernameText, 0, 1);
+    add(usernameInput, 0, 2);
 
-		add(seedText, 0, 3);
-		add(seedInput, 0, 4);
+    add(seedText, 0, 3);
+    add(seedInput, 0, 4);
 
-		add(noAIsText, 1, 1);
-		add(noAIsInput, 1, 2);
+    add(noAIsText, 1, 1);
+    add(noAIsInput, 1, 2);
 
-		add(noLapsText, 1, 3);
-		add(noLapsInput, 1, 4);
+    add(noLapsText, 1, 3);
+    add(noLapsInput, 1, 4);
 
-		add(mapBox, 0, 5);
+    add(mapBox, 0, 5);
 
-		add(generateTrack, 0, 7);
-		add(createGameRoom, 1, 7);
+    add(generateTrack, 0, 7);
+    add(createGameRoom, 1, 7);
 
-		GridPane.setMargin(usernameInput, new Insets(0, 0, 20, 0));
-		GridPane.setMargin(seedInput, new Insets(0, 0, 20, 0));
-		GridPane.setMargin(noAIsInput, new Insets(0, 0, 20, 0));
-		GridPane.setMargin(generateTrack, new Insets(0, 0, 20, 0));
-		GridPane.setMargin(createGameRoom, new Insets(0, 0, 20, 0));
+    GridPane.setMargin(usernameInput, new Insets(0, 0, 20, 0));
+    GridPane.setMargin(seedInput, new Insets(0, 0, 20, 0));
+    GridPane.setMargin(noAIsInput, new Insets(0, 0, 20, 0));
+    GridPane.setMargin(generateTrack, new Insets(0, 0, 20, 0));
+    GridPane.setMargin(createGameRoom, new Insets(0, 0, 20, 0));
 
-	}
+  }
 
-	/**
-	 * Sets the seed that is used to preview the track.
-	 */
-	public void setSeed() {
+  /**
+   * Sets the seed that is used to preview the track.
+   */
+  public void setSeed() {
 
-		if(seedInput.getText().isEmpty()) {
-			this.gameRoomSeed = String.valueOf((new Random()).nextLong());
-		} else {
-			this.gameRoomSeed = seedInput.getText();
-		}
-	}
+    if (seedInput.getText().isEmpty()) {
+      this.gameRoomSeed = String.valueOf((new Random()).nextLong());
+    } else {
+      this.gameRoomSeed = seedInput.getText();
+    }
+  }
 
-	/**
-	 * Sets the seed, maximum number of AIs, number of laps and username by
-	 * taking the input of the user.
-	 * 
-	 * @throws InvalidPlayerNumberException
-	 */
-	public void setSettings() throws InvalidPlayerNumberException {
+  /**
+   * Sets the seed, maximum number of AIs, number of laps and username by taking
+   * the input of the user.
+   * 
+   * @throws InvalidPlayerNumberException
+   */
+  public void setSettings() throws InvalidPlayerNumberException {
 
-		if (usernameInput.getText().isEmpty() || noAIsInput.getText().isEmpty() || noLapsInput.getText().isEmpty()) {
-			throw new NullPointerException();
-		}
-		
-		if(!seedInput.getText().isEmpty()) {
-			this.gameRoomSeed = seedInput.getText();
-		} else if(gameRoomSeed==null) {
-			this.gameRoomSeed = String.valueOf((new Random()).nextLong());
-		}
-		this.maxAIs = Integer.valueOf(noAIsInput.getText());
-		this.lapNo = Integer.valueOf(noLapsInput.getText());
-		this.username = usernameInput.getText();
+    if (usernameInput.getText().isEmpty() || noAIsInput.getText().isEmpty()
+        || noLapsInput.getText().isEmpty()) {
+      throw new NullPointerException();
+    }
 
-		if (this.maxAIs < 1 || this.maxAIs > 8) {
-			throw new InvalidPlayerNumberException();
-		}
+    if (!seedInput.getText().isEmpty()) {
+      this.gameRoomSeed = seedInput.getText();
+    } else if (gameRoomSeed == null) {
+      this.gameRoomSeed = String.valueOf((new Random()).nextLong());
+    }
+    this.maxAIs = Integer.valueOf(noAIsInput.getText());
+    this.lapNo = Integer.valueOf(noLapsInput.getText());
+    this.username = usernameInput.getText();
 
-	}
+    if (this.maxAIs < 0 || this.maxAIs > 7) {
+      throw new InvalidPlayerNumberException();
+    }
 
-	/**
-	 * Get method for the game room seed.
-	 * 
-	 * @return The game room seed.
-	 */
-	public String getSeed() {
-		return this.gameRoomSeed;
-	}
+  }
 
-	/**
-	 * Get method for the maximum number of AI players.
-	 * 
-	 * @return The maximum number of AI players.
-	 */
-	public int getMaxAIs() {
-		return this.maxAIs;
-	}
+  /**
+   * Get method for the game room seed.
+   * 
+   * @return The game room seed.
+   */
+  public String getSeed() {
+    return this.gameRoomSeed;
+  }
 
-	/**
-	 * Get method for the username.
-	 * 
-	 * @return The chosen username.
-	 */
-	public String getUsername() {
-		return this.username;
-	}
+  /**
+   * Get method for the maximum number of AI players.
+   * 
+   * @return The maximum number of AI players.
+   */
+  public int getMaxAIs() {
+    return this.maxAIs;
+  }
 
-	/**
-	 * Get method for the number of laps.
-	 * 
-	 * @return The number of laps.
-	 */
-	public int getNoLaps() {
-		return this.lapNo;
-	}
+  /**
+   * Get method for the username.
+   * 
+   * @return The chosen username.
+   */
+  public String getUsername() {
+    return this.username;
+  }
 
-	public void setTypeId(int typeId) {
-		this.typeId = typeId;
-	}
-	
+  /**
+   * Get method for the number of laps.
+   * 
+   * @return The number of laps.
+   */
+  public int getNoLaps() {
+    return this.lapNo;
+  }
+
+  public void setTypeId(int typeId) {
+    this.typeId = typeId;
+  }
+
 }

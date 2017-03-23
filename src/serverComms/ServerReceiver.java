@@ -41,7 +41,7 @@ public class ServerReceiver extends Thread {
    */
   public void run() {
     try {
-      while (true) {
+      while (!this.isInterrupted()) {
         int in = client.readInt();
         byte[] messageIn = new byte[in];
         client.readFully(messageIn);

@@ -56,7 +56,9 @@ public class ClientTable {
    */
   public boolean userExists(String name) {
     for (Map.Entry<String, CommQueue> entry : queueTable.entrySet()) {
-      if (entry.getKey().equals(name)) {return true;}
+      if (entry.getKey().equals(name)) {
+        return true;
+      }
     }
     return false;
   }

@@ -37,8 +37,8 @@ import gameEngine.textures.TerrainTexture;
 import gameEngine.textures.TerrainTexturePack;
 import input.Action;
 import input.InputController;
+import input.JoystickController;
 import input.KeyboardController;
-import javafx.application.Platform;
 import physics.network.RaceSetupData;
 import physics.placeholders.FlatGroundProvider;
 import physics.ships.MultiplayerShipManager;
@@ -52,7 +52,6 @@ import uiToolkit.Label;
 import uiToolkit.UIRenderer;
 import uiToolkit.fontMeshCreator.FontType;
 import uiToolkit.fontRendering.TextMaster;
-import userInterface.MainMenu;
 
 /**
  * Main game class
@@ -63,7 +62,7 @@ import userInterface.MainMenu;
 public class MultiplayerGame {
 
   // Set this to print debug messages
-  public static boolean debug = true;
+  public static boolean debug = false;
 
   private Loader loader;
   private ArrayList<Entity> entities;
@@ -88,7 +87,6 @@ public class MultiplayerGame {
   private boolean finished;
   private List<String> nicknames;
   private ArrayList<String> leaderboard;
-  private boolean changed = false; // TODO temporary
 
   // UI Globals
   private Container menu;
@@ -109,6 +107,7 @@ public class MultiplayerGame {
   private Container startLights;
   private int lightState = 0;
   private Source countDown;
+  private long[] countdownStage;
 
   public MultiplayerGame(RaceSetupData data, Client client) {
     init(data, client);
@@ -117,6 +116,10 @@ public class MultiplayerGame {
   private void init(RaceSetupData data, Client client) {
     running = true;
     startsAt = System.nanoTime() + data.getTimeToStart();
+
+    countdownStage = new long[] { startsAt - 4 * 1000000000L, startsAt - 3 * 1000000000L,
+        startsAt - 2 * 1000000000L, startsAt - 1 * 1000000000L, startsAt,
+        startsAt + 2 * 1000000000L };
 
     this.client = client;
     client.setMultiplayerGame(this);
@@ -134,12 +137,9 @@ public class MultiplayerGame {
     // Terrain
     TerrainTexture background = new TerrainTexture(
         loader.loadMipmappedTexture("gridTexture", -2.5f));
-    TerrainTexture rTexture = new TerrainTexture(
-        loader.loadMipmappedTexture("gridTexture", -2.5f));
-    TerrainTexture gTexture = new TerrainTexture(
-        loader.loadMipmappedTexture("gridTexture", -2.5f));
-    TerrainTexture bTexture = new TerrainTexture(
-        loader.loadMipmappedTexture("gridTexture", -2.5f));
+    TerrainTexture rTexture = new TerrainTexture(loader.loadMipmappedTexture("gridTexture", -2.5f));
+    TerrainTexture gTexture = new TerrainTexture(loader.loadMipmappedTexture("gridTexture", -2.5f));
+    TerrainTexture bTexture = new TerrainTexture(loader.loadMipmappedTexture("gridTexture", -2.5f));
     TerrainTexturePack texturePack = new TerrainTexturePack(background, rTexture, gTexture,
         bTexture);
 
@@ -198,7 +198,7 @@ public class MultiplayerGame {
     }
 
     setupUI(data);
-    
+
     // Create the count down source
     countDown = AudioMaster.createSFXSource(1f);
 
@@ -215,6 +215,13 @@ public class MultiplayerGame {
 
   public void update(float delta) {
     input.update();
+    if (Keyboard.isKeyDown(Keyboard.KEY_0)) {
+      input = new KeyboardController();
+      ships.getPlayerShip().setInput(input);
+    } else if (Keyboard.isKeyDown(Keyboard.KEY_9)) {
+      input = new JoystickController();
+      ships.getPlayerShip().setInput(input);
+    }
 
     // Display tutorial before race
     long controlsTill = startsAt - (5 * 1000000000L);
@@ -225,20 +232,17 @@ public class MultiplayerGame {
       controlsScreen.setVisibility(false);
     }
 
-    long[] stage = new long[] { startsAt - 4 * 1000000000L, startsAt - 3 * 1000000000L,
-        startsAt - 2 * 1000000000L, startsAt - 1 * 1000000000L, startsAt,
-        startsAt + 2 * 1000000000L };
-
     // Display the count-down
     if (!startLights.isVisible() && System.nanoTime() > controlsTill
         && System.nanoTime() < startsAt) {
       startLights.setVisibility(true);
-    } else if (startLights.isVisible() && System.nanoTime() > stage[5]) {
+    } else if (startLights.isVisible() && System.nanoTime() > countdownStage[5]) {
       startLights.setVisibility(false);
     }
 
     for (int i = 0; i < 5; i++) {
-      if (lightState != i + 1 && System.nanoTime() > stage[i] && System.nanoTime() < stage[i + 1]) {
+      if (lightState != i + 1 && System.nanoTime() > countdownStage[i]
+          && System.nanoTime() < countdownStage[i + 1]) {
         containers.remove(startLights);
         startLights = new Container(loader, "ui/lights" + (i + 1), new Vector2f(470, 40));
         containers.add(startLights);
@@ -248,14 +252,14 @@ public class MultiplayerGame {
           countDown.play(Sounds.BEEP_1);
         } else {
           countDown.play(Sounds.BEEP_2);
-        }   
+        }
       }
     }
 
     // Check for menu
     if (input.wasPressed(Action.MENU) > 0.5f) {
       if (currentMenu.equals("none")) {
-    	finishContainer.setVisibility(false);
+        finishContainer.setVisibility(false);
         menu.setVisibility(true);
         currentMenu = "main";
       } else if (currentMenu.equals("main")) {
@@ -303,14 +307,21 @@ public class MultiplayerGame {
     posCurrent.setText(Integer.toString(ranking));
 
     if (currentMenu.equals("none")) {
-	  if (!finishContainer.isVisible() && finished) {
-	    finishContainer.setVisibility(true);
-	  } else if (finished) {
-	    for (int i = 0; i < leaderboard.size(); i++) {
-	      String text = "\n" + (i + 1) + " : " + leaderboard.get(i);
-	      leaderboardTexts.get(i).setText(text);
-	    }
-	  }
+      if (!finishContainer.isVisible() && finished) {
+        // Enable for great bantz
+        // countDown.stop();
+        // countDown.play(Sounds.ANDHISNAMEIS);
+        finishContainer.setVisibility(true);
+      } else if (finished) {
+        for (int i = 0; i < leaderboard.size(); i++) {
+          String text = "\n" + (i + 1) + " : " + leaderboard.get(i);
+          leaderboardTexts.get(i).setText(text);
+        }
+      }
+    }
+
+    if (finishContainer.isVisible() && !finished) {
+      finishContainer.setVisibility(false);
     }
 
     camera.move();
@@ -346,7 +357,7 @@ public class MultiplayerGame {
     renderer.cleanUp();
     loader.cleanUp();
     InputController.close = true;
-    AudioMaster.cleanUp();
+    AudioMaster.stopInGameMusic();
     DisplayManager.closeDisplay();
   }
 
@@ -764,8 +775,6 @@ public class MultiplayerGame {
 
   public void updateFinishData(byte[] msg) {
     for (int i = 0; i < msg.length; i++) {
-      if (!nicknames.get(msg[i]).equals(leaderboard.get(i)))
-        changed = true;
       leaderboard.set(i, nicknames.get(msg[i]));
       if (msg[i] == ships.getPlayerShip().getId())
         ships.getPlayerShip().finish();
@@ -774,6 +783,7 @@ public class MultiplayerGame {
   }
 
   public void endGame() {
+    this.running = false;
     System.out.println("THE GAME HAS ENDED");
   }
 

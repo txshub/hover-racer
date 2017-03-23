@@ -4,7 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.Socket;
 
 import clientComms.Client;
@@ -43,6 +42,7 @@ public class DummyClient extends Client {
       super.sendByteMessage(clientName.getBytes(ServerComm.charset), ServerComm.USERSENDING);
       Thread.sleep(1000);
       testsPassed = testsPassed && ((DummyReceiverFail) receiver).testsPassed;
-    } catch (Exception e) {}
+    } catch (Exception e) {
+    }
   }
 }

@@ -32,12 +32,13 @@ public class ServerSender extends Thread {
    * Runs the sender (Called via ServerSender.start())
    */
   public void run() {
-    while (continueSending) {
+    while (continueSending && !this.isInterrupted()) {
       try {
         ByteArrayByte msg = queue.take();
         ServerComm.writeByteMessage(msg.getMsg(), msg.getType(), toClient);
       } catch (IOException e) {
-        System.err.println("Error passing message to client: " + e.getMessage());
+        // System.err.println("Error passing message to client: " +
+        // e.getMessage());
       }
     }
   }

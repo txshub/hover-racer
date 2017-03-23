@@ -55,6 +55,7 @@ public class Window {
     final int TARGET_FPS = 60;
     final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
     long lastFpsTime = System.nanoTime();
+    @SuppressWarnings("unused")
     long fps = 0;
 
     Graphics g = frame.getGraphics();

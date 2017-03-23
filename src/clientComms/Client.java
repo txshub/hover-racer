@@ -6,7 +6,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import game.MultiplayerGame;
@@ -16,6 +15,7 @@ import serverComms.GameRoom;
 import serverComms.GameSettings;
 import serverComms.IDShipData;
 import serverComms.ServerComm;
+import userInterface.MainMenu;
 
 /**
  * Main client class for client/server communications
@@ -37,6 +37,8 @@ public class Client extends Thread {
   public volatile boolean alreadyAccessedRoom = true;
   private GameRoom currentRoom;
   public MultiplayerGame multiplayerGame;
+  private boolean alreadyAccessedIP = true;
+  private String currentIP;
 
   /**
    * Creates a client object and connects to a given server on a given port
@@ -82,13 +84,14 @@ public class Client extends Thread {
       serverOn = false;
       return;
     }
-    System.out.println("Proceeded");
     ClientReceiver receiver = new ClientReceiver(fromServer, this);
     receiver.start();
+    MainMenu.allThreads.add(0, receiver);
     try {
       sendByteMessage(clientName.getBytes(ServerComm.charset), ServerComm.USERSENDING);
       serverStop = new StopDisconnect(this);
       serverStop.start();
+      MainMenu.allThreads.add(0, serverStop);
       receiver.join();
       toServer.close();
       fromServer.close();
@@ -97,8 +100,14 @@ public class Client extends Thread {
       System.err.println("Something wrong: " + e.getMessage());
       // What to do here?
     } catch (InterruptedException e) {
-      System.err.println("Unexpected interruption: " + e.getMessage());
       // What to do here?
+    } finally {
+      try {
+        sendByteMessage(new byte[0], ServerComm.CLIENTDISCONNECT);
+      } catch (IOException e) {
+        System.err.println("Closing due to server disconnection");
+        System.exit(1);
+      }
     }
   }
 
@@ -202,6 +211,16 @@ public class Client extends Thread {
     alreadyAccessedRoom = true;
     sendByteMessage(new byte[0], ServerComm.REFRESHROOM);
     return waitForRoom();
+  }
+
+  public String waitForIP() {
+    while (alreadyAccessedIP) {
+      try {
+        Thread.sleep(100);
+      } catch (InterruptedException e) {
+      }
+    }
+    return currentIP;
   }
 
   /**
@@ -318,5 +337,10 @@ public class Client extends Thread {
   public void setMultiplayerGame(MultiplayerGame multiplayerGame) {
     this.multiplayerGame = multiplayerGame;
 
+  }
+
+  public void setIP(String ip) {
+    this.currentIP = ip;
+    alreadyAccessedIP = false;
   }
 }

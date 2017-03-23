@@ -86,8 +86,7 @@ public class GameSettings {
    * Returns a string representing the data
    */
   public String toString() {
-    return seed + "|" + maxPlayers + "|" + lapCount + "|" + lobbyName + "|"
-        + setupData.toString();
+    return seed + "|" + maxPlayers + "|" + lapCount + "|" + lobbyName + "|" + setupData.toString();
   }
 
   /**

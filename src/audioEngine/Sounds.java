@@ -30,6 +30,7 @@ public class Sounds {
   public static String COLLISION = PATH + "collision.wav";
   public static String BEEP_1 = PATH + "beep1.wav";
   public static String BEEP_2 = PATH + "beep2.wav";
+  public static String ANDHISNAMEIS = PATH + "andHisNameIs.wav";
 
   // The list of songs
   public static String[] songs = { MUSIC_1, MUSIC_2, MUSIC_3 };
@@ -61,6 +62,7 @@ public class Sounds {
     map.put(COLLISION, AudioMaster.loadSound(COLLISION));
     map.put(BEEP_1, AudioMaster.loadSound(BEEP_1));
     map.put(BEEP_2, AudioMaster.loadSound(BEEP_2));
+    map.put(ANDHISNAMEIS, AudioMaster.loadSound(ANDHISNAMEIS));
   }
 
   /**

@@ -24,6 +24,11 @@ public class FontRenderer {
     shader = new FontShader();
   }
 
+  /**
+   * Render a list of texts
+   * 
+   * @param texts
+   */
   public void render(Map<FontType, List<GUIText>> texts) {
     prepare();
 
@@ -42,6 +47,9 @@ public class FontRenderer {
     endRendering();
   }
 
+  /*
+   * Cleanup the font shader
+   */
   public void cleanUp() {
     shader.cleanUp();
   }

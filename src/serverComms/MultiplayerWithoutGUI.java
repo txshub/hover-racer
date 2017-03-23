@@ -11,7 +11,7 @@ public class MultiplayerWithoutGUI {
   private static final String MACHINE_NAME = "localhost";
   private static Client client;
   private static final String SEED = "12983";
-  private static final int MAX_PLAYERS = 8;
+  private static final int MAX_PLAYERS = 4;
   private static final int LAPS = 1;
   private static final int SHIP_TYPE = 1;
   private static final String LOBBY_NAME = "Testonium";

@@ -54,6 +54,7 @@ public abstract class InputController {
     save();
   }
 
+  @SuppressWarnings("unchecked")
   protected void load() {
     try {
       Scanner scanner = new Scanner(new File(SETTINGS_PATH));
