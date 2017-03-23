@@ -14,7 +14,8 @@ public class TestLobby {
     Lobby l = new Lobby(5151);
     l.clientTable.add(name);
     l.remove(name);
-    if (l.clientTable.userExists(name)) fail("User existed after delete");
+    if (l.clientTable.userExists(name))
+      fail("User existed after delete");
   }
 
 }

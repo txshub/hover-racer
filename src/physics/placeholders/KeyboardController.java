@@ -9,10 +9,11 @@ import java.util.HashSet;
 import input.Action;
 
 /**
- * Keyboard controller for steering a player controlled ship with the keyboard. The default mapping
- * is W-FORWARD, S-BRAK< A-STRAFE_LEFT, D-STRAFE_RIGHT, right arrow-TURN_RIGHT, left arrow-TURN LEFT
- * Mappings can be changes with the changeKey function. This class is a KeyListener - make sure to
- * add it where needed.
+ * Keyboard controller for steering a player controlled ship with the keyboard.
+ * The default mapping is W-FORWARD, S-BRAK< A-STRAFE_LEFT, D-STRAFE_RIGHT,
+ * right arrow-TURN_RIGHT, left arrow-TURN LEFT Mappings can be changes with the
+ * changeKey function. This class is a KeyListener - make sure to add it where
+ * needed.
  * 
  * @author Maciej Bogacki
  */
@@ -62,13 +63,15 @@ public class KeyboardController implements KeyListener, ControllerInt {
   @Override
   public void keyPressed(KeyEvent e) {
     Action action = mapping.get(e.getKeyCode());
-    if (action != null) pressed.add(action);
+    if (action != null)
+      pressed.add(action);
   }
 
   @Override
   public void keyReleased(KeyEvent e) {
     Action action = mapping.get(e.getKeyCode());
-    if (action != null) pressed.remove(action);
+    if (action != null)
+      pressed.remove(action);
   }
 
   @Override

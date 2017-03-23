@@ -6,7 +6,8 @@ import gameEngine.renderEngine.Loader;
 
 /**
  * 
- * SuperClass that all UI elements such as Labels and TexturedUIElements should extend.
+ * SuperClass that all UI elements such as Labels and TexturedUIElements should
+ * extend.
  * 
  * @author Reece Bennett
  *

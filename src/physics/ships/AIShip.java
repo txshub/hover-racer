@@ -49,7 +49,8 @@ public class AIShip extends Ship {
 
   @Override
   public void update(float delta) {
-    if (debug) System.out.print("AI: " + getId() + " ");
+    if (debug)
+      System.out.print("AI: " + getId() + " ");
 
     float thrust = 0, turn = 0, strafe = 0;
 
@@ -57,7 +58,8 @@ public class AIShip extends Ship {
     float rot = getRotation().y;
 
     TrackPoint nextPoint = track.get(nextPointIndex);
-    // TrackPoint nextNextPoint = nextPointIndex + 1 >= track.size() ? track.get(0)
+    // TrackPoint nextNextPoint = nextPointIndex + 1 >= track.size() ?
+    // track.get(0)
     // : track.get(nextPointIndex + 1);
     TrackPoint prevPoint = nextPointIndex == 0 ? track.get(track.size() - 1)
         : track.get(nextPointIndex - 1);

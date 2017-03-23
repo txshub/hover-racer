@@ -26,15 +26,18 @@ public class testClient {
     String name = "Bob";
     int port = 1111;
     Client test = new Client(name, port, local);
-    if (!test.clientName.equals(name)) fail("Name given not equal to actual name");
-    if (test.serverOn) fail("Server reported on when it was off");
+    if (!test.clientName.equals(name))
+      fail("Name given not equal to actual name");
+    if (test.serverOn)
+      fail("Server reported on when it was off");
     test.serverOn = true;
     test.start();
     try {
       Thread.sleep(2000);
     } catch (Exception e) {
     }
-    if (test.serverOn) fail("Server reported on when it was off");
+    if (test.serverOn)
+      fail("Server reported on when it was off");
   }
 
   @Test
@@ -44,15 +47,18 @@ public class testClient {
     Lobby lobby = new Lobby(port);
     String name = "Mike";
     Client test = new Client(name, port, local);
-    if (!test.clientName.equals(name)) fail("Name given not equal to actual name");
-    if (!test.serverOn) fail("Server reported off when it was on");
+    if (!test.clientName.equals(name))
+      fail("Name given not equal to actual name");
+    if (!test.serverOn)
+      fail("Server reported off when it was on");
     test.start();
     try {
       Thread.sleep(1000);
     } catch (InterruptedException e) {
       fail("InterruptedException");
     }
-    if (!lobby.clientTable.userExists(name)) fail("Name not in server after joining");
+    if (!lobby.clientTable.userExists(name))
+      fail("Name not in server after joining");
   }
 
   @Test
@@ -67,17 +73,24 @@ public class testClient {
       test.start();
       Thread.sleep(1000);
       ArrayList<GameRoom> rooms = test.requestAllGames();
-      if (rooms.size() != 0) fail("Game exists when none were created");
+      if (rooms.size() != 0)
+        fail("Game exists when none were created");
       test.createGame(seed, maxPlayers, lapCount, lobbyName, data);
       Thread.sleep(1000);
       rooms = test.requestAllGames();
-      if (rooms.size() != 1) fail("Wrong number of games when 1 was created");
+      if (rooms.size() != 1)
+        fail("Wrong number of games when 1 was created");
       GameRoom room = rooms.get(0);
-      if (!room.getHostName().equals(name)) fail("Hostname incorrect");
-      if (!room.getSeed().equals(seed)) fail("Seed incorrect");
-      if (room.getNoPlayers() != maxPlayers) fail("Max players incorrect");
-      if (room.getLaps() != lapCount) fail("Lap count incorrect");
-      if (!room.getName().equals(lobbyName)) fail("Lobby name incorrect");
+      if (!room.getHostName().equals(name))
+        fail("Hostname incorrect");
+      if (!room.getSeed().equals(seed))
+        fail("Seed incorrect");
+      if (room.getNoPlayers() != maxPlayers)
+        fail("Max players incorrect");
+      if (room.getLaps() != lapCount)
+        fail("Lap count incorrect");
+      if (!room.getName().equals(lobbyName))
+        fail("Lobby name incorrect");
     } catch (IOException e) {
       fail("IOException");
     } catch (InterruptedException e) {
@@ -107,7 +120,8 @@ public class testClient {
       Thread.sleep(1000);
       GameRoom room1 = test1.getUpdatedRoom();
       GameRoom room2 = test2.getUpdatedRoom();
-      if (!room1.toString().equals(room2.toString())) fail("Rooms not the same");
+      if (!room1.toString().equals(room2.toString()))
+        fail("Rooms not the same");
     } catch (IOException e) {
       fail("IOException");
     } catch (InterruptedException e) {

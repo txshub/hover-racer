@@ -26,7 +26,8 @@ public class DummyReceiverFail extends ClientReceiver {
         server.close();
       }
       ByteArrayByte fullMsg = new ByteArrayByte(msg);
-      if (fullMsg.getType() == ServerComm.BADUSER) ;
+      if (fullMsg.getType() == ServerComm.BADUSER)
+        ;
       testsPassed = true;
     } catch (IOException e) {
 

@@ -16,8 +16,8 @@ import physics.placeholders.KeyboardController;
 import physics.ships.LegacyShip;
 
 /**
- * Class for handling the basic ship physics visualisation. Redone based on code by Reece Bennett
- * that he used to test his AI.
+ * Class for handling the basic ship physics visualisation. Redone based on code
+ * by Reece Bennett that he used to test his AI.
  */
 public class Window {
 
@@ -27,8 +27,8 @@ public class Window {
     // ArrayList<TrackPoint> track = trackComponent.getTrack();
 
     /*
-     * Display.create(); Keyboard.create(); Ship testShip = new Ship(new Vector3(10f, 10f, 30f), new
-     * LwjglController());
+     * Display.create(); Keyboard.create(); Ship testShip = new Ship(new
+     * Vector3(10f, 10f, 30f), new LwjglController());
      */
 
     KeyboardController input = new KeyboardController();

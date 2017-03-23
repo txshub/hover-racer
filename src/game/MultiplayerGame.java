@@ -217,10 +217,10 @@ public class MultiplayerGame {
   public void update(float delta) {
     input.update();
     if (Keyboard.isKeyDown(Keyboard.KEY_0)) {
-    	input = new KeyboardController();
+      input = new KeyboardController();
       ships.getPlayerShip().setInput(input);
     } else if (Keyboard.isKeyDown(Keyboard.KEY_9)) {
-    	input = new JoystickController();
+      input = new JoystickController();
       ships.getPlayerShip().setInput(input);
     }
 
@@ -279,14 +279,20 @@ public class MultiplayerGame {
 
     // Check for audio controls
     /** @author Tudor */
-    if (input.wasPressed(Action.MUSIC_UP) > 0.5f) AudioMaster.increaseMusicVolume();
-    if (input.wasPressed(Action.MUSIC_DOWN) > 0.5f) AudioMaster.decreaseMusicVolume();
-    if (input.wasPressed(Action.MUSIC_SKIP) > 0.5f) AudioMaster.skipInGameMusic();
-    if (input.wasPressed(Action.SFX_UP) > 0.5f) AudioMaster.increaseSFXVolume();
-    if (input.wasPressed(Action.SFX_DOWN) > 0.5f) AudioMaster.decreaseSFXVolume();
+    if (input.wasPressed(Action.MUSIC_UP) > 0.5f)
+      AudioMaster.increaseMusicVolume();
+    if (input.wasPressed(Action.MUSIC_DOWN) > 0.5f)
+      AudioMaster.decreaseMusicVolume();
+    if (input.wasPressed(Action.MUSIC_SKIP) > 0.5f)
+      AudioMaster.skipInGameMusic();
+    if (input.wasPressed(Action.SFX_UP) > 0.5f)
+      AudioMaster.increaseSFXVolume();
+    if (input.wasPressed(Action.SFX_DOWN) > 0.5f)
+      AudioMaster.decreaseSFXVolume();
 
     // Allow inputs iff the race has started
-    if (System.nanoTime() > startsAt) ships.getPlayerShip().start();
+    if (System.nanoTime() > startsAt)
+      ships.getPlayerShip().start();
 
     ships.updateShips(delta);
     try {
@@ -304,8 +310,8 @@ public class MultiplayerGame {
     if (currentMenu.equals("none")) {
       if (!finishContainer.isVisible() && finished) {
         // Enable for great bantz
-//        countDown.stop();
-//        countDown.play(Sounds.ANDHISNAMEIS);
+        // countDown.stop();
+        // countDown.play(Sounds.ANDHISNAMEIS);
         finishContainer.setVisibility(true);
       } else if (finished) {
         for (int i = 0; i < leaderboard.size(); i++) {
@@ -770,9 +776,11 @@ public class MultiplayerGame {
 
   public void updateFinishData(byte[] msg) {
     for (int i = 0; i < msg.length; i++) {
-      if (!nicknames.get(msg[i]).equals(leaderboard.get(i))) changed = true;
+      if (!nicknames.get(msg[i]).equals(leaderboard.get(i)))
+        changed = true;
       leaderboard.set(i, nicknames.get(msg[i]));
-      if (msg[i] == ships.getPlayerShip().getId()) ships.getPlayerShip().finish();
+      if (msg[i] == ships.getPlayerShip().getId())
+        ships.getPlayerShip().finish();
     }
 
   }

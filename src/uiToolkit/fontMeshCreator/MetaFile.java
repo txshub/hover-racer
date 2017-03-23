@@ -94,7 +94,8 @@ public class MetaFile {
   }
 
   /**
-   * Gets the {@code int} value of the variable with a certain name on the current line.
+   * Gets the {@code int} value of the variable with a certain name on the
+   * current line.
    * 
    * @param variable
    *          - the name of the variable.
@@ -147,7 +148,8 @@ public class MetaFile {
   }
 
   /**
-   * Loads the data about how much padding is used around each character in the texture atlas.
+   * Loads the data about how much padding is used around each character in the
+   * texture atlas.
    */
   private void loadPaddingData() {
     processNextLine();
@@ -157,8 +159,9 @@ public class MetaFile {
   }
 
   /**
-   * Loads information about the line height for this font in pixels, and uses this as a way to find
-   * the conversion rate between pixels in the texture atlas and screen-space.
+   * Loads information about the line height for this font in pixels, and uses
+   * this as a way to find the conversion rate between pixels in the texture
+   * atlas and screen-space.
    */
   private void loadLineSizes() {
     processNextLine();
@@ -168,7 +171,8 @@ public class MetaFile {
   }
 
   /**
-   * Loads in data about each character and stores the data in the {@link Character} class.
+   * Loads in data about each character and stores the data in the
+   * {@link Character} class.
    * 
    * @param imageWidth
    *          - the width of the texture atlas in pixels.
@@ -185,8 +189,9 @@ public class MetaFile {
   }
 
   /**
-   * Loads all the data about one character in the texture atlas and converts it all from 'pixels'
-   * to 'screen-space' before storing. The effects of padding are also removed from the data.
+   * Loads all the data about one character in the texture atlas and converts it
+   * all from 'pixels' to 'screen-space' before storing. The effects of padding
+   * are also removed from the data.
    * 
    * @param imageSize
    *          - the size of the texture atlas in pixels.

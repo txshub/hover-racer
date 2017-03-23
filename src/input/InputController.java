@@ -119,8 +119,8 @@ public abstract class InputController {
   public void printSettings() {
     /*
      * for (Entry<Integer, Action> entry : mapping.entrySet()) { String key =
-     * entry.getKey().toString(); String value = entry.getValue().toString(); System.out.println(key
-     * + " -> " + value); }
+     * entry.getKey().toString(); String value = entry.getValue().toString();
+     * System.out.println(key + " -> " + value); }
      */
   }
 }

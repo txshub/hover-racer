@@ -13,7 +13,8 @@ import javafx.scene.text.Font;
 
 /**
  * 
- * @author Andreea Gheorghe Class that defines a toggle button for the audio engine.
+ * @author Andreea Gheorghe Class that defines a toggle button for the audio
+ *         engine.
  *
  */
 public class ToggleButton extends HBox {

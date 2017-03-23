@@ -20,15 +20,15 @@ import javafx.stage.Stage;
 
 /**
  * 
- * @author Andreea Gheorghe Class that implements the pop up windows that will be used for error
- *         handling throughout the User Interface.
+ * @author Andreea Gheorghe Class that implements the pop up windows that will
+ *         be used for error handling throughout the User Interface.
  *
  */
 public class PopUpWindow {
 
   /**
-   * Displays the pop up window with a given text, to reflect the type of error and the action that
-   * must be taken by the user.
+   * Displays the pop up window with a given text, to reflect the type of error
+   * and the action that must be taken by the user.
    * 
    * @param popText
    *          The error text.

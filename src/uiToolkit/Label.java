@@ -84,10 +84,12 @@ public class Label extends UIElement {
   }
 
   private void createText() {
-    if (text != null) text.remove();
+    if (text != null)
+      text.remove();
     text = new GUIText(content, size, font, new Vector2f(toScreenSpace(position)),
         lineLength / Display.getWidth(), centered);
-    if (colour != null) setColour(colour);
+    if (colour != null)
+      setColour(colour);
   }
 
 }

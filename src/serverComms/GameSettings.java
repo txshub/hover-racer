@@ -31,7 +31,8 @@ public class GameSettings {
    * @param setupData
    *          The ship data for the host
    * @throws IllegalArgumentException
-   *           If the lobby name contains a new line symbol (will break the communications)
+   *           If the lobby name contains a new line symbol (will break the
+   *           communications)
    */
   public GameSettings(String seed, int maxPlayers, int lapCount, String lobbyName,
       ShipSetupData setupData) throws IllegalArgumentException {

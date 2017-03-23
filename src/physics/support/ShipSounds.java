@@ -14,8 +14,9 @@ import audioEngine.Source;
 import physics.core.Ship;
 
 /**
- * Class that handles all sounds coming from ships, currently limited to sounds of engines with
- * sounds of collisions on the way. Constructed and updated by PlayerShip.
+ * Class that handles all sounds coming from ships, currently limited to sounds
+ * of engines with sounds of collisions on the way. Constructed and updated by
+ * PlayerShip.
  * 
  * @author Maciej Bogacki
  * @author Tudor Suruceanu
@@ -53,8 +54,8 @@ public class ShipSounds implements CollisionListener {
   }
 
   /**
-   * Updates all sources with positions, velocities, pitch, volume etc. Called on each update of
-   * physics.
+   * Updates all sources with positions, velocities, pitch, volume etc. Called
+   * on each update of physics.
    * 
    * @param delta
    *          Time since last call of this method (may or may not be helpful)
@@ -62,7 +63,8 @@ public class ShipSounds implements CollisionListener {
   public void update(float delta) {
 
     float pitch = 1f + player.getVelocity().length() / (player.getMaxSpeed() / 3f);
-    if (pitch > 2f) pitch = 2f;
+    if (pitch > 2f)
+      pitch = 2f;
     playerSource.setPitch(pitch);
 
     // Updates all other ships
@@ -74,14 +76,15 @@ public class ShipSounds implements CollisionListener {
       source.setPosition(sourcePos.x(), sourcePos.y(), sourcePos.z());
 
       float p = 1f + ship.getVelocity().length() / (ship.getMaxSpeed() / 3f);
-      if (p > 2f) p = 2f;
+      if (p > 2f)
+        p = 2f;
       source.setPitch(p);
     }
   }
 
   /**
-   * Called whenever there if a collision between two ships - produces the sound of this collision
-   * (WIP)
+   * Called whenever there if a collision between two ships - produces the sound
+   * of this collision (WIP)
    * 
    * @param first
    *          First ship involved

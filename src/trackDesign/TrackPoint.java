@@ -5,7 +5,8 @@ import java.awt.Graphics2D;
 import org.joml.Vector2f;
 
 /**
- * This class exists in order to have a sortable point, as well as a distance measure
+ * This class exists in order to have a sortable point, as well as a distance
+ * measure
  * 
  * @author simon
  *

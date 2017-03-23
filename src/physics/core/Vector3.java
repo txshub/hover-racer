@@ -6,8 +6,9 @@ import java.util.function.DoubleUnaryOperator;
 import org.joml.Vector3f;
 
 /**
- * Utility class representing a 3-dimensional vector. Custom built for the Ship class. Supports
- * various functional operations, such as applying a lambda to all components at once.
+ * Utility class representing a 3-dimensional vector. Custom built for the Ship
+ * class. Supports various functional operations, such as applying a lambda to
+ * all components at once.
  * 
  * @author Maciej Bogacki
  */
@@ -56,9 +57,10 @@ public class Vector3 extends Vector3f {
   }
 
   /**
-   * For each component, applies the supplied function to both it and the corresponding component in
-   * supplied vector, and stores the result in the components of this vector. For example
-   * forEach(new Vector3f(4,6,7),(a,b)->a+b) would add 4 to x, 6 to y and 7 to z.
+   * For each component, applies the supplied function to both it and the
+   * corresponding component in supplied vector, and stores the result in the
+   * components of this vector. For example forEach(new
+   * Vector3f(4,6,7),(a,b)->a+b) would add 4 to x, 6 to y and 7 to z.
    */
   public Vector3 forEach(Vector3f v, DoubleBinaryOperator f) {
     changeX(x -> f.applyAsDouble(x, v.x));
@@ -73,10 +75,11 @@ public class Vector3 extends Vector3f {
   }
 
   /**
-   * Bounces, or reflects, this vector over a supplied 2d vector, which represents a vertical wall.
-   * The reflection preserves then magnitude of the vector, and then multiplies each component by
-   * elasticity. Used for collisions with track edges. The wall is assumed to be infinite - call
-   * this after collision was already detected.
+   * Bounces, or reflects, this vector over a supplied 2d vector, which
+   * represents a vertical wall. The reflection preserves then magnitude of the
+   * vector, and then multiplies each component by elasticity. Used for
+   * collisions with track edges. The wall is assumed to be infinite - call this
+   * after collision was already detected.
    * 
    * @param wall
    *          A 2d direction vector to construct the 3d vertical wall from.
@@ -90,8 +93,10 @@ public class Vector3 extends Vector3f {
     ImVector2f current = new ImVector2f(this);
 
     float cosTheta = current.dot(wall) / (current.length() * wall.length());
-    if (cosTheta < 0) cosTheta *= -1;
-    if (cosTheta < 0 || cosTheta > 1) return;
+    if (cosTheta < 0)
+      cosTheta *= -1;
+    if (cosTheta < 0 || cosTheta > 1)
+      return;
 
     float theta = (float) Math.acos(cosTheta);
     float nLength = (float) (current.length() * Math.sin(theta));

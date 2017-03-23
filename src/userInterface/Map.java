@@ -11,8 +11,8 @@ import trackDesign.TrackPoint;
 
 /**
  * 
- * @author Andreea Gheorghe Class that implements the dynamic track map. Will be used to preview the
- *         track when the user inputs a seed.
+ * @author Andreea Gheorghe Class that implements the dynamic track map. Will be
+ *         used to preview the track when the user inputs a seed.
  *
  */
 public class Map extends Canvas {
@@ -21,7 +21,8 @@ public class Map extends Canvas {
   private String seed;
 
   /**
-   * Constructor for the Map class that generates the track according to a given seed.
+   * Constructor for the Map class that generates the track according to a given
+   * seed.
    * 
    * @param seed
    *          The given seed that will generate the track.

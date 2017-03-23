@@ -33,7 +33,8 @@ public class AudioMaster {
   /** Initialise the master */
   public static void init() {
     // Don't reinitialise the engine
-    if (initialised) return;
+    if (initialised)
+      return;
 
     try {
       AL.create();
@@ -58,7 +59,8 @@ public class AudioMaster {
   }
 
   /**
-   * Set the information related to who listens to the sounds Currently not used outside this class
+   * Set the information related to who listens to the sounds Currently not used
+   * outside this class
    * 
    * @param x
    *          X coordinate

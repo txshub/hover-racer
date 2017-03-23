@@ -15,8 +15,8 @@ import serverComms.Lobby;
 
 /**
  * 
- * @author Andreea Gheorghe Class that implements the design and functionality of the single player
- *         mode window.
+ * @author Andreea Gheorghe Class that implements the design and functionality
+ *         of the single player mode window.
  *
  */
 
@@ -157,8 +157,8 @@ public class CreateGameRoom extends GridPane {
   }
 
   /**
-   * Sets the seed, maximum number of AIs, number of laps and username by taking the input of the
-   * user.
+   * Sets the seed, maximum number of AIs, number of laps and username by taking
+   * the input of the user.
    * 
    * @throws InvalidPlayerNumberException
    */

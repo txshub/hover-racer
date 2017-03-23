@@ -41,13 +41,16 @@ public class TrackMaker {
    * @param minDist
    *          Minimum distance between any 2 given points
    * @param seperateIterations
-   *          Number of iterations to spread any points that are within this minimum distance
+   *          Number of iterations to spread any points that are within this
+   *          minimum distance
    * @param difficulty
-   *          The difficulty for the track between 0 and 100. Closest to 0 is the hardest setting
+   *          The difficulty for the track between 0 and 100. Closest to 0 is
+   *          the hardest setting
    * @param maxDisp
    *          The maximum to displace a point by when applying the difficulty
    * @param subDivs
-   *          The number of subdivisions between each point when smoothing is applied
+   *          The number of subdivisions between each point when smoothing is
+   *          applied
    * @return A track in the form of an arraylist of points
    */
   public static SeedTrack makeTrack(int minTrackPoints, int maxTrackPoints, float minDist,
@@ -74,20 +77,24 @@ public class TrackMaker {
    * @param minDist
    *          Minimum distance between any 2 given points
    * @param seperateIterations
-   *          Number of iterations to spread any points that are within this minimum distance
+   *          Number of iterations to spread any points that are within this
+   *          minimum distance
    * @param difficulty
-   *          The difficulty for the track between 0 and 100. Closest to 0 is the hardest setting
+   *          The difficulty for the track between 0 and 100. Closest to 0 is
+   *          the hardest setting
    * @param maxDisp
    *          The maximum to displace a point by when applying the difficulty
    * @param subDivs
-   *          The number of subdivisions between each point when smoothing is applied
+   *          The number of subdivisions between each point when smoothing is
+   *          applied
    * @return A track in the form of an arraylist of points
    */
   public static SeedTrack makeTrack(long seed, int minTrackPoints, int maxTrackPoints,
       float minDist, int seperateIterations, float difficulty, float maxDisp, int subDivs,
       int minTrackWidth, int maxTrackWidth) {
-    if (seed == 0) return makeTrack((new Random(seed)).nextLong(), minTrackPoints, maxTrackPoints,
-        minDist, seperateIterations, difficulty, maxDisp, subDivs, minTrackWidth, maxTrackWidth);
+    if (seed == 0)
+      return makeTrack((new Random(seed)).nextLong(), minTrackPoints, maxTrackPoints, minDist,
+          seperateIterations, difficulty, maxDisp, subDivs, minTrackWidth, maxTrackWidth);
     // return makeStraightTrack(250);
     Random random = new Random(seed); // Make the random object
     ArrayList<TrackPoint> points = new ArrayList<TrackPoint>();
@@ -117,8 +124,9 @@ public class TrackMaker {
     }
     mergeClosePoints(circuit, minDist * 2);
     spreadAngles(circuit);
-    if (circuit.size() < 5) return makeTrack(random.nextLong(), minTrackPoints, maxTrackPoints,
-        minDist, seperateIterations, difficulty, maxDisp, subDivs, minTrackWidth, maxTrackWidth);
+    if (circuit.size() < 5)
+      return makeTrack(random.nextLong(), minTrackPoints, maxTrackPoints, minDist,
+          seperateIterations, difficulty, maxDisp, subDivs, minTrackWidth, maxTrackWidth);
     // If the track generation has failed spectacularly then try again
 
     makeWidths(circuit, random, minTrackWidth, maxTrackWidth);
@@ -184,7 +192,8 @@ public class TrackMaker {
       }
     }
 
-    if (random.nextBoolean()) return new SeedTrack(seed, finalCircuit);
+    if (random.nextBoolean())
+      return new SeedTrack(seed, finalCircuit);
     Collections.reverse(finalCircuit);
     return new SeedTrack(seed, finalCircuit);
   }
@@ -192,7 +201,8 @@ public class TrackMaker {
   private static boolean intersects(ArrayList<Vector2f> line) {
     for (int i = 0; i < line.size(); i++) {
       for (int j = i + 2; j < line.size(); j++) {
-        if (i == 0 && j == line.size() - 1) continue;
+        if (i == 0 && j == line.size() - 1)
+          continue;
         Vector2f l1a = line.get(i);
         Vector2f l1b = line.get((i + 1) % line.size());
         Vector2f l2a = line.get(j);
@@ -248,7 +258,8 @@ public class TrackMaker {
    * <<<<<<< HEAD Ensures all angles are a minimum of 30 degrees
    * 
    * @param points
-   *          The points of the track ======= Ensures all angles are a minimum of 40 degrees
+   *          The points of the track ======= Ensures all angles are a minimum
+   *          of 40 degrees
    * 
    * @param points
    *          The points of the track >>>>>>> branch 'dev' of
@@ -484,12 +495,14 @@ public class TrackMaker {
   }
 
   /**
-   * Puts a new point in between every set of 2 points and offsets it slightly from the middle
+   * Puts a new point in between every set of 2 points and offsets it slightly
+   * from the middle
    * 
    * @param points
    *          The initial track to add points to
    * @param difficulty
-   *          The difficulty rating (The higher the difficulty, the higher the offset)
+   *          The difficulty rating (The higher the difficulty, the higher the
+   *          offset)
    * @param maxDisplacement
    *          The maximum to displace the new points from the centre
    * @param random
@@ -554,11 +567,13 @@ public class TrackMaker {
   }
 
   /**
-   * Returns all the TrackPoints that form the ConvexHull of all elements of points
+   * Returns all the TrackPoints that form the ConvexHull of all elements of
+   * points
    * 
    * @param points
    *          The initial ArrayList
-   * @return All the TrackPoints that form the ConvexHull of all elements of points
+   * @return All the TrackPoints that form the ConvexHull of all elements of
+   *         points
    */
   public static ArrayList<TrackPoint> convexHull(ArrayList<TrackPoint> points) {
     Collections.sort(points); // Sort the points
@@ -607,8 +622,8 @@ public class TrackMaker {
   }
 
   /**
-   * Returns whether a given angle OAB is straight (returns 0), clockwise (returns >0) or
-   * anti-clockwise (returns <0)
+   * Returns whether a given angle OAB is straight (returns 0), clockwise
+   * (returns >0) or anti-clockwise (returns <0)
    * 
    * @param o
    *          Point O

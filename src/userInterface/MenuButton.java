@@ -15,8 +15,8 @@ import javafx.scene.text.Text;
 
 /**
  * 
- * @author Andreea Gheorghe Class that implements the customised design of a menu button, which will
- *         be used throughout the User Interface.
+ * @author Andreea Gheorghe Class that implements the customised design of a
+ *         menu button, which will be used throughout the User Interface.
  *
  */
 public class MenuButton extends StackPane {
@@ -29,8 +29,8 @@ public class MenuButton extends StackPane {
   private Source audioSource;
 
   /**
-   * Constructor for the MenuButton class that creates a menu button, according to the given style
-   * settings.
+   * Constructor for the MenuButton class that creates a menu button, according
+   * to the given style settings.
    * 
    * @param name
    *          The text that will be displayed on the button.

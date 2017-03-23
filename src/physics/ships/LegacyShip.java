@@ -14,7 +14,8 @@ import trackDesign.TrackPoint;
 import upgrades.ShipTemplate;
 
 /**
- * An old player-controlled ship still used for 2d testing. Do not use in the actual game.
+ * An old player-controlled ship still used for 2d testing. Do not use in the
+ * actual game.
  * 
  * @author Maciej Bogacki
  */
@@ -33,13 +34,20 @@ public class LegacyShip extends Ship {
     float thrust = 0, turn = 0, strafe = 0, jump = 0;
     Collection<Action> keys = input.getPressedKeys();
     // Handle inputs
-    if (keys.contains(Action.FORWARD)) thrust++;
-    if (keys.contains(Action.BREAK)) thrust--;
-    if (keys.contains(Action.TURN_RIGHT)) turn++;
-    if (keys.contains(Action.TURN_LEFT)) turn--;
-    if (keys.contains(Action.STRAFE_RIGHT)) strafe++;
-    if (keys.contains(Action.STRAFE_LEFT)) strafe--;
-    if (keys.contains(Action.JUMP)) jump++;
+    if (keys.contains(Action.FORWARD))
+      thrust++;
+    if (keys.contains(Action.BREAK))
+      thrust--;
+    if (keys.contains(Action.TURN_RIGHT))
+      turn++;
+    if (keys.contains(Action.TURN_LEFT))
+      turn--;
+    if (keys.contains(Action.STRAFE_RIGHT))
+      strafe++;
+    if (keys.contains(Action.STRAFE_LEFT))
+      strafe--;
+    if (keys.contains(Action.JUMP))
+      jump++;
     // Steer and update ship
     super.steer(thrust, turn, strafe, delta);
     super.updatePhysics(delta);

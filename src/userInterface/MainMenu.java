@@ -98,7 +98,8 @@ public class MainMenu extends Application {
         AudioMaster.stopMusic();
         AudioMaster.cleanUp();
         for (Thread t : allThreads) {
-          if (t.isAlive()) t.interrupt();
+          if (t.isAlive())
+            t.interrupt();
         }
         System.exit(0);
       }

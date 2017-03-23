@@ -15,12 +15,14 @@ import trackDesign.TrackPoint;
 import upgrades.ShipTemplate;
 
 /**
- * A single ship entity. Can be controlled by an AI or the player. Handles all the physics, namely
- * (currently): -Keeping track of velocity and position -Applying air resistance -Applying
- * accelerations based on user's input -Keeping track of rotation -Handles gravity and forces of the
- * air cushion, on flat terrain only (so far) -Detecting and reacting to collision with other ships.
- * Can also export itself to an array of floats and update itself with such an array received from
- * server (used for ships controlled by other players/server's AIs)
+ * A single ship entity. Can be controlled by an AI or the player. Handles all
+ * the physics, namely (currently): -Keeping track of velocity and position
+ * -Applying air resistance -Applying accelerations based on user's input
+ * -Keeping track of rotation -Handles gravity and forces of the air cushion, on
+ * flat terrain only (so far) -Detecting and reacting to collision with other
+ * ships. Can also export itself to an array of floats and update itself with
+ * such an array received from server (used for ships controlled by other
+ * players/server's AIs)
  * 
  * @author Maciej Bogacki
  */
@@ -59,7 +61,8 @@ public abstract class Ship extends Entity {
   protected Ship(byte id, TexturedModel model, Vector3f startingPosition, GroundProvider ground,
       ShipTemplate stats, List<TrackPoint> track) {
     super(model, startingPosition, new Vector3(0, 0, 0), 1);
-    if (stats == null) stats = ShipTemplate.getDefault();
+    if (stats == null)
+      stats = ShipTemplate.getDefault();
     this.id = id;
     this.position = new Vector3(startingPosition);
     super.position = this.position;
@@ -77,13 +80,15 @@ public abstract class Ship extends Entity {
 
   /** Adds ships to the list of ships this one can collide with */
   public void addOtherShips(Collection<Ship> ships) {
-    if (ships == null) return;
+    if (ships == null)
+      return;
     ships.forEach(this::addOtherShip);
   }
 
   /** Adds another ship to the list of ships this one can collide with */
   public void addOtherShip(Ship ship) {
-    if (ship.getId() != id) otherShips.add(ship);
+    if (ship.getId() != id)
+      otherShips.add(ship);
   }
 
   public void addBarrier(ArrayList<Vector3f> barrierPoints) {
@@ -91,25 +96,28 @@ public abstract class Ship extends Entity {
   }
 
   /**
-   * Sets the listener for this ship colliding with other ships. Used for the sound engine to make
-   * collision sounds.
+   * Sets the listener for this ship colliding with other ships. Used for the
+   * sound engine to make collision sounds.
    * 
    * @param collisionListener
-   *          Listener to be called whenever a collision with another ship happens
+   *          Listener to be called whenever a collision with another ship
+   *          happens
    */
   public void setCollisionListener(CollisionListener collisionListener) {
     this.collisionListener = collisionListener;
   }
 
   /**
-   * Accelerate in any direction within the 2d horizontal plane. The acceleration is instant; it's
-   * basically just changing velocities. Made public for testing purposes.
+   * Accelerate in any direction within the 2d horizontal plane. The
+   * acceleration is instant; it's basically just changing velocities. Made
+   * public for testing purposes.
    * 
    * @param force
-   *          Force to accelerate with. Force 1 means changing velocity by 1 if in angle is along
-   *          one axis
+   *          Force to accelerate with. Force 1 means changing velocity by 1 if
+   *          in angle is along one axis
    * @param angle
-   *          Direction of the acceleration in standard notation: 0 is right, 0.5pi it forward etc.
+   *          Direction of the acceleration in standard notation: 0 is right,
+   *          0.5pi it forward etc.
    */
   public void accelerate2d(float force, float angle) {
     final float relativeAngle = correctAngle(rotation.y + angle);
@@ -137,7 +145,8 @@ public abstract class Ship extends Entity {
   }
 
   /**
-   * @return The Ship's position as Vector3 instead of Vector3f. Used for internal collision logic
+   * @return The Ship's position as Vector3 instead of Vector3f. Used for
+   *         internal collision logic
    */
   protected Vector3 getInternalPosition() {
     return position.copy();
@@ -145,7 +154,8 @@ public abstract class Ship extends Entity {
 
   /** Changes the velocity to account for a collision with a different ship */
   private void collideWith(Ship ship) {
-    if (collisionListener != null) collisionListener.addCollision(this, ship); // TODO fix sounds
+    if (collisionListener != null)
+      collisionListener.addCollision(this, ship); // TODO fix sounds
     Vector3 pos = ship.getInternalPosition().copy();
     float expectedDistance = ship.getSize() + this.getSize();
     // Apply momentum
@@ -162,7 +172,8 @@ public abstract class Ship extends Entity {
   }
 
   /**
-   * Apply the forces of the air cushion (also bounce off ground if it ever happens)
+   * Apply the forces of the air cushion (also bounce off ground if it ever
+   * happens)
    */
   private void airCushion(float delta) {
     float modifier = finished ? 3f : 1f;
@@ -170,8 +181,9 @@ public abstract class Ship extends Entity {
     if (distance <= 0 && velocity.getY() < 0) {
       position.changeY(y -> y - distance + 1); // Get above ground
       velocity.changeY(y -> -.3 * y); // Change velocity to upward
-    } else if (distance > 0) velocity.changeY(y -> y + delta * modifier * stats.AIR_CUSHION
-        * VERTICAL_SCALE / Math.pow(Math.max(distance, 1), stats.CUSHION_SCALE));
+    } else if (distance > 0)
+      velocity.changeY(y -> y + delta * modifier * stats.AIR_CUSHION * VERTICAL_SCALE
+          / Math.pow(Math.max(distance, 1), stats.CUSHION_SCALE));
   }
 
   /** Handles collisions with the track edges */
@@ -214,25 +226,28 @@ public abstract class Ship extends Entity {
   }
 
   /**
-   * Steers the ships, telling it exactly what to do. All parameters (except for delta) should be
-   * between -1 and 1.
+   * Steers the ships, telling it exactly what to do. All parameters (except for
+   * delta) should be between -1 and 1.
    * 
    * @param thrust
-   *          How fast should the ship accelerate. Negative values do breaking insted.
+   *          How fast should the ship accelerate. Negative values do breaking
+   *          insted.
    * @param turn
-   *          How fast (and in which direction) should the ship turn. Positive values turn right,
-   *          negative turn left.
+   *          How fast (and in which direction) should the ship turn. Positive
+   *          values turn right, negative turn left.
    * @param strafe
    *          How fast should the ship strafe; positive values strafe right.
    * @param brokenDelta
-   *          Time in seconds since the last call of this method. TODO brokenDelta
+   *          Time in seconds since the last call of this method. TODO
+   *          brokenDelta
    */
   protected void steer(float thrust, float turn, float strafe, float brokenDelta) {
     steer(Math.max(0, thrust), -thrust, turn, strafe, brokenDelta);
   }
 
   protected void steer(float thrust, float breaking, float turn, float strafe, float delta) {
-    if (!started) return; // Don't allow input until the race has started
+    if (!started)
+      return; // Don't allow input until the race has started
     // Checking parameters
     if (Math.abs(thrust) > 1 || Math.abs(turn) > 1 || Math.abs(strafe) > 1
         || Math.abs(breaking) > 1) {
@@ -248,7 +263,8 @@ public abstract class Ship extends Entity {
     // Accelerating
     accelerate2d(delta * thrust * stats.ACCELERATION, (float) Math.PI * 1.5f);
     // Breaking
-    if (breaking > 0) airResistance(delta * breaking * stats.BREAK_POWER);
+    if (breaking > 0)
+      airResistance(delta * breaking * stats.BREAK_POWER);
     // Strafing TODO change to an instant boost (?)
     if (strafe != 0) {
       accelerate2d(delta * strafe * stats.ACCELERATION, (float) Math.PI);
@@ -258,7 +274,8 @@ public abstract class Ship extends Entity {
   }
 
   /**
-   * Corrects an angle to fit between 0 and 2pi (e.g. 7.13pi->1.13pi, -0.13pi->1.87pi)
+   * Corrects an angle to fit between 0 and 2pi (e.g. 7.13pi->1.13pi,
+   * -0.13pi->1.87pi)
    */
   private float correctAngle(float angle) {
     while (angle < 0)
@@ -284,7 +301,8 @@ public abstract class Ship extends Entity {
     // Do physics
     airResistance(delta);
     shipCollisions();
-    if (!finished) trackCollision();
+    if (!finished)
+      trackCollision();
     gravity(delta);
     airCushion(delta);
     updateRotation(delta);
@@ -295,15 +313,16 @@ public abstract class Ship extends Entity {
   }
 
   /**
-   * Allows the player to control the ship from now on. Call when the race starts.
+   * Allows the player to control the ship from now on. Call when the race
+   * starts.
    */
   public void start() {
     this.started = true;
   }
 
   /**
-   * Finished the race for this ship, causing it to move up and not interfere with ships that are
-   * still racing
+   * Finished the race for this ship, causing it to move up and not interfere
+   * with ships that are still racing
    */
   public void finish() {
     this.finished = true;
@@ -363,18 +382,19 @@ public abstract class Ship extends Entity {
   }
 
   /**
-   * @return Approximated max speed. This is the point where air resistance and acceleration would
-   *         average out. Actual speed might be more due to other factors. Currently only used by
-   *         the sound engine.
+   * @return Approximated max speed. This is the point where air resistance and
+   *         acceleration would average out. Actual speed might be more due to
+   *         other factors. Currently only used by the sound engine.
    */
   public float getMaxSpeed() {
     return stats.MAX_SPEED;
   }
 
   /**
-   * Updates this ship. This includes receiving packets from server for RemoteShip, taking input
-   * from the player for PlayerShip and making decisions what to do for AIship. Excluding
-   * RemoteShip, this method also updates physics.
+   * Updates this ship. This includes receiving packets from server for
+   * RemoteShip, taking input from the player for PlayerShip and making
+   * decisions what to do for AIship. Excluding RemoteShip, this method also
+   * updates physics.
    * 
    * @param delta
    *          Time since last call of this function in seconds

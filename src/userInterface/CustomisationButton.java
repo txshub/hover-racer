@@ -18,8 +18,8 @@ import javafx.scene.text.TextAlignment;
 
 /**
  * 
- * @author Andreea Gheorghe Class that defines the style of a button used for the ship customisation
- *         window.
+ * @author Andreea Gheorghe Class that defines the style of a button used for
+ *         the ship customisation window.
  *
  */
 

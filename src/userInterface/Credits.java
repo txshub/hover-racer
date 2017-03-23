@@ -7,8 +7,8 @@ import javafx.scene.text.Text;
 
 /**
  * 
- * @author Andreea Gheorghe Class that implements the design of the credits window, that is
- *         displayed in the game menu.
+ * @author Andreea Gheorghe Class that implements the design of the credits
+ *         window, that is displayed in the game menu.
  *
  */
 
@@ -22,7 +22,8 @@ public class Credits extends GridPane {
   private Text contribution6Text;
 
   /**
-   * Constructor for the Credits class that defines the style for the UI elements.
+   * Constructor for the Credits class that defines the style for the UI
+   * elements.
    */
   public Credits() {
 

@@ -10,8 +10,8 @@ import javafx.scene.text.Text;
 
 /**
  * 
- * @author Andreea Gheorghe Class that implements the text style that will be used throughout the
- *         User Interface.
+ * @author Andreea Gheorghe Class that implements the text style that will be
+ *         used throughout the User Interface.
  *
  */
 public class TextStyle {

@@ -37,7 +37,8 @@ public class ServerSender extends Thread {
         ByteArrayByte msg = queue.take();
         ServerComm.writeByteMessage(msg.getMsg(), msg.getType(), toClient);
       } catch (IOException e) {
-        // System.err.println("Error passing message to client: " + e.getMessage());
+        // System.err.println("Error passing message to client: " +
+        // e.getMessage());
       }
     }
   }

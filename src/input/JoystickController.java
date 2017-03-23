@@ -100,43 +100,43 @@ public class JoystickController extends InputController {
         float value = controller.getAxisValue(i);
         System.out.print(value + ", ");
         switch (axisMapping.get(i)) {
-          case FORWARD:
-            if (thrust) {
-              if (value < 0f) {
-                keyStatus.put(Action.FORWARD, -value);
-                keyStatus.put(Action.BACKWARD, 0f);
-              } else {
-                keyStatus.put(Action.FORWARD, 0f);
-                keyStatus.put(Action.BACKWARD, value);
-              }
+        case FORWARD:
+          if (thrust) {
+            if (value < 0f) {
+              keyStatus.put(Action.FORWARD, -value);
+              keyStatus.put(Action.BACKWARD, 0f);
+            } else {
+              keyStatus.put(Action.FORWARD, 0f);
+              keyStatus.put(Action.BACKWARD, value);
             }
-            break;
-          case STRAFE_RIGHT:
-            if (strafe) {
-              if (value > 0f) {
-                keyStatus.put(Action.STRAFE_RIGHT, value);
-                keyStatus.put(Action.STRAFE_LEFT, 0f);
-              } else {
-                keyStatus.put(Action.STRAFE_RIGHT, 0f);
-                keyStatus.put(Action.STRAFE_LEFT, -value);
+          }
+          break;
+        case STRAFE_RIGHT:
+          if (strafe) {
+            if (value > 0f) {
+              keyStatus.put(Action.STRAFE_RIGHT, value);
+              keyStatus.put(Action.STRAFE_LEFT, 0f);
+            } else {
+              keyStatus.put(Action.STRAFE_RIGHT, 0f);
+              keyStatus.put(Action.STRAFE_LEFT, -value);
 
-              }
             }
-            break;
-          case TURN_RIGHT:
-            if (turn) {
-              if (value > 0f) {
-                keyStatus.put(Action.TURN_RIGHT, value);
-                keyStatus.put(Action.TURN_LEFT, 0f);
-              } else {
-                keyStatus.put(Action.TURN_RIGHT, 0f);
-                keyStatus.put(Action.TURN_LEFT, -value);
-              }
+          }
+          break;
+        case TURN_RIGHT:
+          if (turn) {
+            if (value > 0f) {
+              keyStatus.put(Action.TURN_RIGHT, value);
+              keyStatus.put(Action.TURN_LEFT, 0f);
+            } else {
+              keyStatus.put(Action.TURN_RIGHT, 0f);
+              keyStatus.put(Action.TURN_LEFT, -value);
             }
-            break;
-          default:
-            keyStatus.put(axisMapping.get(i), value);
-            break;
+          }
+          break;
+        default:
+          keyStatus.put(axisMapping.get(i), value);
+          break;
         }
       }
     }

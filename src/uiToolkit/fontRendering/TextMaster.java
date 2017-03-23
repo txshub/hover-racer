@@ -43,8 +43,8 @@ public class TextMaster {
   }
 
   /**
-   * Removes a text from the textBatch for that font. If the textBatch is now empty, remove it as
-   * well.
+   * Removes a text from the textBatch for that font. If the textBatch is now
+   * empty, remove it as well.
    * 
    * @param text
    */

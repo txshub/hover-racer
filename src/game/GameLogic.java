@@ -109,8 +109,10 @@ public class GameLogic {
       }
       return;
     }
-    if (lastTrackPoint < last) System.err.println("WRONG WAY!");
-    if (lastTrackPoint - last > 1) System.err.println("PENALTY: You left the track!");
+    if (lastTrackPoint < last)
+      System.err.println("WRONG WAY!");
+    if (lastTrackPoint - last > 1)
+      System.err.println("PENALTY: You left the track!");
 
   }
 

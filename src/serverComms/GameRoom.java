@@ -25,11 +25,14 @@ import userInterface.MainMenu;
  */
 public class GameRoom {
 
-  // Time between sending the RaceSetupData and start of the race, in nanoseconds
-  // TODO It's currently low for easy resting, might increase it for the actual game
+  // Time between sending the RaceSetupData and start of the race, in
+  // nanoseconds
+  // TODO It's currently low for easy resting, might increase it for the actual
+  // game
   private static final long TIME_TO_START = 15L * 1000000000L; // 15 sec
 
-  // Time between the first player (not AI) finishing the race and the race ending, in nanoseconds.
+  // Time between the first player (not AI) finishing the race and the race
+  // ending, in nanoseconds.
   private static final long TIME_TO_END = 30L * 1000000000L; // 30 sec
 
   private static final int SIDE_DISTANCES = 10;
@@ -76,8 +79,9 @@ public class GameRoom {
    */
   public GameRoom(int id, String name, String seed, int maxPlayers, String hostName, int lapCount,
       ClientTable table) {
-    if(ServerComm.DEBUG) System.out.println(
-        hostName + " created a game room " + name + " with id " + id + " and seed " + seed);
+    if (ServerComm.DEBUG)
+      System.out.println(
+          hostName + " created a game room " + name + " with id " + id + " and seed " + seed);
     this.id = id;
     this.name = name;
     this.seed = seed;
@@ -207,7 +211,8 @@ public class GameRoom {
    *          The ship data for the user
    */
   public void addPlayer(ShipSetupData data) {
-    if (data == null) throw new IllegalArgumentException("ShipSetupData cannot be null");
+    if (data == null)
+      throw new IllegalArgumentException("ShipSetupData cannot be null");
     ships.add(data);
     players.add(data.getNickname());
   }
@@ -236,9 +241,11 @@ public class GameRoom {
    *          The name of the caller (to check it is the host calling this)
    */
   public void startGame(String clientName) {
-    if (players.size() == 0) throw new IllegalStateException("Tried starting game with no players");
-    if (ships.size() != players.size()) throw new IllegalStateException(
-        "Mismatch between amount of ships and players when staring game.");
+    if (players.size() == 0)
+      throw new IllegalStateException("Tried starting game with no players");
+    if (ships.size() != players.size())
+      throw new IllegalStateException(
+          "Mismatch between amount of ships and players when staring game.");
     if (clientName.equals(hostName)) {
       inGame = true;
       RaceSetupData setupData = setupRace();
@@ -249,7 +256,8 @@ public class GameRoom {
       allQueues = new ArrayList<CommQueue>();
       for (int i = 0; i < players.size(); i++) {
         table.getReceiver(players.get(i)).setGame(this, i);
-        // sendMessage((byte) i, Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA);
+        // sendMessage((byte) i, Converter.sendRaceData(setupData, i),
+        // ServerComm.RACESETUPDATA);
         table.getQueue(players.get(i)).offer(
             new ByteArrayByte(Converter.sendRaceData(setupData, i), ServerComm.RACESETUPDATA));
         allQueues.add(table.getQueue(players.get(i)));
@@ -401,7 +409,8 @@ public class GameRoom {
   public void update(float delta) {
     if (raceStartsAt == -1)
       throw new IllegalStateException("Update called before the race was started");
-    if (System.nanoTime() >= raceStartsAt) shipManager.startRace();
+    if (System.nanoTime() >= raceStartsAt)
+      shipManager.startRace();
     if (raceEndsAt != -1 && (logic.raceFinished() || System.nanoTime() >= raceEndsAt)) {
       if (!endGameSent) {
         updatedUsers.interrupt();
@@ -424,25 +433,29 @@ public class GameRoom {
     sendMessage(id, Converter.buildLogicData(ranking, finished, currrentLap),
         ServerComm.LOGIC_UPDATE);
     // table.getQueue(players.get(id))
-    // .offer(new ByteArrayByte(Converter.buildLogicData(ranking, finished, currrentLap),
+    // .offer(new ByteArrayByte(Converter.buildLogicData(ranking, finished,
+    // currrentLap),
     // ServerComm.LOGIC_UPDATE));
   }
 
   /**
-   * Sends information about player who finished the race (i.e. the leaderboard) to players who
-   * already finished to race.
+   * Sends information about player who finished the race (i.e. the leaderboard)
+   * to players who already finished to race.
    * 
    * @param id
    *          Id of the client to send the message to
    * @param data
-   *          Data being sent - an array of IDs in the order of finishing (index 0 is first place).
-   *          Should only contain IDs of players who already finished
+   *          Data being sent - an array of IDs in the order of finishing (index
+   *          0 is first place). Should only contain IDs of players who already
+   *          finished
    */
   public void sendFinishData(byte id, byte[] data) {
     sendMessage(id, data, ServerComm.FINISH_DATA);
-    // table.getQueue(players.get(id)).offer(new ByteArrayByte(data, ServerComm.FINISH_DATA));
+    // table.getQueue(players.get(id)).offer(new ByteArrayByte(data,
+    // ServerComm.FINISH_DATA));
     // Sending this message means someone has finished the race
-    if (raceEndsAt == -1) raceEndsAt = System.nanoTime() + TIME_TO_END;
+    if (raceEndsAt == -1)
+      raceEndsAt = System.nanoTime() + TIME_TO_END;
   }
 
   private void sendMessage(byte id, byte[] message, byte type) {

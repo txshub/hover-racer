@@ -6,7 +6,8 @@ import gameEngine.models.TexturedModel;
 
 /**
  * @author rtm592
- * @author Reece Bennett A generic class that holds a model that gets draw in the world
+ * @author Reece Bennett A generic class that holds a model that gets draw in
+ *         the world
  */
 public class Entity {
 

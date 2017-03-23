@@ -22,7 +22,7 @@ public class DisplayManager {
   private static long delta;
 
   private static long secondTimer = 99l;
-  
+
   private static boolean goFullscreen = false;
 
   /**

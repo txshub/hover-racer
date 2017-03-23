@@ -40,7 +40,8 @@ public class TestGameSettings {
         + DataGenerator.basicShipSetup(hostName).toString();
     GameSettings gs = new GameSettings(seed, maxPlayers, lapCount, lobbyName,
         DataGenerator.basicShipSetup(hostName));
-    if (!gs.toString().equals(expected)) fail("String with params wasn't as expected");
+    if (!gs.toString().equals(expected))
+      fail("String with params wasn't as expected");
   }
 
   @Test
@@ -53,7 +54,8 @@ public class TestGameSettings {
     String expected = seed + "|" + maxPlayers + "|" + lapCount + "|" + lobbyName + "|"
         + DataGenerator.basicShipSetup(hostName).toString();
     GameSettings gs = new GameSettings(expected);
-    if (!gs.toString().equals(expected)) fail("String with string wasn't as expected");
+    if (!gs.toString().equals(expected))
+      fail("String with string wasn't as expected");
   }
 
   @Test

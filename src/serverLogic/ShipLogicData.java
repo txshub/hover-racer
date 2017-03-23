@@ -33,7 +33,8 @@ public class ShipLogicData {
 
   public void setFinished(boolean finished) {
     this.finished = finished;
-    if (finished) ship.finish();
+    if (finished)
+      ship.finish();
   }
 
   public int getCurrentLap() {

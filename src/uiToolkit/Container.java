@@ -8,7 +8,8 @@ import gameEngine.renderEngine.Loader;
 
 /**
  * 
- * A TexturedUIElement that can contain other UIElement such as buttons and other containers.
+ * A TexturedUIElement that can contain other UIElement such as buttons and
+ * other containers.
  * 
  * @author Reece Bennett
  *

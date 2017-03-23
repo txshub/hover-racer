@@ -39,7 +39,8 @@ public class FontRenderer {
 
       // Render each instance of that font
       for (GUIText text : texts.get(font)) {
-        if (text.isVisible()) renderText(text);
+        if (text.isVisible())
+          renderText(text);
       }
     }
 

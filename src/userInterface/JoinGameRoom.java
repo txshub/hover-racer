@@ -13,8 +13,9 @@ import serverComms.GameRoom;
 
 /**
  * 
- * @author Andreea Gheorghe Class that implements the design and functionality of joining a game
- *         room, option that is provided in the multiplayer mode options.
+ * @author Andreea Gheorghe Class that implements the design and functionality
+ *         of joining a game room, option that is provided in the multiplayer
+ *         mode options.
  *
  */
 
@@ -57,8 +58,8 @@ public class JoinGameRoom extends GridPane {
   }
 
   /**
-   * Method that refreshes the window, to display updated information of the game room and the
-   * number of connected players.
+   * Method that refreshes the window, to display updated information of the
+   * game room and the number of connected players.
    */
   public void refresh() {
 
@@ -119,7 +120,8 @@ public class JoinGameRoom extends GridPane {
   }
 
   /**
-   * Sets the client to be the current connected client that needs to be accessed in this class.
+   * Sets the client to be the current connected client that needs to be
+   * accessed in this class.
    * 
    * @param client
    *          The connected client.
@@ -130,7 +132,8 @@ public class JoinGameRoom extends GridPane {
   }
 
   /**
-   * Sets the game room list to be an updated game room list, received from the server.
+   * Sets the game room list to be an updated game room list, received from the
+   * server.
    * 
    * @param gameRoomList
    *          The updated game room list.
@@ -141,8 +144,8 @@ public class JoinGameRoom extends GridPane {
   }
 
   /**
-   * Sets the game room id after the user has selected a certain game room from the available game
-   * room list.
+   * Sets the game room id after the user has selected a certain game room from
+   * the available game room list.
    * 
    * @param chosenGRid
    *          The chosen game room id.

@@ -19,7 +19,9 @@ public class Lobby {
     clientTable = new ClientTable(this);
     ServerComm comm = new ServerComm(port, this);
     comm.start();
-    if (port == 4445) MainMenu.allThreads.add(0, comm); // Only add the server if it's single player
+    if (port == 4445)
+      MainMenu.allThreads.add(0, comm); // Only add the server if it's single
+                                        // player
   }
 
   public void remove(String clientName) {

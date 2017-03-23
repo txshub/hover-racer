@@ -12,8 +12,9 @@ import javafx.scene.text.Text;
 
 /**
  * 
- * @author Andreea Gheorghe Class that implements the design and functionality of hosting a game
- *         room, option that is provided in the multiplayer mode options.
+ * @author Andreea Gheorghe Class that implements the design and functionality
+ *         of hosting a game room, option that is provided in the multiplayer
+ *         mode options.
  *
  */
 
@@ -86,7 +87,8 @@ public class HostGameRoom extends GridPane {
   }
 
   /**
-   * Sets the client to be the current connected client that needs to be accessed in this class.
+   * Sets the client to be the current connected client that needs to be
+   * accessed in this class.
    * 
    * @param client
    *          The connected client.
@@ -98,8 +100,8 @@ public class HostGameRoom extends GridPane {
   }
 
   /**
-   * Sets the seed, maximum number of players, number of laps and game room name by taking the input
-   * of the user.
+   * Sets the seed, maximum number of players, number of laps and game room name
+   * by taking the input of the user.
    */
 
   public void setSettings() throws InvalidPlayerNumberException {

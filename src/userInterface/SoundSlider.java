@@ -14,7 +14,8 @@ import javafx.scene.text.Text;
 
 /**
  * 
- * @author Andreea Gheorghe Class that defines the style of the sound effects slider.
+ * @author Andreea Gheorghe Class that defines the style of the sound effects
+ *         slider.
  *
  */
 public class SoundSlider extends GridPane {

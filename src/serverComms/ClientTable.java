@@ -95,7 +95,8 @@ public class ClientTable {
     queueTable.remove(name);
     receivers.remove(name);
     int gameId = getGameID(name);
-    if (gameId != -1) allGames.get(gameId).remove(name);
+    if (gameId != -1)
+      allGames.get(gameId).remove(name);
     games.remove(name);
   }
 
@@ -162,7 +163,8 @@ public class ClientTable {
    * 
    * @param gameSettings
    *          The given settings
-   * @return True if the game was succesfully joined, False if there was a problem making the game
+   * @return True if the game was succesfully joined, False if there was a
+   *         problem making the game
    */
   public boolean addGame(GameSettings gameSettings) {
     allGames.put(nextInt, new GameRoom(nextInt, gameSettings.lobbyName, gameSettings.seed,
@@ -179,8 +181,8 @@ public class ClientTable {
    *          The game number to join
    * @param data
    *          The data with which to connect
-   * @return True if the user was succesfully joined to the lobby. False if not (i.e the gameroom no
-   *         longer exists)
+   * @return True if the user was succesfully joined to the lobby. False if not
+   *         (i.e the gameroom no longer exists)
    */
   public boolean joinGame(int gameNum, ShipSetupData data) {
     for (Map.Entry<Integer, GameRoom> g : allGames.entrySet()) {

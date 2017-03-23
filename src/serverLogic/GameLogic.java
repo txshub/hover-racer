@@ -66,7 +66,8 @@ public class GameLogic {
   private void updateRankings() {
     ArrayList<ShipLogicData> racingPlayers = new ArrayList<ShipLogicData>();
     for (ShipLogicData player : players) {
-      if (!player.finished()) racingPlayers.add(player);
+      if (!player.finished())
+        racingPlayers.add(player);
     }
     try {
       racingPlayers.sort(new Comparator<ShipLogicData>() {
@@ -75,8 +76,10 @@ public class GameLogic {
         public int compare(ShipLogicData p1, ShipLogicData p2) {
           float d1 = getPlayerDist(p1);
           float d2 = getPlayerDist(p2);
-          if (d1 > d2) return -1;
-          if (d1 < d2) return 1;
+          if (d1 > d2)
+            return -1;
+          if (d1 < d2)
+            return 1;
           return 0;
         }
       });
@@ -130,7 +133,8 @@ public class GameLogic {
     }
     if (previous == trackPoints.size() - 1 && lastTrackPoint == 0) {
       if (currentLap == laps && !player.finished()) {
-        if(ServerComm.DEBUG) System.out.println("PLAYER " + player.getId() + " FINISHED THE RACE");
+        if (ServerComm.DEBUG)
+          System.out.println("PLAYER " + player.getId() + " FINISHED THE RACE");
         player.setFinished(true);
         finished++;
       } else {
@@ -138,14 +142,16 @@ public class GameLogic {
       }
     } else {
       if (previous == 0 && lastTrackPoint == trackPoints.size() - 1) {
-        if (currentLap > 0) player.setCurrentLap(currentLap - 1);
+        if (currentLap > 0)
+          player.setCurrentLap(currentLap - 1);
       }
     }
 
   }
 
   /**
-   * Calculate the distance on the track a player has travelled from the begining of the race
+   * Calculate the distance on the track a player has travelled from the
+   * begining of the race
    * 
    * @param player
    *          A specific player
@@ -177,7 +183,8 @@ public class GameLogic {
   }
 
   /**
-   * Method called every frame, updating the ranking and sending the data to clients
+   * Method called every frame, updating the ranking and sending the data to
+   * clients
    */
   public void update() {
     for (ShipLogicData player : players) {
@@ -191,7 +198,8 @@ public class GameLogic {
       if (player.getId() < amountOfPlayers) {
         gameRoom.sendLogicUpdate(player.getId(), player.getRanking(), player.finished(),
             player.getCurrentLap());
-        if (player.finished()) gameRoom.sendFinishData(player.getId(), getRanking());
+        if (player.finished())
+          gameRoom.sendFinishData(player.getId(), getRanking());
       }
     }
   }
@@ -215,7 +223,8 @@ public class GameLogic {
   }
 
   /**
-   * Get the ranking of the players that finished the race as data to be sent to clients
+   * Get the ranking of the players that finished the race as data to be sent to
+   * clients
    * 
    * @return The ranking of the players that finished the race
    */

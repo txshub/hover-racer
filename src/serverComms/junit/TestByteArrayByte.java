@@ -16,8 +16,10 @@ public class TestByteArrayByte {
     byte type = ServerComm.SENDALLGAMES;
     byte[] msg = ("JUnit Test").getBytes(ServerComm.charset);
     ByteArrayByte test = new ByteArrayByte(msg, type);
-    if (!Arrays.equals(msg, test.getMsg())) fail("Messages don't match");
-    if (test.getType() != type) fail("Types don't match");
+    if (!Arrays.equals(msg, test.getMsg()))
+      fail("Messages don't match");
+    if (test.getType() != type)
+      fail("Types don't match");
   }
 
   @Test
@@ -30,8 +32,10 @@ public class TestByteArrayByte {
       out[i + 1] = msg[i];
     }
     ByteArrayByte test = new ByteArrayByte(out);
-    if (!Arrays.equals(msg, test.getMsg())) fail("Messages don't match");
-    if (test.getType() != type) fail("Types don't match");
+    if (!Arrays.equals(msg, test.getMsg()))
+      fail("Messages don't match");
+    if (test.getType() != type)
+      fail("Types don't match");
   }
 
   @Test
@@ -39,7 +43,8 @@ public class TestByteArrayByte {
     byte type = ServerComm.BADPACKET;
     byte[] msg = ("JUnit Test").getBytes(ServerComm.charset);
     ByteArrayByte test = new ByteArrayByte(msg, type);
-    if (!Arrays.equals(msg, test.getMsg())) fail("Messages don't match");
+    if (!Arrays.equals(msg, test.getMsg()))
+      fail("Messages don't match");
   }
 
   @Test
@@ -47,6 +52,7 @@ public class TestByteArrayByte {
     byte type = ServerComm.MAKEGAME;
     byte[] msg = ("").getBytes(ServerComm.charset);
     ByteArrayByte test = new ByteArrayByte(msg, type);
-    if (test.getType() != type) fail("Types don't match");
+    if (test.getType() != type)
+      fail("Types don't match");
   }
 }

@@ -9,8 +9,9 @@ import physics.core.Vector3;
 import physics.ships.RemoteShip;
 
 /**
- * An object representing a Ship entity, exported for transmission over the network. It serves as an
- * intermediate step between a Ship object and a byte array and does all the conversion necessary.
+ * An object representing a Ship entity, exported for transmission over the
+ * network. It serves as an intermediate step between a Ship object and a byte
+ * array and does all the conversion necessary.
  * 
  * @author Maciej Bogacki
  */

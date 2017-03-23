@@ -20,12 +20,15 @@ public class TestServerReceiver {
     c.start();
     try {
       Thread.sleep(1000);
-      if (!l.clientTable.userExists(name)) fail("User wasn't added");
+      if (!l.clientTable.userExists(name))
+        fail("User wasn't added");
       c.createGame("1234", 4, 4, "Test Lobby", DataGenerator.basicShipSetup(name));
-      if (l.clientTable.getGameID(name) == -1) fail("Game wasn't created/joined");
+      if (l.clientTable.getGameID(name) == -1)
+        fail("Game wasn't created/joined");
       c.cleanup();
       Thread.sleep(1000);
-      if (l.clientTable.userExists(name)) fail("User wasn't removed after disconnect");
+      if (l.clientTable.userExists(name))
+        fail("User wasn't removed after disconnect");
     } catch (InterruptedException e) {
       fail("Interrupted");
     } catch (IOException e) {

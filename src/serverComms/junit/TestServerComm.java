@@ -24,7 +24,8 @@ public class TestServerComm {
       Thread.sleep(1000);
     } catch (InterruptedException e) {
     }
-    if (comm2.runThread) fail("Listened on in-use port");
+    if (comm2.runThread)
+      fail("Listened on in-use port");
   }
 
   @Test
@@ -34,12 +35,15 @@ public class TestServerComm {
     ServerComm comm = new ServerComm(5153, l);
     comm.start();
     DummyClient client = new DummyClient("Test", 5153, "localhost");
-    if (!client.serverOn) fail("Server wasn't on");
+    if (!client.serverOn)
+      fail("Server wasn't on");
     client.start();
     try {
       Thread.sleep(2000);
-      if (!client.testsPassed) fail("Tests Failed");
-      if (!l.clientTable.userExists("Test")) fail("User didn't exist after accepted");
+      if (!client.testsPassed)
+        fail("Tests Failed");
+      if (!l.clientTable.userExists("Test"))
+        fail("User didn't exist after accepted");
     } catch (InterruptedException e) {
       fail("Interrupted");
     }

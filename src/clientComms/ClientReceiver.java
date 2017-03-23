@@ -63,7 +63,8 @@ public class ClientReceiver extends Thread {
               .split(System.lineSeparator());
           ArrayList<GameRoom> gameList = new ArrayList<GameRoom>();
           for (String s : allGames) {
-            if (!s.equals("")) gameList.add(new GameRoom(s));
+            if (!s.equals(""))
+              gameList.add(new GameRoom(s));
           }
           client.setGameList(gameList);
         } else if (fullMsg.getType() == ServerComm.INVALIDGAME) {
@@ -87,8 +88,9 @@ public class ClientReceiver extends Thread {
           }
           MainGameLoop.startMultiplayerGame(data, client);
         } else if (fullMsg.getType() == ServerComm.FULLPOSITIONUPDATE) {
-          if (client.getManager() == null) throw new IllegalStateException(
-              "Position update received but ship manager was not added to ClientReceiver");
+          if (client.getManager() == null)
+            throw new IllegalStateException(
+                "Position update received but ship manager was not added to ClientReceiver");
           client.getManager().addPacket(fullMsg.getMsg());
         } else if (fullMsg.getType() == ServerComm.ROOMCLOSED) {
           // Go back to multiplayer menu (need to speak to Andreea)

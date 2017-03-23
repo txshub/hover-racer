@@ -11,8 +11,9 @@ import java.util.Collection;
 import physics.core.Ship;
 
 /**
- * Basic visualisation for testing ship physics. Placeholder until physics is connected to the main
- * engine. Adjusted from code by Reece Bennett that he used to test his AI.
+ * Basic visualisation for testing ship physics. Placeholder until physics is
+ * connected to the main engine. Adjusted from code by Reece Bennett that he
+ * used to test his AI.
  */
 public class Visualisation {
 
@@ -32,8 +33,9 @@ public class Visualisation {
   }
 
   /*
-   * public Visualisation(Ship ships, TrackComponent trackComponent, int scale) { super();
-   * this.ships = ships; this.trackComponent = trackComponent; this.scale = scale; }
+   * public Visualisation(Ship ships, TrackComponent trackComponent, int scale)
+   * { super(); this.ships = ships; this.trackComponent = trackComponent;
+   * this.scale = scale; }
    */
 
   public void draw(Graphics g) {

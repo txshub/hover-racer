@@ -99,12 +99,14 @@ public class ServerComm extends Thread {
       System.err.println("Couldn't listen on port " + portNumber);
       runThread = false;
     }
-    if (runThread && DEBUG) System.out.println("Now listening on port " + portNumber);
+    if (runThread && DEBUG)
+      System.out.println("Now listening on port " + portNumber);
     try {
       while (runThread && !this.isInterrupted()) {
         // Wait for a client to connect
         Socket socket = serverSocket.accept();
-        if (DEBUG) System.out.println("Socket Accepted");
+        if (DEBUG)
+          System.out.println("Socket Accepted");
         // Get a buffered input stream from the client to receive the message
         DataInputStream fromClient = new DataInputStream(
             new BufferedInputStream(socket.getInputStream()));
@@ -113,7 +115,8 @@ public class ServerComm extends Thread {
         fromClient.readFully(data);
         // Create a new ByteArrayByte with this data
         ByteArrayByte msg = new ByteArrayByte(data);
-        if (DEBUG) System.out.println("Request to server: " + new String(msg.getMsg(), charset));
+        if (DEBUG)
+          System.out.println("Request to server: " + new String(msg.getMsg(), charset));
         if (msg.getType() == TESTCONN) {
           // Requesting to join - The message is the client's username
         } else {
@@ -123,7 +126,8 @@ public class ServerComm extends Thread {
             DataOutputStream toClient = new DataOutputStream(
                 new BufferedOutputStream(socket.getOutputStream()));
             writeByteMessage(("Bad Username").getBytes(charset), BADUSER, toClient);
-            if (DEBUG) System.out.println("Sent Bad Username to client");
+            if (DEBUG)
+              System.out.println("Sent Bad Username to client");
           } else { // Valid Username
             lobby.clientTable.add(name);
             DataOutputStream toClient = new DataOutputStream(
@@ -133,14 +137,16 @@ public class ServerComm extends Thread {
             MainMenu.allThreads.add(0, sender);
             lobby.clientTable.getQueue(name)
                 .offer(new ByteArrayByte(getIP().getBytes(charset), ACCEPTEDUSER));
-            if (DEBUG) System.out.println("Sent Accepted User to client");
+            if (DEBUG)
+              System.out.println("Sent Accepted User to client");
             ServerReceiver receiver = new ServerReceiver(name, fromClient, lobby);
             lobby.clientTable.addReceiver(name, receiver);
             receiver.start();
             MainMenu.allThreads.add(0, receiver);
             ArrayList<GameRoom> rooms = new ArrayList<GameRoom>();
             for (GameRoom room : lobby.games) {
-              if (!room.isBusy()) rooms.add(room);
+              if (!room.isBusy())
+                rooms.add(room);
             }
             String out = "";
             for (GameRoom r : rooms) {
@@ -154,10 +160,11 @@ public class ServerComm extends Thread {
     } catch (IOException e) {
       System.err.println("IO error: " + e.getMessage());
     } finally {
-      if (serverSocket != null) try {
-        serverSocket.close();
-      } catch (IOException e) {
-      }
+      if (serverSocket != null)
+        try {
+          serverSocket.close();
+        } catch (IOException e) {
+        }
 
     }
   }
@@ -167,12 +174,14 @@ public class ServerComm extends Thread {
       Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
       while (interfaces.hasMoreElements()) {
         NetworkInterface i = interfaces.nextElement();
-        if (i.isLoopback() || !i.isUp()) continue;
+        if (i.isLoopback() || !i.isUp())
+          continue;
 
         Enumeration<InetAddress> addresses = i.getInetAddresses();
         while (addresses.hasMoreElements()) {
           InetAddress a = addresses.nextElement();
-          if (a.getHostAddress().split("\\.").length == 4) return a.getHostAddress();
+          if (a.getHostAddress().split("\\.").length == 4)
+            return a.getHostAddress();
         }
       }
     } catch (SocketException e) {

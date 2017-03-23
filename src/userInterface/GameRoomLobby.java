@@ -11,9 +11,9 @@ import serverComms.GameRoom;
 
 /**
  * 
- * @author Andreea Gheorghe Class that implements the design and functionality of the game room
- *         waiting lobby, where the user will await the start of the game, which is decided by the
- *         host of the game room.
+ * @author Andreea Gheorghe Class that implements the design and functionality
+ *         of the game room waiting lobby, where the user will await the start
+ *         of the game, which is decided by the host of the game room.
  *
  */
 
@@ -75,8 +75,8 @@ public class GameRoomLobby extends GridPane {
   }
 
   /**
-   * Method that refreshes the game room lobby, by receiving an updated list of connected players
-   * from the server.
+   * Method that refreshes the game room lobby, by receiving an updated list of
+   * connected players from the server.
    */
   public void refresh() {
 
@@ -126,7 +126,8 @@ public class GameRoomLobby extends GridPane {
   }
 
   /**
-   * Sets the client to be the current connected client that needs to be accessed in this class.
+   * Sets the client to be the current connected client that needs to be
+   * accessed in this class.
    * 
    * @param client
    *          The connected client.

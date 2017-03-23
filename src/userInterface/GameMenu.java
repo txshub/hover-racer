@@ -26,8 +26,8 @@ import serverComms.GameRoom;
 import serverComms.Lobby;
 
 /**
- * @author Andreea Gheorghe Main class that manages the functionality of the game menu and the
- *         translations between the different windows.
+ * @author Andreea Gheorghe Main class that manages the functionality of the
+ *         game menu and the translations between the different windows.
  */
 public class GameMenu extends Parent {
 
@@ -1066,8 +1066,8 @@ public class GameMenu extends Parent {
   }
 
   /**
-   * Sets the design of the key bindings window, where the user can access a tutorial of the
-   * controls used in the game.
+   * Sets the design of the key bindings window, where the user can access a
+   * tutorial of the controls used in the game.
    */
   public void buildKeyBindingsWindow() {
 
@@ -1099,7 +1099,8 @@ public class GameMenu extends Parent {
   }
 
   /**
-   * Sets the design of the window where the user connects to the lobby in multiplayer mode.
+   * Sets the design of the window where the user connects to the lobby in
+   * multiplayer mode.
    */
   public void buildConnectMultiWindow() {
 
@@ -1113,8 +1114,8 @@ public class GameMenu extends Parent {
   }
 
   /**
-   * Sets the design of the window that provides options for the multiplayer mode - (host a game,
-   * join a game).
+   * Sets the design of the window that provides options for the multiplayer
+   * mode - (host a game, join a game).
    */
   public void buildMultiOptionsWindow() {
 
@@ -1132,7 +1133,8 @@ public class GameMenu extends Parent {
   }
 
   /**
-   * Sets the design for the host game room window, where the user inputs the game settings.
+   * Sets the design for the host game room window, where the user inputs the
+   * game settings.
    */
   private void buildHostGameRoomWindow() {
 
@@ -1145,7 +1147,8 @@ public class GameMenu extends Parent {
   }
 
   /**
-   * Sets the design for the join game room window, where the user can join an existing game room.
+   * Sets the design for the join game room window, where the user can join an
+   * existing game room.
    */
   private void buildJoinGameRoomWindow() {
 
@@ -1157,8 +1160,9 @@ public class GameMenu extends Parent {
   }
 
   /**
-   * Sets the design for the game room lobby window, where the user can see who is currently
-   * connected to the game room and the host can start the game at any point.
+   * Sets the design for the game room lobby window, where the user can see who
+   * is currently connected to the game room and the host can start the game at
+   * any point.
    */
   private void buildGameRoomLobbyWindow() {
 

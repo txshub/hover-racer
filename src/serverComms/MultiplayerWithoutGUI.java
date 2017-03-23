@@ -43,8 +43,9 @@ public class MultiplayerWithoutGUI {
     client.startGame();
 
     /*
-     * long closeAt = System.nanoTime() + 10000000000l; while (System.nanoTime() < closeAt) {
-     * Thread.sleep(100); } System.out.println("---------------EXITING-----------------");
+     * long closeAt = System.nanoTime() + 10000000000l; while (System.nanoTime()
+     * < closeAt) { Thread.sleep(100); }
+     * System.out.println("---------------EXITING-----------------");
      */
 
   }

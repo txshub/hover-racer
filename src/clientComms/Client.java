@@ -41,14 +41,16 @@ public class Client extends Thread {
   private String currentIP;
 
   /**
-   * Creates a client object and connects to a given server on a given port automagically
+   * Creates a client object and connects to a given server on a given port
+   * automagically
    * 
    * @param clientName
    *          The client's nickname to pass to the server first
    * @param portNumber
    *          The port to send the request on
    * @param machineName
-   *          The machinename of the server host (for testing purposes use localhost)
+   *          The machinename of the server host (for testing purposes use
+   *          localhost)
    * @param gameMenu
    * @param gameMenu
    */
@@ -110,8 +112,8 @@ public class Client extends Thread {
   }
 
   /**
-   * Cleans up the client by stopping the thread that constantly pings the server then sends the
-   * disconnect message to the server
+   * Cleans up the client by stopping the thread that constantly pings the
+   * server then sends the disconnect message to the server
    */
   public void cleanup() {
     serverStop.interrupt();
@@ -123,7 +125,8 @@ public class Client extends Thread {
   }
 
   /**
-   * Sends a request to the server to make a game room then returns the resulting room
+   * Sends a request to the server to make a game room then returns the
+   * resulting room
    * 
    * @param seed
    *          The seed to make the track with
@@ -192,7 +195,8 @@ public class Client extends Thread {
   public void startSinglePlayerGame(String seed, int numAI, int lapCount, ShipSetupData data)
       throws IOException {
     GameRoom room = createGame(seed, numAI + 1, lapCount, "1", data);
-    if (room == null) System.out.println("Null Game");
+    if (room == null)
+      System.out.println("Null Game");
     startGame();
   }
 
@@ -284,8 +288,9 @@ public class Client extends Thread {
     toServer.writeInt(out.length);
     toServer.write(out);
     toServer.flush();
-    if (DEBUG) System.out.println("Sent message " + new String(message, ServerComm.charset)
-        + " with tag " + Byte.toString(type));
+    if (DEBUG)
+      System.out.println("Sent message " + new String(message, ServerComm.charset) + " with tag "
+          + Byte.toString(type));
   }
 
   /**

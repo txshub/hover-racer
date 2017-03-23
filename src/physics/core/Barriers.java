@@ -23,8 +23,9 @@ public class Barriers {
    * Creates the barriers from points that are used to render them.
    * 
    * @param track
-   *          List of the points on the track, as supplied for the rendering engine. Even indexes
-   *          are points on the left of the track and odd are points on the right.
+   *          List of the points on the track, as supplied for the rendering
+   *          engine. Even indexes are points on the left of the track and odd
+   *          are points on the right.
    */
   public Barriers(List<Vector3f> track) {
     this.track = track;
@@ -39,13 +40,15 @@ public class Barriers {
   }
 
   /**
-   * Creates all lines a supplied ship collides with (there might occasionally be more than one at a
-   * time).
+   * Creates all lines a supplied ship collides with (there might occasionally
+   * be more than one at a time).
    * 
    * @param ship
-   *          Ship to find the collisions for. Only its position and size are used.
-   * @return Lines describing walls to collide with. They are all 2d direction vectors, and the x
-   *         and z components of the velocity vector should be reflected on them for collisions.
+   *          Ship to find the collisions for. Only its position and size are
+   *          used.
+   * @return Lines describing walls to collide with. They are all 2d direction
+   *         vectors, and the x and z components of the velocity vector should
+   *         be reflected on them for collisions.
    */
   public List<ImVector2f> allCollisions(Ship ship) {
     List<ImVector2f> res = new LinkedList<>();
@@ -58,8 +61,8 @@ public class Barriers {
   }
 
   /**
-   * Returns all collision vectors for a specific point on the track (both left and right walls from
-   * that point). For details see {@link allCollisions}.
+   * Returns all collision vectors for a specific point on the track (both left
+   * and right walls from that point). For details see {@link allCollisions}.
    */
   private List<ImVector2f> collisionVectorsAt(ImVector2f pos, float size, int point) {
     List<ImVector2f> res = new LinkedList<>();
@@ -69,8 +72,8 @@ public class Barriers {
   }
 
   /**
-   * Returns all collision vectors for a specific wall on the track. For details see
-   * {@link allCollisions}.
+   * Returns all collision vectors for a specific wall on the track. For details
+   * see {@link allCollisions}.
    */
   private Optional<ImVector2f> collisionVector(ImVector2f pos, ImVector2f start, ImVector2f end,
       float size) {
@@ -93,15 +96,18 @@ public class Barriers {
    */
   private float distanceTo(ImVector2f pos, ImVector2f start, ImVector2f end) {
     float dist2 = start.distanceSquared(end);
-    if (dist2 == 0) return pos.distance(start);
+    if (dist2 == 0)
+      return pos.distance(start);
 
     double dist = crossPoint(start, end, pos) / start.distance(end);
 
     double dot1 = end.sub(start).dot(pos.sub(end));
-    if (dot1 > 0) return end.distance(pos);
+    if (dot1 > 0)
+      return end.distance(pos);
 
     double dot2 = start.sub(end).dot(pos.sub(start));
-    if (dot2 > 0) return start.distance(pos);
+    if (dot2 > 0)
+      return start.distance(pos);
 
     return (float) Math.abs(dist);
 
@@ -116,8 +122,8 @@ public class Barriers {
 
   /**
    * @param i
-   *          Index of the point. Values outside the bounds are cast to proper indexes: -1 becomes
-   *          the last point etc.
+   *          Index of the point. Values outside the bounds are cast to proper
+   *          indexes: -1 becomes the last point etc.
    * @return Point from the left barriers with given index
    */
   private ImVector2f left(int i) {
@@ -126,8 +132,8 @@ public class Barriers {
 
   /**
    * @param i
-   *          Index of the point. Values outside the bounds are cast to proper indexes: -1 becomes
-   *          the last point etc.
+   *          Index of the point. Values outside the bounds are cast to proper
+   *          indexes: -1 becomes the last point etc.
    * @return Point from the right barriers with given index
    */
   private ImVector2f right(int i) {

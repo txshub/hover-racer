@@ -4,7 +4,8 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
 /**
- * @author rtm592 The class that controls the camera This is used as the games viewport
+ * @author rtm592 The class that controls the camera This is used as the games
+ *         viewport
  */
 public class Camera {
 

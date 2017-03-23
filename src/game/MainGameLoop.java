@@ -27,13 +27,15 @@ public class MainGameLoop extends Thread {
     // updateDur is the minimum time between updates
     // deltaUPS is the time since the last update
     double updateDur = 1000000000 / updateCap;
-    if (updateCap == -1) updateDur = 0;
+    if (updateCap == -1)
+      updateDur = 0;
     double deltaUPS = 0.0;
 
     // renderDur is the minimum time between renders
     // deltaFPS is the time since the last render
     double renderDur = 1000000000 / frameCap;
-    if (frameCap == -1) renderDur = 0;
+    if (frameCap == -1)
+      renderDur = 0;
     double deltaFPS = 0.0;
 
     // FPS and UPS reporting variables
@@ -70,7 +72,8 @@ public class MainGameLoop extends Thread {
       if (System.currentTimeMillis() > timer + 1000) {
         // if (debug) System.out.println("Hover Racer - ups: " + ups + " | fps:
         // " + fps);
-        if (debug) DisplayManager.changeTitle("Hover Racer - ups: " + ups + " | fps: " + fps);
+        if (debug)
+          DisplayManager.changeTitle("Hover Racer - ups: " + ups + " | fps: " + fps);
         timer += 1000;
         fps = 0;
         ups = 0;
@@ -80,7 +83,8 @@ public class MainGameLoop extends Thread {
     game.cleanUp();
     System.out.println("Closing Threads");
     for (Thread t : MainMenu.allThreads) {
-      if (!t.equals(this) && !t.isInterrupted()) t.interrupt();
+      if (!t.equals(this) && !t.isInterrupted())
+        t.interrupt();
     }
     MainMenu.allThreads.clear();
     Platform.runLater(new Runnable() {
