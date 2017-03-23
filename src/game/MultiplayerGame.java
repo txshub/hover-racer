@@ -87,7 +87,6 @@ public class MultiplayerGame {
   private boolean finished;
   private List<String> nicknames;
   private ArrayList<String> leaderboard;
-  private boolean changed = false; // TODO temporary
 
   // UI Globals
   private Container menu;
@@ -776,8 +775,6 @@ public class MultiplayerGame {
 
   public void updateFinishData(byte[] msg) {
     for (int i = 0; i < msg.length; i++) {
-      if (!nicknames.get(msg[i]).equals(leaderboard.get(i)))
-        changed = true;
       leaderboard.set(i, nicknames.get(msg[i]));
       if (msg[i] == ships.getPlayerShip().getId())
         ships.getPlayerShip().finish();

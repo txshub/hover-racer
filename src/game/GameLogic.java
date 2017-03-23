@@ -18,7 +18,6 @@ public class GameLogic {
 
   private float playerDist;
   private Ship player;
-  private ArrayList<Ship> opponents;
   private HashMap<Integer, Integer> ranking;
   private HashMap<TrackPoint, Float> pointsDist;
   private ArrayList<TrackPoint> trackPoints;
@@ -37,10 +36,9 @@ public class GameLogic {
    * @param track
    *          The track seed of the race
    */
-  public GameLogic(Ship player, ArrayList<Ship> opponents, SeedTrack track, int laps) {
+  public GameLogic(Ship player, SeedTrack track, int laps) {
 
     this.player = player;
-    this.opponents = opponents;
     this.laps = laps;
 
     currentLap = 1;
