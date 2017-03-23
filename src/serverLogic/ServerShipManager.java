@@ -99,8 +99,6 @@ public class ServerShipManager implements ServerShipProvider {
 
   private ArrayList<Vector3f> makeBarrierPoints(ArrayList<TrackPoint> trackPoints) {
     float trackHeight = SeedTrack.getTrackHeight();
-    float barrierHeight = SeedTrack.getBarrierHeight();
-    float barrierWidth = SeedTrack.getBarrierWidth();
     ArrayList<Vector3f> barrierPoints = new ArrayList<>();
     for (int i = 0; i <= trackPoints.size(); i++) {
       TrackPoint curPoint = null;
