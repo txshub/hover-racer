@@ -217,9 +217,11 @@ public class MultiplayerGame {
   public void update(float delta) {
     input.update();
     if (Keyboard.isKeyDown(Keyboard.KEY_0)) {
-      ships.getPlayerShip().setInput(new KeyboardController());
+    	input = new KeyboardController();
+      ships.getPlayerShip().setInput(input);
     } else if (Keyboard.isKeyDown(Keyboard.KEY_9)) {
-      ships.getPlayerShip().setInput(new JoystickController());
+    	input = new JoystickController();
+      ships.getPlayerShip().setInput(input);
     }
 
     // Display tutorial before race
