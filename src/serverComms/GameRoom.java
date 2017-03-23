@@ -76,7 +76,7 @@ public class GameRoom {
    */
   public GameRoom(int id, String name, String seed, int maxPlayers, String hostName, int lapCount,
       ClientTable table) {
-    System.out.println(
+    if(ServerComm.DEBUG) System.out.println(
         hostName + " created a game room " + name + " with id " + id + " and seed " + seed);
     this.id = id;
     this.name = name;
