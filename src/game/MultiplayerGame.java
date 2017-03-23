@@ -303,6 +303,9 @@ public class MultiplayerGame {
 
     if (currentMenu.equals("none")) {
       if (!finishContainer.isVisible() && finished) {
+        // Enable for great bantz
+//        countDown.stop();
+//        countDown.play(Sounds.ANDHISNAMEIS);
         finishContainer.setVisibility(true);
       } else if (finished) {
         for (int i = 0; i < leaderboard.size(); i++) {
