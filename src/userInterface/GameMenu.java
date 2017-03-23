@@ -258,7 +258,7 @@ public class GameMenu extends Parent {
       }
     });
 
-    btnKeyBindings = new MenuButton("KEY BINDINGS", 350, 70, 30);
+    btnKeyBindings = new MenuButton("CONTROLS", 350, 70, 30);
     btnKeyBindings.setOnMouseClicked(event -> {
 
       // GAME TUTORIAL
