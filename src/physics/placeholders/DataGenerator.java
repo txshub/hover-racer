@@ -10,6 +10,9 @@ import com.google.gson.GsonBuilder;
 import physics.network.ShipSetupData;
 import upgrades.ShipTemplate;
 
+/** Generates data for various purposes
+ * 
+ * @author Maciej Bogacki */
 public class DataGenerator {
 
 	private static final String SETTINGS_PATH = "src/resources/data/";
