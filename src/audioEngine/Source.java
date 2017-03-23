@@ -30,8 +30,7 @@ public class Source {
   }
 
   /**
-   * Set the initial volume of a source. It will be altered when changing the
-   * master volume.
+   * Set the initial volume of a source. It will be altered when changing the master volume.
    * 
    * @param initVolume
    *          The initial volume
@@ -45,8 +44,7 @@ public class Source {
    * Play the actual sound
    * 
    * @param sound
-   *          The path to the audio file to be played (example:
-   *          Sounds.SOMETHING)
+   *          The path to the audio file to be played (example: Sounds.SOMETHING)
    */
   public void play(String sound) {
     stop();
@@ -171,12 +169,12 @@ public class Source {
     setCurrentVolume(master * initVolume);
   }
 
-	public float getCurrentVolume() {
-		return currentVolume;
-	}
+  public float getCurrentVolume() {
+    return currentVolume;
+  }
 
-	public float getInitialVolume() {
-		return initVolume;
-	}
+  public float getInitialVolume() {
+    return initVolume;
+  }
 
 }

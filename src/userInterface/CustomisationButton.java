@@ -18,127 +18,131 @@ import javafx.scene.text.TextAlignment;
 
 /**
  * 
- * @author Andreea Gheorghe Class that defines the style of a button used for
- *         the ship customisation window.
+ * @author Andreea Gheorghe Class that defines the style of a button used for the ship customisation
+ *         window.
  *
  */
 
 public class CustomisationButton extends StackPane {
 
-	Rectangle background;
-	boolean clicked;
-	Source audioSource;
+  Rectangle background;
+  boolean clicked;
+  Source audioSource;
 
-	/**
-	 * Constructor for the CustomisationButton class.
-	 * 
-	 * @param shipType
-	 *            The type of the ship from the three available models.
-	 * @param width
-	 *            The width of the button.
-	 * @param height
-	 *            The height of the button.
-	 * @param fontSize
-	 *            The font size of the description text.
-	 * @param image
-	 *            The ship image.
-	 */
-	public CustomisationButton(int shipType, int width, int height, int fontSize, ImageView image) {
+  /**
+   * Constructor for the CustomisationButton class.
+   * 
+   * @param shipType
+   *          The type of the ship from the three available models.
+   * @param width
+   *          The width of the button.
+   * @param height
+   *          The height of the button.
+   * @param fontSize
+   *          The font size of the description text.
+   * @param image
+   *          The ship image.
+   */
+  public CustomisationButton(int shipType, int width, int height, int fontSize, ImageView image) {
 
-		TextStyle descriptionText;
-		Text descriptionStyled = null;
-		
-		audioSource = AudioMaster.createSFXSource();
+    TextStyle descriptionText;
+    Text descriptionStyled = null;
 
-		if (shipType == 1) {
+    audioSource = AudioMaster.createSFXSource();
 
-			String description = "GOOD ACCELERATION \n POWERFUL BRAKES";
-			descriptionText = new TextStyle(description, fontSize);
-			descriptionStyled = descriptionText.getTextStyled();
+    if (shipType == 1) {
 
-		} else if (shipType == 2) {
+      String description = "GOOD ACCELERATION \n POWERFUL BRAKES";
+      descriptionText = new TextStyle(description, fontSize);
+      descriptionStyled = descriptionText.getTextStyled();
 
-			String description = "MAXIMUM SPEED \n HARD TO CONTROL";
-			descriptionText = new TextStyle(description, fontSize);
-			descriptionStyled = descriptionText.getTextStyled();
+    } else if (shipType == 2) {
 
-		} else if (shipType == 3) {
+      String description = "MAXIMUM SPEED \n HARD TO CONTROL";
+      descriptionText = new TextStyle(description, fontSize);
+      descriptionStyled = descriptionText.getTextStyled();
 
-			String description = "LARGEST ACCELERATION \n NO BRAKES";
-			descriptionText = new TextStyle(description, fontSize);
-			descriptionStyled = descriptionText.getTextStyled();
-		}
+    } else if (shipType == 3) {
 
-		background = new Rectangle(width, height);
-		background.setOpacity(0.8);
-		setSelectedEffect(Color.BLACK);
+      String description = "LARGEST ACCELERATION \n NO BRAKES";
+      descriptionText = new TextStyle(description, fontSize);
+      descriptionStyled = descriptionText.getTextStyled();
+    }
 
-		GaussianBlur blur = new GaussianBlur(3.6);
-		background.setEffect(blur);
+    background = new Rectangle(width, height);
+    background.setOpacity(0.8);
+    setSelectedEffect(Color.BLACK);
 
-		VBox box = new VBox(10);
-		descriptionStyled.setTextAlignment(TextAlignment.CENTER);
-		box.getChildren().addAll(image, descriptionStyled);
-		box.setAlignment(Pos.CENTER);
+    GaussianBlur blur = new GaussianBlur(3.6);
+    background.setEffect(blur);
 
-		this.setOnMouseEntered(event -> {
+    VBox box = new VBox(10);
+    descriptionStyled.setTextAlignment(TextAlignment.CENTER);
+    box.getChildren().addAll(image, descriptionStyled);
+    box.setAlignment(Pos.CENTER);
 
-			background.setTranslateX(6);
-			box.setTranslateX(6);
-			if (!this.clicked) {
-				setSelectedEffect(Color.DIMGRAY);
-			}
-		});
+    this.setOnMouseEntered(event -> {
 
-		this.setOnMouseExited(event -> {
+      background.setTranslateX(6);
+      box.setTranslateX(6);
+      if (!this.clicked) {
+        setSelectedEffect(Color.DIMGRAY);
+      }
+    });
 
-			if (!this.clicked) {
-				background.setTranslateX(0);
-				box.setTranslateX(0);
-				setSelectedEffect(Color.BLACK);
-			} else {
-				background.setTranslateX(0);
-				box.setTranslateX(0);
-			}
-			
-			audioSource.play(Sounds.BUTTON_HOVER);
-		});
+    this.setOnMouseExited(event -> {
 
-		// Create glow effect to let user know they have clicked a button
-		DropShadow effect = new DropShadow(50, Color.WHITE);
-		effect.setInput(new Glow());
+      if (!this.clicked) {
+        background.setTranslateX(0);
+        box.setTranslateX(0);
+        setSelectedEffect(Color.BLACK);
+      } else {
+        background.setTranslateX(0);
+        box.setTranslateX(0);
+      }
 
-		// Clicked on button
-		this.setOnMousePressed(event -> {
-			setEffect(effect);
-			audioSource.play(Sounds.BUTTON_CLICK);
-		});
+      audioSource.play(Sounds.BUTTON_HOVER);
+    });
 
-		// Release button and remove effect
-		this.setOnMouseReleased(event -> {
-			setEffect(null);
-		});
+    // Create glow effect to let user know they have clicked a button
+    DropShadow effect = new DropShadow(50, Color.WHITE);
+    effect.setInput(new Glow());
 
-		getChildren().addAll(background, box);
+    // Clicked on button
+    this.setOnMousePressed(event -> {
+      setEffect(effect);
+      audioSource.play(Sounds.BUTTON_CLICK);
+    });
 
-		this.setCache(true);
-		this.setCacheHint(CacheHint.SPEED);
-	}
+    // Release button and remove effect
+    this.setOnMouseReleased(event -> {
+      setEffect(null);
+    });
 
-	/**
-	 * Sets the colour of the button.
-	 * @param colour The chosen colour.
-	 */
-	public void setSelectedEffect(Color colour) {
-		background.setFill(colour);
-	}
+    getChildren().addAll(background, box);
 
-	/**
-	 * Sets the clicked status of the button.
-	 * @param clicked The clicked status.
-	 */
-	public void setClicked(boolean clicked) {
-		this.clicked = clicked;
-	}
+    this.setCache(true);
+    this.setCacheHint(CacheHint.SPEED);
+  }
+
+  /**
+   * Sets the colour of the button.
+   * 
+   * @param colour
+   *          The chosen colour.
+   */
+  public void setSelectedEffect(Color colour) {
+    background.setFill(colour);
+  }
+
+  /**
+   * Sets the clicked status of the button.
+   * 
+   * @param clicked
+   *          The clicked status.
+   */
+  public void setClicked(boolean clicked) {
+    this.clicked = clicked;
+  }
 
 }

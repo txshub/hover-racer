@@ -26,8 +26,7 @@ public class DummyReceiver extends ClientReceiver {
         server.close();
       }
       ByteArrayByte fullMsg = new ByteArrayByte(msg);
-      if (fullMsg.getType() == ServerComm.ACCEPTEDUSER)
-        testsPassed = true;
+      if (fullMsg.getType() == ServerComm.ACCEPTEDUSER) testsPassed = true;
     } catch (IOException e) {
 
     }

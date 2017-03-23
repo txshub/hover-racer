@@ -11,8 +11,7 @@ import trackDesign.TrackPoint;
 import upgrades.ShipTemplate;
 
 /**
- * Ship that does nothing (except following physics and colliding with things).
- * Used for testing.
+ * Ship that does nothing (except following physics and colliding with things). Used for testing.
  * 
  * @author Maciej Bogacki
  */

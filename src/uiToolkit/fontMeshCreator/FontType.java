@@ -3,8 +3,8 @@ package uiToolkit.fontMeshCreator;
 import java.io.File;
 
 /**
- * Represents a font. It holds the font's texture atlas as well as having the
- * ability to create the quad vertices for any text using this font.
+ * Represents a font. It holds the font's texture atlas as well as having the ability to create the
+ * quad vertices for any text using this font.
  */
 public class FontType {
 
@@ -12,14 +12,12 @@ public class FontType {
   private TextMeshCreator loader;
 
   /**
-   * Creates a new font and loads up the data about each character from the font
-   * file.
+   * Creates a new font and loads up the data about each character from the font file.
    * 
    * @param textureAtlas
    *          - the ID of the font atlas texture.
    * @param fontFile
-   *          - the font file containing information about each character in the
-   *          texture atlas.
+   *          - the font file containing information about each character in the texture atlas.
    */
   public FontType(int textureAtlas, File fontFile) {
     this.textureAtlas = textureAtlas;
@@ -34,9 +32,9 @@ public class FontType {
   }
 
   /**
-   * Takes in an unloaded text and calculate all of the vertices for the quads
-   * on which this text will be rendered. The vertex positions and texture
-   * coords and calculated based on the information from the font file.
+   * Takes in an unloaded text and calculate all of the vertices for the quads on which this text
+   * will be rendered. The vertex positions and texture coords and calculated based on the
+   * information from the font file.
    * 
    * @param text
    *          - the unloaded text.

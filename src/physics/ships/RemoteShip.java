@@ -13,8 +13,8 @@ import trackDesign.TrackPoint;
 import upgrades.ShipTemplate;
 
 /**
- * Represents a ship controlled by remote packets. This is all but the player's
- * ship on client side and all but AI's ships on the server side.
+ * Represents a ship controlled by remote packets. This is all but the player's ship on client side
+ * and all but AI's ships on the server side.
  * 
  * @author Maciej Bogacki
  */

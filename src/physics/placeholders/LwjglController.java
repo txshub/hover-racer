@@ -44,8 +44,7 @@ public class LwjglController implements ControllerInt {
    * Change the key mapping for a specific action.
    * 
    * @param action
-   *          Action to update the corresponding key for, e.g. Action.TURN_LEFT
-   *          for turning left
+   *          Action to update the corresponding key for, e.g. Action.TURN_LEFT for turning left
    * @param key
    *          Key code, e.g. Keyboard.KEY_A for a
    */
@@ -58,8 +57,7 @@ public class LwjglController implements ControllerInt {
   }
 
   /**
-   * Updates a specific key, adding to 'pressed' if it's pressed and removing if
-   * it's not
+   * Updates a specific key, adding to 'pressed' if it's pressed and removing if it's not
    * 
    * @param keyCode
    *          Key code for the key to update

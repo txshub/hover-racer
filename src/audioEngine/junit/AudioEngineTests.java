@@ -1,7 +1,6 @@
 package audioEngine.junit;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -43,14 +42,16 @@ public class AudioEngineTests {
   public void test3m() {
     source1.setCurrentVolume(0f);
     AudioMaster.increaseMusicVolume();
-    assert (source1.getCurrentVolume() == source1.getInitialVolume() * AudioMaster.getMusicVolume());
+    assert (source1.getCurrentVolume() == source1.getInitialVolume()
+        * AudioMaster.getMusicVolume());
   }
 
   @Test
   public void test4m() {
     source1.setCurrentVolume(0f);
     AudioMaster.decreaseMusicVolume();
-    assert (source1.getCurrentVolume() == source1.getInitialVolume() * AudioMaster.getMusicVolume());
+    assert (source1.getCurrentVolume() == source1.getInitialVolume()
+        * AudioMaster.getMusicVolume());
   }
 
   @Test

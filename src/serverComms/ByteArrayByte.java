@@ -1,8 +1,8 @@
 package serverComms;
 
 /**
- * Container for Client-Server communications, holds a byte to specify the type
- * of message and also a byte array for the actual message
+ * Container for Client-Server communications, holds a byte to specify the type of message and also
+ * a byte array for the actual message
  * 
  * @author simon
  *

@@ -39,7 +39,6 @@ import input.Action;
 import input.InputController;
 import input.JoystickController;
 import input.KeyboardController;
-import javafx.application.Platform;
 import physics.network.RaceSetupData;
 import physics.placeholders.FlatGroundProvider;
 import physics.ships.MultiplayerShipManager;
@@ -53,7 +52,6 @@ import uiToolkit.Label;
 import uiToolkit.UIRenderer;
 import uiToolkit.fontMeshCreator.FontType;
 import uiToolkit.fontRendering.TextMaster;
-import userInterface.MainMenu;
 
 /**
  * Main game class
@@ -218,10 +216,10 @@ public class MultiplayerGame {
 
   public void update(float delta) {
     input.update();
-    if(Keyboard.isKeyDown(Keyboard.KEY_0)){
-        ships.getPlayerShip().setInput(new KeyboardController());
-    }else if(Keyboard.isKeyDown(Keyboard.KEY_9)){
-        ships.getPlayerShip().setInput(new JoystickController());
+    if (Keyboard.isKeyDown(Keyboard.KEY_0)) {
+      ships.getPlayerShip().setInput(new KeyboardController());
+    } else if (Keyboard.isKeyDown(Keyboard.KEY_9)) {
+      ships.getPlayerShip().setInput(new JoystickController());
     }
 
     // Display tutorial before race
@@ -279,20 +277,14 @@ public class MultiplayerGame {
 
     // Check for audio controls
     /** @author Tudor */
-    if (input.wasPressed(Action.MUSIC_UP) > 0.5f)
-      AudioMaster.increaseMusicVolume();
-    if (input.wasPressed(Action.MUSIC_DOWN) > 0.5f)
-      AudioMaster.decreaseMusicVolume();
-    if (input.wasPressed(Action.MUSIC_SKIP) > 0.5f)
-      AudioMaster.skipInGameMusic();
-    if (input.wasPressed(Action.SFX_UP) > 0.5f)
-      AudioMaster.increaseSFXVolume();
-    if (input.wasPressed(Action.SFX_DOWN) > 0.5f)
-      AudioMaster.decreaseSFXVolume();
+    if (input.wasPressed(Action.MUSIC_UP) > 0.5f) AudioMaster.increaseMusicVolume();
+    if (input.wasPressed(Action.MUSIC_DOWN) > 0.5f) AudioMaster.decreaseMusicVolume();
+    if (input.wasPressed(Action.MUSIC_SKIP) > 0.5f) AudioMaster.skipInGameMusic();
+    if (input.wasPressed(Action.SFX_UP) > 0.5f) AudioMaster.increaseSFXVolume();
+    if (input.wasPressed(Action.SFX_DOWN) > 0.5f) AudioMaster.decreaseSFXVolume();
 
     // Allow inputs iff the race has started
-    if (System.nanoTime() > startsAt)
-      ships.getPlayerShip().start();
+    if (System.nanoTime() > startsAt) ships.getPlayerShip().start();
 
     ships.updateShips(delta);
     try {
@@ -773,11 +765,9 @@ public class MultiplayerGame {
 
   public void updateFinishData(byte[] msg) {
     for (int i = 0; i < msg.length; i++) {
-      if (!nicknames.get(msg[i]).equals(leaderboard.get(i)))
-        changed = true;
+      if (!nicknames.get(msg[i]).equals(leaderboard.get(i))) changed = true;
       leaderboard.set(i, nicknames.get(msg[i]));
-      if (msg[i] == ships.getPlayerShip().getId())
-        ships.getPlayerShip().finish();
+      if (msg[i] == ships.getPlayerShip().getId()) ships.getPlayerShip().finish();
     }
 
   }

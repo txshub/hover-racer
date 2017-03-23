@@ -49,8 +49,7 @@ public class AIShip extends Ship {
 
   @Override
   public void update(float delta) {
-    if (debug)
-      System.out.print("AI: " + getId() + " ");
+    if (debug) System.out.print("AI: " + getId() + " ");
 
     float thrust = 0, turn = 0, strafe = 0;
 
@@ -58,8 +57,8 @@ public class AIShip extends Ship {
     float rot = getRotation().y;
 
     TrackPoint nextPoint = track.get(nextPointIndex);
-//    TrackPoint nextNextPoint = nextPointIndex + 1 >= track.size() ? track.get(0)
-//        : track.get(nextPointIndex + 1);
+    // TrackPoint nextNextPoint = nextPointIndex + 1 >= track.size() ? track.get(0)
+    // : track.get(nextPointIndex + 1);
     TrackPoint prevPoint = nextPointIndex == 0 ? track.get(track.size() - 1)
         : track.get(nextPointIndex - 1);
 
@@ -79,8 +78,8 @@ public class AIShip extends Ship {
     float y1 = prevPoint.y;
     float x2 = nextPoint.x;
     float y2 = nextPoint.y;
-    
-    // -1 on left of track, +1 on right of track 
+
+    // -1 on left of track, +1 on right of track
     float perpSide = dirNP.angle(dirSeg);
     perpSide /= -Math.abs(perpSide);
 
@@ -97,11 +96,11 @@ public class AIShip extends Ship {
           turn = Math.max(-1f, turnAngle);
         }
 
-         if (perpDistance > strafeMargin) {
-         strafe = Math.min(1, perpDistance / track.get(nextPointIndex).getWidth() * 2);
-         } else if (perpDistance < -strafeMargin) {
-         strafe = Math.max(-1, perpDistance / track.get(nextPointIndex).getWidth() * 2);
-         }
+        if (perpDistance > strafeMargin) {
+          strafe = Math.min(1, perpDistance / track.get(nextPointIndex).getWidth() * 2);
+        } else if (perpDistance < -strafeMargin) {
+          strafe = Math.max(-1, perpDistance / track.get(nextPointIndex).getWidth() * 2);
+        }
 
         thrust = 1f;
 

@@ -26,6 +26,7 @@ public class FontRenderer {
 
   /**
    * Render a list of texts
+   * 
    * @param texts
    */
   public void render(Map<FontType, List<GUIText>> texts) {
@@ -38,8 +39,7 @@ public class FontRenderer {
 
       // Render each instance of that font
       for (GUIText text : texts.get(font)) {
-        if (text.isVisible())
-          renderText(text);
+        if (text.isVisible()) renderText(text);
       }
     }
 

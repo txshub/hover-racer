@@ -20,7 +20,7 @@ public class TestAITurn {
   private Vector2f point;
   private float rotationY;
   private int expectedTurn;
-  
+
   public TestAITurn(Vector2f point, float rotationY, int expectedTurn) {
     this.point = point;
     this.rotationY = rotationY;
@@ -29,13 +29,10 @@ public class TestAITurn {
 
   @Parameterized.Parameters
   public static Collection<Object[]> inputs() {
-     return Arrays.asList(new Object[][] {
-       // Data: point1 position, ship rotation, expected turn 0/-1/1
-        { new Vector2f(0, 1000), 0, 0 },
-        { new Vector2f(1000, 0), 0, 1 },
-        { new Vector2f(0, 1000), -90, 1 },
-        { new Vector2f(0, 1000), 90, -1 }
-     });
+    return Arrays.asList(new Object[][] {
+        // Data: point1 position, ship rotation, expected turn 0/-1/1
+        { new Vector2f(0, 1000), 0, 0 }, { new Vector2f(1000, 0), 0, 1 },
+        { new Vector2f(0, 1000), -90, 1 }, { new Vector2f(0, 1000), 90, -1 } });
   }
 
   @Test
@@ -44,17 +41,17 @@ public class TestAITurn {
     track.add(new TrackPoint(0, 0));
     track.add(new TrackPoint(point.x, point.y));
 
-    AIShip ship = new AIShip(new Byte("0"), null, new Vector3f(), null,
-        new FlatGroundProvider(0), track, null);
-    
+    AIShip ship = new AIShip(new Byte("0"), null, new Vector3f(), null, new FlatGroundProvider(0),
+        track, null);
+
     // Create some fake barrier points
     ArrayList<Vector3f> barrierPoints = new ArrayList<>();
     barrierPoints.add(new Vector3f(1000, 0, 0));
     barrierPoints.add(new Vector3f(1001, 0, 0));
     ship.addBarrier(barrierPoints);
-    
+
     ship.start();
-    
+
     ship.setPosition(new Vector3f());
     ship.setRotation(new Vector3f(0, rotationY, 0));
 
@@ -71,8 +68,8 @@ public class TestAITurn {
     }
 
     System.out.println(oldRot + " - " + newRot + " : " + actualTurn);
-    
-    assert(actualTurn == expectedTurn);
+
+    assert (actualTurn == expectedTurn);
   }
 
 }

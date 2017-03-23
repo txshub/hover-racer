@@ -13,8 +13,8 @@ import com.google.gson.GsonBuilder;
 import upgrades.ShipTemplate;
 
 /**
- * Contains data sent by the server to all clients with information about the
- * game. Only the "youId" field is different for each client.
+ * Contains data sent by the server to all clients with information about the game. Only the "youId"
+ * field is different for each client.
  * 
  * @author Maciej Bogacki
  */

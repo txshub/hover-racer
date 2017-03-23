@@ -30,9 +30,8 @@ public class Line {
   }
 
   /**
-   * Attempt to add a word to the line. If the line can fit the word in without
-   * reaching the maximum line length then the word is added and the line length
-   * increased.
+   * Attempt to add a word to the line. If the line can fit the word in without reaching the maximum
+   * line length then the word is added and the line length increased.
    * 
    * @param word
    *          - the word to try to add.

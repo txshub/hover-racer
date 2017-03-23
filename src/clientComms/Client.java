@@ -6,7 +6,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import game.MultiplayerGame;
@@ -38,20 +37,18 @@ public class Client extends Thread {
   public volatile boolean alreadyAccessedRoom = true;
   private GameRoom currentRoom;
   public MultiplayerGame multiplayerGame;
-private boolean alreadyAccessedIP = true;
-private String currentIP;
+  private boolean alreadyAccessedIP = true;
+  private String currentIP;
 
   /**
-   * Creates a client object and connects to a given server on a given port
-   * automagically
+   * Creates a client object and connects to a given server on a given port automagically
    * 
    * @param clientName
    *          The client's nickname to pass to the server first
    * @param portNumber
    *          The port to send the request on
    * @param machineName
-   *          The machinename of the server host (for testing purposes use
-   *          localhost)
+   *          The machinename of the server host (for testing purposes use localhost)
    * @param gameMenu
    * @param gameMenu
    */
@@ -103,18 +100,18 @@ private String currentIP;
     } catch (InterruptedException e) {
       // What to do here?
     } finally {
-    	try {
-			sendByteMessage(new byte[0], ServerComm.CLIENTDISCONNECT);
-		} catch (IOException e) {
-			System.err.println("Closing due to server disconnection");
-			System.exit(1);
-		}
+      try {
+        sendByteMessage(new byte[0], ServerComm.CLIENTDISCONNECT);
+      } catch (IOException e) {
+        System.err.println("Closing due to server disconnection");
+        System.exit(1);
+      }
     }
   }
 
   /**
-   * Cleans up the client by stopping the thread that constantly pings the
-   * server then sends the disconnect message to the server
+   * Cleans up the client by stopping the thread that constantly pings the server then sends the
+   * disconnect message to the server
    */
   public void cleanup() {
     serverStop.interrupt();
@@ -126,8 +123,7 @@ private String currentIP;
   }
 
   /**
-   * Sends a request to the server to make a game room then returns the
-   * resulting room
+   * Sends a request to the server to make a game room then returns the resulting room
    * 
    * @param seed
    *          The seed to make the track with
@@ -196,8 +192,7 @@ private String currentIP;
   public void startSinglePlayerGame(String seed, int numAI, int lapCount, ShipSetupData data)
       throws IOException {
     GameRoom room = createGame(seed, numAI + 1, lapCount, "1", data);
-    if (room == null)
-      System.out.println("Null Game");
+    if (room == null) System.out.println("Null Game");
     startGame();
   }
 
@@ -213,15 +208,15 @@ private String currentIP;
     sendByteMessage(new byte[0], ServerComm.REFRESHROOM);
     return waitForRoom();
   }
-  
+
   public String waitForIP() {
-	  while(alreadyAccessedIP) {
-		  try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-		}
-	  }
-	  return currentIP;
+    while (alreadyAccessedIP) {
+      try {
+        Thread.sleep(100);
+      } catch (InterruptedException e) {
+      }
+    }
+    return currentIP;
   }
 
   /**
@@ -289,9 +284,8 @@ private String currentIP;
     toServer.writeInt(out.length);
     toServer.write(out);
     toServer.flush();
-    if (DEBUG)
-      System.out.println("Sent message " + new String(message, ServerComm.charset) + " with tag "
-          + Byte.toString(type));
+    if (DEBUG) System.out.println("Sent message " + new String(message, ServerComm.charset)
+        + " with tag " + Byte.toString(type));
   }
 
   /**
@@ -340,8 +334,8 @@ private String currentIP;
 
   }
 
-	public void setIP(String ip) {
-		this.currentIP = ip;
-		alreadyAccessedIP = false;
-	}
+  public void setIP(String ip) {
+    this.currentIP = ip;
+    alreadyAccessedIP = false;
+  }
 }

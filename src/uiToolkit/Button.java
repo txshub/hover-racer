@@ -13,8 +13,8 @@ import gameEngine.renderEngine.Loader;
 
 /**
  * 
- * A TexturedUIElement that can perform an action when clicked. This is set by
- * adding ActionListener to the button.
+ * A TexturedUIElement that can perform an action when clicked. This is set by adding ActionListener
+ * to the button.
  * 
  * @author Reece Bennett
  *

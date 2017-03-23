@@ -5,8 +5,7 @@ import org.joml.Vector3f;
 import physics.support.GroundProvider;
 
 /**
- * GroundProvider the provides a flat ground at y=0 and assumes all vehicles are
- * horizontal.
+ * GroundProvider the provides a flat ground at y=0 and assumes all vehicles are horizontal.
  * 
  * @author Maciej Bogacki
  */

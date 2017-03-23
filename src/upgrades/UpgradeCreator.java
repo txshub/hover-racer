@@ -22,8 +22,7 @@ public class UpgradeCreator {
       Arrays.stream(Stat.values()).forEach(s -> System.out.print(s.getName() + ", "));
       System.out.println();
       String inStat = in.nextLine().toLowerCase();
-      if (inStat.equals(""))
-        break; // If empty line then finish adding stats
+      if (inStat.equals("")) break; // If empty line then finish adding stats
       System.out.println(inStat);
       Optional<Stat> stat = Arrays.stream(Stat.values())
           .filter(s -> s.getName().toLowerCase().equals(inStat)).findAny();
@@ -39,8 +38,7 @@ public class UpgradeCreator {
     double cost = Double.parseDouble(in.nextLine());
     System.out.println("Enter max level (negative for no limit).");
     int maxLevel = Integer.parseInt(in.nextLine());
-    if (maxLevel < -1)
-      maxLevel = -1;
+    if (maxLevel < -1) maxLevel = -1;
     UpgradeType upgrade = new UpgradeType(name, stats, maxLevel, cost, Piece.OTHER);
     String json = (new Gson()).toJson(upgrade);
     System.out.println("Created " + json);

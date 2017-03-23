@@ -30,7 +30,7 @@ public abstract class TexturedUIElement extends UIElement {
   }
 
   public abstract void update();
-  
+
   protected void prepare() {
     int w = Display.getWidth();
     int h = Display.getHeight();
@@ -53,7 +53,7 @@ public abstract class TexturedUIElement extends UIElement {
     // Load the quad into a VAO
     quad = loader.loadToVAO(positions, textureCoords);
   }
-  
+
   @Override
   public void setParent(UIElement parent) {
     super.setParent(parent);

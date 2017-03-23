@@ -5,21 +5,21 @@ package gameEngine.textures;
  */
 public class TerrainTexture {
 
-	private int textureID;
+  private int textureID;
 
-	/**
-	 * @param textureID
-	 *            the texture id
-	 */
-	public TerrainTexture(int textureID) {
-		this.textureID = textureID;
-	}
+  /**
+   * @param textureID
+   *          the texture id
+   */
+  public TerrainTexture(int textureID) {
+    this.textureID = textureID;
+  }
 
-	/**
-	 * @return the texture id
-	 */
-	public int getTextureID() {
-		return textureID;
-	}
+  /**
+   * @return the texture id
+   */
+  public int getTextureID() {
+    return textureID;
+  }
 
 }

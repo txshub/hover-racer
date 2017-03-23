@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Class to read any incoming messages from the client and branch it out as
- * required
+ * Class to read any incoming messages from the client and branch it out as required
  * 
  * @author simon
  *
