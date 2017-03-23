@@ -27,17 +27,12 @@ public class GameRoom {
 
   // Time between sending the RaceSetupData and start of the race, in
   // nanoseconds
-  // TODO It's currently low for easy resting, might increase it for the actual
-  // game
-  private static final long TIME_TO_START = 15L * 1000000000L; // 15 sec
+  private static final long TIME_TO_START = 15L * 1000000000L;
 
   // Time between the first player (not AI) finishing the race and the race
   // ending, in nanoseconds.
-  private static final long TIME_TO_END = 30L * 1000000000L; // 30 sec
+  private static final long TIME_TO_END = 30L * 1000000000L;
 
-  private static final int SIDE_DISTANCES = 10;
-  private static final int FORWARD_DISTANCES = 10;
-  private static final int STARTING_HEIGHT = 10;
   ArrayList<String> players = new ArrayList<String>();
   ArrayList<ShipSetupData> ships;
   String name;
@@ -336,12 +331,17 @@ public class GameRoom {
     }
     Vector2f startDirection = new Vector2f(trackPoints.get(1)).sub(trackPoints.get(0));
     float facingAngle = (float) Math.toDegrees(Math.atan2(startDirection.x, startDirection.y));
-    return new RaceSetupData(resShips, generateStartingPositions(startDirection),
-        new Vector3f(0, facingAngle, 0), seed, TIME_TO_START, lapCount);
+    return new RaceSetupData(resShips, generateStartingPositions(), new Vector3f(0, facingAngle, 0),
+        seed, TIME_TO_START, lapCount);
   }
 
-  // TODO finish this
-  private Map<Byte, Vector3f> generateStartingPositions(Vector2f startDirection) {
+  /**
+   * Create the starting positions for the racers
+   * 
+   * @return a mapping of racer ID to their position
+   * @author Reece Bennett
+   */
+  private Map<Byte, Vector3f> generateStartingPositions() {
     float offset = 40;
     Map<Byte, Vector3f> res = new HashMap<>();
 
@@ -362,15 +362,6 @@ public class GameRoom {
           new Vector3f(trackPoints.get(0).x + combined.x, 5, trackPoints.get(0).y + combined.y));
     }
     return res;
-  }
-
-  /**
-   * @author Mac Returns the direction the track starts in
-   * @return The direction the track starts in
-   */
-  private float getTrackDirection() {
-    Vector2f relative = trackPoints.get(0).sub(trackPoints.get(1));
-    return (float) Math.atan2(relative.x, relative.y);
   }
 
   /** Returns a string representing this room */

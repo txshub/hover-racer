@@ -20,7 +20,7 @@ public class TestGameSettings {
     String lobbyName = "New" + System.lineSeparator() + "Line Test";
     String hostName = "Tester";
     try {
-      GameSettings test = new GameSettings(seed, maxPlayers, lapCount, lobbyName,
+      new GameSettings(seed, maxPlayers, lapCount, lobbyName,
           DataGenerator.basicShipSetup(hostName));
       // Constructor should throw exception
       fail("IllegalArgumentException not raised");
@@ -62,7 +62,6 @@ public class TestGameSettings {
   public void testToByteArrayWithParams() {
     String seed = "12432";
     int maxPlayers = 3;
-    int numAI = 4;
     int lapCount = 7;
     String lobbyName = "Testing";
     String hostName = "Tester";
@@ -78,7 +77,6 @@ public class TestGameSettings {
   public void testToByteArrayWithString() {
     String seed = "12432";
     int maxPlayers = 3;
-    int numAI = 4;
     int lapCount = 7;
     String lobbyName = "Testing";
     String hostName = "Tester";

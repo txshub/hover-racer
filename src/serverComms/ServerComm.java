@@ -89,6 +89,7 @@ public class ServerComm extends Thread {
   }
 
   /** Runs the server */
+  @SuppressWarnings("unused")
   public void run() {
     ServerSocket serverSocket = null;
     // Open the server socket and start listening
