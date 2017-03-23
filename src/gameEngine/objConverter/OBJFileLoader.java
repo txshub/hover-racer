@@ -90,9 +90,10 @@ public class OBJFileLoader {
     float[] verticesArray = new float[vertices.size() * 3];
     float[] texturesArray = new float[vertices.size() * 2];
     float[] normalsArray = new float[vertices.size() * 3];
-    float[] tangentsArray = new float[vertices.size() * 3];
-    float furthest = convertDataToArrays(vertices, textures, normals, verticesArray, texturesArray,
-        normalsArray, tangentsArray);
+    // float[] tangentsArray = new float[vertices.size() * 3];
+    // float furthest = convertDataToArrays(vertices, textures, normals,
+    // verticesArray, texturesArray,
+    // normalsArray, tangentsArray);
     int[] indicesArray = convertIndicesListToArray(indices);
     // ModelData data = new ModelData(verticesArray, texturesArray,
     // normalsArray, tangentsArray, indicesArray,
@@ -189,6 +190,7 @@ public class OBJFileLoader {
    *          an array of all the tangents
    * @return the furthest point
    */
+  @SuppressWarnings("unused")
   private static float convertDataToArrays(List<Vertex> vertices, List<Vector2f> textures,
       List<Vector3f> normals, float[] verticesArray, float[] texturesArray, float[] normalsArray,
       float[] tangentsArray) {
