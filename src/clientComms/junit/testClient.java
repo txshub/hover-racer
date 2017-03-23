@@ -65,7 +65,7 @@ public class testClient {
   public void testCreateGameRequestAllGames() {
     System.out.println("-----Start testCreateGameRequestAllGames method-----");
     int port = 1113;
-    Lobby lobby = new Lobby(port);
+    new Lobby(port);
     String name = "Pablo";
     ShipSetupData data = DataGenerator.basicShipSetup(name);
     try {
@@ -103,7 +103,7 @@ public class testClient {
   public void testJoinGame() {
     System.out.println("-----Start testJoinGame method-----");
     int port = 1114;
-    Lobby lobby = new Lobby(port);
+    new Lobby(port);
     String name1 = "George";
     ShipSetupData data1 = DataGenerator.basicShipSetup(name1);
     String name2 = "Sunny";

@@ -8,7 +8,6 @@ import audioEngine.AudioMaster;
 import game.MainGameLoop;
 import javafx.application.Platform;
 import physics.network.RaceSetupData;
-import physics.ships.MultiplayerShipManager;
 import serverComms.ByteArrayByte;
 import serverComms.GameRoom;
 import serverComms.ServerComm;
@@ -24,7 +23,6 @@ public class ClientReceiver extends Thread {
 
   private DataInputStream server;
   private Client client;
-  private MultiplayerShipManager manager;
 
   /**
    * Creates a ClientReceiver object
@@ -115,10 +113,5 @@ public class ClientReceiver extends Thread {
       System.err.println("Server seems to have died: " + e.getMessage());
       // What to do here?
     }
-  }
-
-  /** Adds the ShipManager, to receive the information about ships */
-  public void addManager(MultiplayerShipManager manager) {
-    this.manager = manager;
   }
 }
