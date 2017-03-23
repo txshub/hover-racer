@@ -125,7 +125,7 @@ public class AIShip extends Ship {
           + " Dist: " + dist + " Thrust: " + thrust + " Turn: " + turn + " Strafe: " + strafe);
 
     // Steer and update ship
-    super.steer(thrust, turn, strafe, delta); // TODO temporary thing
+    super.steer(thrust, turn, strafe, delta);
     super.updatePhysics(delta);
 
     if (dist < track.get(nextPointIndex).getWidth() / 2) {

@@ -233,7 +233,6 @@ public class GameLogic {
     for (ShipLogicData player : players) {
       if (player.finished()) {
         try {
-          // TODO actually fix whatever is causeing it
           ranking[player.getRanking() - 1] = player.getId();
         } catch (ArrayIndexOutOfBoundsException e) {
           System.err.println("Game logic says: " + e.getMessage());

@@ -14,7 +14,6 @@ public class TerrainProvider implements GroundProvider {
 
   @Override
   public float distanceToGround(Vector3f position, Vector3f direction) {
-    // TODO directionality
     try {
       float groundHeight = terrain.getHeightOfTerrain(position.x, position.z);
       return position.y - groundHeight;
@@ -26,7 +25,6 @@ public class TerrainProvider implements GroundProvider {
 
   @Override
   public Vector3f normalToGround(Vector3f point) {
-    // TODO Auto-generated method stub
     return null;
   }
 

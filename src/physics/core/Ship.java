@@ -155,7 +155,7 @@ public abstract class Ship extends Entity {
   /** Changes the velocity to account for a collision with a different ship */
   private void collideWith(Ship ship) {
     if (collisionListener != null)
-      collisionListener.addCollision(this, ship); // TODO fix sounds
+      collisionListener.addCollision(this, ship);
     Vector3 pos = ship.getInternalPosition().copy();
     float expectedDistance = ship.getSize() + this.getSize();
     // Apply momentum
@@ -238,7 +238,7 @@ public abstract class Ship extends Entity {
    * @param strafe
    *          How fast should the ship strafe; positive values strafe right.
    * @param brokenDelta
-   *          Time in seconds since the last call of this method. TODO
+   *          Time in seconds since the last call of this method.
    *          brokenDelta
    */
   protected void steer(float thrust, float turn, float strafe, float brokenDelta) {
@@ -265,7 +265,7 @@ public abstract class Ship extends Entity {
     // Breaking
     if (breaking > 0)
       airResistance(delta * breaking * stats.BREAK_POWER);
-    // Strafing TODO change to an instant boost (?)
+    // Strafing
     if (strafe != 0) {
       accelerate2d(delta * strafe * stats.ACCELERATION, (float) Math.PI);
       rotationalVelocity
