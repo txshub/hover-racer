@@ -2,7 +2,6 @@ package userInterface;
 
 import java.util.Random;
 
-import clientComms.Client;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
@@ -20,7 +19,6 @@ import javafx.scene.text.Text;
 
 public class HostGameRoom extends GridPane {
 
-  private Client client;
   private String gameRoomSeed;
   private int maxPlayers;
   private int lapNo;
@@ -83,19 +81,6 @@ public class HostGameRoom extends GridPane {
 
     this.setCache(true);
     this.setCacheHint(CacheHint.SPEED);
-
-  }
-
-  /**
-   * Sets the client to be the current connected client that needs to be
-   * accessed in this class.
-   * 
-   * @param client
-   *          The connected client.
-   */
-  public void setClient(Client client) {
-
-    this.client = client;
 
   }
 

@@ -52,7 +52,7 @@ public class MainMenu extends Application {
     root = new Pane();
     root.setPrefSize(1000, 600);
 
-    this.primaryStage = primaryStage;
+    MainMenu.primaryStage = primaryStage;
 
     // get file from path
     try {
@@ -70,7 +70,6 @@ public class MainMenu extends Application {
     try {
       gameMenu = new GameMenu();
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     gameMenu.setVisible(true);

@@ -21,7 +21,6 @@ import javafx.scene.text.Text;
  */
 public class MenuButton extends StackPane {
 
-  private Text buttonText;
   private Rectangle bg;
   private boolean clicked;
 

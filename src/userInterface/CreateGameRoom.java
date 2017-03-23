@@ -84,7 +84,7 @@ public class CreateGameRoom extends GridPane {
         setSettings();
 
         // CREATE LOCAL SERVER //
-        Lobby localLobby = new Lobby(4445);
+        new Lobby(4445);
 
         // CREATE SINGLE PLAYER CLIENT //
         Client localClient = new Client(getUsername(), 4445, "localhost");

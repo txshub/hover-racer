@@ -23,8 +23,6 @@ public class JoinGameRoom extends GridPane {
 
   private ArrayList<GameRoom> gameRoomList;
   private Client client;
-  private GameRoomLobby gameRoomLobby;
-  private GameRoom gameRoomChosen;
   private MenuButton refresh;
   private VBox gameRoomData;
   private int chosenGRid;

@@ -714,7 +714,7 @@ public class GameMenu extends Parent {
     // Start the client with <username, 4444, localhost>
     startServerMulti.setOnMouseClicked(event -> {
 
-      Lobby serverLobby = new Lobby(4444);
+      new Lobby(4444);
 
       usr = usernameInputMulti.getText();
       int portNo = 4444;
@@ -849,7 +849,6 @@ public class GameMenu extends Parent {
     hostGR.setOnMouseClicked(eventHost -> {
 
       getChildren().add(hostGameRoomWindow);
-      hostGameRoom.setClient(client);
 
       TranslateTransition trans = new TranslateTransition(Duration.seconds(0.25),
           multiOptionsWindow);
