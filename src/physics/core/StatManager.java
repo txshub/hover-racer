@@ -29,9 +29,9 @@ public class StatManager {
     this.SIZE = stats.get(Stat.SIZE);
 
     if (stats.get(Stat.WALL_ELASTICITY) != null)
-      this.WALL_ELASTICITY = stats.get(Stat.WALL_ELASTICITY);
+      StatManager.WALL_ELASTICITY = stats.get(Stat.WALL_ELASTICITY);
     if (stats.get(Stat.SHIP_ELASTICITY) != null)
-      this.SHIP_COLLISION_ELASTICITY = stats.get(Stat.SHIP_ELASTICITY);
+      StatManager.SHIP_COLLISION_ELASTICITY = stats.get(Stat.SHIP_ELASTICITY);
 
     this.ROTATIONAL_RESISTANCE = AIR_RESISTANCE / 2;
     this.MAX_SPEED = ACCELERATION * ACCELERATION / AIR_RESISTANCE;

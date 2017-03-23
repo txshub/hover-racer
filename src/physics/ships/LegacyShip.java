@@ -31,7 +31,7 @@ public class LegacyShip extends Ship {
 
   @Override
   public void update(float delta) {
-    float thrust = 0, turn = 0, strafe = 0, jump = 0;
+    float thrust = 0, turn = 0, strafe = 0;
     Collection<Action> keys = input.getPressedKeys();
     // Handle inputs
     if (keys.contains(Action.FORWARD))
@@ -46,8 +46,6 @@ public class LegacyShip extends Ship {
       strafe++;
     if (keys.contains(Action.STRAFE_LEFT))
       strafe--;
-    if (keys.contains(Action.JUMP))
-      jump++;
     // Steer and update ship
     super.steer(thrust, turn, strafe, delta);
     super.updatePhysics(delta);

@@ -160,7 +160,7 @@ public abstract class Ship extends Entity {
     float expectedDistance = ship.getSize() + this.getSize();
     // Apply momentum
     velocity.add(ship.getVelocity().sub(this.velocity).mul(ship.getMass()).mul(1 / this.getMass())
-        .mul(stats.SHIP_COLLISION_ELASTICITY));
+        .mul(StatManager.SHIP_COLLISION_ELASTICITY));
     // Get out of collision zone
     position.add(this.position.copy().sub(pos)
         .mul((expectedDistance - position.distance(pos)) / expectedDistance));
@@ -188,7 +188,7 @@ public abstract class Ship extends Entity {
 
   /** Handles collisions with the track edges */
   private void trackCollision() {
-    barriers.allCollisions(this).forEach(v -> velocity.bounceOff(v, stats.WALL_ELASTICITY));
+    barriers.allCollisions(this).forEach(v -> velocity.bounceOff(v, StatManager.WALL_ELASTICITY));
   }
 
   /**

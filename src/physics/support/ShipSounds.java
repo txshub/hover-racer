@@ -94,7 +94,8 @@ public class ShipSounds implements CollisionListener {
   @Override
   public void addCollision(Ship first, Ship second) {
     Vector3f position = new Vector3f(first.getPosition()).sub(player.getPosition()).div(2);
-    float force = new Vector3f(first.getVelocity()).sub(second.getVelocity()).length();
+    // float force = new
+    // Vector3f(first.getVelocity()).sub(second.getVelocity()).length();
 
     // Set initial volume
     Source collisionSource = AudioMaster.createSFXSource(1f);

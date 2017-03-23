@@ -36,7 +36,6 @@ public class MultiplayerShipManager implements ServerShipProvider {
   private List<Ship> remotes;
   private Map<Byte, byte[]> packets;
   private ShipSounds sounds;
-  private ArrayList<TrackPoint> track;
   private boolean debug;
 
   /**
@@ -63,7 +62,6 @@ public class MultiplayerShipManager implements ServerShipProvider {
       List<Vector3f> startingPositions, Vector3f startingOrientation, List<ShipTemplate> stats,
       GroundProvider ground, ArrayList<TrackPoint> track) {
     this.packets = new HashMap<Byte, byte[]>();
-    this.track = track;
 
     // Create all RemoteShips
     this.remotes = new ArrayList<Ship>();
