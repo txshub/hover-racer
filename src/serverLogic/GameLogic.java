@@ -8,6 +8,7 @@ import org.joml.Intersectionf;
 import org.joml.Vector3f;
 
 import serverComms.GameRoom;
+import serverComms.ServerComm;
 import trackDesign.TrackPoint;
 
 /**
@@ -129,7 +130,7 @@ public class GameLogic {
     }
     if (previous == trackPoints.size() - 1 && lastTrackPoint == 0) {
       if (currentLap == laps && !player.finished()) {
-        System.out.println("PLAYER " + player.getId() + " FINISHED THE RACE");
+        if(ServerComm.DEBUG) System.out.println("PLAYER " + player.getId() + " FINISHED THE RACE");
         player.setFinished(true);
         finished++;
       } else {
