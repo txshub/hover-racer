@@ -13,6 +13,9 @@ JUnit 4 is now also required, add this with "Add Library..." and select JUnit 4.
 
 ![The Eclipse Build Path Window](buildPath.png)
 
+## Running the game
+Once the build path has been configured the game can be run via the MainMenu class `userInterface/MainMenu`.
+
 # Interesting Seeds
 - 8702257163401221369
 - -3776264373565894405
